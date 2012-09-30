@@ -1,7 +1,12 @@
 <resources>
 
     <string name="app_name">TestMind</string>
-    <string name="title_item_detail">Item Detail</string>
-    <string name="title_item_list">Items</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="btn_click">Stlač</string>
+    <string name="edittext_label">Kolko máš rokov?</string>
+    <string name="wellcome_toast">Napiš, kolik Ti je let, a pak klikni na tlačítko.</string>
+    <string name="invalid_age">Neplatný vek</string>
+    <string name="displayed_age">Je Ti %1$d let. To je ten nejlepší věk!</string>
 
 </resources>
