@@ -1,25 +1,14 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <TextView 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edittext_label"/>
-    
-    <EditText
-        android:id="@+id/edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number" />
+    android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_click"
-        android:onClick="buttonClicked" />
-   
-</LinearLayout>
+    <SurfaceView
+        android:id="@+id/sruface_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#FF66FF33"
+        android:focusableInTouchMode="true" />
+
+</FrameLayout>
