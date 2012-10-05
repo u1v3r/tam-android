@@ -1,12 +1,13 @@
 package cz.vutbr.fit.testmind;
 
-import cz.vutbr.fit.testmind.graphics.ITAMItem;
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
-import android.R;
-import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.Menu;
+import cz.vutbr.fit.tesmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
+
+
 
 public class MainActivity extends Activity {
 	
@@ -20,8 +21,13 @@ public class MainActivity extends Activity {
         graph = new TAMGraph(this);
         graph.setBackgroundColor(Color.WHITE);
         
-        graph.addRoot(ITAMItem.ITEM_TYPE_RECTANGLE, 10, 10);
-        graph.addRoot(ITAMItem.ITEM_TYPE_RECTANGLE, 60, 60);
+        ITAMNode node1 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 10, 10);
+        
+        node1.addChild(10, 40);
+        
+        ITAMNode node2 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 60, 60);
+        
+        node2.addChild(100, 100);
         
         setContentView(graph);
 

@@ -6,21 +6,7 @@ import android.graphics.Rect;
 
 public interface ITAMItem {
 	
-	public int ITEM_TYPE_RECTANGLE = 1;
-	
-	public ITAMItem addChild(int x, int y);
-	
-	public ITAMItem addChild(int type, int x, int y);
-	
 	public int getType();
-	
-	public Point getPosition();
-	
-	public Point getSize();
-	
-	public void draw(Canvas canvas);
-	
-	public Rect getBounds();
 	
 	public boolean hit(int x, int y);
 
@@ -30,9 +16,9 @@ public interface ITAMItem {
 	
 	public int getBackground();
 	
-	public void highlightColor(int highlightColor);
+	public void setHighlightColor(int highlightColor);
 	
-	public int highlightColor();
+	public int getHighlightColor();
 	
 	public boolean isHighlighted();
 

@@ -3,8 +3,12 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.tesmind.graphics.ITAMConnection;
+import cz.vutbr.fit.tesmind.graphics.ITAMNode;
+
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.view.DragEvent;
 import android.view.MotionEvent;
@@ -12,8 +16,9 @@ import android.view.View;
 
 public class TAMGraph extends View {
 	
-	//protected Paint paint = new Paint();
-	protected List<ITAMItem> listOfItems;
+	protected Paint paint = new Paint();
+	protected List<ITAMNode> listOfNodes;
+	protected List<ITAMConnection> listOfConnections;
 	protected List<ITAMItem> listOfSelectedItems;
 	protected TAMItemFactory factory;
 	protected Point actualPoint;
@@ -22,7 +27,8 @@ public class TAMGraph extends View {
 	public TAMGraph(Context context) {
 		super(context);
 		factory = new TAMItemFactory();
-		listOfItems = new ArrayList<ITAMItem>();
+		listOfNodes = new ArrayList<ITAMNode>();
+		listOfConnections = new ArrayList<ITAMConnection>();
 		listOfSelectedItems = new ArrayList<ITAMItem>();;
 		actualPoint = new Point();
 		
@@ -33,10 +39,9 @@ public class TAMGraph extends View {
 		return factory;
 	}
 	
-	public ITAMItem addRoot(int type, int x, int y) {
-		ITAMItem item = factory.createNode(this, type, x, y);
-		listOfItems.add(item);
-		return item;
+	public ITAMNode addRoot(int type, int x, int y) {
+		ITAMNode node = factory.createNode(this, type, x, y);
+		return node;
 	}
 	
 	@Override
@@ -45,11 +50,12 @@ public class TAMGraph extends View {
         
         //paint.setColor(Color.BLUE);
 		
-		for(ITAMItem item : listOfItems) {
-			
-			if(item.getType() == ITAMItem.ITEM_TYPE_RECTANGLE) {
-				item.draw(canvas);
-			}
+		for(ITAMConnection connection : listOfConnections) {
+			connection.draw(canvas, paint);
+		}
+		
+		for(ITAMNode node : listOfNodes) {
+				node.draw(canvas);
 		}
 	}
 	
@@ -72,7 +78,7 @@ public class TAMGraph extends View {
 				
 			ITAMItem result = null;
 			
-			for(ITAMItem item : listOfItems) {
+			for(ITAMItem item : listOfNodes) {
 				if(item.hit(x, y)) {
 					result = item;
 				}
