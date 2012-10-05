@@ -3,10 +3,6 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.graphics.DrawingSurface.DrawingThread;
-
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -16,8 +12,6 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 
 public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
@@ -33,7 +27,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected Point actualPoint;
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
-	
+	private boolean activeTouchEvent = false;
 	
 	public TAMGraph(Context context) {
 		this(context,null);		
@@ -53,9 +47,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		setLongClickable(true);		
 		setFocusable(true);// umozni dotyky
 		setFocusableInTouchMode(true);
-		
 		drawingThread = new DrawingThread(getHolder(), this);
-		getHolder().addCallback(this);			
+		getHolder().addCallback(this);	
+		setWillNotDraw(false);
 		
 	}
 	
@@ -69,9 +63,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-        
+	protected void onDraw(Canvas canvas) {        
+				
         //paint.setColor(Color.BLUE);
 		
 		for(ITAMConnection connection : listOfConnections) {
@@ -91,10 +84,12 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-
+		
+		
 		synchronized (drawingThread.getSurfaceHolder()) {
-			//System.out.println(e);
-
+						
+			activeTouchEvent = true;
+			
 			int x = (int) e.getX();
 			int y = (int) e.getY();
 
@@ -234,6 +229,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		private TAMGraph panel;
 		private SurfaceHolder surfaceHolder;
 		private boolean run;
+		
 
 
 		public DrawingThread(SurfaceHolder surface, TAMGraph panel) {
@@ -251,22 +247,25 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		
 		@Override
 		public void run() {
-
+			if(activeTouchEvent){
 			Canvas canvas;
 			while (this.run) {
 				canvas = null;
 				try {
 					canvas = this.surfaceHolder.lockCanvas(null);
 					if(canvas != null){
-						synchronized (this.surfaceHolder) {						
+						synchronized (this.surfaceHolder) {		
+							
 							this.panel.onDraw(canvas);
 						}
 					}
 				} finally {
 					if (canvas != null) {
 						this.surfaceHolder.unlockCanvasAndPost(canvas);
+						activeTouchEvent = false;
 					}
 				}
+			}
 			}
 		}
 	}

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="drawing_surface">#EEEEEE</color>    
+    <color name="drawing_surface">#EEEEEE</color>
+    <color name="node_background">#0FA1D3</color>
+    <color name="node_highlight_background">#FFC641</color>
+    <color name="node_text">#FFFFFF</color>    
 </resources>
