@@ -29,14 +29,20 @@ public class TAMDefaultConnection implements ITAMConnection {
 	}
 
 	public void draw(Canvas canvas, Paint paint) {
+		
+
+		
 		paint.setAntiAlias(true);
 		if(isHighlighted) {
 			paint.setColor(highlightColor);
 		} else {
 			paint.setColor(background);
 		}
+		
+		
 		canvas.drawLine(parent.getPosition().x, parent.getPosition().y,
 				child.getPosition().x, child.getPosition().y, paint);
+
 	}
 
 	public boolean hit(int x, int y) {
