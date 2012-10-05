@@ -3,4 +3,8 @@
         android:title="@string/menu_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    
+    <item android:id="@+id/menu_add" android:title="@string/add" android:showAsAction="always|withText" android:icon="@drawable/ic_action_add"></item>
+    <item android:id="@+id/menu_edit" android:title="@string/edit" android:showAsAction="always|withText" android:icon="@drawable/ic_action_edit"></item><item android:id="@+id/menu_save" android:title="@string/save" android:showAsAction="always|withText" android:icon="@drawable/ic_action_save"></item>
+    <item android:id="@+id/menu_delete" android:title="@string/delete" android:showAsAction="always|withText" android:icon="@drawable/ic_action_delete"></item>
 </menu>

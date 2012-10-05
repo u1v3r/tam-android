@@ -2,7 +2,11 @@ package cz.vutbr.fit.testmind;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
@@ -14,6 +18,7 @@ public class MainActivity extends Activity {
 	
 	protected int currentZoomLevel = 0;
 	protected int maxZoomLovel = 0;	
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,4 +41,52 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	switch (item.getItemId()) {
+		case R.id.menu_add:
+			addNode();
+			break;
+		case R.id.menu_edit:
+			editNode();
+			break;
+		case R.id.menu_delete:
+			deleteNode();			
+			break;
+		case R.id.menu_save:
+			saveMap();
+			break;
+		case R.id.menu_settings:
+			
+			break;
+		default: 
+			return super.onOptionsItemSelected(item);
+		
+    	
+    	} 	
+    	
+    	return true;    	
+    }
+
+	private void saveMap() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void deleteNode() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void editNode() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void addNode() {
+		// TODO Auto-generated method stub
+		
+	}
 }
