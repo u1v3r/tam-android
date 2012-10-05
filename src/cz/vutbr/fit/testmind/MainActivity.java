@@ -1,7 +1,8 @@
-package com.example.testmind;
+package cz.vutbr.fit.testmind;
 
-import cz.vutbr.fit.tesmind.graphics.ITAMItem;
-import cz.vutbr.fit.tesmind.graphics.TAMGraph;
+import cz.vutbr.fit.testmind.graphics.ITAMItem;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import android.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;

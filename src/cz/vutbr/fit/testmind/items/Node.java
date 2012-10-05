@@ -1,4 +1,4 @@
-package com.example.testmind.items;
+package cz.vutbr.fit.testmind.items;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package cz.vutbr.fit.tesmind.graphics;
+package cz.vutbr.fit.testmind.graphics;
 
 import java.util.ArrayList;
 import java.util.List;

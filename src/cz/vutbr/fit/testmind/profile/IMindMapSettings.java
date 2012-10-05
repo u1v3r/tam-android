@@ -1,4 +1,4 @@
-package com.example.testmind.profile;
+package cz.vutbr.fit.testmind.profile;
 
 /**
  * interface for settings of mind map

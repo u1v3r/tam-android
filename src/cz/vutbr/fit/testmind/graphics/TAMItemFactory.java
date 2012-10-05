@@ -1,4 +1,4 @@
-package cz.vutbr.fit.tesmind.graphics;
+package cz.vutbr.fit.testmind.graphics;
 
 public class TAMItemFactory {
 	
