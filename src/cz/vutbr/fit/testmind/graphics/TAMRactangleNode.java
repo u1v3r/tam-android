@@ -30,17 +30,17 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
 		this.graph = graph;
 		this.position = new Point(x,y);
 		this.text = text;
-		int width = (int) this.getPaint().measureText(text);
-		Rect rect = new Rect();
+		int width = (int) this.getPaint().measureText(text)/2;
+		/*Rect rect = new Rect();
 		this.getPaint().getTextBounds(text, 0, 0, rect);
-		System.out.println("rect: " + rect);
+		System.out.println("rect: " + rect);*/
 		System.out.println(width);
-		this.size = new Point(width, 20); // TODO count new size due to text
+		this.size = new Point((width*2+40), 20); // TODO count new size due to text
 		this.background = 0xffffdab9;
 		this.foreground = Color.BLACK;
 		this.highlightColor = Color.YELLOW;
 		this.isHighlited = false;
-	    this.setBounds(x-width-8, y-16, x+width-8, y+16);
+	    this.setBounds(x-width-20, y-16, x+width+20, y+16);
 	    
 	    this.getPaint().setColor(background);
 	}
@@ -142,7 +142,7 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
 		super.onDraw(shape, canvas, paint);
 		
 		paint.setColor(foreground);
-		canvas.drawText(text, 8, 20, paint);
+		canvas.drawText(text, 20, 20, paint);
 	}
 
 }
