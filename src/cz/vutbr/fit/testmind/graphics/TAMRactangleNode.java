@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.graphics;
 
+import cz.vutbr.fit.testmind.R;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -36,9 +37,9 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
 		System.out.println("rect: " + rect);*/
 		System.out.println(width);
 		this.size = new Point((width*2+40), 20); // TODO count new size due to text
-		this.background = 0xffffdab9;
-		this.foreground = Color.BLACK;
-		this.highlightColor = Color.YELLOW;
+		this.background = graph.getResources().getColor(R.color.node_background);
+		this.foreground = graph.getResources().getColor(R.color.node_text);
+		this.highlightColor = graph.getResources().getColor(R.color.node_highlight_background);
 		this.isHighlited = false;
 	    this.setBounds(x-width-20, y-16, x+width+20, y+16);
 	    
