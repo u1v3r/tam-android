@@ -57,7 +57,7 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
 		
 		Rect rect = this.getBounds();
 		
-		if(x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+		if(rect.contains(x,y)) {
 			return true;
 		} else {
 			return false;
@@ -95,8 +95,8 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
 		}
 		
 		isHighlited = enable;
-		//graph.refreshDrawableState();
-		graph.invalidate();
+		
+		//graph.invalidate();
 	}
 	
 	public boolean isHighlighted() {
@@ -111,7 +111,7 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
 		Rect rect = this.getBounds();
 		this.setBounds(rect.left+dx, rect.top+dy, rect.right+dx, rect.bottom+dy);
 		
-		graph.invalidate();
+		//graph.invalidate();
 	}
 
 }

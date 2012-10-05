@@ -66,6 +66,8 @@ public class TAMGraph extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		
+		System.out.println(e);
+		
 		int x = (int) e.getX();
 		int y = (int) e.getY();
 		
@@ -75,6 +77,12 @@ public class TAMGraph extends View {
 			//System.out.println("click: " + e.getX() + " " + e.getY());
 				
 			ITAMItem result = null;
+			
+			/*for(ITAMItem item : listOfConnections) {
+				if(item.hit(x, y)) {
+					result = item;
+				}
+			}*/
 			
 			for(ITAMItem item : listOfNodes) {
 				if(item.hit(x, y)) {
@@ -103,6 +111,10 @@ public class TAMGraph extends View {
 					for(ITAMItem item : listOfSelectedItems) {
 						item.move(dx,dy);
 					}
+				} else {
+					for(ITAMItem item : listOfNodes) {
+						item.move(dx,dy);
+					}
 				}
 				
 				actualPoint.x = x;
@@ -110,11 +122,7 @@ public class TAMGraph extends View {
 			}
 		}
 		
-		//invalidate();
-
-
-		
-		
+		invalidate();
 		
 		return super.onTouchEvent(e);
 	}

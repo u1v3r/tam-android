@@ -3,6 +3,8 @@ package cz.vutbr.fit.testmind.graphics;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.shapes.PathShape;
 
 public class TAMDefaultConnection implements ITAMConnection {
@@ -38,14 +40,40 @@ public class TAMDefaultConnection implements ITAMConnection {
 		canvas.drawLine(parent.getPosition().x, parent.getPosition().y,
 				child.getPosition().x, child.getPosition().y, paint);
 	}
+	
+	/*private boolean inRange(int value, int from, int to) {
+		
+		if(from > to) {
+			if(value >= to && value <= from) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if(value >= from && value <= to) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}*/
 
 	public boolean hit(int x, int y) {
-		// TODO Auto-generated method stub
+		// not supported //
+		
+		//Point pos1 = parent.getPosition();
+		//Point pos2 = child.getPosition();
+		
+		/*if(inRange(x,pos1.x,pos2.x) && inRange(y,pos1.y,pos2.y)) {
+			//TODO
+			return true;
+		}*/
 		return false;
 	}
 
 	public void setHighlight(boolean enable) {
 		isHighlighted = enable;
+		//graph.invalidate();
 	}
 
 	public void setBackgroud(int background) {
