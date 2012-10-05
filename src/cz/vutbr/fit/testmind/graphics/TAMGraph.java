@@ -63,8 +63,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		return factory;
 	}
 	
-	public ITAMNode addRoot(int type, int x, int y) {
-		ITAMNode node = factory.createNode(this, type, x, y);
+	public ITAMNode addRoot(int type, int x, int y, String text) {
+		ITAMNode node = factory.createNode(this, type, x, y, text);
 		return node;
 	}
 	
@@ -92,49 +92,49 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 
-		synchronized (drawingThread.getSurfaceHolder()) {	
+		synchronized (drawingThread.getSurfaceHolder()) {
 			//System.out.println(e);
-	
+
 			int x = (int) e.getX();
 			int y = (int) e.getY();
-	
+
 			if(e.getAction() == MotionEvent.ACTION_DOWN) {
 				//System.out.println(e);
-	
+
 				//System.out.println("click: " + e.getX() + " " + e.getY());
-	
+
 				ITAMItem result = null;
-	
+
 				/*for(ITAMItem item : listOfConnections) {
 					if(item.hit(x, y)) {
 						result = item;
 					}
 				}*/
-	
+
 				for(ITAMItem item : listOfNodes) {
 					if(item.hit(x, y)) {
 						result = item;
 					}
 				}
-	
+
 				select(result);
-	
+
 				actualPoint.x = x;
 				actualPoint.y = y;
-	
+
 			} else if (e.getAction() == MotionEvent.ACTION_MOVE) {
-	
+
 				//System.out.println("move: " + e.getX() + " " + e.getY());
-	
+
 				//Point newPoint = new Point((int) e.getX(), (int) e.getY());
-	
+
 				int dx = x - actualPoint.x;
 				int dy = y - actualPoint.y;
-	
-	
+
+
 				if(dx > 0 || dy > 0 || dx < 0 || dy < 0) {
 					if(!listOfSelectedItems.isEmpty()) {
-	
+
 						for(ITAMItem item : listOfSelectedItems) {
 							item.move(dx,dy);
 						}
@@ -143,14 +143,14 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 							item.move(dx,dy);
 						}
 					}
-	
+
 					actualPoint.x = x;
 					actualPoint.y = y;
 				}
 			}
-	
+
 			invalidate();
-	
+
 			return super.onTouchEvent(e);
 		}
 	
