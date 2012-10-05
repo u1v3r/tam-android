@@ -3,6 +3,7 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.graphics.DrawingSurface.DrawingThread;
 
 
@@ -16,6 +17,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
+import android.widget.ZoomControls;
 
 public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
@@ -28,6 +31,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected List<ITAMItem> listOfSelectedItems;
 	protected TAMItemFactory factory;
 	protected Point actualPoint;
+	protected ZoomControls zoomControls;
 	//Canvas canvas;
 	
 	
@@ -51,8 +55,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		setFocusableInTouchMode(true);
 		
 		drawingThread = new DrawingThread(getHolder(), this);
-		getHolder().addCallback(this);
-		
+		getHolder().addCallback(this);			
 		
 	}
 	
@@ -132,6 +135,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					actualPoint.x = x;
 					actualPoint.y = y;
 				}
+			} else if(e.getAction() == MotionEvent.ACTION_POINTER_DOWN){// pinch to zoom
+				
 			}
 			
 			//invalidate();
@@ -172,8 +177,30 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		// TODO Auto-generated method stub
 		
+		//zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
+		
+		//zoomControls.setIsZoomInEnabled(true);
+		//zoomControls.setIsZoomOutEnabled(true);
+		
+		/*
+		zoomControls.setOnZoomInClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				setPivotX(10);
+				setPivotY(40);
+				setScaleX(40f);
+				setScaleY(160f);
+			}
+		});
+		
+		zoomControls.setOnZoomOutClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Toast.makeText(getContext(), "click out", Toast.LENGTH_LONG).show();
+			}
+		});
+		*/
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
