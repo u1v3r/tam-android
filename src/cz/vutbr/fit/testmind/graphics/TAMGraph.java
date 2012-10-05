@@ -85,7 +85,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	@Override
 	public boolean onDragEvent(DragEvent event) {
-		System.out.println(event);
+		//System.out.println(event);
 		return super.onDragEvent(event);
 	}
 	
