@@ -1,6 +1,5 @@
-package cz.vutbr.fit.tesmind.graphics;
+package cz.vutbr.fit.testmind.graphics;
 
-import cz.vutbr.fit.testmind.graphics.ITAMItem;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;

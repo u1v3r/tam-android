@@ -1,8 +1,5 @@
 package cz.vutbr.fit.testmind.graphics;
 
-import cz.vutbr.fit.tesmind.graphics.ITAMConnection;
-import cz.vutbr.fit.tesmind.graphics.ITAMNode;
-import cz.vutbr.fit.tesmind.graphics.TAMDefaultConnection;
 
 public class TAMItemFactory {
 	

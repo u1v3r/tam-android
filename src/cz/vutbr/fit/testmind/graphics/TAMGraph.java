@@ -3,8 +3,6 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.tesmind.graphics.ITAMConnection;
-import cz.vutbr.fit.tesmind.graphics.ITAMNode;
 
 import android.content.Context;
 import android.graphics.Canvas;

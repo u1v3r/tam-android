@@ -1,6 +1,5 @@
-package cz.vutbr.fit.tesmind.graphics;
+package cz.vutbr.fit.testmind.graphics;
 
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,7 +30,11 @@ public class TAMDefaultConnection implements ITAMConnection {
 
 	public void draw(Canvas canvas, Paint paint) {
 		paint.setAntiAlias(true);
-		paint.setColor(background);
+		if(isHighlighted) {
+			paint.setColor(highlightColor);
+		} else {
+			paint.setColor(background);
+		}
 		canvas.drawLine(parent.getPosition().x, parent.getPosition().y,
 				child.getPosition().x, child.getPosition().y, paint);
 	}
@@ -42,13 +45,11 @@ public class TAMDefaultConnection implements ITAMConnection {
 	}
 
 	public void setHighlight(boolean enable) {
-		// TODO Auto-generated method stub
-		
+		isHighlighted = enable;
 	}
 
 	public void setBackgroud(int background) {
-		// TODO Auto-generated method stub
-		
+		this.background = background;
 	}
 
 	public int getBackground() {
@@ -56,8 +57,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 	}
 
 	public void setHighlightColor(int highlightColor) {
-		// TODO Auto-generated method stub
-		
+		this.highlightColor = highlightColor;
 	}
 
 	public int getHighlightColor() {

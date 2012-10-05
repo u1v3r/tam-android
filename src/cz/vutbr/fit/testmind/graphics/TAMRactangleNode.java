@@ -1,7 +1,5 @@
 package cz.vutbr.fit.testmind.graphics;
 
-import cz.vutbr.fit.tesmind.graphics.ITAMConnection;
-import cz.vutbr.fit.tesmind.graphics.ITAMNode;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
