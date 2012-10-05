@@ -1,6 +1,7 @@
 package com.example.testmind;
 
 import cz.vutbr.fit.tesmind.graphics.ITAMItem;
+import cz.vutbr.fit.tesmind.graphics.ITAMNode;
 import cz.vutbr.fit.tesmind.graphics.TAMGraph;
 import android.os.Bundle;
 import android.app.Activity;
@@ -19,8 +20,13 @@ public class MainActivity extends Activity {
         graph = new TAMGraph(this);
         graph.setBackgroundColor(Color.WHITE);
         
-        graph.addRoot(ITAMItem.ITEM_TYPE_RECTANGLE, 10, 10);
-        graph.addRoot(ITAMItem.ITEM_TYPE_RECTANGLE, 60, 60);
+        ITAMNode node1 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 10, 10);
+        
+        node1.addChild(10, 40);
+        
+        ITAMNode node2 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 60, 60);
+        
+        node2.addChild(100, 100);
         
         setContentView(graph);
 

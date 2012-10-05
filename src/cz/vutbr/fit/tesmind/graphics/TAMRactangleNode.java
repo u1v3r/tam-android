@@ -6,11 +6,11 @@ import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 
-public class TAMRactangleNode extends ShapeDrawable implements ITAMItem {
+public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
 	
 	private Point position;
 	private Point size;
-	private final int type = ITEM_TYPE_RECTANGLE;
+	private final int type = NODE_TYPE_RECTANGLE;
 	private TAMGraph graph;
 	private int background;
 	private int highlightColor;
@@ -35,7 +35,10 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMItem {
 
 	public ITAMItem addChild(int type, int x, int y) {
 		
-		return graph.getItemFactory().createNode(graph, type, x, y);
+		ITAMNode node = graph.getItemFactory().createNode(graph, type, x, y);
+		graph.getItemFactory().createConnection(graph, this, node, ITAMConnection.CONNECTION_TYPE_DEFAULT);
+		
+		return node;
 	}
 
 	public int getType() {
@@ -72,14 +75,14 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMItem {
 		return background;
 	}
 	
-	public void highlightColor(int highlightColor) {
+	public void setHighlightColor(int highlightColor) {
 		this.highlightColor = highlightColor;
 		if(isHighlited) {
 			this.getPaint().setColor(highlightColor);
 		}
 	}
 	
-	public int highlightColor() {
+	public int getHighlightColor() {
 		return highlightColor;
 	}
 
@@ -101,8 +104,13 @@ public class TAMRactangleNode extends ShapeDrawable implements ITAMItem {
 	}
 
 	public void move(int dx, int dy) {
+		
+		position.x += dx;
+		position.y += dy;
+		
 		Rect rect = this.getBounds();
 		this.setBounds(rect.left+dx, rect.top+dy, rect.right+dx, rect.bottom+dy);
+		
 		graph.invalidate();
 	}
 
