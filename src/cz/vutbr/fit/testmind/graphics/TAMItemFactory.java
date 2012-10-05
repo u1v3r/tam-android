@@ -3,12 +3,12 @@ package cz.vutbr.fit.testmind.graphics;
 
 public class TAMItemFactory {
 	
-	protected ITAMNode createNode(TAMGraph graph, int type, int x, int y) {
+	protected ITAMNode createNode(TAMGraph graph, int type, int x, int y, String text) {
 		
 		ITAMNode node = null;
 		
 		if(type == ITAMNode.NODE_TYPE_RECTANGLE) {
-			node = new TAMRactangleNode(graph, x, y);
+			node = new TAMRactangleNode(graph, x, y, text);
 		}
 		
 		graph.listOfNodes.add(node);

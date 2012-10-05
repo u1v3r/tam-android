@@ -21,13 +21,13 @@ public class MainActivity extends Activity {
         graph = new TAMGraph(this);
         graph.setBackgroundColor(Color.WHITE);
         
-        ITAMNode node1 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 10, 10);
+        ITAMNode node1 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 10, 10, "jedna");
         
-        node1.addChild(10, 40);
+        node1.addChild(10, 40, "dva");
         
-        ITAMNode node2 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 60, 60);
+        ITAMNode node2 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 60, 60, "tri");
         
-        node2.addChild(100, 100);
+        node2.addChild(100, 100, "ctyri");
         
         setContentView(graph);
 

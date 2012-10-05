@@ -37,8 +37,8 @@ public class TAMGraph extends View {
 		return factory;
 	}
 	
-	public ITAMNode addRoot(int type, int x, int y) {
-		ITAMNode node = factory.createNode(this, type, x, y);
+	public ITAMNode addRoot(int type, int x, int y, String text) {
+		ITAMNode node = factory.createNode(this, type, x, y, text);
 		return node;
 	}
 	
@@ -66,7 +66,7 @@ public class TAMGraph extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		
-		System.out.println(e);
+		//System.out.println(e);
 		
 		int x = (int) e.getX();
 		int y = (int) e.getY();
