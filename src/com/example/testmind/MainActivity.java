@@ -13,8 +13,6 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FrameLayout frame = (FrameLayout)findViewById(R.id.main_view);
-        frame.addView(new DataRectangle(this, 30, 80));
         //setContentView(new DrawingSurface(this));
     }
 
@@ -22,6 +20,14 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
+    }
+    
+    public void createNode(){
+    	    	    	
+    	FrameLayout frame = (FrameLayout)findViewById(R.id.main_view);
+         	
+    	
+    	frame.addView(new DataRectangle(this, 30, 80));
     }
     
     

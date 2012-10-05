@@ -4,11 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <SurfaceView
-        android:id="@+id/sruface_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#FF66FF33"
-        android:focusableInTouchMode="true" />
+    <com.example.testmind.draw.DrawingSurface
+        android:id="@+id/drawing_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/drawing_surface" />
 
 </FrameLayout>
