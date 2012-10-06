@@ -7,6 +7,7 @@ import android.graphics.Rect;
 public interface ITAMNode extends ITAMItem {
 	
 	public final int NODE_TYPE_RECTANGLE = 1;
+	public final int NODE_TYPE_ROUND_RECTANGLE = 2;
 	
 	public ITAMItem addChild(int x, int y, String text);
 	
@@ -16,8 +17,20 @@ public interface ITAMNode extends ITAMItem {
 	
 	public Point getPosition();
 	
-	public Point getSize();
+	public void actualizePosition(int x, int y);
+	
+	public float getWidth();
+	
+	public float getHeight();
 	
 	public void draw(Canvas canvas);
+	
+	public void actualizeSize();
+	
+	public TAMGraph getGraph();
+	
+	public String getText();
+	
+	public void setText(String text);
 
 }

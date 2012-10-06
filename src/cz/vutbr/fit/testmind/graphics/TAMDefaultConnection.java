@@ -77,7 +77,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 		return false;
 	}
 
-	public void setHighlight(boolean enable) {
+	public void highlight(boolean enable) {
 		isHighlighted = enable;
 		//graph.invalidate();
 	}
@@ -104,6 +104,16 @@ public class TAMDefaultConnection implements ITAMConnection {
 
 	public void move(int dx, int dy) {
 		// not supported - connections are fixed to nodes //
+	}
+
+	public void setForeground(int foreground) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getForeground() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

@@ -10,11 +10,15 @@ public interface ITAMItem {
 	
 	public boolean hit(int x, int y);
 
-	public void setHighlight(boolean enable);
+	public void highlight(boolean enable);
 	
 	public void setBackgroud(int background);
 	
 	public int getBackground();
+	
+	public void setForeground(int foreground);
+	
+	public int getForeground();
 	
 	public void setHighlightColor(int highlightColor);
 	
