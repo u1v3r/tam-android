@@ -19,6 +19,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String TAG = "TAMGraph";
 
 	public static final float ZOOM_STEP = 0.3f;
+	public static final float DEFAULT_ZOOM = 1f;
 	
 	protected DrawingThread drawingThread;
 	protected Paint paint = new Paint();
@@ -30,8 +31,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
-   
-    
+
+	public float px, py;
+
+       
 	public TAMGraph(Context context) {
 		this(context,null);		
 	}
@@ -52,8 +55,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		setFocusableInTouchMode(true);
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
-		setWillNotDraw(false);		
-		
+		setWillNotDraw(false);
+				
+		// default zoom na stred 
+		px = getWidth()/2; 
+		py = getHeight()/2;
 	}
 	
 	protected TAMItemFactory getItemFactory() {
@@ -67,6 +73,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	@Override
 	protected void onDraw(Canvas canvas) { 
+		
+		//canvas.scale(2, 2, 0, 0);
+		canvas.scale(DEFAULT_ZOOM, DEFAULT_ZOOM, px, py);
 		
 		//System.out.println("ahoj");
 				
