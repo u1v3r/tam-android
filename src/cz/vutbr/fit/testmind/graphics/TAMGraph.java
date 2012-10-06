@@ -63,7 +63,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	@Override
-	protected void onDraw(Canvas canvas) {        
+	protected void onDraw(Canvas canvas) {     
+		
+		//System.out.println("ahoj");
 				
         //paint.setColor(Color.BLUE);
 		
@@ -161,7 +163,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		
 		for(ITAMItem item : listOfSelectedItems) {
-			item.setHighlight(false);
+			item.highlight(false);
 		}
 		
 		listOfSelectedItems.clear();
@@ -169,7 +171,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		if(selectedItem != null) {
 			listOfSelectedItems.add(selectedItem);
 			
-			selectedItem.setHighlight(true);
+			selectedItem.highlight(true);
 		}
 	}
 

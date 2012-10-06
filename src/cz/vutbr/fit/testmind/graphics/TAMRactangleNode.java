@@ -1,149 +1,70 @@
 package cz.vutbr.fit.testmind.graphics;
 
-import cz.vutbr.fit.testmind.R;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
-import android.graphics.drawable.shapes.Shape;
 
-public class TAMRactangleNode extends ShapeDrawable implements ITAMNode {
+/**
+ * Default rectangle node.
+ * 
+ * @author jurij
+ *
+ */
+public class TAMRactangleNode extends TAMAbstractNode implements ITAMNode {
 	
-	public final int TEXT_SIZE = 14;
-	private Point position;
-	private Point size;
-	private final int type = NODE_TYPE_RECTANGLE;
-	private TAMGraph graph;
-	private int background;
-	private int foreground;
-	private int highlightColor;
-	private boolean isHighlited;
-	private String text;
+	public static final int TEXT_SIZE = 14;
+	private static final int type = NODE_TYPE_RECTANGLE;
+	public static final int OFFSET_X = 20;
+	public static final int OFFSET_Y = 20;
 	
 	public TAMRactangleNode(TAMGraph graph, int x, int y, String text) {
-		super(new RectShape());
-		
-		this.getPaint().setTextSize(TEXT_SIZE);
-		
-		this.graph = graph;
-		this.position = new Point(x,y);
-		this.text = text;
-		int width = (int) this.getPaint().measureText(text)/2;
-		/*Rect rect = new Rect();
-		this.getPaint().getTextBounds(text, 0, 0, rect);
-		System.out.println("rect: " + rect);*/
-		System.out.println(width);
-		this.size = new Point((width*2+40), 20); // TODO count new size due to text
-		this.background = graph.getResources().getColor(R.color.node_background);
-		this.foreground = graph.getResources().getColor(R.color.node_text);
-		this.highlightColor = graph.getResources().getColor(R.color.node_highlight_background);
-		this.isHighlited = false;
-	    this.setBounds(x-width-20, y-16, x+width+20, y+16);
-	    
-	    this.getPaint().setColor(background);
-	}
-	
-	public ITAMItem addChild(int x, int y, String text) {
-		return addChild(type, x, y, text);
-	}
-
-	public ITAMItem addChild(int type, int x, int y, String text) {
-		
-		ITAMNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
-		graph.getItemFactory().createConnection(graph, this, node, ITAMConnection.CONNECTION_TYPE_DEFAULT);
-		
-		return node;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public Point getPosition() {
-		return position;
-	}
-
-	public Point getSize() {
-		return size;
+		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
 	}
 	
 	public boolean hit(int x, int y) {
 		
 		Rect rect = this.getBounds();
 		
+		// if point is situated in rectangle area then return true, otherwise return false //
 		if(rect.contains(x,y)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	public void setBackgroud(int background) {
-		this.background = background;
-		if(!isHighlited) {
-			this.getPaint().setColor(background);
-		}
-	}
-	
-	public int getBackground() {
-		return background;
-	}
-	
-	public void setHighlightColor(int highlightColor) {
-		this.highlightColor = highlightColor;
-		if(isHighlited) {
-			this.getPaint().setColor(highlightColor);
-		}
-	}
-	
-	public int getHighlightColor() {
-		return highlightColor;
-	}
-
-	public void setHighlight(boolean enable) {
-		
-		if(enable) {
-			this.getPaint().setColor(highlightColor);
-		} else {
-			this.getPaint().setColor(background);
-		}
-		
-		isHighlited = enable;
-		
-		//graph.invalidate();
-	}
-	
-	public boolean isHighlighted() {
-		return isHighlited;
-	}
 
 	public void move(int dx, int dy) {
 		
-		position.x += dx;
-		position.y += dy;
+		setPosition(getPosition().x+dx, getPosition().y+dy);
 		
 		Rect rect = this.getBounds();
 		this.setBounds(rect.left+dx, rect.top+dy, rect.right+dx, rect.bottom+dy);
-		
-		//graph.invalidate();
 	}
 	
-	@Override
-	protected void onDraw(Shape shape, Canvas canvas, Paint paint) {
+	public void actualizePosition(int x, int y) {
 		
-		if(isHighlited) {
-			paint.setColor(highlightColor);
-		} else {
-			paint.setColor(background);
-		}
+		// change position //
+		setPosition(x, y);
 		
-		super.onDraw(shape, canvas, paint);
+		// count new position for rectangle //
+		Rect rect = this.getBounds();
+		int width = rect.right - rect.left;
+		int height = rect.top - rect.bottom;
+		int left = x - width/2;
+		int top = y - height/2;
 		
-		paint.setColor(foreground);
-		canvas.drawText(text, 20, 20, paint);
+		// actualize rectangle //
+		this.setBounds(left, top, left+width, top+height);
+	}
+	
+	public void actualizeSize() {
+		this.getPaint().setTextSize(TEXT_SIZE);
+		int width = (int) this.getPaint().measureText(getText())/2;
+		
+		Point p = this.getPosition();
+		
+		// real size of node //
+		this.setBounds(p.x-width-20, p.y-16, p.x+width+20, p.y+16);
 	}
 
 }
