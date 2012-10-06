@@ -53,8 +53,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
 		setWillNotDraw(false);
-		sx = sy = 0.5f;
-		px = py = 200;
+		sx = sy = 1;
+		px = py = 0;
 	}
 	
 	protected TAMItemFactory getItemFactory() {

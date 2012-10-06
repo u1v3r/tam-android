@@ -12,10 +12,10 @@ import android.graphics.drawable.shapes.RectShape;
  */
 public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 	
-	public static final int TEXT_SIZE = 14;
+	public static final int TEXT_SIZE = 64;
 	private static final int type = NODE_TYPE_RECTANGLE;
 	public static final int OFFSET_X = 20;
-	public static final int OFFSET_Y = 20;
+	public static final int OFFSET_Y = 65;
 	
 	public TAMRectangleNode(TAMGraph graph, int x, int y, String text) {
 		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
@@ -77,7 +77,7 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 		Point p = this.getPosition();
 		
 		// real size of node //
-		this.setBounds(p.x-width-20, p.y-16, p.x+width+20, p.y+16);
+		this.setBounds(p.x-width-20, p.y-45, p.x+width+20, p.y+45);
 	}
 
 }
