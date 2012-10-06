@@ -51,6 +51,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
 		setWillNotDraw(false);		
+		
 	}
 	
 	protected TAMItemFactory getItemFactory() {
@@ -63,7 +64,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	@Override
-	protected void onDraw(Canvas canvas) {     
+	protected void onDraw(Canvas canvas) { 
 		
 		//System.out.println("ahoj");
 				
@@ -174,7 +175,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 			selectedItem.highlight(true);
 		}
 	}
-
+	
 	public void surfaceCreated(SurfaceHolder holder) {
 		this.drawingThread.setRunning(true);
 		this.drawingThread.start();
@@ -220,6 +221,15 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	        }
 	    }
 	}
+	
+	
+	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
+		setPivotX(pivotX);		
+		setPivotY(pivotY);
+		setScaleX(scaleX);
+		setScaleY(scaleY);
+	}
+	
 	
 	/**
 	 * Trieda sa postará o vytvorenie samostatného vlákna na vykreslenie plátna
