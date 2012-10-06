@@ -84,11 +84,7 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 		Point p = this.getPosition();
 		
 		// real size of node //
-<<<<<<< HEAD
 		this.setBounds(p.x-width-40, p.y-32, p.x+width+40, p.y+32);
-=======
-		this.setBounds(p.x-width-20, p.y-45, p.x+width+20, p.y+45);
->>>>>>> 4329e626a0a1d5911b77d4c65f831014568673fd
 	}
 
 }
