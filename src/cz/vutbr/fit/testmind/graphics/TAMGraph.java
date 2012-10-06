@@ -28,6 +28,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
+	public float sx, sy, px, py;
 
     
     
@@ -51,7 +52,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		setFocusableInTouchMode(true);
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
-		setWillNotDraw(false);		
+		setWillNotDraw(false);
+		sx = sy = 0.5f;
+		px = py = 200;
 	}
 	
 	protected TAMItemFactory getItemFactory() {
@@ -65,6 +68,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {     
+		
+		//canvas.scale(2, 2, 0, 0);
+		canvas.scale(sx, sy, px, py);
 		
 		//System.out.println("ahoj");
 				
@@ -134,11 +140,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					if(!listOfSelectedItems.isEmpty()) {
 
 						for(ITAMItem item : listOfSelectedItems) {
-							item.move(dx,dy);
+							item.move((int)(dx/sx),(int)(dy/sy));
 						}
 					} else {
 						for(ITAMItem item : listOfNodes) {
-							item.move(dx,dy);
+							item.move((int)(dx/sx),(int)(dy/sy));
 						}
 					}
 
