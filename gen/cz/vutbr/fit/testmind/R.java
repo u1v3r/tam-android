@@ -13,8 +13,10 @@ public final class R {
     public static final class color {
         public static final int drawing_surface=0x7f040000;
         public static final int node_background=0x7f040001;
-        public static final int node_highlight_background=0x7f040002;
-        public static final int node_text=0x7f040003;
+        public static final int node_background_stroke=0x7f040002;
+        public static final int node_highlight_background=0x7f040003;
+        public static final int node_highlight_background_stroke=0x7f040004;
+        public static final int node_text=0x7f040005;
     }
     public static final class drawable {
         public static final int ic_action_add=0x7f020000;

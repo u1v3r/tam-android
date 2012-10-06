@@ -2,6 +2,7 @@ package cz.vutbr.fit.testmind.graphics;
 
 import cz.vutbr.fit.testmind.R;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
@@ -28,8 +29,11 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	private int background;
 	private int foreground;
 	private int highlightColor;
+	private int highlightColorStroke;
+	private int backgroundStroke;
 	
 	private boolean isHighlited;
+	
 	
 	public TAMAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
@@ -39,8 +43,10 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 
 		this.type = type;
 		this.background = graph.getResources().getColor(R.color.node_background);
+		this.backgroundStroke = graph.getResources().getColor(R.color.node_background_stroke);
 		this.foreground = graph.getResources().getColor(R.color.node_text);
 		this.highlightColor = graph.getResources().getColor(R.color.node_highlight_background);
+		this.highlightColorStroke = graph.getResources().getColor(R.color.node_highlight_background_stroke);
 		
 		this.isHighlited = false;
 		
@@ -144,14 +150,20 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	
 	@Override
 	protected void onDraw(Shape shape, Canvas canvas, Paint paint) {
-		Log.i("AbstractNode", "som tu");
+		Paint strokePaint = new Paint();
+		strokePaint.setStrokeWidth(2f);
+		strokePaint.setStyle(Paint.Style.STROKE);
+		
 		if(isHighlited) {
 			paint.setColor(highlightColor);
+			strokePaint.setColor(highlightColorStroke);
 		} else {
 			paint.setColor(background);
+			strokePaint.setColor(backgroundStroke);
 		}
-		
+					
 		super.onDraw(shape, canvas, paint);
+		super.onDraw(shape, canvas, strokePaint);
 		
 		paint.setColor(foreground);
 		canvas.drawText(text, offsetX, offsetY, paint);
