@@ -7,6 +7,12 @@ import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
 
+/**
+ * Abstract rectangle class providing basic functionality of drawable nodes.
+ * 
+ * @author jurij
+ *
+ */
 public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode {
 	
 	private TAMGraph graph;

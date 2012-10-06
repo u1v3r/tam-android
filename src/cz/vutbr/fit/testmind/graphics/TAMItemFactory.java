@@ -8,7 +8,7 @@ public class TAMItemFactory {
 		ITAMNode node = null;
 		
 		if(type == ITAMNode.NODE_TYPE_RECTANGLE) {
-			node = new TAMRactangleNode(graph, x, y, text);
+			node = new TAMRectangleNode(graph, x, y, text);
 		}
 		
 		graph.listOfNodes.add(node);

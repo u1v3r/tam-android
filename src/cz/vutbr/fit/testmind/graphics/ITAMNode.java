@@ -7,6 +7,7 @@ import android.graphics.Rect;
 public interface ITAMNode extends ITAMItem {
 	
 	public final int NODE_TYPE_RECTANGLE = 1;
+	public final int NODE_TYPE_ROUND_RECTANGLE = 2;
 	
 	public ITAMItem addChild(int x, int y, String text);
 	
