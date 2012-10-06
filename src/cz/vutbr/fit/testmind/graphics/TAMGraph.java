@@ -28,7 +28,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
-	
+
+    
+    
 	public TAMGraph(Context context) {
 		this(context,null);		
 	}
@@ -49,8 +51,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		setFocusableInTouchMode(true);
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
-		setWillNotDraw(false);
-		
+		setWillNotDraw(false);		
 	}
 	
 	protected TAMItemFactory getItemFactory() {
@@ -271,5 +272,4 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		}
 	}
-
 }
