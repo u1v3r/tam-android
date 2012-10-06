@@ -1,12 +1,13 @@
 package cz.vutbr.fit.testmind.dialogs;
 
 
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,23 +24,20 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 	private EditText titleEditText;
 	private Button cancelButton;
 	private Button okButton;
-	AddNodeDialogListener activity;
+	private AddNodeDialogListener activity;
 	
-	private View.OnClickListener okButtonHandler = new View.OnClickListener() {
+	private View.OnClickListener buttonsHandler = new View.OnClickListener() {
 		
 		public void onClick(View v) {			
-			activity.onFinishNodeAddDialog(titleEditText.getText().toString());	
-			dismiss();
+			if(v == okButton){
+				activity.onFinishNodeAddDialog(titleEditText.getText().toString());	
+				dismiss();
+			}else if(v == cancelButton){
+				dismiss();
+			}
 		}
 	};
-	
-	private View.OnClickListener cancelButtonHandler = new View.OnClickListener() {
 		
-		public void onClick(View v) {
-			getDialog().dismiss();			
-		}
-	};
-	
 	public AddNodeDialog() {}
 	
 	@Override
@@ -55,8 +53,13 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 			okButton = (Button)view.findViewById(R.id.add_dialog_button_ok);
 			
 			
-			cancelButton.setOnClickListener(cancelButtonHandler);
-			okButton.setOnClickListener(okButtonHandler);
+			cancelButton.setOnClickListener(buttonsHandler);
+			okButton.setOnClickListener(buttonsHandler);
+			
+			// zobrazi soft klavesnicu a po kliknuti na done ulozi
+			titleEditText.requestFocus();
+	        getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+	        titleEditText.setOnEditorActionListener(this);
 			
 			return view;
 	}

@@ -10,6 +10,7 @@
     <string name="node_add_dialog">Add Node</string>
     <string name="node_add_dialog_title">Title</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
+    <string name="node_not_selected">Please select parrent node</string>
 
 </resources>

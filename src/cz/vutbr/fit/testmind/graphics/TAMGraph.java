@@ -20,7 +20,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String TAG = "TAMGraph";
 
 	public static final float ZOOM_STEP = 0.125f;
-	public static final float DEFAULT_ZOOM = 1f;
+	public static final float DEFAULT_ZOOM = 0.7f;
+
+	private static final float MIN_ZOOM = 0;
+	private static final float MAX_ZOOM = 2;
 	
 	protected DrawingThread drawingThread;
 	protected Paint paint = new Paint();
@@ -62,10 +65,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		sx = sy = DEFAULT_ZOOM;
 		px = getWidth()/2;
 		py = getHeight()/2;
-		setPivotX(getWidth()/2); 
+		invalidate();
+		/*setPivotX(getWidth()/2); 
 		setPivotY(getHeight()/2);
 		setScaleX(DEFAULT_ZOOM);
-		setScaleY(DEFAULT_ZOOM);
+		setScaleY(DEFAULT_ZOOM);*/
 	}
 	
 	protected TAMItemFactory getItemFactory() {
@@ -95,7 +99,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected void onDraw(Canvas canvas) { 
 		
 		//canvas.scale(2, 2, 0, 0);
-		//canvas.scale(DEFAULT_ZOOM, DEFAULT_ZOOM, getPivotX(), getPivotY());
+		canvas.scale(sx, sy, px, py);
 		
 		//System.out.println("ahoj");
 				
@@ -232,12 +236,22 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
-		Log.d(TAG,"pivotX: " + getPivotX() + " ,pivotY" + getPivotY()
-				+ ", scaleX:"+ getScaleX() + ", scaleY"	 + getScaleY());
-		setPivotX(pivotX);		
+		Log.d(TAG,"pivotX: " + px + " ,pivotY" + py
+				+ ", scaleX:"+ sx + ", scaleY"	 + sy);
+		
+		
+		if(scaleX <= MIN_ZOOM || MIN_ZOOM <= 0) return;
+		if(scaleX >= MAX_ZOOM || scaleY >= MAX_ZOOM) return;
+		
+		px = pivotX;
+		py = pivotY;
+		sx = scaleX;
+		sy = scaleY;
+		/*setPivotX(pivotX);		
 		setPivotY(pivotY);
 		setScaleX(scaleX);
-		setScaleY(scaleY);		
+		setScaleY(scaleY);*/	
+		invalidate();	
 	}
 	
 	

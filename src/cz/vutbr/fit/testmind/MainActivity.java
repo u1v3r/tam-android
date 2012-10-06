@@ -2,10 +2,10 @@ package cz.vutbr.fit.testmind;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
@@ -33,15 +33,15 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
         zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				graph.zoom(graph.getScaleX() + TAMGraph.ZOOM_STEP, graph.getScaleY() + TAMGraph.ZOOM_STEP, 
-						graph.getWidth()/2, graph.getPivotY()/2);
+				graph.zoom(graph.sx + TAMGraph.ZOOM_STEP, graph.sx + TAMGraph.ZOOM_STEP, 
+						graph.getWidth()/2, graph.getHeight()/2);
 			}
 		});
         zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				graph.zoom(graph.getScaleX() - TAMGraph.ZOOM_STEP, graph.getScaleY() - TAMGraph.ZOOM_STEP, 
-						graph.getWidth()/2, graph.getPivotY()/2);
+				graph.zoom(graph.sx - TAMGraph.ZOOM_STEP, graph.sy - TAMGraph.ZOOM_STEP, 
+						graph.getWidth()/2, graph.getHeight()/2);
 			}
 		});
         
@@ -104,7 +104,7 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 	}
 	
 	/**
-	 * Vytvorí child pre vybrany parent uzol
+	 * Vytvorí child pre vybrany parrent uzol
 	 */
 	protected void addNode() {
 		
@@ -112,7 +112,11 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 		
 		if(selectedNode != null){
 			showAddNodeDialog();
+		}else{
+			Toast.makeText(this, R.string.node_not_selected, Toast.LENGTH_LONG).show();			
 		}
+		
+		
 	}
 	
 	/**
@@ -120,9 +124,9 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 	 */
 	private void showAddNodeDialog() {
 		
-		android.app.FragmentManager fm = getFragmentManager();		
+		//FragmentActivity fm = getSupportFragmentManager();		
 		AddNodeDialog dialog = new AddNodeDialog();
-		dialog.show(fm, "fragment_add_node");
+		dialog.show(getSupportFragmentManager(), "fragment_add_node");
 		
 	}
 	
