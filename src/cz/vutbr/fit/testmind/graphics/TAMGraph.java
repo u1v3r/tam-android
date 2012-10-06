@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -18,7 +19,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	private static final String TAG = "TAMGraph";
 
-	public static final float ZOOM_STEP = 0.3f;
+	public static final float ZOOM_STEP = 0.125f;
 	public static final float DEFAULT_ZOOM = 1f;
 	
 	protected DrawingThread drawingThread;
@@ -32,7 +33,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
 
-	public float px, py;
+	public float sx, sy, px, py;
 
        
 	public TAMGraph(Context context) {
@@ -58,8 +59,13 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		setWillNotDraw(false);
 				
 		// default zoom na stred 
-		px = getWidth()/2; 
+		sx = sy = DEFAULT_ZOOM;
+		px = getWidth()/2;
 		py = getHeight()/2;
+		setPivotX(getWidth()/2); 
+		setPivotY(getHeight()/2);
+		setScaleX(DEFAULT_ZOOM);
+		setScaleY(DEFAULT_ZOOM);
 	}
 	
 	protected TAMItemFactory getItemFactory() {
@@ -75,7 +81,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected void onDraw(Canvas canvas) { 
 		
 		//canvas.scale(2, 2, 0, 0);
-		canvas.scale(DEFAULT_ZOOM, DEFAULT_ZOOM, px, py);
+		//canvas.scale(DEFAULT_ZOOM, DEFAULT_ZOOM, getPivotX(), getPivotY());
 		
 		//System.out.println("ahoj");
 				
@@ -145,11 +151,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					if(!listOfSelectedItems.isEmpty()) {
 
 						for(ITAMItem item : listOfSelectedItems) {
-							item.move(dx,dy);
+							item.move((int)(dx/sx),(int)(dy/sy));
 						}
 					} else {
 						for(ITAMItem item : listOfNodes) {
-							item.move(dx,dy);
+							item.move((int)(dx/sx),(int)(dy/sy));
 						}
 					}
 
@@ -195,29 +201,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		
-		//zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
-		
-		//zoomControls.setIsZoomInEnabled(true);
-		//zoomControls.setIsZoomOutEnabled(true);
-		
-		/*
-		zoomControls.setOnZoomInClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				setPivotX(10);
-				setPivotY(40);
-				setScaleX(40f);
-				setScaleY(160f);
-			}
-		});
-		
-		zoomControls.setOnZoomOutClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				Toast.makeText(getContext(), "click out", Toast.LENGTH_LONG).show();
-			}
-		});
-		*/
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
@@ -235,10 +218,12 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
+		Log.i(TAG,"pivotX: " + getPivotX() + " ,pivotY" + getPivotY()
+				+ ", scaleX:"+ getScaleX() + ", scaleY"	 + getScaleY());
 		setPivotX(pivotX);		
 		setPivotY(pivotY);
 		setScaleX(scaleX);
-		setScaleY(scaleY);
+		setScaleY(scaleY);		
 	}
 	
 	
