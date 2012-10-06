@@ -1,24 +1,26 @@
 package cz.vutbr.fit.testmind;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.ZoomControls;
+import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
+import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
-
-
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity implements AddNodeDialogListener{
 	
+	private static final String TAG = "MainActivity";
 	protected TAMGraph graph;
 	protected ZoomControls zoomControls;
 	
 	protected int currentZoomLevel = 0;
-	protected int maxZoomLovel = 0;	
+	protected int maxZoomLovel = 0;
+	private ITAMNode selectedNode;	
 
 	
     @Override
@@ -100,9 +102,38 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		
 	}
-
-	private void addNode() {
-		// TODO Auto-generated method stub
+	
+	/**
+	 * Vytvorí child pre vybrany parent uzol
+	 */
+	protected void addNode() {
 		
+		selectedNode = graph.getSelectedNode();
+		
+		if(selectedNode != null){
+			showAddNodeDialog();
+		}
+	}
+	
+	/**
+	 * Zobrazí dialog na pridanie uzlu
+	 */
+	private void showAddNodeDialog() {
+		
+		android.app.FragmentManager fm = getFragmentManager();		
+		AddNodeDialog dialog = new AddNodeDialog();
+		dialog.show(fm, "fragment_add_node");
+		
+	}
+	
+	/**
+	 * Vykoná sa po uzavretí dialogu
+	 */
+	public void onFinishNodeAddDialog(String title) {
+		/*
+		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
+		 */
+		selectedNode.addChild(selectedNode.getPosition().x + 50, 
+				selectedNode.getPosition().y + 50, title);
 	}
 }

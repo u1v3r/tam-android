@@ -77,6 +77,20 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		return node;
 	}
 	
+	public ITAMNode getSelectedNode(){
+		
+		ITAMItem item;
+		
+		for (ITAMNode node : listOfNodes) {
+			item = (ITAMItem)node;
+			if(listOfSelectedItems.contains(item)){
+				return node;
+			}			
+		}
+		
+		return null;
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas) { 
 		
@@ -218,7 +232,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
-		Log.i(TAG,"pivotX: " + getPivotX() + " ,pivotY" + getPivotY()
+		Log.d(TAG,"pivotX: " + getPivotX() + " ,pivotY" + getPivotY()
 				+ ", scaleX:"+ getScaleX() + ", scaleY"	 + getScaleY());
 		setPivotX(pivotX);		
 		setPivotY(pivotY);
