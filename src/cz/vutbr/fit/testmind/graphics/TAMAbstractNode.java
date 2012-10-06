@@ -31,8 +31,6 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	
 	private boolean isHighlited;
 	
-	private int actualTextSize;
-	
 	public TAMAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
 		
@@ -157,13 +155,5 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		
 		paint.setColor(foreground);
 		canvas.drawText(text, offsetX, offsetY, paint);
-	}
-	
-	public int getActualTextSize() {
-		return actualTextSize;
-	}
-
-	public void setActualTextSize(int actualTextSize) {
-		this.actualTextSize = actualTextSize;
 	}
 }

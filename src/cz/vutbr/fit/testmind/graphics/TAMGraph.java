@@ -17,6 +17,8 @@ import android.widget.ZoomControls;
 public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	private static final String TAG = "TAMGraph";
+
+	public static final float ZOOM_STEP = 0.3f;
 	
 	protected DrawingThread drawingThread;
 	protected Paint paint = new Paint();

@@ -2,7 +2,6 @@ package cz.vutbr.fit.testmind;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class MainActivity extends Activity {
 	
-	protected static final String TAG = "MainActivity";
 	protected TAMGraph graph;
 	protected ZoomControls zoomControls;
 	
@@ -33,20 +31,15 @@ public class MainActivity extends Activity {
         zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Log.i(TAG,"scaleX:" + graph.getScaleX() + " ,scaleY:" + graph.getScaleY());
-				
-				graph.zoom(graph.getScaleX() + 0.5f, graph.getScaleY() + 0.5f, 
-						graph.getWidth()/2, graph.getHeight()/2);
-			
+				graph.zoom(graph.getScaleX() + TAMGraph.ZOOM_STEP, graph.getScaleY() + TAMGraph.ZOOM_STEP, 
+						graph.getWidth()/2, graph.getPivotY()/2);
 			}
 		});
         zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				Log.i(TAG,"scaleX:" + graph.getScaleX() + " ,scaleY:" + graph.getScaleY());
-				
-				graph.zoom(graph.getScaleX() - 0.5f, graph.getScaleY() - 0.5f, 
-						graph.getWidth()/2, graph.getHeight()/2); 
+				graph.zoom(graph.getScaleX() - TAMGraph.ZOOM_STEP, graph.getScaleY() - TAMGraph.ZOOM_STEP, 
+						graph.getWidth()/2, graph.getPivotY()/2);
 			}
 		});
         
