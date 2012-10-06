@@ -2,11 +2,11 @@ package cz.vutbr.fit.testmind;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
@@ -15,6 +15,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
 public class MainActivity extends Activity {
 	
 	protected TAMGraph graph;
+	protected ZoomControls zoomControls;
 	
 	protected int currentZoomLevel = 0;
 	protected int maxZoomLovel = 0;	
@@ -26,6 +27,22 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);        
 
         graph = (TAMGraph)findViewById(R.id.tam_graph);
+        zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
+        zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), "+", Toast.LENGTH_LONG).show();
+			}
+		});
+        zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				v.setPivotX(10);
+				v.setPivotY(10);  
+				graph.setScaleX(1);
+				graph.setScaleY(1); 
+			}
+		});
         
 		ITAMNode node1 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 10, 10, "jedna");
 		

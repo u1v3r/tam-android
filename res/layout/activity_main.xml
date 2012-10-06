@@ -4,16 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
+    <cz.vutbr.fit.testmind.graphics.TAMGraph
+        android:id="@+id/tam_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:background="@color/drawing_surface" />
 
-        <cz.vutbr.fit.testmind.graphics.TAMGraph
-            android:id="@+id/tam_graph"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/drawing_surface" />
-    </LinearLayout>
+    <ZoomControls
+        android:id="@+id/zoom_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal" />
 
 </FrameLayout>

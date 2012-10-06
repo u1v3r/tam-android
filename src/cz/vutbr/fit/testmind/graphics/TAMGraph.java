@@ -28,8 +28,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
-
-    
+   
     
 	public TAMGraph(Context context) {
 		this(context,null);		
