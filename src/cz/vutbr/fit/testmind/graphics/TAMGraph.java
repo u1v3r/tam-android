@@ -20,7 +20,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	private static final String TAG = "TAMGraph";
 
 	public static final float ZOOM_STEP = 0.125f;
-	public static final float DEFAULT_ZOOM = 0.7f;
+	public static final float DEFAULT_ZOOM = 0.4f;
 
 	private static final float MIN_ZOOM = 0;
 	private static final float MAX_ZOOM = 2;
@@ -240,8 +240,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				+ ", scaleX:"+ sx + ", scaleY"	 + sy);
 		
 		
-		if(scaleX <= MIN_ZOOM || MIN_ZOOM <= 0) return;
-		if(scaleX >= MAX_ZOOM || scaleY >= MAX_ZOOM) return;
+		if(scaleX <= MIN_ZOOM || scaleY <= MIN_ZOOM) return;
+		if(scaleY >= MAX_ZOOM || scaleY >= MAX_ZOOM) return;
 		
 		px = pivotX;
 		py = pivotY;

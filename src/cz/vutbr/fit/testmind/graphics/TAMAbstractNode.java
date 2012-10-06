@@ -17,6 +17,8 @@ import android.util.Log;
  */
 public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode {
 	
+	private static final float STROKE_WIDTH = 5f;
+	
 	private TAMGraph graph;
 	private String text;
 	
@@ -151,7 +153,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	@Override
 	protected void onDraw(Shape shape, Canvas canvas, Paint paint) {
 		Paint strokePaint = new Paint();
-		strokePaint.setStrokeWidth(2f);
+		strokePaint.setStrokeWidth(STROKE_WIDTH);
 		strokePaint.setStyle(Paint.Style.STROKE);
 		
 		if(isHighlited) {
