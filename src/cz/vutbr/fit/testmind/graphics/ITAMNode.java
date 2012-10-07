@@ -2,7 +2,6 @@ package cz.vutbr.fit.testmind.graphics;
 
 import java.util.List;
 
-import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
 
@@ -28,8 +27,6 @@ public interface ITAMNode extends ITAMItem {
 	//public void draw(Canvas canvas);
 	
 	public void actualizeSize();
-	
-	public TAMGraph getGraph();
 	
 	public String getText();
 	

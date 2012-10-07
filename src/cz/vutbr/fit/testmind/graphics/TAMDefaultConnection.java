@@ -3,9 +3,6 @@ package cz.vutbr.fit.testmind.graphics;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.drawable.shapes.PathShape;
 
 public class TAMDefaultConnection implements ITAMConnection {
 	
@@ -38,6 +35,10 @@ public class TAMDefaultConnection implements ITAMConnection {
 
 	public ITAMNode getChildNode() {
 		return child;
+	}
+
+	public TAMGraph getGraph() {
+		return graph;
 	}
 
 	public void draw(Canvas canvas, Paint paint) {

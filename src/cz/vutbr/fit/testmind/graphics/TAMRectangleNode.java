@@ -23,34 +23,28 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 	
 	public boolean hit(int x, int y) {
 		
-		TAMGraph graph = getGraph();
+		//TAMGraph graph = getGraph();
 		Rect rect = this.getBounds();
-		/*
-		float left = rect.left*graph.getScaleX()+(graph.getPivotX()-graph.getPivotX()*graph.getScaleX());
-		float top = rect.top*graph.getScaleY()+(graph.getPivotY()-graph.getPivotY()*graph.getScaleY());
-		float right = rect.right*graph.getScaleX()+(graph.getPivotX()-graph.getPivotX()*graph.getScaleX());
-		float bottom = rect.bottom*graph.getScaleY()+(graph.getPivotY()-graph.getPivotY()*graph.getScaleY());
-		*/
 		
-		float left = rect.left*graph.sx+(graph.px-graph.px*graph.sx);
+		/*float left = rect.left*graph.sx+(graph.px-graph.px*graph.sx);
 		float top = rect.top*graph.sy+(graph.py-graph.py*graph.sy);
 		float right = rect.right*graph.sx+(graph.px-graph.px*graph.sx);
-		float bottom = rect.bottom*graph.sy+(graph.py-graph.py*graph.sy);
+		float bottom = rect.bottom*graph.sy+(graph.py-graph.py*graph.sy);*/
 		
 		Rect newRect = new Rect(rect.left, rect.top, rect.right, rect.bottom);
 		
-		if(x >= left && x <= right && y >= top && y <= bottom) {
-			return true;
-		} else {
-			return false;
-		}
-		
-		// if point is situated in rectangle area then return true, otherwise return false //
-		/*if(newRect.contains(x,y)) {
+		/*if(x >= left && x <= right && y >= top && y <= bottom) {
 			return true;
 		} else {
 			return false;
 		}*/
+		
+		// if point is situated in rectangle area then return true, otherwise return false //
+		if(newRect.contains(x,y)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void move(int dx, int dy) {

@@ -108,15 +108,13 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 	 */
 	protected void addNode() {
 		
-		selectedNode = graph.getSelectedNode();
+		selectedNode = graph.getLastSelectedNode();
 		
 		if(selectedNode != null){
 			showAddNodeDialog();
 		}else{
 			Toast.makeText(this, R.string.node_not_selected, Toast.LENGTH_LONG).show();			
 		}
-		
-		
 	}
 	
 	/**

@@ -31,6 +31,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected List<ITAMConnection> listOfConnections;
 	protected List<ITAMItem> listOfDrawableItems;
 	protected List<ITAMItem> listOfSelectedItems;
+	protected ITAMNode lastSelectedNode;
 	protected TAMItemFactory factory;
 	protected Point actualPoint;
 	protected ZoomControls zoomControls;
@@ -66,34 +67,29 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		sx = sy = DEFAULT_ZOOM;
 		px = getWidth()/2;
 		py = getHeight()/2;
+		
 		invalidate();
-		/*setPivotX(getWidth()/2); 
-		setPivotY(getHeight()/2);
-		setScaleX(DEFAULT_ZOOM);
-		setScaleY(DEFAULT_ZOOM);*/
 	}
 	
+	/**
+	 * 
+	 * @return itemFactory
+	 */
 	protected TAMItemFactory getItemFactory() {
 		return factory;
 	}
 	
+	/**
+	 * 
+	 * @param type
+	 * @param x
+	 * @param y
+	 * @param text
+	 * @return rootNode
+	 */
 	public ITAMNode addRoot(int type, int x, int y, String text) {
 		ITAMNode node = factory.createNode(this, type, x, y, text);
 		return node;
-	}
-	
-	public ITAMNode getSelectedNode(){
-		
-		ITAMItem item;
-		
-		for (ITAMNode node : listOfNodes) {
-			item = (ITAMItem)node;
-			if(listOfSelectedItems.contains(item)){
-				return node;
-			}			
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -150,6 +146,17 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return lastSelectedNode
+	 */
+	public ITAMNode getLastSelectedNode() {
+		return lastSelectedNode;
+	}
+	
+	/**
+	 * 
+	 */
 	public void unselectAll() {
 		
 		for(ITAMItem item : listOfSelectedItems) {
@@ -159,11 +166,159 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		listOfSelectedItems.clear();
 	}
 	
+	/**
+	 * 
+	 * @param item
+	 */
 	public void unselect(ITAMItem item) {
 		
 		if(listOfSelectedItems.contains(item)) {
 			listOfSelectedItems.remove(item);
 			item.highlight(false);
+		}
+	}
+	
+	public void enable(ITAMNode enabledItem) {
+		
+		enabledItem.setEnabled(true);
+			
+		// add to list of drawable items and move to top //
+		if(enabledItem != null && !listOfDrawableItems.contains(enabledItem)) {
+			
+			if(enabledItem instanceof ITAMNode) {
+				
+				ITAMNode enabledNode = (ITAMNode) enabledItem;
+				ITAMConnection parentConnection = enabledNode.getParentConnection();
+				
+				if(parentConnection != null) {
+					ITAMNode parentNode = parentConnection.getParentNode();
+					if(!listOfDrawableItems.contains(parentNode)) {
+						listOfDrawableItems.add(parentConnection);
+						parentConnection.setEnabled(true);
+					}
+				}
+				
+				for(ITAMConnection childConnection : enabledNode.getListOfChildConnections()) {
+					ITAMNode childNode = childConnection.getChildNode();
+					if(!listOfDrawableItems.contains(childNode)) {
+						listOfDrawableItems.add(childConnection);
+						childConnection.setEnabled(true);
+					}
+				}
+				
+				listOfDrawableItems.add(enabledNode);
+				
+			} else if(enabledItem instanceof ITAMConnection) {
+				
+				ITAMConnection selectedConnection = (ITAMConnection) enabledItem;
+				listOfDrawableItems.add(selectedConnection);
+				
+				ITAMNode parentNode = selectedConnection.getParentNode();
+				enable(parentNode);
+				
+				ITAMNode childNode = selectedConnection.getChildNode();
+				enable(childNode);
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void enableAll() {
+		
+		disableAll();
+		
+		for(ITAMConnection connection : listOfConnections) {
+			listOfDrawableItems.add(connection);
+			connection.setEnabled(true);
+		}
+		
+		for(ITAMNode node : listOfNodes) {
+			listOfDrawableItems.add(node);
+			node.setEnabled(true);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param disabledItem
+	 */
+	public void disable(ITAMNode disabledItem) {
+		
+		disabledItem.setEnabled(false);
+		
+		if(disabledItem != null && listOfDrawableItems.contains(disabledItem)) {
+			
+			if(disabledItem instanceof ITAMNode) {
+				
+				ITAMNode disabledNode = (ITAMNode) disabledItem;
+				ITAMConnection parentConnection = disabledNode.getParentConnection();
+				
+				if(parentConnection != null) {
+					listOfDrawableItems.remove(parentConnection);
+					parentConnection.setEnabled(false);
+				}
+				
+				for(ITAMConnection childConnection : disabledNode.getListOfChildConnections()) {
+					listOfDrawableItems.remove(childConnection);
+					childConnection.setEnabled(false);
+				}
+				
+				listOfDrawableItems.remove(disabledNode);
+				
+			} else if(disabledItem instanceof ITAMConnection) {
+				
+				ITAMConnection disabledConnection = (ITAMConnection) disabledItem;
+				listOfDrawableItems.remove(disabledConnection);
+				
+				ITAMNode parentNode = disabledConnection.getParentNode();
+				disable(parentNode);
+				
+				ITAMNode childNode = disabledConnection.getChildNode();
+				disable(childNode);
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void disableAll() {
+		
+		for(ITAMItem item : listOfDrawableItems) {
+			item.setEnabled(false);
+		}
+		
+		listOfDrawableItems.clear();
+	}
+	
+	/**
+	 * 
+	 */
+	public void unhighlightAllItems() {
+		
+		unhighlightAllNodes();
+		unhighlightAllConnections();
+	}
+	
+	/**
+	 * 
+	 */
+	public void unhighlightAllNodes() {
+		
+		for(ITAMNode node : listOfNodes) {
+			node.highlight(false);
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void unhighlightAllConnections() {
+		
+		for(ITAMConnection connection : listOfConnections) {
+			connection.highlight(false);
 		}
 	}
 	
@@ -219,15 +374,26 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 						result = item;
 					}
 				}*/
+				
+				float dx = px-px*sx;
+				float dy = py-py*sy;
 
 				for(ITAMItem item : listOfNodes) {
-					if(item.hit(x, y)) {
+					if(item.hit((int)((x-dx)/sy), (int)((y-dy)/sy))) {
 						result = item;
 					}
 				}
 
 				unselectAll();
 				select(result);
+				
+				if(result == null) {
+					lastSelectedNode = null;
+				} else {
+					if(result instanceof ITAMNode) {
+						lastSelectedNode = (ITAMNode) result;
+					}
+				}
 
 				actualPoint.x = x;
 				actualPoint.y = y;

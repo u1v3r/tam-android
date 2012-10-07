@@ -32,5 +32,7 @@ public interface ITAMItem {
 	public boolean isEnabled();
 	
 	public void draw(Canvas canvas, Paint paint);
+	
+	public TAMGraph getGraph();
 
 }

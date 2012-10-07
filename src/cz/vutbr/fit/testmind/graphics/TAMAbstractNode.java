@@ -5,12 +5,10 @@ import java.util.List;
 
 import cz.vutbr.fit.testmind.R;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
-import android.util.Log;
 
 /**
  * Abstract rectangle class providing basic functionality of drawable nodes.
@@ -163,10 +161,6 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	
 	public void setEnabled(boolean enable) {
 		this.isEnabled = enable;
-		
-		if(enable) {
-			
-		}
 	}
 	
 	public boolean isEnabled() {

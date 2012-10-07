@@ -7,8 +7,11 @@ public class TAMItemFactory {
 		
 		ITAMNode node = null;
 		
+		float dx = graph.px-graph.px*graph.sx;
+		float dy = graph.py-graph.py*graph.sy;
+		
 		if(type == ITAMNode.NODE_TYPE_RECTANGLE) {
-			node = new TAMRectangleNode(graph, x, y, text);
+			node = new TAMRectangleNode(graph, (int)((x-dx)/graph.sx), (int)((y-dy)/graph.sy), text);
 		}
 		
 		graph.listOfNodes.add(node);
