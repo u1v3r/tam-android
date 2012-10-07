@@ -29,6 +29,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	protected Paint paint = new Paint();
 	protected List<ITAMNode> listOfNodes;
 	protected List<ITAMConnection> listOfConnections;
+	protected List<ITAMItem> listOfDrawableItems;
 	protected List<ITAMItem> listOfSelectedItems;
 	protected TAMItemFactory factory;
 	protected Point actualPoint;
@@ -37,7 +38,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean activeTouchEvent = false;
 
 	public float sx, sy, px, py;
-
        
 	public TAMGraph(Context context) {
 		this(context,null);		
@@ -52,7 +52,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		factory = new TAMItemFactory();
 		listOfNodes = new ArrayList<ITAMNode>();
 		listOfConnections = new ArrayList<ITAMConnection>();
-		listOfSelectedItems = new ArrayList<ITAMItem>();;
+		listOfSelectedItems = new ArrayList<ITAMItem>();
+		listOfDrawableItems = new ArrayList<ITAMItem>();
 		actualPoint = new Point();	
 		setLongClickable(true);		
 		setFocusable(true);// umozni dotyky
@@ -95,6 +96,77 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param selectedItem
+	 */
+	public void select(ITAMItem selectedItem) {
+		
+		// add to list of selected items and move to top //
+		if(selectedItem != null && !listOfSelectedItems.contains(selectedItem)) {
+			
+			listOfSelectedItems.add(selectedItem);
+			
+			selectedItem.highlight(true);
+			
+			// move items to the end of the drawable list, so they will be drawn on the top of all items //
+			if(selectedItem instanceof ITAMNode) {
+				
+				ITAMNode selectedNode = (ITAMNode) selectedItem;
+				ITAMConnection parentConnection = selectedNode.getParentConnection();
+				
+				if(parentConnection != null) {
+					listOfDrawableItems.remove(parentConnection);
+					listOfDrawableItems.add(parentConnection);
+					ITAMNode parentNode = parentConnection.getParentNode();
+					listOfDrawableItems.remove(parentNode);
+					listOfDrawableItems.add(parentNode);
+				}
+				
+				for(ITAMConnection childConnection : selectedNode.getListOfChildConnections()) {
+					listOfDrawableItems.remove(childConnection);
+					listOfDrawableItems.add(childConnection);
+					ITAMNode childNode = childConnection.getChildNode();
+					listOfDrawableItems.remove(childNode);
+					listOfDrawableItems.add(childNode);
+				}
+				
+				listOfDrawableItems.remove(selectedItem);
+				listOfDrawableItems.add(selectedItem);
+			} else if(selectedItem instanceof ITAMConnection) {
+				
+				ITAMConnection selectedConnection = (ITAMConnection) selectedItem;
+				listOfDrawableItems.remove(selectedConnection);
+				listOfDrawableItems.add(selectedConnection);
+				
+				ITAMNode parentNode = selectedConnection.getParentNode();
+				listOfDrawableItems.remove(parentNode);
+				listOfDrawableItems.add(parentNode);
+				
+				ITAMNode childNode = selectedConnection.getChildNode();
+				listOfDrawableItems.remove(childNode);
+				listOfDrawableItems.add(childNode);
+			}
+		}
+	}
+	
+	public void unselectAll() {
+		
+		for(ITAMItem item : listOfSelectedItems) {
+			item.highlight(false);
+		}
+		
+		listOfSelectedItems.clear();
+	}
+	
+	public void unselect(ITAMItem item) {
+		
+		if(listOfSelectedItems.contains(item)) {
+			listOfSelectedItems.remove(item);
+			item.highlight(false);
+		}
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas) { 
 		
@@ -105,12 +177,16 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				
         //paint.setColor(Color.BLUE);
 		
-		for(ITAMConnection connection : listOfConnections) {
+		/*for(ITAMConnection connection : listOfConnections) {
 			connection.draw(canvas, paint);
 		}
 		
 		for(ITAMNode node : listOfNodes) {
 				node.draw(canvas);
+		}*/
+		
+		for(ITAMItem item : listOfDrawableItems) {
+			item.draw(canvas, paint);
 		}
 	}
 	
@@ -150,6 +226,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					}
 				}
 
+				unselectAll();
 				select(result);
 
 				actualPoint.x = x;
@@ -189,35 +266,12 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	
 	}
 	
-	
-	public void select(ITAMItem selectedItem) {
-		
-		if(selectedItem != null) {
-			if(listOfSelectedItems.contains(selectedItem)) {
-				return;
-			}
-		}
-		
-		for(ITAMItem item : listOfSelectedItems) {
-			item.highlight(false);
-		}
-		
-		listOfSelectedItems.clear();
-		
-		if(selectedItem != null) {
-			listOfSelectedItems.add(selectedItem);
-			
-			selectedItem.highlight(true);
-		}
-	}
-	
 	public void surfaceCreated(SurfaceHolder holder) {
 		this.drawingThread.setRunning(true);
 		this.drawingThread.start();
 	}
 
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		
 	}
 
@@ -284,25 +338,25 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		@Override
 		public void run() {
 			if(activeTouchEvent){
-			Canvas canvas;
-			while (this.run) {
-				canvas = null;
-				try {
-					canvas = this.surfaceHolder.lockCanvas(null);
-					if(canvas != null){
-						synchronized (this.surfaceHolder) {		
-							
-							this.panel.onDraw(canvas);
+				Canvas canvas;
+				while (this.run) {
+					canvas = null;
+					try {
+						canvas = this.surfaceHolder.lockCanvas(null);
+						if(canvas != null){
+							synchronized (this.surfaceHolder) {		
+								
+								this.panel.onDraw(canvas);
+							}
 						}
-					}
-				} finally {
-					if (canvas != null) {
-						this.surfaceHolder.unlockCanvasAndPost(canvas);
-						activeTouchEvent = false;
+					} finally {
+						if (canvas != null) {
+							this.surfaceHolder.unlockCanvasAndPost(canvas);
+							activeTouchEvent = false;
+						}
 					}
 				}
 			}
-		}
 		}
 	}
 }

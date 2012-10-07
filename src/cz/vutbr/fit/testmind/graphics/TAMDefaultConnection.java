@@ -16,6 +16,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 	private ITAMNode parent;
 	private ITAMNode child;
 	private TAMGraph graph;
+	private boolean isEnabled;
 
 	public TAMDefaultConnection(TAMGraph graph, ITAMNode parent, ITAMNode child) {
 		this.graph = graph;
@@ -24,10 +25,19 @@ public class TAMDefaultConnection implements ITAMConnection {
 		this.background = Color.RED;
 		this.highlightColor = Color.YELLOW;
 		this.isHighlighted = false;
+		this.isEnabled = true;
 	}
 	
 	public int getType() {
 		return type;
+	}
+	
+	public ITAMNode getParentNode() {
+		return parent;
+	}
+
+	public ITAMNode getChildNode() {
+		return child;
 	}
 
 	public void draw(Canvas canvas, Paint paint) {
@@ -114,6 +124,14 @@ public class TAMDefaultConnection implements ITAMConnection {
 	public int getForeground() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void setEnabled(boolean enable) {
+		isEnabled = enable;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
 	}
 
 }

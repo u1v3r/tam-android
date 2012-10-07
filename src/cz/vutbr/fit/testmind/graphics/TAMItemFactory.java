@@ -12,6 +12,7 @@ public class TAMItemFactory {
 		}
 		
 		graph.listOfNodes.add(node);
+		graph.listOfDrawableItems.add(node);
 		
 		return node;
 	}
@@ -25,6 +26,13 @@ public class TAMItemFactory {
 		}
 		
 		graph.listOfConnections.add(connection);
+		
+		// move on top //
+		graph.listOfDrawableItems.add(connection);
+		graph.listOfDrawableItems.remove(parent);
+		graph.listOfDrawableItems.add(parent);
+		graph.listOfDrawableItems.remove(child);
+		graph.listOfDrawableItems.add(child);
 		
 		return connection;
 	}

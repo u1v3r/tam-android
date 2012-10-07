@@ -1,5 +1,8 @@
 package cz.vutbr.fit.testmind.graphics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.vutbr.fit.testmind.R;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,6 +24,8 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	
 	private TAMGraph graph;
 	private String text;
+	private List<ITAMConnection> listOfChildConnections;
+	private ITAMConnection parentConnection;
 	
 	private int type;
 	
@@ -35,6 +40,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	private int backgroundStroke;
 	
 	private boolean isHighlited;
+	private boolean isEnabled;
 	
 	
 	public TAMAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
@@ -42,6 +48,8 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		
 		this.graph = graph;
 		this.text = text;
+		this.listOfChildConnections = new ArrayList<ITAMConnection>();
+		this.parentConnection = null;
 
 		this.type = type;
 		this.background = graph.getResources().getColor(R.color.node_background);
@@ -51,6 +59,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		this.highlightColorStroke = graph.getResources().getColor(R.color.node_highlight_background_stroke);
 		
 		this.isHighlited = false;
+		this.isEnabled = true;
 		
 		this.position = new Point(x,y);
 		this.offsetX = offsetX;
@@ -137,7 +146,9 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		ITAMNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
 		
 		// create new connection between these nodes from item factory //
-		graph.getItemFactory().createConnection(graph, this, node, ITAMConnection.CONNECTION_TYPE_DEFAULT);
+		ITAMConnection connection = graph.getItemFactory().createConnection(graph, this, node, ITAMConnection.CONNECTION_TYPE_DEFAULT);
+		listOfChildConnections.add(connection);
+		node.setParentConnection(connection);
 		
 		return node;
 	}
@@ -150,6 +161,30 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		return getShape().getHeight();
 	}
 	
+	public void setEnabled(boolean enable) {
+		this.isEnabled = enable;
+		
+		if(enable) {
+			
+		}
+	}
+	
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+	
+	public ITAMConnection getParentConnection() {
+		return parentConnection;
+	}
+
+	public void setParentConnection(ITAMConnection parentConnection) {
+		this.parentConnection = parentConnection;
+	}
+
+	public List<ITAMConnection> getListOfChildConnections() {
+		return listOfChildConnections;
+	}
+
 	@Override
 	protected void onDraw(Shape shape, Canvas canvas, Paint paint) {
 		Paint strokePaint = new Paint();
@@ -169,5 +204,9 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		
 		paint.setColor(foreground);
 		canvas.drawText(text, offsetX, offsetY, paint);
+	}
+	
+	public void draw(Canvas canvas, Paint paint) {
+		draw(canvas);
 	}
 }

@@ -7,5 +7,7 @@ public interface ITAMConnection extends ITAMItem {
 
 	public final int CONNECTION_TYPE_DEFAULT = 1;
 	
-	public void draw(Canvas canvas, Paint paint);
+	public ITAMNode getParentNode();
+	
+	public ITAMNode getChildNode();
 }

@@ -1,5 +1,7 @@
 package cz.vutbr.fit.testmind.graphics;
 
+import java.util.List;
+
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -23,7 +25,7 @@ public interface ITAMNode extends ITAMItem {
 	
 	public float getHeight();
 	
-	public void draw(Canvas canvas);
+	//public void draw(Canvas canvas);
 	
 	public void actualizeSize();
 	
@@ -32,5 +34,11 @@ public interface ITAMNode extends ITAMItem {
 	public String getText();
 	
 	public void setText(String text);
+	
+	public ITAMConnection getParentConnection();
+	
+	public void setParentConnection(ITAMConnection parentConnection);
+	
+	public List<ITAMConnection> getListOfChildConnections();
 
 }

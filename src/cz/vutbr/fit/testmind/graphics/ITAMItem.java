@@ -1,8 +1,7 @@
 package cz.vutbr.fit.testmind.graphics;
 
 import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.Rect;
+import android.graphics.Paint;
 
 public interface ITAMItem {
 	
@@ -27,5 +26,11 @@ public interface ITAMItem {
 	public boolean isHighlighted();
 
 	public void move(int dx, int dy);
+	
+	public void setEnabled(boolean enable);
+	
+	public boolean isEnabled();
+	
+	public void draw(Canvas canvas, Paint paint);
 
 }
