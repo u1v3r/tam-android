@@ -44,7 +44,6 @@ public class TAMDefaultConnection implements ITAMConnection {
 	public void draw(Canvas canvas, Paint paint) {
 		
 
-		
 		paint.setAntiAlias(true);
 		if(isHighlighted) {
 			paint.setColor(highlightColor);
@@ -52,7 +51,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 			paint.setColor(background);
 		}
 		
-		
+		paint.setStrokeWidth(6);
 		canvas.drawLine(parent.getPosition().x, parent.getPosition().y,
 				child.getPosition().x, child.getPosition().y, paint);
 

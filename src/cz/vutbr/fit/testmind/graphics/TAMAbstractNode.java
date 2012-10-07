@@ -181,20 +181,29 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 
 	@Override
 	protected void onDraw(Shape shape, Canvas canvas, Paint paint) {
-		Paint strokePaint = new Paint();
-		strokePaint.setStrokeWidth(STROKE_WIDTH);
-		strokePaint.setStyle(Paint.Style.STROKE);
+		
+		paint.setStyle(Paint.Style.FILL);
 		
 		if(isHighlited) {
 			paint.setColor(highlightColor);
-			strokePaint.setColor(highlightColorStroke);
 		} else {
 			paint.setColor(background);
-			strokePaint.setColor(backgroundStroke);
 		}
 					
 		super.onDraw(shape, canvas, paint);
-		super.onDraw(shape, canvas, strokePaint);
+		
+		paint.setStrokeWidth(STROKE_WIDTH);
+		paint.setStyle(Paint.Style.STROKE);
+		
+		if(isHighlited) {
+			paint.setColor(highlightColorStroke);
+		} else {
+			paint.setColor(backgroundStroke);
+		}
+		
+		super.onDraw(shape, canvas, paint);
+		
+		paint.setStyle(Paint.Style.FILL);
 		
 		paint.setColor(foreground);
 		canvas.drawText(text, offsetX, offsetY, paint);
