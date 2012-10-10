@@ -13,16 +13,21 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        //FrameLayout frame = (FrameLayout)findViewById(R.id.main_view);
-        //frame.addView(new DataRectangle(this, 30, 80));
-        setContentView(new DrawingSurface(this));
+        setContentView(R.layout.activity_main);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
+    }
+    
+    public void createNode(){
+    	    	    	
+    	FrameLayout frame = (FrameLayout)findViewById(R.id.main_view);
+         	
+    	
+    	frame.addView(new DataRectangle(this, 30, 80));
     }
     
     
