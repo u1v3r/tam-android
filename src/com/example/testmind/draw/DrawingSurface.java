@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.shapes.Shape;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,6 +25,7 @@ public class DrawingSurface extends SurfaceView implements SurfaceHolder.Callbac
 		this.drawingThread = new DrawingThread(getHolder(), this);
 		this.paint = new Paint();
 		setFocusable(true);// umozni dotyky
+		setFocusableInTouchMode(true);
 	}
 	
 	@Override
@@ -40,12 +42,23 @@ public class DrawingSurface extends SurfaceView implements SurfaceHolder.Callbac
 		this.y = event.getY();
 		Log.i(TAG, "X:" + this.x);
 		Log.i(TAG, "Y:" + this.y);
+	
 		return true;
+	}
+	
+	@Override
+	protected void onFocusChanged(boolean gainFocus, int direction,
+			Rect previouslyFocusedRect) {
+		Log.i(
+				TAG,"direction:" + direction + 
+				", gainFocus:" + gainFocus
+				);
+		super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
 	}
 	
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		// TODO Auto-generated method stub
+		Log.i(TAG,"surface changed");
 		
 	}
 
@@ -107,8 +120,6 @@ public class DrawingSurface extends SurfaceView implements SurfaceHolder.Callbac
 					}
 				}
 			}
-
 		}
-	}		
-	
+	}	
 }
