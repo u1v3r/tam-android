@@ -23,7 +23,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	private TAMGraph graph;
 	private String text;
 	private List<ITAMConnection> listOfChildConnections;
-	private ITAMConnection parentConnection;
+	private List<ITAMConnection> listOfParentConnections;
 	
 	private int type;
 	
@@ -47,7 +47,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		this.graph = graph;
 		this.text = text;
 		this.listOfChildConnections = new ArrayList<ITAMConnection>();
-		this.parentConnection = null;
+		this.listOfParentConnections = new ArrayList<ITAMConnection>();
 
 		this.type = type;
 		this.background = graph.getResources().getColor(R.color.node_background);
@@ -144,9 +144,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		ITAMNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
 		
 		// create new connection between these nodes from item factory //
-		ITAMConnection connection = graph.getItemFactory().createConnection(graph, this, node, ITAMConnection.CONNECTION_TYPE_DEFAULT);
-		listOfChildConnections.add(connection);
-		node.setParentConnection(connection);
+		graph.getItemFactory().createConnection(graph, this, node, ITAMConnection.CONNECTION_TYPE_DEFAULT);
 		
 		return node;
 	}
@@ -167,12 +165,8 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		return isEnabled;
 	}
 	
-	public ITAMConnection getParentConnection() {
-		return parentConnection;
-	}
-
-	public void setParentConnection(ITAMConnection parentConnection) {
-		this.parentConnection = parentConnection;
+	public List<ITAMConnection> getListOfParentConnections() {
+		return listOfParentConnections;
 	}
 
 	public List<ITAMConnection> getListOfChildConnections() {

@@ -32,9 +32,7 @@ public interface ITAMNode extends ITAMItem {
 	
 	public void setText(String text);
 	
-	public ITAMConnection getParentConnection();
-	
-	public void setParentConnection(ITAMConnection parentConnection);
+	public List<ITAMConnection> getListOfParentConnections();
 	
 	public List<ITAMConnection> getListOfChildConnections();
 

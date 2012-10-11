@@ -75,9 +75,18 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	 * 
 	 * @return itemFactory
 	 */
-	protected TAMItemFactory getItemFactory() {
+	public TAMItemFactory getItemFactory() {
 		return factory;
 	}
+	
+	/*public ITAMConnection connect(ITAMNode parent, ITAMNode child, int type) {
+		ITAMConnection connection = factory.createConnection(this, parent, child, type);
+		
+		parent.getListOfChildConnections().add(connection);
+		child.getListOfParentConnections().add(connection);
+		
+		return connection;
+	}*/
 	
 	/**
 	 * 
@@ -109,9 +118,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 			if(selectedItem instanceof ITAMNode) {
 				
 				ITAMNode selectedNode = (ITAMNode) selectedItem;
-				ITAMConnection parentConnection = selectedNode.getParentConnection();
 				
-				if(parentConnection != null) {
+				for(ITAMConnection parentConnection : selectedNode.getListOfParentConnections()) {
 					listOfDrawableItems.remove(parentConnection);
 					listOfDrawableItems.add(parentConnection);
 					ITAMNode parentNode = parentConnection.getParentNode();
@@ -188,9 +196,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 			if(enabledItem instanceof ITAMNode) {
 				
 				ITAMNode enabledNode = (ITAMNode) enabledItem;
-				ITAMConnection parentConnection = enabledNode.getParentConnection();
 				
-				if(parentConnection != null) {
+				for(ITAMConnection parentConnection : enabledNode.getListOfParentConnections()) {
 					ITAMNode parentNode = parentConnection.getParentNode();
 					if(!listOfDrawableItems.contains(parentNode)) {
 						listOfDrawableItems.add(parentConnection);
@@ -253,9 +260,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 			if(disabledItem instanceof ITAMNode) {
 				
 				ITAMNode disabledNode = (ITAMNode) disabledItem;
-				ITAMConnection parentConnection = disabledNode.getParentConnection();
 				
-				if(parentConnection != null) {
+				for(ITAMConnection parentConnection : disabledNode.getListOfParentConnections()) {
 					listOfDrawableItems.remove(parentConnection);
 					parentConnection.setEnabled(false);
 				}

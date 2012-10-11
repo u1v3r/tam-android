@@ -3,7 +3,7 @@ package cz.vutbr.fit.testmind.graphics;
 
 public class TAMItemFactory {
 	
-	protected ITAMNode createNode(TAMGraph graph, int type, int x, int y, String text) {
+	public ITAMNode createNode(TAMGraph graph, int type, int x, int y, String text) {
 		
 		ITAMNode node = null;
 		
@@ -20,7 +20,7 @@ public class TAMItemFactory {
 		return node;
 	}
 	
-	protected ITAMConnection createConnection(TAMGraph graph, ITAMNode parent, ITAMNode child, int type) {
+	public ITAMConnection createConnection(TAMGraph graph, ITAMNode parent, ITAMNode child, int type) {
 		
 		ITAMConnection connection = null;
 		
@@ -29,6 +29,9 @@ public class TAMItemFactory {
 		}
 		
 		graph.listOfConnections.add(connection);
+		
+		parent.getListOfChildConnections().add(connection);
+		child.getListOfParentConnections().add(connection);
 		
 		// move on top //
 		graph.listOfDrawableItems.add(connection);
