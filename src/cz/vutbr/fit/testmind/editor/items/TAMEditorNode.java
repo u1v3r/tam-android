@@ -1,9 +1,9 @@
-package cz.vutbr.fit.tesmind.editor.items;
+package cz.vutbr.fit.testmind.editor.items;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.tesmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 

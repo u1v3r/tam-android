@@ -1,13 +1,13 @@
-package cz.vutbr.fit.tesmind.editor;
+package cz.vutbr.fit.testmind.editor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.view.View;
-import cz.vutbr.fit.tesmind.editor.items.TAMEditorConnection;
-import cz.vutbr.fit.tesmind.editor.items.TAMEditorFactory;
-import cz.vutbr.fit.tesmind.editor.items.TAMEditorNode;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class TAMEditor extends View {

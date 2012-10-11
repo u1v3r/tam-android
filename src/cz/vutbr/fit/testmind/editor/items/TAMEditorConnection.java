@@ -1,6 +1,6 @@
-package cz.vutbr.fit.tesmind.editor.items;
+package cz.vutbr.fit.testmind.editor.items;
 
-import cz.vutbr.fit.tesmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMConnection;
 
 public class TAMEditorConnection {
