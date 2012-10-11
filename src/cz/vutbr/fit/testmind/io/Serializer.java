@@ -1,12 +1,17 @@
 package cz.vutbr.fit.testmind.io;
 
+import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.ITAMConnection;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,12 +24,11 @@ public class Serializer
 {
     static private final String CREATE_TABLE_NODES = "CREATE TABLE \"nodes\" (" +
             "\"id\" INTEGER PRIMARY KEY NOT NULL," +
-            "\"isRoot\" INTEGER NOT NULL," +
             "\"title\" TEXT NOT NULL," +
             "\"body\" TEXT," +
             "\"type\" INTEGER NOT NULL," +
-            "\"position_x\" INTEGER NOT NULL," +
-            "\"position_y\" INTEGER NOT NULL," +
+            "\"x\" INTEGER NOT NULL," +
+            "\"y\" INTEGER NOT NULL," +
             "\"background\" INTEGER," +
             "\"foreground\" INTEGER," +
             "\"highlightColor\" INTEGER," +
@@ -39,7 +43,11 @@ public class Serializer
             "\"isHighlighted\" INTEGER," +
             "FOREIGN KEY(parent) REFERENCES node(id)," +
             "FOREIGN KEY(child) REFERENCES node(id))";
-       
+
+    static private final String[] COLUMNS_NODES = {"id", "title", "body", "type", "x",
+                                                   "y", "background", "foreground", "highlightColor",
+                                                   "isEnabled", "isHighlighted"};
+    
     private File fileDB;
     
     /**
@@ -57,11 +65,30 @@ public class Serializer
      * method create database and serialize nodes
      * @param node
      */
-    public void serialize(ITAMNode node)
+    public void serialize(TAMEditor editor)
     {
         SQLiteDatabase db = createDB();
         
-        serializeNode(db, node, true);
+        for (Iterator<TAMEditorNode> i = editor.getListOfNodes().iterator(); i.hasNext(); )
+        {
+             TAMEditorNode currentNode = (TAMEditorNode) i.next();
+             insertNode(db, currentNode);
+        }
+        
+        for (Iterator<TAMEditorConnection> i = editor.getListOfConnections().iterator(); i.hasNext(); )
+        {
+             TAMEditorConnection currentConnection = (TAMEditorConnection) i.next();
+             insertConnection(db, currentConnection);
+        }   
+        
+        db.close();
+    }
+    
+    public void deserialize(TAMGraph graph)
+    {
+        SQLiteDatabase db = openDB();
+
+
         
         db.close();
     }
@@ -77,6 +104,7 @@ public class Serializer
         // remove old database
         if(fileDB.exists())
         {
+            // TODO check journal
             fileDB.delete();
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(fileDB, null);
@@ -87,42 +115,37 @@ public class Serializer
     }
     
     /**
-     * serialize node and all childs
+     * open sqlite file
+     * @return
+     */
+    private SQLiteDatabase openDB()
+    {
+        return SQLiteDatabase.openDatabase(fileDB.getPath(), null, SQLiteDatabase.OPEN_READONLY);
+    }
+    
+    /**
+     * serialize node
      * @param db
      * @param node
-     * @param isRoot
      * @return SQL rowid of root node
      */
-    private Long serializeNode(SQLiteDatabase db, ITAMNode node, Boolean isRoot)
+    private void insertNode(SQLiteDatabase db, TAMEditorNode node)
     {
+        ITAMNode core = node.getCore();
+        
         ContentValues values = new ContentValues();
-        // obligate
-        values.put("isRoot", booleanToInt(isRoot));
-        values.put("title", node.getText());
-        values.put("type", node.getType());
-        Point position = node.getPosition();
-        values.put("position_x", position.x);
-        values.put("position_y", position.y);
-        // optional
-//        values.put("body", );
-        values.put("background", node.getBackground());
-        values.put("foreground", node.getForeground());
-        values.put("highlightColor", node.getHighlightColor());
-        values.put("isEnabled", booleanToInt(node.isEnabled()));
-        values.put("isHighlighted", booleanToInt(node.isHighlighted()));
-        
-        Long parentId = db.insert("nodes", null, values);
-        
-        List<ITAMConnection> childConnections = node.getListOfChildConnections();
-        for (Iterator<ITAMConnection> i = childConnections.iterator(); i.hasNext(); )
-        {
-             ITAMConnection currentConnection = (ITAMConnection) i.next();
-             ITAMNode childNode = currentConnection.getChildNode();
-             Long childId = serializeNode(db, childNode, false);
-             insertConnection(db, parentId, childId, currentConnection);
-        }
-        
-        return parentId;
+        values.put("id", node.getId());
+        values.put("title", core.getText());
+        values.put("title", node.getBody());
+        values.put("type", core.getType());
+        Point position = core.getPosition();
+        values.put("x", position.x);
+        values.put("y", position.y);
+        values.put("background", core.getBackground());
+        values.put("foreground", core.getForeground());
+        values.put("highlightColor", core.getHighlightColor());
+        values.put("isEnabled", booleanToInt(core.isEnabled()));
+        values.put("isHighlighted", booleanToInt(core.isHighlighted()));
     }
     
     /**
@@ -132,20 +155,24 @@ public class Serializer
      * @param childId
      * @param connection
      */
-    private void insertConnection(SQLiteDatabase db, Long parentId, Long childId, ITAMConnection connection)
+    private void insertConnection(SQLiteDatabase db, TAMEditorConnection connection)
     {
         ContentValues values = new ContentValues();
         
-        // obligate
-        values.put("parent", parentId);
-        values.put("child", childId);
-        // optional
-        values.put("background", connection.getBackground());
-        values.put("highlightColor", connection.getHighlightColor());
-        values.put("isHighlighted", booleanToInt(connection.isHighlighted()));
+        ITAMConnection core = connection.getCore();
+        values.put("parent", connection.getParent().getId());
+        values.put("child", connection.getChild().getId());
+        values.put("background", core.getBackground());
+        values.put("highlightColor", core.getHighlightColor());
+        values.put("isHighlighted", booleanToInt(core.isHighlighted()));
         
         db.insert("connections", null, values);
     }
+    
+//    private Integer loadNodes(SQLiteDatabase db, ArrayList<ITAMNode> nodes)
+//    {
+//        db.query("nodes", "id, isRoot", null, null, null, null, null);
+//    }
     
     /**
      * convert boolean value to integer
