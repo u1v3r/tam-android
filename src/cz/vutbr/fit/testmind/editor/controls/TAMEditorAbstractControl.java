@@ -1,6 +1,6 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-public abstract class TAMAbstractControl {
+public abstract class TAMEditorAbstractControl {
 	
 	private boolean enabled;
 
