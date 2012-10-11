@@ -39,6 +39,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	
 	private boolean isHighlited;
 	private boolean isEnabled;
+	private boolean isSelected;
 	
 	
 	public TAMAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
@@ -58,6 +59,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		
 		this.isHighlited = false;
 		this.isEnabled = true;
+		this.isSelected = false;
 		
 		this.position = new Point(x,y);
 		this.offsetX = offsetX;
@@ -126,14 +128,6 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		this.highlightColor = highlightColor;
 	}
 
-	public void highlight(boolean enable) {
-		isHighlited = enable;
-	}
-	
-	public boolean isHighlighted() {
-		return isHighlited;
-	}
-
 	public ITAMItem addChild(int x, int y, String text) {
 		return addChild(type, x, y, text);
 	}
@@ -157,8 +151,70 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		return getShape().getHeight();
 	}
 	
+	public void setHighlighted(boolean enable) {
+		isHighlited = enable;
+	}
+	
+	public boolean isHighlighted() {
+		return isHighlited;
+	}
+	
+	public void setSelected(boolean enable) {
+		
+		if(isSelected != enable) {
+			
+			if(enable) {
+				graph.listOfSelectedItems.add(this);
+				graph.moveOnTop(this);
+			} else {
+				graph.listOfSelectedItems.remove(this);
+			}
+			
+			setHighlighted(enable);
+			this.isSelected = enable;
+		}
+	}
+	
+	public boolean isSelected() {
+		return isSelected;
+	}
+	
 	public void setEnabled(boolean enable) {
-		this.isEnabled = enable;
+		
+		if(isEnabled != enable) {
+			
+			for(ITAMConnection parentConnection : listOfParentConnections) {
+				ITAMNode parentNode = parentConnection.getParentNode();
+				if(parentNode.isEnabled() != enable) {
+					if(enable) {
+						graph.listOfDrawableItems.add(parentConnection);
+					} else {
+						graph.listOfDrawableItems.remove(parentConnection);
+					}
+					parentConnection.setEnabled(enable);
+				}
+			}
+			
+			for(ITAMConnection childConnection : listOfChildConnections) {
+				ITAMNode childNode = childConnection.getChildNode();
+				if(childNode.isEnabled() != enable) {
+					if(enable) {
+						graph.listOfDrawableItems.add(childConnection);
+					} else {
+						graph.listOfDrawableItems.remove(childConnection);
+					}
+					childConnection.setEnabled(enable);
+				}
+			}
+			
+			if(enable) {
+				graph.listOfDrawableItems.add(this);
+			} else {
+				graph.listOfDrawableItems.remove(this);
+			}
+			
+			this.isEnabled = enable;
+		}
 	}
 	
 	public boolean isEnabled() {

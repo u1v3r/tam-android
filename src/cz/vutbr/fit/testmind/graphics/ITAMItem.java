@@ -8,8 +8,6 @@ public interface ITAMItem {
 	public int getType();
 	
 	public boolean hit(int x, int y);
-
-	public void highlight(boolean enable);
 	
 	public void setBackgroud(int background);
 	
@@ -22,10 +20,16 @@ public interface ITAMItem {
 	public void setHighlightColor(int highlightColor);
 	
 	public int getHighlightColor();
-	
-	public boolean isHighlighted();
 
 	public void move(int dx, int dy);
+	
+	public void setHighlighted(boolean enable);
+	
+	public boolean isHighlighted();
+	
+	public void setSelected(boolean enable);
+	
+	public boolean isSelected();
 	
 	public void setEnabled(boolean enable);
 	
