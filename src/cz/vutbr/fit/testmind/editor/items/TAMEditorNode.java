@@ -14,8 +14,11 @@ public class TAMEditorNode {
 	private ITAMNode core;
 	private String body;
 	private List<TAMEditorNode> listOfChildNodes;
+	
 	private static int counter = 0;
 	private static int defaultType = ITAMConnection.CONNECTION_TYPE_DEFAULT;
+	
+	private boolean hasVisibleChilds;
 	
 	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type) {
 		this(editor, x, type, title, body, type, getNewSequenceNumber());
@@ -26,6 +29,7 @@ public class TAMEditorNode {
 		this.editor = editor;
 		this.body = body;
 		this.listOfChildNodes = new ArrayList<TAMEditorNode>();
+		this.hasVisibleChilds = true;
 		this.core = editor.getGraph().addRoot(type, x, y, title);
 	}
 
@@ -80,6 +84,32 @@ public class TAMEditorNode {
 
 	public static void setDefaultType(int defaultType) {
 		TAMEditorNode.defaultType = defaultType;
+	}
+	
+	public boolean hasVisibleChilds() {
+		return hasVisibleChilds;
+	}
+	
+	public void setChildsVisible(boolean visible) {
+		
+		if(this.hasVisibleChilds == visible) return;
+		
+		enable(visible);
+		
+		this.hasVisibleChilds = visible;
+	}
+	
+	private void enable(boolean enable) {
+		
+		if(core.isEnabled() == enable) return;
+		
+		core.setEnabled(true);
+		
+		if(hasVisibleChilds == enable) {
+			for(TAMEditorNode node : listOfChildNodes) {
+				node.enable(enable);
+			}
+		}
 	}
 
 }

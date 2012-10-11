@@ -79,15 +79,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		return factory;
 	}
 	
-	/*public ITAMConnection connect(ITAMNode parent, ITAMNode child, int type) {
-		ITAMConnection connection = factory.createConnection(this, parent, child, type);
-		
-		parent.getListOfChildConnections().add(connection);
-		child.getListOfParentConnections().add(connection);
-		
-		return connection;
-	}*/
-	
 	/**
 	 * 
 	 * @param type
@@ -101,18 +92,59 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		return node;
 	}
 	
+	public void moveOnTop(ITAMItem selectedItem) {
+		
+		// move items to the end of the drawable list, so they will be drawn on the top of all items //
+		if(selectedItem instanceof ITAMNode) {
+			
+			ITAMNode selectedNode = (ITAMNode) selectedItem;
+			
+			for(ITAMConnection parentConnection : selectedNode.getListOfParentConnections()) {
+				listOfDrawableItems.remove(parentConnection);
+				listOfDrawableItems.add(parentConnection);
+				ITAMNode parentNode = parentConnection.getParentNode();
+				listOfDrawableItems.remove(parentNode);
+				listOfDrawableItems.add(parentNode);
+			}
+			
+			for(ITAMConnection childConnection : selectedNode.getListOfChildConnections()) {
+				listOfDrawableItems.remove(childConnection);
+				listOfDrawableItems.add(childConnection);
+				ITAMNode childNode = childConnection.getChildNode();
+				listOfDrawableItems.remove(childNode);
+				listOfDrawableItems.add(childNode);
+			}
+			
+			listOfDrawableItems.remove(selectedItem);
+			listOfDrawableItems.add(selectedItem);
+		} else if(selectedItem instanceof ITAMConnection) {
+			
+			ITAMConnection selectedConnection = (ITAMConnection) selectedItem;
+			listOfDrawableItems.remove(selectedConnection);
+			listOfDrawableItems.add(selectedConnection);
+			
+			ITAMNode parentNode = selectedConnection.getParentNode();
+			listOfDrawableItems.remove(parentNode);
+			listOfDrawableItems.add(parentNode);
+			
+			ITAMNode childNode = selectedConnection.getChildNode();
+			listOfDrawableItems.remove(childNode);
+			listOfDrawableItems.add(childNode);
+		}
+	}
+	
 	/**
 	 * 
 	 * @param selectedItem
 	 */
-	public void select(ITAMItem selectedItem) {
+	/*public void select(ITAMItem selectedItem) {
 		
 		// add to list of selected items and move to top //
 		if(selectedItem != null && !listOfSelectedItems.contains(selectedItem)) {
 			
 			listOfSelectedItems.add(selectedItem);
 			
-			selectedItem.highlight(true);
+			selectedItem.setHighlighted(true);
 			
 			// move items to the end of the drawable list, so they will be drawn on the top of all items //
 			if(selectedItem instanceof ITAMNode) {
@@ -152,7 +184,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				listOfDrawableItems.add(childNode);
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 * 
@@ -168,7 +200,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	public void unselectAll() {
 		
 		for(ITAMItem item : listOfSelectedItems) {
-			item.highlight(false);
+			item.setSelected(false);
 		}
 		
 		listOfSelectedItems.clear();
@@ -178,17 +210,17 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	 * 
 	 * @param item
 	 */
-	public void unselect(ITAMItem item) {
+	/*public void unselect(ITAMItem item) {
 		
 		if(listOfSelectedItems.contains(item)) {
 			listOfSelectedItems.remove(item);
-			item.highlight(false);
+			item.setHighlighted(false);
 		}
-	}
+	}*/
 	
-	public void enable(ITAMNode enabledItem) {
+	/*protected void enable(ITAMNode enabledItem) {
 		
-		enabledItem.setEnabled(true);
+		//enabledItem.setEnabled(true);
 			
 		// add to list of drawable items and move to top //
 		if(enabledItem != null && !listOfDrawableItems.contains(enabledItem)) {
@@ -201,7 +233,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					ITAMNode parentNode = parentConnection.getParentNode();
 					if(!listOfDrawableItems.contains(parentNode)) {
 						listOfDrawableItems.add(parentConnection);
-						parentConnection.setEnabled(true);
+						//parentConnection.setEnabled(true);
 					}
 				}
 				
@@ -209,7 +241,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					ITAMNode childNode = childConnection.getChildNode();
 					if(!listOfDrawableItems.contains(childNode)) {
 						listOfDrawableItems.add(childConnection);
-						childConnection.setEnabled(true);
+						//childConnection.setEnabled(true);
 					}
 				}
 				
@@ -227,12 +259,12 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				enable(childNode);
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 * 
 	 */
-	public void enableAll() {
+	/*public void enableAll() {
 		
 		disableAll();
 		
@@ -245,13 +277,13 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 			listOfDrawableItems.add(node);
 			node.setEnabled(true);
 		}
-	}
+	}*/
 	
 	/**
 	 * 
 	 * @param disabledItem
 	 */
-	public void disable(ITAMNode disabledItem) {
+	/*public void disable(ITAMNode disabledItem) {
 		
 		disabledItem.setEnabled(false);
 		
@@ -285,7 +317,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				disable(childNode);
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 * 
@@ -314,7 +346,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	public void unhighlightAllNodes() {
 		
 		for(ITAMNode node : listOfNodes) {
-			node.highlight(false);
+			node.setHighlighted(false);
 		}
 	}
 	
@@ -324,7 +356,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	public void unhighlightAllConnections() {
 		
 		for(ITAMConnection connection : listOfConnections) {
-			connection.highlight(false);
+			connection.setHighlighted(false);
 		}
 	}
 	
@@ -391,11 +423,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				}
 
 				unselectAll();
-				select(result);
 				
 				if(result == null) {
 					lastSelectedNode = null;
 				} else {
+					result.setSelected(true);
 					if(result instanceof ITAMNode) {
 						lastSelectedNode = (ITAMNode) result;
 					}

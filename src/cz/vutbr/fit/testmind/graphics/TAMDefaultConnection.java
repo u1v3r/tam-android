@@ -9,11 +9,13 @@ public class TAMDefaultConnection implements ITAMConnection {
 	private final int type = CONNECTION_TYPE_DEFAULT;
 	private int background;
 	private int highlightColor;
-	private boolean isHighlighted;
 	private ITAMNode parent;
 	private ITAMNode child;
 	private TAMGraph graph;
+	
+	private boolean isHighlighted;
 	private boolean isEnabled;
+	private boolean isSelected;
 
 	public TAMDefaultConnection(TAMGraph graph, ITAMNode parent, ITAMNode child) {
 		this.graph = graph;
@@ -21,8 +23,10 @@ public class TAMDefaultConnection implements ITAMConnection {
 		this.child = child;
 		this.background = Color.RED;
 		this.highlightColor = Color.YELLOW;
+		
 		this.isHighlighted = false;
 		this.isEnabled = true;
+		this.isSelected = false;
 	}
 	
 	public int getType() {
@@ -87,11 +91,6 @@ public class TAMDefaultConnection implements ITAMConnection {
 		return false;
 	}
 
-	public void highlight(boolean enable) {
-		isHighlighted = enable;
-		//graph.invalidate();
-	}
-
 	public void setBackgroud(int background) {
 		this.background = background;
 	}
@@ -107,9 +106,55 @@ public class TAMDefaultConnection implements ITAMConnection {
 	public int getHighlightColor() {
 		return highlightColor;
 	}
+	
+	public void setHighlighted(boolean enable) {
+		isHighlighted = enable;
+		//graph.invalidate();
+	}
 
 	public boolean isHighlighted() {
 		return isHighlighted;
+	}
+	
+	public void setSelected(boolean enable) {
+		
+		if(isSelected != enable) {
+			
+			if(enable) {
+				graph.listOfSelectedItems.add(this);
+				graph.moveOnTop(this);
+			} else {
+				graph.listOfSelectedItems.remove(this);
+			}
+			
+			setHighlighted(enable);
+			this.isSelected = enable;
+		}
+	}
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+	
+	public void setEnabled(boolean enable) {
+		
+		if(isEnabled != enable) {
+			
+			if(enable) {
+				graph.listOfDrawableItems.add(this);
+			} else {
+				graph.listOfDrawableItems.remove(this);
+			}
+			
+			parent.setEnabled(enable);
+			child.setEnabled(enable);
+		}
+		
+		isEnabled = enable;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
 	}
 
 	public void move(int dx, int dy) {
@@ -124,14 +169,6 @@ public class TAMDefaultConnection implements ITAMConnection {
 	public int getForeground() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	public void setEnabled(boolean enable) {
-		isEnabled = enable;
-	}
-
-	public boolean isEnabled() {
-		return isEnabled;
 	}
 
 }
