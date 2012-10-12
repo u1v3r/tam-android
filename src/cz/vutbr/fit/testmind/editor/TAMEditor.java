@@ -14,8 +14,8 @@ public class TAMEditor extends View {
 	
 	private TAMGraph graph;
 	private TAMEditorNode root;
-	private List<TAMEditorNode> listOfEditorNodes;
-	private List<TAMEditorConnection> listOfEditorConnections;
+	private List<TAMEditorNode> listOfNodes;
+	private List<TAMEditorConnection> listOfConnections;
 	private TAMEditorFactory factory;
 	
 	public TAMEditor(Context context) {
@@ -23,14 +23,24 @@ public class TAMEditor extends View {
 		
 		// TODO buttons (initialization from XML ?), etc...
 		
-		listOfEditorNodes = new ArrayList<TAMEditorNode>();
-		listOfEditorConnections = new ArrayList<TAMEditorConnection>();
+		listOfNodes = new ArrayList<TAMEditorNode>();
+		listOfConnections = new ArrayList<TAMEditorConnection>();
 		
 		factory = new TAMEditorFactory(this);
 	}
 	
+	public TAMEditorNode createRoot(int type, int x, int y, String title, String body) {
+		
+		if(root != null) return root;
+		
+		TAMEditorNode node = new TAMEditorNode(this, x, y, title, body, type);
+		listOfNodes.add(node);
+		
+		return node;
+	}
+	
 	public boolean containsNode(int id) {
-		for(TAMEditorNode node : listOfEditorNodes) {
+		for(TAMEditorNode node : listOfNodes) {
 			if(id == node.getId()) {
 				return true;
 			}
@@ -40,7 +50,7 @@ public class TAMEditor extends View {
 	}
 	
 	public boolean containsConnection(int id) {
-		for(TAMEditorConnection connection : listOfEditorConnections) {
+		for(TAMEditorConnection connection : listOfConnections) {
 			if(id == connection.getId()) {
 				return true;
 			}
@@ -66,11 +76,11 @@ public class TAMEditor extends View {
 	}
 
 	public List<TAMEditorNode> getListOfNodes() {
-		return listOfEditorNodes;
+		return listOfNodes;
 	}
 
 	public List<TAMEditorConnection> getListOfConnections() {
-		return listOfEditorConnections;
+		return listOfConnections;
 	}
 	
 	

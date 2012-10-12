@@ -10,16 +10,6 @@ public class TAMEditorFactory {
 		this.editor = editor;
 	}
 	
-	public TAMEditorNode createRoot(int type, int x, int y, String title, String body) {
-		
-		if(editor.getRoot() != null) return editor.getRoot();
-		
-		TAMEditorNode node = new TAMEditorNode(editor, x, y, title, body, type);
-		editor.getListOfNodes().add(node);
-		
-		return node;
-	}
-	
 	public TAMEditorNode createNode(int x, int y, String title, String body, int type) {
 		
 		TAMEditorNode node = new TAMEditorNode(editor, x, y, title, body, type);
