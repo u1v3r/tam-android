@@ -38,5 +38,9 @@ public interface ITAMItem {
 	public void draw(Canvas canvas, Paint paint);
 	
 	public TAMGraph getGraph();
+	
+	public void setHelpObject(Object object);
+	
+	public Object getHelpObject();
 
 }

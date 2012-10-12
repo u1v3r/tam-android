@@ -1,10 +1,10 @@
 package cz.vutbr.fit.testmind;
 
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
@@ -52,25 +52,28 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
     	this.controller = new TAMEditorNodesControl(this.editor);
 		   
         controller.createDefaultRootNode();
-        
-        /*
-        graph = (TAMGraph)findViewById(R.id.tam_graph);
-        zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
-        zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
+               
+        EventObjects.zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				graph.zoom(graph.sx + TAMGraph.ZOOM_STEP, graph.sx + TAMGraph.ZOOM_STEP, 
+				controller.zoomIn(EventObjects.graph);
+				/*graph.zoom(graph.sx + TAMGraph.ZOOM_STEP, graph.sx + TAMGraph.ZOOM_STEP, 
 						graph.getWidth()/2, graph.getHeight()/2);
+				*/
 			}
 		});
-        zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
+        EventObjects.zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
+				controller.zoomOut(EventObjects.graph);
+				/*
 				graph.zoom(graph.sx - TAMGraph.ZOOM_STEP, graph.sy - TAMGraph.ZOOM_STEP, 
 						graph.getWidth()/2, graph.getHeight()/2);
+				*/
 			}
 		});
         
+        /*
 		ITAMNode node1 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 10, 10, "jedna");
 		
 		node1.addChild(10, 40, "dva");

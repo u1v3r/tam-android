@@ -24,6 +24,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	private String text;
 	private List<ITAMConnection> listOfChildConnections;
 	private List<ITAMConnection> listOfParentConnections;
+	private Object object;
 	
 	private int type;
 	
@@ -261,5 +262,13 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	
 	public void draw(Canvas canvas, Paint paint) {
 		draw(canvas);
+	}
+	
+	public void setHelpObject(Object object) {
+		this.object = object;
+	}
+
+	public Object getHelpObject() {
+		return object;
 	}
 }

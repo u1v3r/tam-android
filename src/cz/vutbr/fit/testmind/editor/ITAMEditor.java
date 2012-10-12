@@ -12,7 +12,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
 public interface ITAMEditor {
 
 	public TAMEditorNode createRoot(int type, int x, int y,
-			String title, String body, ITAMNode core);
+			String title, String body);
 
 	public boolean containsNode(int id);
 
@@ -25,9 +25,7 @@ public interface ITAMEditor {
 	public TAMGraph getGraph();
 
 	public TAMEditorNode getRoot();
-	
-	public void setRoot(TAMEditorNode root);
-	
+		
 	public TAMEditorFactory getFactory();
 
 	public List<TAMEditorNode> getListOfNodes();

@@ -23,23 +23,16 @@ public class TAMEditorNode {
 	
 	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type) {
 		this(editor, x, type, title, body, type, getNewSequenceNumber());
-	}
-	
-	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, ITAMNode core) {
-		this(editor,x,y,title,body,type,getNewSequenceNumber(),core);
-	}
-	
-	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
-		this(editor,x,y,title,body,type,id,null);
 	}	
 	
-	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id, ITAMNode core) {
+	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
 		this.id = id;
 		this.editor = editor;
 		this.body = body;
-		this.core = core;
 		this.listOfChildNodes = new ArrayList<TAMEditorNode>();
 		this.hasVisibleChilds = true;
+		this.core = editor.getGraph().getItemFactory().createNode(editor.getGraph(), type, x, y, title);
+		this.core.setHelpObject(this);
 	}
 
 	public String getBody() {

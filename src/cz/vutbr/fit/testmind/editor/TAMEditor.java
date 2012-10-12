@@ -10,7 +10,6 @@ import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 
@@ -50,15 +49,15 @@ public class TAMEditor extends View implements ITAMEditor{
 		this.factory = new TAMEditorFactory(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#createRoot(int, int, int, java.lang.String, java.lang.String)
-	 */
-	public TAMEditorNode createRoot(int type, int x, int y, String title, String body, ITAMNode core) {
+
+	public TAMEditorNode createRoot(int type, int x, int y, String title, String body) {
 		
 		if(root != null) return root;
 		
-		TAMEditorNode node = new TAMEditorNode(this, x, y, title, body, type, core);
+		TAMEditorNode node = new TAMEditorNode(this, x, y, title, body, type);
 		listOfNodes.add(node);
+		
+		setRoot(node);
 		
 		return node;
 	}
@@ -138,8 +137,11 @@ public class TAMEditor extends View implements ITAMEditor{
 		return factory;
 	}
 
-	public void setRoot(TAMEditorNode root) {
-		this.root = root;
+	private void setRoot(TAMEditorNode root) {
+		
+		if(this.root == null){
+			this.root = root;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -159,24 +161,22 @@ public class TAMEditor extends View implements ITAMEditor{
 	/**
 	 * Vyhlada prave jeden uzol, ktory je vybrany
 	 * 
-	 * @return {@link TAMEditorNode}|null - ak nie je ziadny vybrany
+	 * @return {@link TAMEditorNode}|<code>null</code> - ak nie je ziadny vybrany
 	 */
 	public TAMEditorNode getLastSelectedNode(){
 		
-		
-		for (TAMEditorNode node : listOfNodes) {
-			if(node.getCore().isHighlighted()){
-				return node;
-			}
+		if(getGraph().getLastSelectedNode() != null) {
+			return (TAMEditorNode) getGraph().getLastSelectedNode().getHelpObject();
 		}
 		
 		return null;
 	}
 
+	
 	public View getView() {
 		return this;
 	}
-
+	
 	public boolean hasRootNode() {
 		
 		if(root != null) return true;
