@@ -27,10 +27,6 @@ public interface ITAMItem {
 	
 	public boolean isHighlighted();
 	
-    public int getBackgroundStroke();
-    
-    public void setBackgroundStroke(int backgroundStroke);
-	
 	public void setSelected(boolean enable);
 	
 	public boolean isSelected();

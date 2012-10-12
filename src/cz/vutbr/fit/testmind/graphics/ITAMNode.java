@@ -36,4 +36,7 @@ public interface ITAMNode extends ITAMItem {
 	
 	public List<ITAMConnection> getListOfChildConnections();
 
+    public int getBackgroundStroke();
+    
+    public void setBackgroundStroke(int backgroundStroke);
 }
