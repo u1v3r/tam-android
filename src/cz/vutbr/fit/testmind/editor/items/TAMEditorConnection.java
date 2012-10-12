@@ -1,12 +1,13 @@
 package cz.vutbr.fit.testmind.editor.items;
 
 import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMConnection;
 
 public class TAMEditorConnection {
 	
 	private int id;
-	private TAMEditor editor;
+	private ITAMEditor editor;
 	private ITAMConnection core;
 	private TAMEditorNode parent;
 	private TAMEditorNode child;
@@ -42,7 +43,7 @@ public class TAMEditorConnection {
 		return child;
 	}
 
-	public TAMEditor getEditor() {
+	public ITAMEditor getEditor() {
 		return editor;
 	}
 

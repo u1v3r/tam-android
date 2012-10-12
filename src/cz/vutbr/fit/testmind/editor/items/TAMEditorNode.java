@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 
 public class TAMEditorNode {
 	
 	private int id;
-	private TAMEditor editor;
+	private ITAMEditor editor;
 	private ITAMNode core;
 	private String body;
 	private List<TAMEditorNode> listOfChildNodes;
@@ -24,13 +25,21 @@ public class TAMEditorNode {
 		this(editor, x, type, title, body, type, getNewSequenceNumber());
 	}
 	
+	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, ITAMNode core) {
+		this(editor,x,y,title,body,type,getNewSequenceNumber(),core);
+	}
+	
 	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
+		this(editor,x,y,title,body,type,id,null);
+	}	
+	
+	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id, ITAMNode core) {
 		this.id = id;
 		this.editor = editor;
 		this.body = body;
+		this.core = core;
 		this.listOfChildNodes = new ArrayList<TAMEditorNode>();
 		this.hasVisibleChilds = true;
-		this.core = editor.getGraph().addRoot(type, x, y, title);
 	}
 
 	public String getBody() {
@@ -44,12 +53,16 @@ public class TAMEditorNode {
 	public ITAMNode getCore() {
 		return core;
 	}
+	
+	public void setCore(ITAMNode core) {
+		this.core = core;
+	}
 
 	public int getId() {
 		return id;
 	}
 
-	public TAMEditor getEditor() {
+	public ITAMEditor getEditor() {
 		return editor;
 	}
 
