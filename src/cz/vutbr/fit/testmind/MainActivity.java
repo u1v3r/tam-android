@@ -1,38 +1,57 @@
 package cz.vutbr.fit.testmind;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 import android.widget.ZoomControls;
-import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class MainActivity extends FragmentActivity implements AddNodeDialogListener{
 	
-	private static final String TAG = "MainActivity";
+	/**
+	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam menu
+	 * 
+	 */
+	public final static class MenuItems{
+		public static final int add = R.id.menu_add;
+		public static final int edit = R.id.menu_edit;
+		public static final int delete = R.id.menu_delete;
+		public static final int save = R.id.menu_save;
+		public static final int settings = R.id.menu_settings;
+		public static final int importFile = R.id.menu_import; 
+	}
 	
-	protected TAMEditor editor = new TAMEditor(this);
+	public static class EventObjects{
+		public static ZoomControls zoomControls;
+		public static TAMGraph graph;
+	}
 	
-	protected TAMGraph graph;
-	//protected ZoomControls zoomControls;
+	private static final String TAG = "MainActivity";	
+	private TAMEditor editor;
+	private TAMEditorNodesControl controller;
 	
+
 	//protected int currentZoomLevel = 0;
 	//protected int maxZoomLovel = 0;
 	
-	private ITAMNode selectedNode;	
-
 	
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(editor.getLayout());        
+    public void onCreate(Bundle savedInstanceState) {    	
+    	super.onCreate(savedInstanceState);    	
+    	setContentView(R.layout.activity_main);
+    	  
+    	EventObjects.graph = (TAMGraph)findViewById(R.id.tam_graph);
+    	EventObjects.zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
+    	
+    	this.editor = new TAMEditor(this);
+    	this.controller = new TAMEditorNodesControl(this.editor);
+		   
+        controller.createDefaultRootNode();
         
         /*
         graph = (TAMGraph)findViewById(R.id.tam_graph);
@@ -61,34 +80,33 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 		node2.addChild(100, 100, "ctyri");
 		*/
     }
-
+        
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	// vlozi action menu
-        getMenuInflater().inflate(editor.getActionBar(), menu);
-        return true;
+    	getMenuInflater().inflate(R.menu.activity_main, menu);    	
+    	return true;
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	
     	switch (item.getItemId()) {
-		case TAMEditor.MenuItems.add:
-			addNode();
+		case MenuItems.add:		
+			controller.showAddChildNodeDialog();
 			break;
-		case TAMEditor.MenuItems.edit:
+		case MenuItems.edit:
 			editNode();
 			break;
-		case TAMEditor.MenuItems.delete:
+		case MenuItems.delete:
 			deleteNode();			
 			break;
-		case TAMEditor.MenuItems.save:
+		case MenuItems.save:
 			saveMap();
 			break;
-		case TAMEditor.MenuItems.importFile:
+		case MenuItems.importFile:
 			importFile();
 			break;
-		case TAMEditor.MenuItems.settings:
+		case MenuItems.settings:
 			
 			break;
 		default: 
@@ -119,40 +137,8 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/**
-	 * Vytvorí child pre vybrany parrent uzol
-	 */
-	protected void addNode() {
-		
-		selectedNode = graph.getLastSelectedNode();
-		
-		if(selectedNode != null){
-			showAddNodeDialog();
-		}else{
-			Toast.makeText(this, R.string.node_not_selected, Toast.LENGTH_LONG).show();			
-		}
-	}
-	
-	/**
-	 * Zobrazí dialog na pridanie uzlu
-	 */
-	private void showAddNodeDialog() {
-		
-		//FragmentActivity fm = getSupportFragmentManager();		
-		AddNodeDialog dialog = new AddNodeDialog();
-		dialog.show(getSupportFragmentManager(), "fragment_add_node");
-		
-	}
-	
-	/**
-	 * Vykoná sa po uzavretí dialogu
-	 */
-	public void onFinishNodeAddDialog(String title) {
-		/*
-		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
-		 */
-		selectedNode.addChild(selectedNode.getPosition().x + 50, 
-				selectedNode.getPosition().y + 50, title);
+
+	public void onFinishAddChildNodeDialog(String title) {
+		controller.addChildNode(title, editor.getLastSelectedNode());
 	}
 }
