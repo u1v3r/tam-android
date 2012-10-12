@@ -2,18 +2,18 @@ package cz.vutbr.fit.testmind.io;
 
 import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.ITAMConnection;
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * class for serializing 
@@ -84,11 +84,28 @@ public class Serializer
         db.close();
     }
     
-    public void deserialize(TAMGraph graph)
+    /**
+     * load nodes and connections from db file
+     * @param graph
+     */
+    public void deserialize(TAMEditor graph)
     {
         SQLiteDatabase db = openDB();
 
-
+        Cursor cur = db.query("nodes", COLUMNS_NODES, null, null, null, null, null);
+        
+        TAMEditorFactory factory = graph.getFactory();
+        HashMap<String, Integer> indexes = getIndexesCursor(cur);
+        
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            Integer x = cur.getInt(indexes.get("x"));
+            Integer y = cur.getInt(indexes.get("y"));
+            String title = cur.getString(indexes.get("title"));
+            String body = cur.getString(indexes.get("body"));
+            Integer type = cur.getInt(indexes.get("type"));
+            factory.createNode(x, y, title, body, type);
+        }
         
         db.close();
     }
@@ -136,7 +153,7 @@ public class Serializer
         ContentValues values = new ContentValues();
         values.put("id", node.getId());
         values.put("title", core.getText());
-        values.put("title", node.getBody());
+        values.put("body", node.getBody());
         values.put("type", core.getType());
         Point position = core.getPosition();
         values.put("x", position.x);
@@ -169,10 +186,7 @@ public class Serializer
         db.insert("connections", null, values);
     }
     
-//    private Integer loadNodes(SQLiteDatabase db, ArrayList<ITAMNode> nodes)
-//    {
-//        db.query("nodes", "id, isRoot", null, null, null, null, null);
-//    }
+    // static private methods =================================================
     
     /**
      * convert boolean value to integer
@@ -184,4 +198,15 @@ public class Serializer
         return value ? 1 : 0;
     }
     
+    static private HashMap<String, Integer> getIndexesCursor(Cursor cur)
+    {
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        
+        for (Integer i = 0; i < COLUMNS_NODES.length; i++)
+        {
+            map.put(COLUMNS_NODES[i], cur.getColumnIndex(COLUMNS_NODES[i]));
+        }
+        
+        return map;
+    }
 }
