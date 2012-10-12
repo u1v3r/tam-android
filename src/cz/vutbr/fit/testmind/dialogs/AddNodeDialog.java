@@ -14,32 +14,41 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
+import cz.vutbr.fit.testmind.graphics.ITAMNode;
 
 public class AddNodeDialog extends DialogFragment implements OnEditorActionListener{
 	
 	public interface AddNodeDialogListener{
-		void onFinishNodeAddDialog(String title);
+		void onFinishAddChildNodeDialog(String title);
 	}
+	
 	
 	private EditText titleEditText;
 	private Button cancelButton;
 	private Button okButton;
+	
+	private TAMEditorNode parent;
 	private AddNodeDialogListener activity;
 	
 	private View.OnClickListener buttonsHandler = new View.OnClickListener() {
 		
 		public void onClick(View v) {			
 			if(v == okButton){
-				activity.onFinishNodeAddDialog(titleEditText.getText().toString());	
+				activity.onFinishAddChildNodeDialog(titleEditText.getText().toString());	
 				dismiss();
 			}else if(v == cancelButton){
 				dismiss();
 			}
 		}
 	};
-		
-	public AddNodeDialog() {}
 	
+	public AddNodeDialog(){}
+			
+	public AddNodeDialog(TAMEditorNode parent) {
+		this.parent = parent;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -67,7 +76,7 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		if (EditorInfo.IME_ACTION_DONE == actionId) {
             // vrati vyplneny text do activity            
-            activity.onFinishNodeAddDialog(titleEditText.getText().toString());
+            activity.onFinishAddChildNodeDialog(titleEditText.getText().toString());
             dismiss();
             return true;
         }
