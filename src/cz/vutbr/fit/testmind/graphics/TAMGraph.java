@@ -21,8 +21,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	private static final String TAG = "TAMGraph";
 
-	public static final float ZOOM_STEP = 0.125f;
-	public static final float DEFAULT_ZOOM = 0.4f;
+	private static final float ZOOM_STEP = 0.125f;
+	private static final float DEFAULT_ZOOM = 0.4f;
 
 	private static final float MIN_ZOOM = 0;
 	private static final float MAX_ZOOM = 2;
