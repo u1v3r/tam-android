@@ -160,7 +160,17 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		return isHighlited;
 	}
 	
-	public void setSelected(boolean enable) {
+	public int getBackgroundStroke()
+    {
+        return backgroundStroke;
+    }
+
+    public void setBackgroundStroke(int backgroundStroke)
+    {
+        this.backgroundStroke = backgroundStroke;
+    }
+
+    public void setSelected(boolean enable) {
 		
 		if(isSelected != enable) {
 			
