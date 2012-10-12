@@ -199,11 +199,30 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	public void unselectAll() {
 		
-		for(ITAMItem item : listOfSelectedItems) {
-			item.setSelected(false);
+		int size = listOfSelectedItems.size();
+		for(int i = 0; i < size; i++) {
+			listOfSelectedItems.get(0).setSelected(false);
 		}
+	}
+	
+	public void unselectAllWithout(ITAMItem actual) {
 		
-		listOfSelectedItems.clear();
+		if(actual == null) {
+			unselectAll();
+		} else {
+			int size = listOfSelectedItems.size();
+			int a = 0;
+			System.out.println(size);
+			for(int i = 0; i < size; i++) {
+				System.out.println(i);
+				ITAMItem item = listOfSelectedItems.get(a);
+				if(item != actual) {
+					item.setSelected(false);
+				} else {
+					a = 1;
+				}
+			}
+		}
 	}
 	
 	/**
@@ -425,16 +444,21 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					}
 				}
 
-				unselectAll();
+				unselectAllWithout(result);
 				
 				if(result == null) {
 					lastSelectedNode = null;
 				} else {
-					result.setSelected(true);
 					if(result instanceof ITAMNode) {
 						lastSelectedNode = (ITAMNode) result;
 					} else if(result instanceof ITAMConnection) {
-						((ITAMConnection) result).setSelectedPoint(ax, ay);
+						System.out.println(result.isSelected());
+						if(result.isSelected()) {
+							((ITAMConnection) result).setSelectedPoint(ax, ay);
+						}
+					}
+					if(!result.isSelected()) {
+						result.setSelected(true);
 					}
 				}
 
