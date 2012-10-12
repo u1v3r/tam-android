@@ -7,4 +7,8 @@ public interface ITAMConnection extends ITAMItem {
 	public ITAMNode getParentNode();
 	
 	public ITAMNode getChildNode();
+	
+	public void setSelectedPoint(float x, float y);
+	
+	public void moveSelectedPoint(int dx, int dy);
 }

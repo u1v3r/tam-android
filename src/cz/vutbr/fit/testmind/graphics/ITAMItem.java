@@ -7,9 +7,9 @@ public interface ITAMItem {
 	
 	public int getType();
 	
-	public boolean hit(int x, int y);
+	public boolean hit(float x, float y);
 	
-	public void setBackgroud(int background);
+	public void setBackground(int background);
 	
 	public int getBackground();
 	
