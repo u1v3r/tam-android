@@ -50,14 +50,12 @@ public class TAMEditor extends View implements ITAMEditor{
 		this.factory = new TAMEditorFactory(this);
 	}
 	
-	/* (non-Javadoc)
-	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#createRoot(int, int, int, java.lang.String, java.lang.String)
-	 */
+
 	public TAMEditorNode createRoot(int type, int x, int y, String title, String body, ITAMNode core) {
 		
 		if(root != null) return root;
 		
-		TAMEditorNode node = new TAMEditorNode(this, x, y, title, body, type, core);
+		TAMEditorNode node = new TAMEditorNode(this, x, y, title, body, type);
 		listOfNodes.add(node);
 		
 		return node;
@@ -163,11 +161,8 @@ public class TAMEditor extends View implements ITAMEditor{
 	 */
 	public TAMEditorNode getLastSelectedNode(){
 		
-		
-		for (TAMEditorNode node : listOfNodes) {
-			if(node.getCore().isHighlighted()){
-				return node;
-			}
+		if(getGraph().getLastSelectedNode() != null) {
+			return (TAMEditorNode) getGraph().getLastSelectedNode().getHelpObject();
 		}
 		
 		return null;

@@ -17,6 +17,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 	private ITAMNode parent;
 	private ITAMNode child;
 	private TAMGraph graph;
+	private Object object;
 	
 	private boolean isHighlighted;
 	private boolean isEnabled;
@@ -193,6 +194,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 				graph.moveOnTop(this);
 			} else {
 				graph.listOfSelectedItems.remove(this);
+				selectedPoint = null;
 			}
 			
 			setHighlighted(enable);
@@ -226,11 +228,14 @@ public class TAMDefaultConnection implements ITAMConnection {
 	}
 	
 	private void moveOnePoint(Point point, int dx, int dy) {
-		point.x += dx;
-		point.y += dy;
+		if(point != null) {
+			point.x += dx;
+			point.y += dy;
+		}
 	}
 	
 	public void moveSelectedPoint(int dx, int dy) {
+		System.out.println(selectedPoint);
 		moveOnePoint(selectedPoint, dx, dy);
 	}
 
@@ -270,17 +275,30 @@ public class TAMDefaultConnection implements ITAMConnection {
 		} else if(laysNearPoint((int) x, (int) y, to)) {
 			selectedPoint = to;
 		} else {
-			float left = getLineParameter(x, from.x, to.x);
-			float right = getLineParameter(y, from.y, to.y);
+			int newX;
+			int newY;
 			
-			//float left1 = left-(left*0.2f);
-			//float left2 = left+(left*0.2f);
-			
-			//if(inRange(right, left1, left2)) {
+			if(from.x > to.x-OFFSET && from.x < to.x+OFFSET) {
+				newY = (int) y;
+				float t = getLineParameter(y, from.y, to.y);
+				newX = (int) (from.x+t*(to.x-from.x));
+			} else if(from.y > to.y-OFFSET && from.y < to.y+OFFSET) {
+				newX = (int) x;
+				float t = getLineParameter(x, from.x, to.x);
+				newY = (int) (from.y+t*(to.y-from.y));
+			} else {
+				float left = getLineParameter(x, from.x, to.x);
+				float right = getLineParameter(y, from.y, to.y);
+				
+				//float left1 = left-(left*0.2f);
+				//float left2 = left+(left*0.2f);
+				
+				//if(inRange(right, left1, left2)) {
 				float t = (left+right)/2;
 				
-				int newX = (int) (from.x+t*(to.x-from.x));
-				int newY = (int) (from.y+t*(to.y-from.y));
+				newX = (int) (from.x+t*(to.x-from.x));
+				newY = (int) (from.y+t*(to.y-from.y));
+			}
 				
 				for(Point point : listOfMiddlePoints) {
 					if(point.equals(newX, newY)) {
@@ -304,6 +322,14 @@ public class TAMDefaultConnection implements ITAMConnection {
 				}
 			//}
 		}
+	}
+
+	public void setHelpObject(Object object) {
+		this.object = object;
+	}
+
+	public Object getHelpObject() {
+		return object;
 	}
 
 }
