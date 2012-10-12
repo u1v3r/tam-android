@@ -17,6 +17,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 	private ITAMNode parent;
 	private ITAMNode child;
 	private TAMGraph graph;
+	private Object object;
 	
 	private boolean isHighlighted;
 	private boolean isEnabled;
@@ -321,6 +322,14 @@ public class TAMDefaultConnection implements ITAMConnection {
 				}
 			//}
 		}
+	}
+
+	public void setHelpObject(Object object) {
+		this.object = object;
+	}
+
+	public Object getHelpObject() {
+		return object;
 	}
 
 }
