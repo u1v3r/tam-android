@@ -3,6 +3,8 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.editor.controls.ZoomEventListener;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -15,7 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ZoomControls;
 
-public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
+public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,ZoomEventListener {
 	
 	private static final String TAG = "TAMGraph";
 
@@ -509,7 +511,15 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	
-	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
+	/**
+	 * @deprecated nepouzivat, pouzit rozhranie ZoomEventListener 
+	 * 
+	 * @param scaleX
+	 * @param scaleY
+	 * @param pivotX
+	 * @param pivotY
+	 */
+	private void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
 		Log.d(TAG,"pivotX: " + px + " ,pivotY" + py
 				+ ", scaleX:"+ sx + ", scaleY"	 + sy);
 		
@@ -578,5 +588,16 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 		}
+	}
+
+
+	public void onZoomIn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onZoomOut() {
+		// TODO Auto-generated method stub
+		
 	}
 }

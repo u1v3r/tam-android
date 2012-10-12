@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
 
 public class AddNodeDialog extends DialogFragment implements OnEditorActionListener{
 	

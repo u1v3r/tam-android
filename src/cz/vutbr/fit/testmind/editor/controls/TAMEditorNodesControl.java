@@ -9,6 +9,7 @@ import android.widget.Toast;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
@@ -46,7 +47,6 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl{
 	 */
 	public void createDefaultRootNode(){
 		
-		Log.d(TAG, "je tu");
 		
 		Point position = new Point(this.view.getWidth()/2, this.view.getHeight()/2);
 		
@@ -122,9 +122,30 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl{
 	 */
 	public void addChildNode(String title, TAMEditorNode parent, Point position){		
 		
-		parent.getCore().addChild(position.x, position.y, title);
+		int posX = position.x;
+		int posY = position.y;
+		editor.getFactory().createNode(posX, posY, title, "",TAMRectangleNode.NODE_TYPE_RECTANGLE);
+		/*
+		ITAMNode core = (ITAMNode) parent.getCore().addChild(posX, posY, title);
 		
+		TAMEditorNode editorNode = new TAMEditorNode((TAMEditor) editor,posX,posY,title,"",
+				TAMRectangleNode.NODE_TYPE_RECTANGLE,core);
+		
+		editor.getListOfNodes().add(editorNode);		
+		parent.getListOfChildNodes().add(editorNode);
+		*/
+	}
 
+
+	public void zoomIn(ZoomEventListener graph) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void zoomOut(ZoomEventListener graph) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

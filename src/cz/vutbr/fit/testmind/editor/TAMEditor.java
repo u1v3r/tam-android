@@ -159,7 +159,7 @@ public class TAMEditor extends View implements ITAMEditor{
 	/**
 	 * Vyhlada prave jeden uzol, ktory je vybrany
 	 * 
-	 * @return {@link TAMEditorNode}|null - ak nie je ziadny vybrany
+	 * @return {@link TAMEditorNode}|<code>null</code> - ak nie je ziadny vybrany
 	 */
 	public TAMEditorNode getLastSelectedNode(){
 		
@@ -173,10 +173,11 @@ public class TAMEditor extends View implements ITAMEditor{
 		return null;
 	}
 
+	
 	public View getView() {
 		return this;
 	}
-
+	
 	public boolean hasRootNode() {
 		
 		if(root != null) return true;
