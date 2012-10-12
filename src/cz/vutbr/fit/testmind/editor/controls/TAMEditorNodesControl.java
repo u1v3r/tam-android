@@ -1,17 +1,17 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Point;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.graphics.TAMRectangleNode;
 
@@ -23,12 +23,12 @@ import cz.vutbr.fit.testmind.graphics.TAMRectangleNode;
  *
  */
 public class TAMEditorNodesControl extends TAMEditorAbstractControl{
-	
-	
+		
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
 	private static final String TAG = "TAMEditorNodes";
-	
+	private static final String INTENT_MIME_TYPE = "text/xml";
+		
 	private ITAMEditor editor;
 	private TAMGraph graph;
 	private FragmentActivity activity;
@@ -151,5 +151,33 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	/**
+	 *  Zobrazi file manager s moznostou vyberu suboru
+	 */
+	public void importFile() {
+		
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT); 
+        intent.setType(INTENT_MIME_TYPE); 
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            activity.startActivityForResult(
+            		
+                    Intent.createChooser(intent, 
+                    		editor.getView().getResources().getString(R.string.select_file_to_upload)),
+                    		MainActivity.PICK_FILE_RESULT_CODE);
+            
+        } catch (ActivityNotFoundException e) {
+            
+        	// vyzve uzivatela na instalaciu file managera
+            Toast.makeText(editor.getView().getContext(), 
+            		editor.getView().getResources().getString(R.string.install_file_manager), 
+                    Toast.LENGTH_SHORT).show();
+        }
+	}
+	
+	
 	
 }

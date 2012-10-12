@@ -13,5 +13,7 @@
     <string name="ok">OK</string>
     <string name="node_not_selected">Please select parrent node</string>
     <string name="import_file">Import</string>
-
+    <string name="select_file_to_upload">Select a File to Upload</string>
+	<string name="install_file_manager">Please install a File Manager</string>
+	
 </resources>

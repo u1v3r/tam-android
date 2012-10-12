@@ -1,10 +1,14 @@
 package cz.vutbr.fit.testmind;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
@@ -30,6 +34,8 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 		public static ZoomControls zoomControls;
 		public static TAMGraph graph;
 	}
+	
+	public static final int PICK_FILE_RESULT_CODE = 0;
 	
 	private static final String TAG = "MainActivity";	
 	private TAMEditor editor;
@@ -107,7 +113,7 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 			saveMap();
 			break;
 		case MenuItems.importFile:
-			importFile();
+			controller.importFile();
 			break;
 		case MenuItems.settings:
 			
@@ -120,11 +126,6 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
     	
     	return true;    	
     }
-
-	private void importFile() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	private void saveMap() {
 		// TODO Auto-generated method stub
@@ -144,4 +145,22 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 	public void onFinishAddChildNodeDialog(String title) {
 		controller.addChildNode(title, editor.getLastSelectedNode());
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if(PICK_FILE_RESULT_CODE == requestCode && RESULT_OK == resultCode){
+			
+			Uri uri = data.getData();
+			Log.d(TAG,"File selected: " + uri.toString());
+			
+			// TODO: implementovat import suboru
+			
+			
+
+		}
+		
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 }
