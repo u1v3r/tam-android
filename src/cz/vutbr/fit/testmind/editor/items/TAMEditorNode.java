@@ -73,7 +73,6 @@ public class TAMEditorNode {
 		
 		TAMEditorNode node = editor.getFactory().createNode(x, y, title, body, nodeType);
 		editor.getFactory().createConnection(this, node, connectionType);
-		listOfChildNodes.add(node);
 		
 		return node;
 	}

@@ -49,6 +49,16 @@ public class TAMEditor extends View {
 		return false;
 	}
 	
+	public TAMEditorNode getNode(int id) {
+		for(TAMEditorNode node : listOfNodes) {
+			if(id == node.getId()) {
+				return node;
+			}
+		}
+		
+		return null;
+	}
+	
 	public boolean containsConnection(int id) {
 		for(TAMEditorConnection connection : listOfConnections) {
 			if(id == connection.getId()) {
@@ -57,6 +67,16 @@ public class TAMEditor extends View {
 		}
 		
 		return false;
+	}
+	
+	public TAMEditorConnection getConnection(int id) {
+		for(TAMEditorConnection connection : listOfConnections) {
+			if(id == connection.getId()) {
+				return connection;
+			}
+		}
+		
+		return null;
 	}
 
 	public TAMGraph getGraph() {
