@@ -10,7 +10,6 @@ import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 
@@ -51,12 +50,14 @@ public class TAMEditor extends View implements ITAMEditor{
 	}
 	
 
-	public TAMEditorNode createRoot(int type, int x, int y, String title, String body, ITAMNode core) {
+	public TAMEditorNode createRoot(int type, int x, int y, String title, String body) {
 		
 		if(root != null) return root;
 		
 		TAMEditorNode node = new TAMEditorNode(this, x, y, title, body, type);
 		listOfNodes.add(node);
+		
+		setRoot(node);
 		
 		return node;
 	}
@@ -136,8 +137,11 @@ public class TAMEditor extends View implements ITAMEditor{
 		return factory;
 	}
 
-	public void setRoot(TAMEditorNode root) {
-		this.root = root;
+	private void setRoot(TAMEditorNode root) {
+		
+		if(this.root == null){
+			this.root = root;
+		}
 	}
 
 	/* (non-Javadoc)

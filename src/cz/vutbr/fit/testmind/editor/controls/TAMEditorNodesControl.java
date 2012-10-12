@@ -47,19 +47,14 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl{
 	 */
 	public void createDefaultRootNode(){
 		
+		// ak uz je jeden root uzol vytvoreny nesmie sa vytvorit druhy
+		if(editor.hasRootNode()) return;
 		
-		Point position = new Point(this.view.getWidth()/2, this.view.getHeight()/2);
+		Point position = new Point(this.graph.getWidth()/2, this.graph.getHeight()/2);
 		
-		ITAMNode core = graph.addRoot(TAMRectangleNode.NODE_TYPE_RECTANGLE, 
-				position.x, position.y, DEFAULT_ROOT_TITLE);
+		editor.createRoot(TAMRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
+				DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);	
 		
-		TAMEditorNode rootEditorNode = editor.createRoot(TAMRectangleNode.NODE_TYPE_RECTANGLE,
-				position.x, position.y, 
-				DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY,
-				core);
-		
-		
-		editor.setRoot(rootEditorNode);
 	}
 		
 	
@@ -109,7 +104,23 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl{
 		/*
 		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
 		 */
-		addChildNode(title, parent, 
+		addChildNode(title, "", parent, 
+				new Point(parent.getCore().getPosition().x, parent.getCore().getPosition().y));
+	}
+	
+	/**
+	 * Prida child uzol k parent uzlu s automatickym umiestnenim
+	 * 
+	 * @param title Titulok uzlu
+	 * @param body Telo uzlu
+	 * @param parent Rodicovsky uzol 
+	 */
+	public void addChildNode(String title, String body, TAMEditorNode parent) {
+			
+		/*
+		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
+		 */
+		addChildNode(title, body, parent, 
 				new Point(parent.getCore().getPosition().x, parent.getCore().getPosition().y));
 	}
 	
@@ -117,23 +128,16 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl{
 	 * Vytovori child uzol k parent uzlu a umiestni ho na zadanu poziciu
 	 * 
 	 * @param title Titulok uzlu
-	 * @param parent Rodicovsky uzol
+	 * @param body Telo uzlu
+	 * @param parent Rodicovsky uzol 
 	 * @param position Pozicia child uzlu
 	 */
-	public void addChildNode(String title, TAMEditorNode parent, Point position){		
+	public void addChildNode(String title, String body, TAMEditorNode parent, Point position){		
 		
 		int posX = position.x;
 		int posY = position.y;
-		editor.getFactory().createNode(posX, posY, title, "",TAMRectangleNode.NODE_TYPE_RECTANGLE);
-		/*
-		ITAMNode core = (ITAMNode) parent.getCore().addChild(posX, posY, title);
 		
-		TAMEditorNode editorNode = new TAMEditorNode((TAMEditor) editor,posX,posY,title,"",
-				TAMRectangleNode.NODE_TYPE_RECTANGLE,core);
-		
-		editor.getListOfNodes().add(editorNode);		
-		parent.getListOfChildNodes().add(editorNode);
-		*/
+		parent.addChild(posX, posY, title, body);
 	}
 
 
