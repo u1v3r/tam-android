@@ -406,18 +406,21 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 				//System.out.println("click: " + e.getX() + " " + e.getY());
 
 				ITAMItem result = null;
-
-				/*for(ITAMItem item : listOfConnections) {
-					if(item.hit(x, y)) {
-						result = item;
-					}
-				}*/
 				
 				float dx = px-px*sx;
 				float dy = py-py*sy;
+				
+				float ax = ((x-dx)/sy);
+				float ay = ((y-dy)/sy);
+				
+				for(ITAMItem item : listOfConnections) {
+					if(item.hit(ax, ay)) {
+						result = item;
+					}
+				}
 
 				for(ITAMItem item : listOfNodes) {
-					if(item.hit((int)((x-dx)/sy), (int)((y-dy)/sy))) {
+					if(item.hit(ax, ay)) {
 						result = item;
 					}
 				}
@@ -430,6 +433,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 					result.setSelected(true);
 					if(result instanceof ITAMNode) {
 						lastSelectedNode = (ITAMNode) result;
+					} else if(result instanceof ITAMConnection) {
+						((ITAMConnection) result).setSelectedPoint(ax, ay);
 					}
 				}
 
@@ -447,14 +452,25 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 
 
 				if(dx > 0 || dy > 0 || dx < 0 || dy < 0) {
+					
+					int ddx = (int) (dx/sx);
+					int ddy = (int) (dy/sy);
+					
 					if(!listOfSelectedItems.isEmpty()) {
 
 						for(ITAMItem item : listOfSelectedItems) {
-							item.move((int)(dx/sx),(int)(dy/sy));
+							if(item instanceof ITAMNode) {
+								item.move(ddx,ddy);
+							} else if(item instanceof ITAMConnection) {
+								((ITAMConnection) item).moveSelectedPoint(ddx,ddy);
+							}
 						}
 					} else {
 						for(ITAMItem item : listOfNodes) {
-							item.move((int)(dx/sx),(int)(dy/sy));
+							item.move(ddx,ddy);
+						}
+						for(ITAMItem item : listOfConnections) {
+							item.move(ddx,ddy);
 						}
 					}
 

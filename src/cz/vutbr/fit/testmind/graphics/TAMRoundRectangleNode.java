@@ -14,7 +14,7 @@ public class TAMRoundRectangleNode extends TAMAbstractNode {
 	}
 
 	@Override
-	public boolean hit(int x, int y) {
+	public boolean hit(float x, float y) {
 		// TODO Auto-generated method stub
 		return false;
 	}

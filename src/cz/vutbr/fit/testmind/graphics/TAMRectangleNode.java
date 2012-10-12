@@ -21,7 +21,7 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
 	}
 	
-	public boolean hit(int x, int y) {
+	public boolean hit(float x, float y) {
 		
 		//TAMGraph graph = getGraph();
 		Rect rect = this.getBounds();
@@ -40,7 +40,7 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 		}*/
 		
 		// if point is situated in rectangle area then return true, otherwise return false //
-		if(newRect.contains(x,y)) {
+		if(newRect.contains((int)x,(int)y)) {
 			return true;
 		} else {
 			return false;

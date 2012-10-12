@@ -70,7 +70,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		actualizeSize();
 	}
 	
-	public abstract boolean hit(int x, int y);
+	public abstract boolean hit(float x, float y);
 	
 	public abstract void move(int dx, int dy);
 	
@@ -108,7 +108,7 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		return background;
 	}
 	
-	public void setBackgroud(int background) {
+	public void setBackground(int background) {
 		this.background = background;
 	}
 	
