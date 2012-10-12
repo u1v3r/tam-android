@@ -5,29 +5,36 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
+import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class MainActivity extends FragmentActivity implements AddNodeDialogListener{
 	
 	private static final String TAG = "MainActivity";
-	protected TAMGraph graph;
-	protected ZoomControls zoomControls;
 	
-	protected int currentZoomLevel = 0;
-	protected int maxZoomLovel = 0;
+	protected TAMEditor editor = new TAMEditor(this);
+	
+	protected TAMGraph graph;
+	//protected ZoomControls zoomControls;
+	
+	//protected int currentZoomLevel = 0;
+	//protected int maxZoomLovel = 0;
+	
 	private ITAMNode selectedNode;	
 
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);        
-
+        setContentView(editor.getLayout());        
+        
+        /*
         graph = (TAMGraph)findViewById(R.id.tam_graph);
         zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
         zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
@@ -52,11 +59,13 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 		ITAMNode node2 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 60, 60, "tri");
 		
 		node2.addChild(100, 100, "ctyri");
+		*/
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+    	// vlozi action menu
+        getMenuInflater().inflate(editor.getActionBar(), menu);
         return true;
     }
     
@@ -64,19 +73,22 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
     public boolean onOptionsItemSelected(MenuItem item) {
     	
     	switch (item.getItemId()) {
-		case R.id.menu_add:
+		case TAMEditor.MenuItems.add:
 			addNode();
 			break;
-		case R.id.menu_edit:
+		case TAMEditor.MenuItems.edit:
 			editNode();
 			break;
-		case R.id.menu_delete:
+		case TAMEditor.MenuItems.delete:
 			deleteNode();			
 			break;
-		case R.id.menu_save:
+		case TAMEditor.MenuItems.save:
 			saveMap();
 			break;
-		case R.id.menu_settings:
+		case TAMEditor.MenuItems.importFile:
+			importFile();
+			break;
+		case TAMEditor.MenuItems.settings:
 			
 			break;
 		default: 
@@ -87,6 +99,11 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
     	
     	return true;    	
     }
+
+	private void importFile() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	private void saveMap() {
 		// TODO Auto-generated method stub

@@ -19,29 +19,31 @@
     <EditText
         android:id="@+id/edit_text_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="0.5"
         android:ems="10"
         android:gravity="top|left"
-        android:inputType="textMultiLine"
-        android:minLines="5" />
+        android:inputType="textMultiLine" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:showDividers="beginning|middle|end" >
 
         <Button
             android:id="@+id/add_dialog_button_cancel"
-            android:layout_width="wrap_content"
+            style="@style/button_style"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/cancel" />
 
         <Button
             android:id="@+id/add_dialog_button_ok"
-            android:layout_width="wrap_content"
+            style="@style/button_style"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="@string/ok" />
 
     </LinearLayout>

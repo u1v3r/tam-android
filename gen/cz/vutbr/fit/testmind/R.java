@@ -37,8 +37,9 @@ public final class R {
         public static final int menu_add=0x7f080007;
         public static final int menu_delete=0x7f080009;
         public static final int menu_edit=0x7f080008;
+        public static final int menu_import=0x7f08000b;
         public static final int menu_save=0x7f08000a;
-        public static final int menu_settings=0x7f08000b;
+        public static final int menu_settings=0x7f08000c;
         public static final int tam_graph=0x7f080001;
         public static final int zoom_controls=0x7f080002;
     }
@@ -55,6 +56,7 @@ public final class R {
         public static final int cancel=0x7f050009;
         public static final int delete=0x7f050006;
         public static final int edit=0x7f050005;
+        public static final int import_file=0x7f05000c;
         public static final int menu_settings=0x7f050001;
         public static final int node_add_dialog=0x7f050007;
         public static final int node_add_dialog_title=0x7f050008;
@@ -65,5 +67,6 @@ public final class R {
     }
     public static final class style {
         public static final int AppTheme=0x7f060000;
+        public static final int button_style=0x7f060001;
     }
 }
