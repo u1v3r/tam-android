@@ -12,6 +12,13 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 	
+	public interface ZoomInOutEventListener {
+		
+		void onZoomIn();
+		void onZoomOut();
+		
+	}
+	
 	private ZoomControls zoomControls;
 	private TAMGraph graph;
 
@@ -22,29 +29,35 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 		this.graph = (TAMGraph) getEditor();
 		addListeners();
 	}
-	
+	/*
 	public void zoom(float sx, float sy, float px, float py) {
 		getEditor().zoom(sx, sy, px, py);
 	}
+	*/
 	
 	private void addListeners() {
 
 		zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				//controller.zoomIn(EventObjects.editor);
-				graph.zoom(graph.sx*2, graph.sy*2, graph.getWidth()*0.5f, graph.getHeight()*0.5f);
+				zoomIn(graph);				
 			}
 		});
         zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				graph.zoom(graph.sx*0.5f, graph.sy*0.5f, graph.getWidth()*0.5f, graph.getHeight()*0.5f);
+				zoomOut(graph);				
 			}
 		});
 	}
 
-
+	private void zoomIn(ZoomInOutEventListener object){
+		object.onZoomIn();		
+	}
+	
+	private void zoomOut(ZoomInOutEventListener object){
+		object.onZoomOut();		
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

@@ -3,7 +3,7 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.testmind.editor.controls.ZoomEventListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl.ZoomInOutEventListener;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -17,7 +17,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ZoomControls;
 
-public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,ZoomEventListener {
+public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,ZoomInOutEventListener {
 	
 	private static final String TAG = "TAMGraph";
 
@@ -537,13 +537,14 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	/**
 	 * 
+	 * Sluzi na zoom objektu
 	 * 
 	 * @param scaleX
 	 * @param scaleY
 	 * @param pivotX
 	 * @param pivotY
 	 */
-	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
+	protected void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
 		Log.d(TAG,"pivotX: " + px + " ,pivotY" + py
 				+ ", scaleX:"+ sx + ", scaleY"	 + sy);
 		
@@ -614,14 +615,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		}
 	}
 
-
 	public void onZoomIn() {
-		// TODO Auto-generated method stub
-		
+		zoom(sx*2, sy*2, getWidth()*0.5f, getHeight()*0.5f);
 	}
 
-	public void onZoomOut() {
-		// TODO Auto-generated method stub
-		
+	public void onZoomOut() {		
+		zoom(sx*0.5f, sy*0.5f, getWidth()*0.5f, getHeight()*0.5f);
 	}
 }
