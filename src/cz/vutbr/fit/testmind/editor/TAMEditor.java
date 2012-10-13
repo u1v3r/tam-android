@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
@@ -191,6 +192,16 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		for(TAMEditorAbstractControl control : listOfControls) {
 			control.onDraw(canvas);
 		}
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent e) {
+		
+		for(TAMEditorAbstractControl control : listOfControls) {
+			control.onTouchEvent(e);
+		}
+		
+		return super.onTouchEvent(e);
 	}
 
 }

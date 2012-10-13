@@ -7,6 +7,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import android.graphics.Canvas;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ZoomControls;
 
@@ -54,6 +55,12 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 
 	@Override
 	public void onDraw(Canvas canvas) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTouchEvent(MotionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -2,6 +2,7 @@ package cz.vutbr.fit.testmind.editor.controls;
 
 import android.graphics.Canvas;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
 public abstract class TAMEditorAbstractControl {
@@ -28,5 +29,7 @@ public abstract class TAMEditorAbstractControl {
 	public abstract boolean onOptionsItemSelected(MenuItem item);
 
 	public abstract void onDraw(Canvas canvas);
+
+	public abstract void onTouchEvent(MotionEvent e);
 
 }

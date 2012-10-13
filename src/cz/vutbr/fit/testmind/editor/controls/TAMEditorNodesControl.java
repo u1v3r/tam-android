@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
@@ -192,6 +193,13 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	@Override
 	public void onDraw(Canvas canvas) {
 		// do nothing //
+	}
+
+
+	@Override
+	public void onTouchEvent(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
