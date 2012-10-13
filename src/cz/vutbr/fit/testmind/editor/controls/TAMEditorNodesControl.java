@@ -135,19 +135,6 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		parent.addChild(posX, posY, title, body);
 	}
 
-
-	public void zoomIn(ZoomEventListener graph) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void zoomOut(ZoomEventListener graph) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	/**
 	 *  Zobrazi file manager s moznostou vyberu suboru
 	 */
@@ -181,12 +168,31 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		if(item.getItemId() == MenuItems.add)	 {
-			showAddChildNodeDialog();
-			return true;
-		} else {
-			return false;
-		}
+		
+		switch (item.getItemId()) {
+			case MenuItems.add:		
+				showAddChildNodeDialog();
+				return true;
+			case MenuItems.edit:
+				
+				break;
+			case MenuItems.delete:
+							
+				break;
+			case MenuItems.save:
+				
+				break;
+			case MenuItems.importFile:
+				importFile();
+				return true;
+			case MenuItems.settings:
+	
+				break;
+			default: 
+				return false;    	
+    	} 	
+    	
+    	return true;		
 	}
 
 
@@ -200,8 +206,5 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	public void onTouchEvent(MotionEvent e) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	
-	
+	}	
 }

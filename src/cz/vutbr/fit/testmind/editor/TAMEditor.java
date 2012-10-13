@@ -9,8 +9,6 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
-import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
