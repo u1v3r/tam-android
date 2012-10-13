@@ -9,6 +9,8 @@ public interface ITAMNode extends ITAMItem {
 	
 	public interface OnNodeSelectListener{
 		public void onSelectNodeEvent(ITAMNode node);
+		public void onUnselectNodeEvent(ITAMNode node);
+		public void onMoveNodeEvent(ITAMNode node);
 	}
 	
 	public final int NODE_TYPE_RECTANGLE = 1;

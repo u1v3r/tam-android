@@ -29,7 +29,7 @@ public class TAMEditorNode {
 		this(editor, x, type, title, body, type, getNewSequenceNumber());
 	}	
 	
-	public TAMEditorNode(final TAMEditor editor, int x, int y, String title, String body, int type, int id) {
+	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
 		this.id = id;
 		this.editor = editor;
 		this.body = body;
@@ -40,7 +40,17 @@ public class TAMEditorNode {
 		this.core.setSelectEventListener(new ITAMNode.OnNodeSelectListener() {
 			
 			public void onSelectNodeEvent(ITAMNode node) {				
-				editor.onSelectEvent(node);			
+				getEditor().onSelectEvent(node);			
+			}
+
+			public void onUnselectNodeEvent(ITAMNode node) {
+				getEditor().onUnselectEvent(node);
+				
+			}
+
+			public void onMoveNodeEvent(ITAMNode node) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 	}

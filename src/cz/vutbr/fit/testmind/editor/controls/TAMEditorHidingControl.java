@@ -31,4 +31,14 @@ public class TAMEditorHidingControl extends TAMEditorAbstractControl {
 		
 	}
 
+	public void onUnselectNodeEvent(ITAMNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMoveNodeEvent(ITAMNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

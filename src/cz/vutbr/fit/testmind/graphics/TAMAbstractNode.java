@@ -190,6 +190,10 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 				}
 			} else {
 				graph.listOfSelectedItems.remove(this);
+				
+				if(selectListener != null){
+					selectListener.onUnselectNodeEvent(this);
+				}
 			}
 			
 			setHighlighted(enable);

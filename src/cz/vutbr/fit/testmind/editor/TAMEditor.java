@@ -8,6 +8,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.R;
@@ -39,6 +41,8 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	private List<TAMEditorAbstractControl> listOfControls;
 
 	private TAMEditorFactory factory;
+
+	
 			
 	public TAMEditor(Context context) {
 		this(context, null);
@@ -68,7 +72,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		listOfControls.add(new TAMEditorZoomControl(this,R.id.zoom_controls));
 		listOfControls.add(new TAMEditorGesturesControl(this));
 		
-		this.factory = new TAMEditorFactory(this);
+		this.factory = new TAMEditorFactory(this);		
 	}
 	
 
@@ -204,14 +208,19 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		for(TAMEditorAbstractControl control : listOfControls) {
 			control.onTouchEvent(e);
 		}
-		
+				
 		return super.onTouchEvent(e);
 	}
 	
 	public void onSelectEvent(ITAMNode node){
-		
 		for(TAMEditorAbstractControl control : listOfControls) {			 
 			control.onSelectNodeEvent(node);
+		}
+	}
+
+	public void onUnselectEvent(ITAMNode node) {
+		for(TAMEditorAbstractControl control : listOfControls) {			 
+			control.onUnselectNodeEvent(node);
 		}
 	}
 	

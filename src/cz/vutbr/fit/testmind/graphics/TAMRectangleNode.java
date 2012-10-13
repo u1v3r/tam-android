@@ -51,11 +51,11 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 	}
 
 	public void move(int dx, int dy) {
-		
+		/*
 		Log.d(TAG,"Bounds(top,right,bottom,left): " + 
 				this.getBounds().top + "," + this.getBounds().right + "," +
 				this.getBounds().bottom + "," + this.getBounds().left);
-		
+		*/
 		setPosition(getPosition().x+dx, getPosition().y+dy);
 		
 		Rect rect = this.getBounds();

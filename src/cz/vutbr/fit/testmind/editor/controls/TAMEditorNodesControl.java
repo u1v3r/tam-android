@@ -213,5 +213,17 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	public void onSelectNodeEvent(ITAMNode node) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public void onUnselectNodeEvent(ITAMNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onMoveNodeEvent(ITAMNode node) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

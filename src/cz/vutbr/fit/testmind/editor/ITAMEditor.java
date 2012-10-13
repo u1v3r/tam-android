@@ -49,4 +49,6 @@ public interface ITAMEditor {
 	public boolean onOptionsItemSelected(MenuItem item);
 	
 	public void onSelectEvent(ITAMNode node);
+
+	public void onUnselectEvent(ITAMNode node);
 }
