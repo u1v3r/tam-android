@@ -13,9 +13,9 @@ import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 
-public class MainActivity extends FragmentActivity implements AddNodeDialogListener{
+public class MainActivity extends FragmentActivity {
 	
 	/**
 	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam menu
@@ -32,7 +32,7 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 	
 	public static class EventObjects{
 		public static ZoomControls zoomControls;
-		public static TAMGraph graph;
+		public static TAMEditor editor;
 	}
 	
 	public static final int PICK_FILE_RESULT_CODE = 0;
@@ -48,46 +48,36 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {    	
-    	super.onCreate(savedInstanceState);    	
+    	super.onCreate(savedInstanceState);
     	setContentView(R.layout.activity_main);
     	  
-    	EventObjects.graph = (TAMGraph)findViewById(R.id.tam_graph);
-    	EventObjects.zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
+    	editor = (TAMEditor)findViewById(R.id.tam_editor);
+    	//EventObjects.zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
     	
-    	this.editor = new TAMEditor(this);
-    	this.controller = new TAMEditorNodesControl(this.editor);
+    	//this.editor = new TAMEditor(this);
+    	//this.controller = new TAMEditorNodesControl(this.editor);
 		   
-        controller.createDefaultRootNode();
+        /*controller.createDefaultRootNode();
                
         EventObjects.zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				controller.zoomIn(EventObjects.graph);
+				controller.zoomIn(EventObjects.editor);
 				/*graph.zoom(graph.sx + TAMGraph.ZOOM_STEP, graph.sx + TAMGraph.ZOOM_STEP, 
 						graph.getWidth()/2, graph.getHeight()/2);
 				*/
-			}
+			/*}
 		});
         EventObjects.zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				controller.zoomOut(EventObjects.graph);
+				controller.zoomOut(EventObjects.editor);
 				/*
 				graph.zoom(graph.sx - TAMGraph.ZOOM_STEP, graph.sy - TAMGraph.ZOOM_STEP, 
 						graph.getWidth()/2, graph.getHeight()/2);
 				*/
-			}
-		});
-        
-        /*
-		ITAMNode node1 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 10, 10, "jedna");
-		
-		node1.addChild(10, 40, "dva");
-		
-		ITAMNode node2 = graph.addRoot(ITAMNode.NODE_TYPE_RECTANGLE, 60, 60, "tri");
-		
-		node2.addChild(100, 100, "ctyri");
-		*/
+			/*}
+		});*/
     }
         
     @Override
@@ -99,52 +89,10 @@ public class MainActivity extends FragmentActivity implements AddNodeDialogListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	
-    	switch (item.getItemId()) {
-		case MenuItems.add:		
-			controller.showAddChildNodeDialog();
-			break;
-		case MenuItems.edit:
-			editNode();
-			break;
-		case MenuItems.delete:
-			deleteNode();			
-			break;
-		case MenuItems.save:
-			saveMap();
-			break;
-		case MenuItems.importFile:
-			controller.importFile();
-			break;
-		case MenuItems.settings:
-			
-			break;
-		default: 
-			return super.onOptionsItemSelected(item);
-		
-    	
-    	} 	
-    	
-    	return true;    	
+    	editor.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(item);
+		    	
     }
-
-	private void saveMap() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void deleteNode() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void editNode() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void onFinishAddChildNodeDialog(String title) {
-		controller.addChildNode(title, editor.getLastSelectedNode());
-	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

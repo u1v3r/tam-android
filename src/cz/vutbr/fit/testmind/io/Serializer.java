@@ -152,16 +152,15 @@ public class Serializer
 
     private void insertGraph(SQLiteDatabase db, TAMEditor editor)
     {
-        TAMGraph graph = editor.getGraph();
         
         ContentValues values = new ContentValues();
         values.put("root", editor.getRoot().getId());
         // TODO values.put("nodeCounter", );
         // TODO values.put("connectionCounter", );
-        values.put("sx", graph.getScaleX());
-        values.put("sy", graph.getScaleY());
-        values.put("px", graph.getPivotX());
-        values.put("py", graph.getPivotY());
+        values.put("sx", editor.getScaleX());
+        values.put("sy", editor.getScaleY());
+        values.put("px", editor.getPivotX());
+        values.put("py", editor.getPivotY());
         
         db.insert("graph", null, values);
     }
@@ -225,11 +224,10 @@ public class Serializer
         // TODO node counter
         // TODO connection counter
         
-        TAMGraph graph = editor.getGraph();
-        graph.setScaleX(cur.getInt(indexes.get("sx")));
-        graph.setScaleY(cur.getInt(indexes.get("sy")));
-        graph.setPivotX(cur.getInt(indexes.get("px")));
-        graph.setPivotY(cur.getInt(indexes.get("py")));
+        editor.setScaleX(cur.getInt(indexes.get("sx")));
+        editor.setScaleY(cur.getInt(indexes.get("sy")));
+        editor.setPivotX(cur.getInt(indexes.get("px")));
+        editor.setPivotY(cur.getInt(indexes.get("py")));
     }    
     
     /**

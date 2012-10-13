@@ -40,7 +40,7 @@ public final class R {
         public static final int menu_import=0x7f08000b;
         public static final int menu_save=0x7f08000a;
         public static final int menu_settings=0x7f08000c;
-        public static final int tam_graph=0x7f080001;
+        public static final int tam_editor=0x7f080001;
         public static final int zoom_controls=0x7f080002;
     }
     public static final class layout {

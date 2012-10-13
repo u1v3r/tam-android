@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
@@ -17,7 +21,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
  * Obsahuje zakladne funkcie na pracu s grafom 
  *
  */
-public class TAMEditor extends View implements ITAMEditor{
+public class TAMEditor extends TAMGraph implements ITAMEditor{
 	
 	private static final String TAG = "TAMEditor";
 		
@@ -25,11 +29,16 @@ public class TAMEditor extends View implements ITAMEditor{
 	
 	private List<TAMEditorNode> listOfNodes;
 	private List<TAMEditorConnection> listOfConnections;
+	private List<TAMEditorAbstractControl> listOfControls;
 
 	private TAMEditorFactory factory;
 			
 	public TAMEditor(Context context) {
-		super(context);
+		this(context, null);
+	}
+	
+	public TAMEditor(Context context, AttributeSet attrs){		
+		super(context,attrs,0);
 		
 		/*
 		View inflater = View.inflate(context, R.layout.activity_main, null);
@@ -45,6 +54,8 @@ public class TAMEditor extends View implements ITAMEditor{
 		
 		this.listOfNodes = new ArrayList<TAMEditorNode>();
 		this.listOfConnections = new ArrayList<TAMEditorConnection>();
+		this.listOfControls = new ArrayList<TAMEditorAbstractControl>();
+		listOfControls.add(new TAMEditorNodesControl(this));
 		
 		this.factory = new TAMEditorFactory(this);
 	}
@@ -115,14 +126,6 @@ public class TAMEditor extends View implements ITAMEditor{
 		return null;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getGraph()
-	 */
-	public TAMGraph getGraph() {
-		return MainActivity.EventObjects.graph;
-	}
-
 	/* (non-Javadoc)
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getRoot()
 	 */
@@ -158,30 +161,22 @@ public class TAMEditor extends View implements ITAMEditor{
 		return listOfConnections;
 	}
 	
-	/**
-	 * Vyhlada prave jeden uzol, ktory je vybrany
-	 * 
-	 * @return {@link TAMEditorNode}|<code>null</code> - ak nie je ziadny vybrany
-	 */
-	public TAMEditorNode getLastSelectedNode(){
-		
-		if(getGraph().getLastSelectedNode() != null) {
-			return (TAMEditorNode) getGraph().getLastSelectedNode().getHelpObject();
-		}
-		
-		return null;
-	}
-
-	
-	public View getView() {
-		return this;
-	}
-	
 	public boolean hasRootNode() {
 		
 		if(root != null) return true;
 		
 		return false;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		boolean selected = false;
+		
+		for(TAMEditorAbstractControl control : listOfControls) {
+			selected = control.onOptionsItemSelected(item);
+		}
+		
+		return selected;
 	}
 
 }

@@ -43,7 +43,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	public float sx, sy, px, py;
        
 	public TAMGraph(Context context) {
-		this(context,null);		
+		this(context,null);
 	}
 	
 	public TAMGraph(Context context, AttributeSet attrs){		

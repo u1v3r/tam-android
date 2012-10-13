@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import android.view.MenuItem;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
 public abstract class TAMEditorAbstractControl {
@@ -22,5 +23,7 @@ public abstract class TAMEditorAbstractControl {
 	public boolean isEnabled() {
 		return enabled;
 	}
+
+	public abstract boolean onOptionsItemSelected(MenuItem item);
 
 }

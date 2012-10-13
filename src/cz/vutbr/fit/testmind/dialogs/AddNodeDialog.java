@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 
 public class AddNodeDialog extends DialogFragment implements OnEditorActionListener{
@@ -28,24 +29,23 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 	private Button okButton;
 	
 	private TAMEditorNode parent;
-	private AddNodeDialogListener activity;
+	private AddNodeDialogListener control;
 	
 	private View.OnClickListener buttonsHandler = new View.OnClickListener() {
 		
 		public void onClick(View v) {			
 			if(v == okButton){
-				activity.onFinishAddChildNodeDialog(titleEditText.getText().toString());	
+				control.onFinishAddChildNodeDialog(titleEditText.getText().toString());	
 				dismiss();
 			}else if(v == cancelButton){
 				dismiss();
 			}
 		}
 	};
-	
-	public AddNodeDialog(){}
 			
-	public AddNodeDialog(TAMEditorNode parent) {
+	public AddNodeDialog(TAMEditorNode parent, TAMEditorAbstractControl control) {
 		this.parent = parent;
+		this.control = (AddNodeDialogListener) control;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 			View view = inflater.inflate(R.layout.fragment_add_node, container);
 			getDialog().setTitle(R.string.node_add_dialog);
 			
-			activity = (AddNodeDialogListener) getActivity();
+			//activity = (AddNodeDialogListener) getActivity();
 			titleEditText = (EditText)view.findViewById(R.id.edit_text_node_title);
 			cancelButton = (Button)view.findViewById(R.id.add_dialog_button_cancel);
 			okButton = (Button)view.findViewById(R.id.add_dialog_button_ok);
@@ -75,7 +75,7 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		if (EditorInfo.IME_ACTION_DONE == actionId) {
             // vrati vyplneny text do activity            
-            activity.onFinishAddChildNodeDialog(titleEditText.getText().toString());
+            control.onFinishAddChildNodeDialog(titleEditText.getText().toString());
             dismiss();
             return true;
         }
