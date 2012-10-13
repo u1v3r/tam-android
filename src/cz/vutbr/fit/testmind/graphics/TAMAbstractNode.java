@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
+import android.util.Log;
 
 /**
  * Abstract rectangle class providing basic functionality of drawable nodes.
@@ -41,6 +42,8 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	private boolean isHighlited;
 	private boolean isEnabled;
 	private boolean isSelected;
+
+	private OnNodeSelectListener selectListener;
 	
 	
 	public TAMAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
@@ -78,6 +81,10 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	public abstract void actualizePosition(int x, int y);
 
 	public abstract void actualizeSize();
+	
+	public void setSelectEventListener(OnNodeSelectListener eventListner){
+		this.selectListener = eventListner;
+	}
 	
 	public Point getPosition() {
 		return position;
@@ -177,6 +184,10 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 			if(enable) {
 				graph.listOfSelectedItems.add(this);
 				graph.moveOnTop(this);
+				
+				if(selectListener != null){
+					selectListener.onSelectNodeEvent(this);
+				}
 			} else {
 				graph.listOfSelectedItems.remove(this);
 			}

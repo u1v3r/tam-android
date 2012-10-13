@@ -3,12 +3,16 @@ package cz.vutbr.fit.testmind.editor.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.testmind.editor.TAMEditor;
+import android.util.Log;
+
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 
 public class TAMEditorNode {
+	
+	private static final String TAG = "TAMEditorNode";
 	
 	private int id;
 	private ITAMEditor editor;
@@ -25,7 +29,7 @@ public class TAMEditorNode {
 		this(editor, x, type, title, body, type, getNewSequenceNumber());
 	}	
 	
-	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
+	public TAMEditorNode(final TAMEditor editor, int x, int y, String title, String body, int type, int id) {
 		this.id = id;
 		this.editor = editor;
 		this.body = body;
@@ -33,6 +37,12 @@ public class TAMEditorNode {
 		this.hasVisibleChilds = true;
 		this.core = editor.getItemFactory().createNode(editor, type, x, y, title);
 		this.core.setHelpObject(this);
+		this.core.setSelectEventListener(new ITAMNode.OnNodeSelectListener() {
+			
+			public void onSelectNodeEvent(ITAMNode node) {				
+				editor.onSelectEvent(node);			
+			}
+		});
 	}
 
 	public String getBody() {

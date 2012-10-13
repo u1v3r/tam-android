@@ -7,15 +7,20 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorGesturesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
+import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.graphics.ITAMNode.OnNodeSelectListener;
+import cz.vutbr.fit.testmind.graphics.TAMAbstractNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 
@@ -61,6 +66,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		this.listOfControls = new ArrayList<TAMEditorAbstractControl>();
 		listOfControls.add(new TAMEditorNodesControl(this));
 		listOfControls.add(new TAMEditorZoomControl(this,R.id.zoom_controls));
+		listOfControls.add(new TAMEditorGesturesControl(this));
 		
 		this.factory = new TAMEditorFactory(this);
 	}
@@ -201,5 +207,12 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		
 		return super.onTouchEvent(e);
 	}
-
+	
+	public void onSelectEvent(ITAMNode node){
+		
+		for(TAMEditorAbstractControl control : listOfControls) {			 
+			control.onSelectNodeEvent(node);
+		}
+	}
+	
 }

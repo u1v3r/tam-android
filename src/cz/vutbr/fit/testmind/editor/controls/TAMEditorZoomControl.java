@@ -5,9 +5,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class TAMEditorZoomControl extends TAMEditorAbstractControl {
@@ -77,4 +79,8 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 		
 	}
 
+	public void onSelectNodeEvent(ITAMNode node) {
+		// TODO Auto-generated method stub
+		
+	}
 }

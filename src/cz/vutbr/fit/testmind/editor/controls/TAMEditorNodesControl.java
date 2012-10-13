@@ -17,6 +17,7 @@ import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
+import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.graphics.TAMRectangleNode;
 
@@ -204,6 +205,12 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 
 	@Override
 	public void onTouchEvent(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onSelectNodeEvent(ITAMNode node) {
 		// TODO Auto-generated method stub
 		
 	}	

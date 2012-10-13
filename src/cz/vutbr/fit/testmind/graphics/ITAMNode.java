@@ -7,6 +7,10 @@ import android.graphics.Rect;
 
 public interface ITAMNode extends ITAMItem {
 	
+	public interface OnNodeSelectListener{
+		public void onSelectNodeEvent(ITAMNode node);
+	}
+	
 	public final int NODE_TYPE_RECTANGLE = 1;
 	public final int NODE_TYPE_ROUND_RECTANGLE = 2;
 	
@@ -39,4 +43,6 @@ public interface ITAMNode extends ITAMItem {
     public int getBackgroundStroke();
     
     public void setBackgroundStroke(int backgroundStroke);
+    
+	public void setSelectEventListener(OnNodeSelectListener eventListner);
 }

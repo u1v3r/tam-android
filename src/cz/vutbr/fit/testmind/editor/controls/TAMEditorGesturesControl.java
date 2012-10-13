@@ -1,14 +1,20 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.graphics.ITAMNode;
 
-public class TAMEditorHidingControl extends TAMEditorAbstractControl {
+public class TAMEditorGesturesControl extends TAMEditorAbstractControl {
 
-	private static final String TAG = "TAMEditorHidingControl";
+	private static final String TAG = "TAMEditorGesturesControl";
 
+	public TAMEditorGesturesControl(ITAMEditor editor) {
+		setEditor(editor);
+	}
+		
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -17,18 +23,17 @@ public class TAMEditorHidingControl extends TAMEditorAbstractControl {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		// do nothing //
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void onTouchEvent(MotionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void onSelectNodeEvent(ITAMNode node) {
-		// TODO Auto-generated method stub
 		
 	}
-
 }

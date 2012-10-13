@@ -4,8 +4,9 @@ import android.graphics.Canvas;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.graphics.ITAMNode.OnNodeSelectListener;
 
-public abstract class TAMEditorAbstractControl {
+public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
 	
 	private boolean enabled;
 	private ITAMEditor editor;
@@ -31,5 +32,4 @@ public abstract class TAMEditorAbstractControl {
 	public abstract void onDraw(Canvas canvas);
 
 	public abstract void onTouchEvent(MotionEvent e);
-
 }
