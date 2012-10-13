@@ -2,6 +2,7 @@ package cz.vutbr.fit.testmind.editor.controls;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -185,6 +186,12 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		} else {
 			return false;
 		}
+	}
+
+
+	@Override
+	public void onDraw(Canvas canvas) {
+		// do nothing //
 	}
 	
 	

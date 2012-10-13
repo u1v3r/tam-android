@@ -21,10 +21,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	private static final String TAG = "TAMGraph";
 
-	private static final float ZOOM_STEP = 0.125f;
-	private static final float DEFAULT_ZOOM = 0.4f;
+	//private static final float ZOOM_STEP = 0.125f;
+	private static final float DEFAULT_ZOOM = 0.5f;
 
-	private static final float MIN_ZOOM = 0;
+	private static final float MIN_ZOOM = 0.03125f;
 	private static final float MAX_ZOOM = 2;
 	
 	protected DrawingThread drawingThread;
@@ -536,19 +536,19 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	
 	/**
-	 * @deprecated nepouzivat, pouzit rozhranie ZoomEventListener 
+	 * 
 	 * 
 	 * @param scaleX
 	 * @param scaleY
 	 * @param pivotX
 	 * @param pivotY
 	 */
-	private void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
+	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
 		Log.d(TAG,"pivotX: " + px + " ,pivotY" + py
 				+ ", scaleX:"+ sx + ", scaleY"	 + sy);
 		
 		
-		if(scaleX <= MIN_ZOOM || scaleY <= MIN_ZOOM) return;
+		if(scaleX < MIN_ZOOM || scaleY < MIN_ZOOM) return;
 		if(scaleY >= MAX_ZOOM || scaleY >= MAX_ZOOM) return;
 		
 		px = pivotX;

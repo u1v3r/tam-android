@@ -37,47 +37,18 @@ public class MainActivity extends FragmentActivity {
 	
 	public static final int PICK_FILE_RESULT_CODE = 0;
 	
-	private static final String TAG = "MainActivity";	
-	private TAMEditor editor;
-	private TAMEditorNodesControl controller;
-	
-
-	//protected int currentZoomLevel = 0;
-	//protected int maxZoomLovel = 0;
+	private static final String TAG = "MainActivity";
 	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {    	
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.activity_main);
-    	  
-    	editor = (TAMEditor)findViewById(R.id.tam_editor);
-    	//EventObjects.zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
     	
-    	//this.editor = new TAMEditor(this);
-    	//this.controller = new TAMEditorNodesControl(this.editor);
-		   
-        /*controller.createDefaultRootNode();
-               
-        EventObjects.zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				controller.zoomIn(EventObjects.editor);
-				/*graph.zoom(graph.sx + TAMGraph.ZOOM_STEP, graph.sx + TAMGraph.ZOOM_STEP, 
-						graph.getWidth()/2, graph.getHeight()/2);
-				*/
-			/*}
-		});
-        EventObjects.zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				controller.zoomOut(EventObjects.editor);
-				/*
-				graph.zoom(graph.sx - TAMGraph.ZOOM_STEP, graph.sy - TAMGraph.ZOOM_STEP, 
-						graph.getWidth()/2, graph.getHeight()/2);
-				*/
-			/*}
-		});*/
+    	EventObjects.editor = (TAMEditor) findViewById(R.id.tam_editor);
+    	EventObjects.zoomControls = (ZoomControls) findViewById(R.id.zoom_controls);
+    	
+    	EventObjects.editor.initialize();
     }
         
     @Override
@@ -89,7 +60,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	
-    	editor.onOptionsItemSelected(item);
+    	EventObjects.editor.onOptionsItemSelected(item);
 		return super.onOptionsItemSelected(item);
 		    	
     }

@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
+import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
@@ -51,11 +54,14 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		this.zoomControls = (ZoomControls)findViewById(R.id.zoom_controls);
 		*/	
 		//Log.d(TAG, this.zoomControls.toString());
-		
+	}
+	
+	public void initialize() {
 		this.listOfNodes = new ArrayList<TAMEditorNode>();
 		this.listOfConnections = new ArrayList<TAMEditorConnection>();
 		this.listOfControls = new ArrayList<TAMEditorAbstractControl>();
 		listOfControls.add(new TAMEditorNodesControl(this));
+		listOfControls.add(new TAMEditorZoomControl(this,R.id.zoom_controls));
 		
 		this.factory = new TAMEditorFactory(this);
 	}
@@ -177,6 +183,14 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		}
 		
 		return selected;
+	}
+	
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		for(TAMEditorAbstractControl control : listOfControls) {
+			control.onDraw(canvas);
+		}
 	}
 
 }

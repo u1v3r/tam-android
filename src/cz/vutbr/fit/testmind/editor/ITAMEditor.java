@@ -47,4 +47,6 @@ public interface ITAMEditor {
 	public int getHeight();
 	
 	public boolean onOptionsItemSelected(MenuItem item);
+	
+	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
 }

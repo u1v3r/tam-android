@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import android.graphics.Canvas;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
@@ -25,5 +26,7 @@ public abstract class TAMEditorAbstractControl {
 	}
 
 	public abstract boolean onOptionsItemSelected(MenuItem item);
+
+	public abstract void onDraw(Canvas canvas);
 
 }
