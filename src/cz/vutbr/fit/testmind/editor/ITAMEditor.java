@@ -2,6 +2,10 @@ package cz.vutbr.fit.testmind.editor;
 
 import java.util.List;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.support.v4.app.FragmentActivity;
+import android.view.MenuItem;
 import android.view.View;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
@@ -22,8 +26,6 @@ public interface ITAMEditor {
 
 	public TAMEditorConnection getConnection(int id);
 
-	public TAMGraph getGraph();
-
 	public TAMEditorNode getRoot();
 		
 	public TAMEditorFactory getFactory();
@@ -32,9 +34,19 @@ public interface ITAMEditor {
 
 	public List<TAMEditorConnection> getListOfConnections();
 	
-	public View getView();
-	
 	public boolean hasRootNode();
 	
-	public TAMEditorNode getLastSelectedNode();
+	public ITAMNode getLastSelectedNode();
+
+	public Context getContext();
+
+	public Resources getResources();
+
+	public int getWidth();
+
+	public int getHeight();
+	
+	public boolean onOptionsItemSelected(MenuItem item);
+	
+	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
 }

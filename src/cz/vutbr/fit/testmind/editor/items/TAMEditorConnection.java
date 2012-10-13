@@ -23,7 +23,7 @@ public class TAMEditorConnection {
 		this.editor = editor;
 		this.parent = parent;
 		this.child = child;
-		this.core = editor.getGraph().getItemFactory().createConnection(editor.getGraph(), parent.getCore(), child.getCore(), type);
+		this.core = editor.getItemFactory().createConnection(editor, parent.getCore(), child.getCore(), type);
 		this.core.setHelpObject(this);
 		this.parent.getListOfChildNodes().add(child);
 	}

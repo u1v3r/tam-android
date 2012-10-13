@@ -31,7 +31,7 @@ public class TAMEditorNode {
 		this.body = body;
 		this.listOfChildNodes = new ArrayList<TAMEditorNode>();
 		this.hasVisibleChilds = true;
-		this.core = editor.getGraph().getItemFactory().createNode(editor.getGraph(), type, x, y, title);
+		this.core = editor.getItemFactory().createNode(editor, type, x, y, title);
 		this.core.setHelpObject(this);
 	}
 
