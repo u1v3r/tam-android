@@ -68,18 +68,6 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 		return false;
 	}
 
-	@Override
-	public void onDraw(Canvas canvas) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTouchEvent(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		

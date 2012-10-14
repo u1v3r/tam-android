@@ -195,24 +195,6 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		return selected;
 	}
 	
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-		for(TAMEditorAbstractControl control : listOfControls) {
-			control.onDraw(canvas);
-		}
-	}
-	
-	@Override
-	public boolean onTouchEvent(MotionEvent e) {
-		
-		for(TAMEditorAbstractControl control : listOfControls) {
-			control.onTouchEvent(e);
-		}
-				
-		return super.onTouchEvent(e);
-	}
-	
 	public void onSelectEvent(ITAMGNode node){
 		for(TAMEditorAbstractControl control : listOfControls) {			 
 			control.onSelectNodeEvent(node);

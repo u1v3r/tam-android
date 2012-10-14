@@ -53,8 +53,4 @@ public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
 
 	public abstract boolean onOptionsItemSelected(MenuItem item);
 
-	public abstract void onDraw(Canvas canvas);
-
-	public abstract void onTouchEvent(MotionEvent e);
-
 }

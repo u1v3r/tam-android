@@ -38,25 +38,26 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
 	
-	protected List<ITAMDrawControl> listOfDrawControls;
-	protected List<ITAMItemControl> listOfItemControls;
-	protected List<ITAMGestureControl> listOfGestureControls;
+	protected List<ITAMDrawListener> listOfDrawControls;
+	protected List<ITAMItemListener> listOfItemControls;
+	protected List<ITAMGestureListener> listOfGestureControls;
+	protected List<ITAMTouchListener> listOfTouchControls;
 	
-	public interface ITAMDrawControl {
+	public interface ITAMDrawListener {
 		public void onDraw(Canvas canvas);
 	};
 	
-	public interface ITAMItemControl {
+	public interface ITAMItemListener {
 		public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay);	
 		public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy);
 	};
 	
-	public interface ITAMGestureControl {
+	public interface ITAMGestureListener {
 		public void onMoveEvent(MotionEvent e, int dx, int dy);
 	}
 	
-	public interface ITAMTouchControl {
-		public void onMoveEvent(MotionEvent e, int dx, int dy);
+	public interface ITAMTouchListener {
+		public boolean onTouchEvent(MotionEvent e);
 	}
 
 	public float sx, sy, px, py;
@@ -78,9 +79,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		listOfSelectedItems = new ArrayList<ITAMGItem>();
 		listOfDrawableItems = new ArrayList<ITAMGItem>();
 		
-		listOfDrawControls = new ArrayList<ITAMDrawControl>();
-		listOfItemControls = new ArrayList<ITAMItemControl>();
-		listOfGestureControls = new ArrayList<ITAMGestureControl>();
+		listOfDrawControls = new ArrayList<ITAMDrawListener>();
+		listOfItemControls = new ArrayList<ITAMItemListener>();
+		listOfGestureControls = new ArrayList<ITAMGestureListener>();
+		listOfTouchControls = new ArrayList<ITAMTouchListener>();
 		
 		actualPoint = new Point();	
 		setLongClickable(true);		
@@ -263,7 +265,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			item.draw(canvas, paint);
 		}
 		
-		for(ITAMDrawControl control : listOfDrawControls) {
+		for(ITAMDrawListener control : listOfDrawControls) {
 			control.onDraw(canvas);
 		}
 	}
@@ -336,6 +338,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			}
 
 			invalidate();
+			
+			for(ITAMTouchListener control : listOfTouchControls) {
+				control.onTouchEvent(e);
+			}
 
 			return super.onTouchEvent(e);
 		}	
@@ -353,7 +359,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			item.setSelected(true);
 		}
 		
-		for(ITAMItemControl control : listOfItemControls) {
+		for(ITAMItemListener control : listOfItemControls) {
 			control.onItemHitEvent(e, item, ax, ay);
 		}
 	}
@@ -365,7 +371,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			((ITAMGConnection) item).moveSelectedPoint(dx,dy);
 		}
 		
-		for(ITAMItemControl control : listOfItemControls) {
+		for(ITAMItemListener control : listOfItemControls) {
 			control.onItemMoveEvent(e, item, dx, dy);
 		}
 	}
@@ -378,7 +384,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			item.move(dx,dy);
 		}
 		
-		for(ITAMGestureControl control : listOfGestureControls) {
+		for(ITAMGestureListener control : listOfGestureControls) {
 			control.onMoveEvent(e, dx, dy);
 		}
 	}

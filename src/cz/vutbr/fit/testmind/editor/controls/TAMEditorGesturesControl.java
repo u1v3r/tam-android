@@ -13,8 +13,10 @@ import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 
-public class TAMEditorGesturesControl extends TAMEditorAbstractControl implements OnGestureListener,AddNodeDialogListener {
+public class TAMEditorGesturesControl extends TAMEditorAbstractControl implements OnGestureListener,AddNodeDialogListener, ITAMTouchListener{
 		
 	
 	private static final String TAG = "TAMEditorGesturesControl";
@@ -37,15 +39,10 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 		return false;
 	}
 
-	@Override
-	public void onDraw(Canvas canvas) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onTouchEvent(MotionEvent e) {
+	public boolean onTouchEvent(MotionEvent e) {
 		gDetector.onTouchEvent(e);
+		
+		return true;
 	}
 
 	public void onSelectNodeEvent(ITAMGNode node) {		

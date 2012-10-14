@@ -183,19 +183,6 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 
-	@Override
-	public void onDraw(Canvas canvas) {
-		// do nothing //
-	}
-
-
-	@Override
-	public void onTouchEvent(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
