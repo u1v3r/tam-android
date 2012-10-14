@@ -84,7 +84,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	public void setSelectEventListener(OnNodeSelectListener eventListner){
 		this.selectListener = eventListner;
 	}
-	
+		
 	public Point getPosition() {
 		return position;
 	}
@@ -282,6 +282,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 		paint.setColor(foreground);
 		canvas.drawText(text, offsetX, offsetY, paint);
+		
 	}
 	
 	public void draw(Canvas canvas, Paint paint) {

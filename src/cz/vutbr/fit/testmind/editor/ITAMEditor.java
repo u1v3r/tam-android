@@ -53,4 +53,5 @@ public interface ITAMEditor {
 	public void onSelectEvent(ITAMGNode node);
 
 	public void onUnselectEvent(ITAMGNode node);
+	
 }

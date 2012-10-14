@@ -5,14 +5,19 @@ import java.util.List;
 
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl.ZoomInOutEventListener;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnDragListener;
 import android.widget.ZoomControls;
 
 public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,ZoomInOutEventListener {
@@ -61,6 +66,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	}
 
 	public float sx, sy, px, py;
+
+	public boolean isDragging = false;;
        
 	public TAMGraph(Context context) {
 		this(context,null);
@@ -271,6 +278,14 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	}
 	
 	@Override
+	public boolean onDragEvent(DragEvent event) {
+		// TODO Auto-generated method stub
+		
+		Log.e(TAG,"drag event");
+		return true;
+	}
+	
+	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		
 		synchronized (drawingThread.getSurfaceHolder()) {
@@ -281,7 +296,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			int y = (int) e.getY();
 
 			if(e.getAction() == MotionEvent.ACTION_DOWN) {
-
+								
 				ITAMGItem result = null;
 				
 				float dx = px-px*sx;
@@ -312,7 +327,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 
 				actualPoint.x = x;
 				actualPoint.y = y;
-
+				
+				isDragging = true;
+				
 			} else if (e.getAction() == MotionEvent.ACTION_MOVE) {
 
 				int dx = x - actualPoint.x;
@@ -335,6 +352,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 					actualPoint.x = x;
 					actualPoint.y = y;
 				}
+				
+				isDragging  = true;
+			} else if(e.getAction() == MotionEvent.ACTION_UP){
+				isDragging = false;
 			}
 
 			invalidate();
@@ -346,7 +367,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			return super.onTouchEvent(e);
 		}	
 	}
-	
+
 	public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay) {
 		if(item instanceof ITAMGNode) {
 			lastSelectedNode = (ITAMGNode) item;
