@@ -51,6 +51,10 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	public TAMEditor(Context context, AttributeSet attrs){		
 		super(context,attrs,0);
 		
+		this.listOfNodes = new ArrayList<TAMENode>();
+		this.listOfConnections = new ArrayList<TAMEConnection>();
+		this.listOfControls = new ArrayList<TAMEditorAbstractControl>();
+		
 		/*
 		View inflater = View.inflate(context, R.layout.activity_main, null);
 		
@@ -65,9 +69,6 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	}
 	
 	public void initialize() {
-		this.listOfNodes = new ArrayList<TAMENode>();
-		this.listOfConnections = new ArrayList<TAMEConnection>();
-		this.listOfControls = new ArrayList<TAMEditorAbstractControl>();
 		listOfControls.add(new TAMEditorNodesControl(this));
 		listOfControls.add(new TAMEditorZoomControl(this,R.id.zoom_controls));
 		listOfControls.add(new TAMEditorGesturesControl(this));
