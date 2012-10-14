@@ -3,7 +3,9 @@ package cz.vutbr.fit.testmind.editor.controls;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
@@ -24,6 +26,8 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 		
 	
 	private static final String TAG = "TAMEditorGesturesControl";
+
+	private static final long VIBRATE_DRUATION = 100;
 	
 	private List<TAMENode> selectedNodesList;	
 	
@@ -102,6 +106,12 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 		
 		// musi byt vybrany prave jeden uzol
 		if(selectedNodesList.size() == 1){
+			
+			
+			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+			if(vibrator.hasVibrator()){
+				vibrator.vibrate(VIBRATE_DRUATION);
+			}
 			
 			creatingNewNode = true;
 			
