@@ -71,7 +71,9 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	public void initialize() {
 		listOfControls.add(new TAMEditorNodesControl(this));
 		listOfControls.add(new TAMEditorZoomControl(this,R.id.zoom_controls));
-		listOfControls.add(new TAMEditorGesturesControl(this));
+		TAMEditorGesturesControl gestureControl = new TAMEditorGesturesControl(this);
+		listOfControls.add(gestureControl);
+		listOfTouchControls.add(gestureControl);
 		
 		this.factory = new TAMEItemFactory(this);		
 	}
