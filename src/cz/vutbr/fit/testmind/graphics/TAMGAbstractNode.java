@@ -40,10 +40,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	
 	private boolean isHighlited;
 	private boolean isEnabled;
-	private boolean isSelected;
-
-	private OnNodeSelectListener selectListener;
-	
+	private boolean isSelected;	
 	
 	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
@@ -80,10 +77,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	public abstract void actualizePosition(int x, int y);
 
 	public abstract void actualizeSize();
-	
-	public void setSelectEventListener(OnNodeSelectListener eventListner){
-		this.selectListener = eventListner;
-	}
 		
 	public Point getPosition() {
 		return position;
@@ -183,20 +176,13 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 			if(enable) {
 				graph.listOfSelectedItems.add(this);
 				graph.moveOnTop(this);
-				
-				if(selectListener != null){
-					selectListener.onSelectNodeEvent(this);
-				}
 			} else {
 				graph.listOfSelectedItems.remove(this);
-				
-				if(selectListener != null){
-					selectListener.onUnselectNodeEvent(this);
-				}
 			}
 			
 			setHighlighted(enable);
 			this.isSelected = enable;
+			graph.onItemSelectEvent(this, enable);
 		}
 	}
 	

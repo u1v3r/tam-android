@@ -15,12 +15,6 @@ public class TAMEditorHidingControl extends TAMEditorAbstractControl {
 
 	private static final String TAG = "TAMEditorHidingControl";
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		

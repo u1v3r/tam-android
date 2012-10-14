@@ -10,19 +10,20 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 
 public class TAMEditorGesturesControl extends TAMEditorAbstractControl 
 	implements OnGestureListener,OnDoubleTapListener, AddNodeDialogListener, 
-	ITAMTouchListener,ITAMDrawListener{
+	ITAMTouchListener,ITAMDrawListener, ITAMItemListener{
 		
 	
 	private static final String TAG = "TAMEditorGesturesControl";
@@ -39,12 +40,10 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 		super(editor);
 		gDetector = new GestureDetector(editor.getContext(),this);
 		selectedNodesList = new ArrayList<TAMENode>();
-	}
 		
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		return false;
+		editor.getListOfTouchControls().add(this);
+		editor.getListOfDrawControls().add(this);
+		editor.getListOfItemControls().add(this);
 	}
 
 	public boolean onTouchEvent(MotionEvent e) {
@@ -52,30 +51,22 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 		return true;
 	}
 
-	public void onSelectNodeEvent(ITAMGNode node) {		
-		TAMENode selectedNode = (TAMENode)node.getHelpObject();
+	public void onSelectNodeEvent(TAMENode node) {		
 		
-		Log.d(TAG,"select node: " + selectedNode.getCore().getText());
+		Log.d(TAG,"select node: " + node.getCore().getText());
 		
 		synchronized (selectedNodesList) {
-			selectedNodesList.add(selectedNode);
+			selectedNodesList.add(node);
 		};
 	}
 
-	public void onUnselectNodeEvent(ITAMGNode node) {
+	public void onUnselectNodeEvent(TAMENode node) {
 		
-		TAMENode selectedNode = (TAMENode)node.getHelpObject();
-		
-		Log.d(TAG,"unselect node: " + selectedNode.getCore().getText());
+		Log.d(TAG,"unselect node: " + node.getCore().getText());
 		
 		synchronized (selectedNodesList) {
-			selectedNodesList.remove(selectedNode);
+			selectedNodesList.remove(node);
 		};
-	}
-
-	public void onMoveNodeEvent(ITAMGNode node) {
-		Log.d(TAG,"onMoveNodeEvent");
-		
 	}
 	
 	public boolean onDown(MotionEvent e) {
@@ -193,5 +184,25 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 		Log.d(TAG,"onDoubleTapEvent");
 		
 		return true;
+	}
+
+	public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay) {
+		// do nothing //
+	}
+
+	public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy) {
+		// do nothing //
+	}
+
+	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
+		if(item instanceof ITAMGNode) {
+			TAMENode node = (TAMENode) item.getHelpObject();
+			
+			if(selection) {
+				onSelectNodeEvent(node);
+			} else {
+				onUnselectNodeEvent(node);
+			}
+		}
 	}
 }

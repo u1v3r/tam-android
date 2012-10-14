@@ -12,6 +12,9 @@ import cz.vutbr.fit.testmind.editor.items.TAMEItemFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 
 public interface ITAMEditor {
 
@@ -49,9 +52,11 @@ public interface ITAMEditor {
 	public void invalidate();
 	
 	public boolean onOptionsItemSelected(MenuItem item);
-	
-	public void onSelectEvent(ITAMGNode node);
 
-	public void onUnselectEvent(ITAMGNode node);
+	public List<ITAMTouchListener> getListOfTouchControls();
+
+	public List<ITAMDrawListener> getListOfDrawControls();
+
+	public List<ITAMItemListener> getListOfItemControls();
 	
 }

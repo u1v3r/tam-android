@@ -62,12 +62,6 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 		object.onZoomOut();		
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		

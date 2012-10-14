@@ -37,21 +37,6 @@ public class TAMENode {
 		this.hasVisibleChilds = true;
 		this.core = editor.getItemFactory().createNode(editor, type, x, y, title);
 		this.core.setHelpObject(this);
-		this.core.setSelectEventListener(new ITAMGNode.OnNodeSelectListener() {
-
-			public void onSelectNodeEvent(ITAMGNode tamAbstractNode) {
-				getEditor().onSelectEvent(core);
-			}
-
-			public void onUnselectNodeEvent(ITAMGNode tamAbstractNode) {
-				getEditor().onUnselectEvent(core);				
-			}
-
-			public void onMoveNodeEvent(ITAMGNode node) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
 	}
 
 	public String getBody() {

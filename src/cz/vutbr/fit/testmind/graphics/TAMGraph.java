@@ -55,6 +55,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	public interface ITAMItemListener {
 		public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay);	
 		public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy);
+		public void onItemSelectEvent(ITAMGItem item, boolean selection);
 	};
 	
 	public interface ITAMGestureListener {
@@ -114,7 +115,55 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	public TAMGItemFactory getItemFactory() {
 		return factory;
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMGItem> getListOfDrawableItems() {
+		return listOfDrawableItems;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMGItem> getListOfSelectedItems() {
+		return listOfSelectedItems;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMDrawListener> getListOfDrawControls() {
+		return listOfDrawControls;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMItemListener> getListOfItemControls() {
+		return listOfItemControls;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMGestureListener> getListOfGestureControls() {
+		return listOfGestureControls;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMTouchListener> getListOfTouchControls() {
+		return listOfTouchControls;
+	}
+
 	/**
 	 * 
 	 * @param type
@@ -407,6 +456,13 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		
 		for(ITAMGestureListener control : listOfGestureControls) {
 			control.onMoveEvent(e, dx, dy);
+		}
+	}
+	
+	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
+		
+		for(ITAMItemListener control : listOfItemControls) {
+			control.onItemSelectEvent(item, selection);
 		}
 	}
 	

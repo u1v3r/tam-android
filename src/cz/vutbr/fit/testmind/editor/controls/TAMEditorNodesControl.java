@@ -28,7 +28,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGRectangleNode;
  * @author Radovan Dvorsky
  *
  */
-public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener {
+public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener, ITAMMenuListener {
 		
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
@@ -151,8 +151,6 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
 	}
 
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		

@@ -13,6 +13,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorGesturesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
@@ -21,7 +22,6 @@ import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMEItemFactory;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
-import cz.vutbr.fit.testmind.graphics.ITAMGNode.OnNodeSelectListener;
 import cz.vutbr.fit.testmind.graphics.TAMGAbstractNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
@@ -41,6 +41,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	private List<TAMEditorAbstractControl> listOfControls;
 
 	private TAMEItemFactory factory;
+	protected List<ITAMMenuListener> listOfMenuListeners;
 
 	
 			
@@ -54,6 +55,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		this.listOfNodes = new ArrayList<TAMENode>();
 		this.listOfConnections = new ArrayList<TAMEConnection>();
 		this.listOfControls = new ArrayList<TAMEditorAbstractControl>();
+		this.listOfMenuListeners = new ArrayList<ITAMMenuListener>();
 		
 		/*
 		View inflater = View.inflate(context, R.layout.activity_main, null);
@@ -71,10 +73,9 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	public void initialize() {
 		listOfControls.add(new TAMEditorNodesControl(this));
 		listOfControls.add(new TAMEditorZoomControl(this,R.id.zoom_controls));
+		
 		TAMEditorGesturesControl gestureControl = new TAMEditorGesturesControl(this);
 		listOfControls.add(gestureControl);
-		listOfTouchControls.add(gestureControl);
-		listOfDrawControls.add(gestureControl);
 		
 		this.factory = new TAMEItemFactory(this);		
 	}
@@ -191,14 +192,14 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		
 		boolean selected = false;
 		
-		for(TAMEditorAbstractControl control : listOfControls) {
+		for(ITAMMenuListener control : listOfMenuListeners) {
 			selected = control.onOptionsItemSelected(item);
 		}
 		
 		return selected;
 	}
 	
-	public void onSelectEvent(ITAMGNode node){
+	/*public void onSelectEvent(ITAMGNode node){
 		for(TAMEditorAbstractControl control : listOfControls) {			 
 			control.onSelectNodeEvent(node);
 		}
@@ -208,6 +209,6 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		for(TAMEditorAbstractControl control : listOfControls) {			 
 			control.onUnselectNodeEvent(node);
 		}
-	}
+	}*/
 	
 }

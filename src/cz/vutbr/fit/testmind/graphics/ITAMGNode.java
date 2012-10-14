@@ -6,12 +6,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 public interface ITAMGNode extends ITAMGItem {
-	
-	public interface OnNodeSelectListener{
-		public void onSelectNodeEvent(ITAMGNode node);
-		public void onUnselectNodeEvent(ITAMGNode node);
-		public void onMoveNodeEvent(ITAMGNode node);
-	}
 		
 	public final int NODE_TYPE_RECTANGLE = 1;
 	public final int NODE_TYPE_ROUND_RECTANGLE = 2;
@@ -45,6 +39,4 @@ public interface ITAMGNode extends ITAMGItem {
     public int getBackgroundStroke();
     
     public void setBackgroundStroke(int backgroundStroke);
-    
-	public void setSelectEventListener(OnNodeSelectListener eventListner);
 }

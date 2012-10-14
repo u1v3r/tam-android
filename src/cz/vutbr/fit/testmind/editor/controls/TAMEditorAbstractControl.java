@@ -9,9 +9,8 @@ import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
-import cz.vutbr.fit.testmind.graphics.ITAMGNode.OnNodeSelectListener;
 
-public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
+public abstract class TAMEditorAbstractControl {
 	
 	protected ITAMEditor editor;
 	protected FragmentActivity activity;
@@ -50,7 +49,5 @@ public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
 		dialog.show(fm, "fragment_add_node");
 		
 	}
-
-	public abstract boolean onOptionsItemSelected(MenuItem item);
 
 }
