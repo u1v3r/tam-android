@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
-import android.util.Log;
 
 /**
  * Abstract rectangle class providing basic functionality of drawable nodes.

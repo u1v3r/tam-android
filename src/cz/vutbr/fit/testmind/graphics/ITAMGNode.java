@@ -2,8 +2,6 @@ package cz.vutbr.fit.testmind.graphics;
 
 import java.util.List;
 
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
-
 import android.graphics.Point;
 import android.graphics.Rect;
 

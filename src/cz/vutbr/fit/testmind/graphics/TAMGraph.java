@@ -10,8 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -39,6 +37,27 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
+	
+	protected List<ITAMDrawControl> listOfDrawControls;
+	protected List<ITAMItemControl> listOfItemControls;
+	protected List<ITAMGestureControl> listOfGestureControls;
+	
+	public interface ITAMDrawControl {
+		public void onDraw(Canvas canvas);
+	};
+	
+	public interface ITAMItemControl {
+		public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay);	
+		public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy);
+	};
+	
+	public interface ITAMGestureControl {
+		public void onMoveEvent(MotionEvent e, int dx, int dy);
+	}
+	
+	public interface ITAMTouchControl {
+		public void onMoveEvent(MotionEvent e, int dx, int dy);
+	}
 
 	public float sx, sy, px, py;
        
@@ -53,10 +72,16 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	public TAMGraph(Context context, AttributeSet attrs, int defStyle) {
 		super(context,attrs,defStyle);
 		factory = new TAMGItemFactory();
+		
 		listOfNodes = new ArrayList<ITAMGNode>();
 		listOfConnections = new ArrayList<ITAMGConnection>();
 		listOfSelectedItems = new ArrayList<ITAMGItem>();
 		listOfDrawableItems = new ArrayList<ITAMGItem>();
+		
+		listOfDrawControls = new ArrayList<ITAMDrawControl>();
+		listOfItemControls = new ArrayList<ITAMItemControl>();
+		listOfGestureControls = new ArrayList<ITAMGestureControl>();
+		
 		actualPoint = new Point();	
 		setLongClickable(true);		
 		setFocusable(true);// umozni dotyky
@@ -137,59 +162,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	/**
 	 * 
-	 * @param selectedItem
-	 */
-	/*public void select(ITAMItem selectedItem) {
-		
-		// add to list of selected items and move to top //
-		if(selectedItem != null && !listOfSelectedItems.contains(selectedItem)) {
-			
-			listOfSelectedItems.add(selectedItem);
-			
-			selectedItem.setHighlighted(true);
-			
-			// move items to the end of the drawable list, so they will be drawn on the top of all items //
-			if(selectedItem instanceof ITAMNode) {
-				
-				ITAMNode selectedNode = (ITAMNode) selectedItem;
-				
-				for(ITAMConnection parentConnection : selectedNode.getListOfParentConnections()) {
-					listOfDrawableItems.remove(parentConnection);
-					listOfDrawableItems.add(parentConnection);
-					ITAMNode parentNode = parentConnection.getParentNode();
-					listOfDrawableItems.remove(parentNode);
-					listOfDrawableItems.add(parentNode);
-				}
-				
-				for(ITAMConnection childConnection : selectedNode.getListOfChildConnections()) {
-					listOfDrawableItems.remove(childConnection);
-					listOfDrawableItems.add(childConnection);
-					ITAMNode childNode = childConnection.getChildNode();
-					listOfDrawableItems.remove(childNode);
-					listOfDrawableItems.add(childNode);
-				}
-				
-				listOfDrawableItems.remove(selectedItem);
-				listOfDrawableItems.add(selectedItem);
-			} else if(selectedItem instanceof ITAMConnection) {
-				
-				ITAMConnection selectedConnection = (ITAMConnection) selectedItem;
-				listOfDrawableItems.remove(selectedConnection);
-				listOfDrawableItems.add(selectedConnection);
-				
-				ITAMNode parentNode = selectedConnection.getParentNode();
-				listOfDrawableItems.remove(parentNode);
-				listOfDrawableItems.add(parentNode);
-				
-				ITAMNode childNode = selectedConnection.getChildNode();
-				listOfDrawableItems.remove(childNode);
-				listOfDrawableItems.add(childNode);
-			}
-		}
-	}*/
-	
-	/**
-	 * 
 	 * @return lastSelectedNode
 	 */
 	public ITAMGNode getLastSelectedNode() {
@@ -229,127 +201,28 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	/**
 	 * 
-	 * @param item
 	 */
-	/*public void unselect(ITAMItem item) {
+	public void enableAll() {
 		
-		if(listOfSelectedItems.contains(item)) {
-			listOfSelectedItems.remove(item);
-			item.setHighlighted(false);
-		}
-	}*/
-	
-	/*protected void enable(ITAMNode enabledItem) {
-		
-		//enabledItem.setEnabled(true);
-			
-		// add to list of drawable items and move to top //
-		if(enabledItem != null && !listOfDrawableItems.contains(enabledItem)) {
-			
-			if(enabledItem instanceof ITAMNode) {
-				
-				ITAMNode enabledNode = (ITAMNode) enabledItem;
-				
-				for(ITAMConnection parentConnection : enabledNode.getListOfParentConnections()) {
-					ITAMNode parentNode = parentConnection.getParentNode();
-					if(!listOfDrawableItems.contains(parentNode)) {
-						listOfDrawableItems.add(parentConnection);
-						//parentConnection.setEnabled(true);
-					}
-				}
-				
-				for(ITAMConnection childConnection : enabledNode.getListOfChildConnections()) {
-					ITAMNode childNode = childConnection.getChildNode();
-					if(!listOfDrawableItems.contains(childNode)) {
-						listOfDrawableItems.add(childConnection);
-						//childConnection.setEnabled(true);
-					}
-				}
-				
-				listOfDrawableItems.add(enabledNode);
-				
-			} else if(enabledItem instanceof ITAMConnection) {
-				
-				ITAMConnection selectedConnection = (ITAMConnection) enabledItem;
-				listOfDrawableItems.add(selectedConnection);
-				
-				ITAMNode parentNode = selectedConnection.getParentNode();
-				enable(parentNode);
-				
-				ITAMNode childNode = selectedConnection.getChildNode();
-				enable(childNode);
-			}
-		}
-	}*/
-	
-	/**
-	 * 
-	 */
-	/*public void enableAll() {
-		
-		disableAll();
-		
-		for(ITAMConnection connection : listOfConnections) {
-			listOfDrawableItems.add(connection);
+		for(ITAMGConnection connection : listOfConnections) {
 			connection.setEnabled(true);
 		}
 		
-		for(ITAMNode node : listOfNodes) {
-			listOfDrawableItems.add(node);
+		for(ITAMGNode node : listOfNodes) {
 			node.setEnabled(true);
 		}
-	}*/
-	
-	/**
-	 * 
-	 * @param disabledItem
-	 */
-	/*public void disable(ITAMNode disabledItem) {
-		
-		disabledItem.setEnabled(false);
-		
-		if(disabledItem != null && listOfDrawableItems.contains(disabledItem)) {
-			
-			if(disabledItem instanceof ITAMNode) {
-				
-				ITAMNode disabledNode = (ITAMNode) disabledItem;
-				
-				for(ITAMConnection parentConnection : disabledNode.getListOfParentConnections()) {
-					listOfDrawableItems.remove(parentConnection);
-					parentConnection.setEnabled(false);
-				}
-				
-				for(ITAMConnection childConnection : disabledNode.getListOfChildConnections()) {
-					listOfDrawableItems.remove(childConnection);
-					childConnection.setEnabled(false);
-				}
-				
-				listOfDrawableItems.remove(disabledNode);
-				
-			} else if(disabledItem instanceof ITAMConnection) {
-				
-				ITAMConnection disabledConnection = (ITAMConnection) disabledItem;
-				listOfDrawableItems.remove(disabledConnection);
-				
-				ITAMNode parentNode = disabledConnection.getParentNode();
-				disable(parentNode);
-				
-				ITAMNode childNode = disabledConnection.getChildNode();
-				disable(childNode);
-			}
-		}
-	}*/
+	}
 	
 	/**
 	 * 
 	 */
 	public void disableAll() {
 		
-		for(ITAMGItem item : listOfDrawableItems) {
-			item.setEnabled(false);
-		}
+		int size = listOfDrawableItems.size();
 		
-		listOfDrawableItems.clear();
+		for(int i = 0; i < size; i++) {
+			listOfDrawableItems.get(0).setEnabled(false);
+		}
 	}
 	
 	/**
@@ -384,30 +257,19 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	@Override
 	protected void onDraw(Canvas canvas) { 
 		
-		//canvas.scale(2, 2, 0, 0);
 		canvas.scale(sx, sy, px, py);
-		
-		//System.out.println("ahoj");
-				
-        //paint.setColor(Color.BLUE);
-		
-		/*for(ITAMConnection connection : listOfConnections) {
-			connection.draw(canvas, paint);
-		}
-		
-		for(ITAMNode node : listOfNodes) {
-				node.draw(canvas);
-		}*/
 		
 		for(ITAMGItem item : listOfDrawableItems) {
 			item.draw(canvas, paint);
 		}
+		
+		for(ITAMDrawControl control : listOfDrawControls) {
+			control.onDraw(canvas);
+		}
 	}
-	
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-		
 		
 		synchronized (drawingThread.getSurfaceHolder()) {
 						
@@ -417,9 +279,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			int y = (int) e.getY();
 
 			if(e.getAction() == MotionEvent.ACTION_DOWN) {
-				//System.out.println(e);
-
-				//System.out.println("click: " + e.getX() + " " + e.getY());
 
 				ITAMGItem result = null;
 				
@@ -446,17 +305,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 				if(result == null) {
 					lastSelectedNode = null;
 				} else {
-					if(result instanceof ITAMGNode) {
-						lastSelectedNode = (ITAMGNode) result;
-					} else if(result instanceof ITAMGConnection) {
-						System.out.println(result.isSelected());
-						if(result.isSelected()) {
-							((ITAMGConnection) result).setSelectedPoint(ax, ay);
-						}
-					}
-					if(!result.isSelected()) {
-						result.setSelected(true);
-					}
+					onItemHitEvent(e, result, ax, ay);
 				}
 
 				actualPoint.x = x;
@@ -464,13 +313,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 
 			} else if (e.getAction() == MotionEvent.ACTION_MOVE) {
 
-				//System.out.println("move: " + e.getX() + " " + e.getY());
-
-				//Point newPoint = new Point((int) e.getX(), (int) e.getY());
-
 				int dx = x - actualPoint.x;
 				int dy = y - actualPoint.y;
-
 
 				if(dx > 0 || dy > 0 || dx < 0 || dy < 0) {
 					
@@ -480,19 +324,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 					if(!listOfSelectedItems.isEmpty()) {
 
 						for(ITAMGItem item : listOfSelectedItems) {
-							if(item instanceof ITAMGNode) {
-								item.move(ddx,ddy);
-							} else if(item instanceof ITAMGConnection) {
-								((ITAMGConnection) item).moveSelectedPoint(ddx,ddy);
-							}
+							onItemMoveEvent(e, item, ddx, ddy);
 						}
 					} else {
-						for(ITAMGItem item : listOfNodes) {
-							item.move(ddx,ddy);
-						}
-						for(ITAMGItem item : listOfConnections) {
-							item.move(ddx,ddy);
-						}
+						onMoveEvent(e, ddx, ddy);
 					}
 
 					actualPoint.x = x;
@@ -503,9 +338,88 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			invalidate();
 
 			return super.onTouchEvent(e);
-		}
-	
+		}	
 	}
+	
+	public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay) {
+		if(item instanceof ITAMGNode) {
+			lastSelectedNode = (ITAMGNode) item;
+		} else if(item instanceof ITAMGConnection) {
+			if(item.isSelected()) {
+				((ITAMGConnection) item).setSelectedPoint(ax, ay);
+			}
+		}
+		if(!item.isSelected()) {
+			item.setSelected(true);
+		}
+		
+		for(ITAMItemControl control : listOfItemControls) {
+			control.onItemHitEvent(e, item, ax, ay);
+		}
+	}
+	
+	public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy) {
+		if(item instanceof ITAMGNode) {
+			item.move(dx,dy);
+		} else if(item instanceof ITAMGConnection) {
+			((ITAMGConnection) item).moveSelectedPoint(dx,dy);
+		}
+		
+		for(ITAMItemControl control : listOfItemControls) {
+			control.onItemMoveEvent(e, item, dx, dy);
+		}
+	}
+	
+	public void onMoveEvent(MotionEvent e, int dx, int dy) {
+		for(ITAMGItem item : listOfNodes) {
+			item.move(dx,dy);
+		}
+		for(ITAMGItem item : listOfConnections) {
+			item.move(dx,dy);
+		}
+		
+		for(ITAMGestureControl control : listOfGestureControls) {
+			control.onMoveEvent(e, dx, dy);
+		}
+	}
+	
+	
+	
+	/**
+	 * 
+	 * Sluzi na zoom objektu
+	 * 
+	 * @param scaleX
+	 * @param scaleY
+	 * @param pivotX
+	 * @param pivotY
+	 */
+	protected void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
+		//Log.d(TAG,"pivotX: " + px + " ,pivotY" + py
+		//		+ ", scaleX:"+ sx + ", scaleY"	 + sy);
+		
+		if(scaleX < MIN_ZOOM || scaleY < MIN_ZOOM) return;
+		if(scaleY >= MAX_ZOOM || scaleY >= MAX_ZOOM) return;
+		
+		px = pivotX;
+		py = pivotY;
+		sx = scaleX;
+		sy = scaleY;
+		invalidate();	
+	}
+	
+	public void onZoomIn() {
+		zoom(sx*2, sy*2, getWidth()*0.5f, getHeight()*0.5f);
+	}
+
+	public void onZoomOut() {		
+		zoom(sx*0.5f, sy*0.5f, getWidth()*0.5f, getHeight()*0.5f);
+	}
+	
+	
+	
+	
+	
 	
 	public void surfaceCreated(SurfaceHolder holder) {
 		this.drawingThread.setRunning(true);
@@ -528,36 +442,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	        }
 	    }
 	}
-	
-	
-	/**
-	 * 
-	 * Sluzi na zoom objektu
-	 * 
-	 * @param scaleX
-	 * @param scaleY
-	 * @param pivotX
-	 * @param pivotY
-	 */
-	protected void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
-		Log.d(TAG,"pivotX: " + px + " ,pivotY" + py
-				+ ", scaleX:"+ sx + ", scaleY"	 + sy);
-		
-		
-		if(scaleX < MIN_ZOOM || scaleY < MIN_ZOOM) return;
-		if(scaleY >= MAX_ZOOM || scaleY >= MAX_ZOOM) return;
-		
-		px = pivotX;
-		py = pivotY;
-		sx = scaleX;
-		sy = scaleY;
-		/*setPivotX(pivotX);		
-		setPivotY(pivotY);
-		setScaleX(scaleX);
-		setScaleY(scaleY);*/	
-		invalidate();	
-	}
-	
 	
 	/**
 	 * Trieda sa postará o vytvorenie samostatného vlákna na vykreslenie plátna
@@ -608,13 +492,5 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 				}
 			}
 		}
-	}
-
-	public void onZoomIn() {
-		zoom(sx*2, sy*2, getWidth()*0.5f, getHeight()*0.5f);
-	}
-
-	public void onZoomOut() {		
-		zoom(sx*0.5f, sy*0.5f, getWidth()*0.5f, getHeight()*0.5f);
 	}
 }
