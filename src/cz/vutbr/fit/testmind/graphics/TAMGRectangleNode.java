@@ -11,7 +11,7 @@ import android.util.Log;
  * @author jurij
  *
  */
-public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
+public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	
 	private static final String TAG = "TAMRectangleNode";
 	private static final int type = NODE_TYPE_RECTANGLE;
@@ -20,7 +20,7 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 	public static final int OFFSET_X = 80;
 	public static final int OFFSET_Y = 80;
 		
-	public TAMRectangleNode(TAMGraph graph, int x, int y, String text) {
+	public TAMGRectangleNode(TAMGraph graph, int x, int y, String text) {
 		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
 	}
 	

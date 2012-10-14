@@ -1,11 +1,11 @@
 package cz.vutbr.fit.testmind.io;
 
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
-import cz.vutbr.fit.testmind.graphics.ITAMConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMEItemFactory;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import android.R.integer;
 import android.content.ContentValues;
@@ -86,15 +86,15 @@ public class Serializer
         
         insertGraph(db, editor);
         
-        for (Iterator<TAMEditorNode> i = editor.getListOfNodes().iterator(); i.hasNext(); )
+        for (Iterator<TAMENode> i = editor.getListOfNodes().iterator(); i.hasNext(); )
         {
-             TAMEditorNode currentNode = (TAMEditorNode) i.next();
+             TAMENode currentNode = (TAMENode) i.next();
              insertNode(db, currentNode);
         }
         
-        for (Iterator<TAMEditorConnection> i = editor.getListOfConnections().iterator(); i.hasNext(); )
+        for (Iterator<TAMEConnection> i = editor.getListOfConnections().iterator(); i.hasNext(); )
         {
-             TAMEditorConnection currentConnection = (TAMEditorConnection) i.next();
+             TAMEConnection currentConnection = (TAMEConnection) i.next();
              insertConnection(db, currentConnection);
         }   
         
@@ -109,9 +109,9 @@ public class Serializer
     {
         SQLiteDatabase db = openDB();
         
-        TAMEditorFactory factory = editor.getFactory();
+        TAMEItemFactory factory = editor.getFactory();
         
-        SparseArray<TAMEditorNode> nodes = importNodes(db, factory);
+        SparseArray<TAMENode> nodes = importNodes(db, factory);
         
         importGraph(db, editor, nodes);
         importConnections(db, factory, nodes);
@@ -171,9 +171,9 @@ public class Serializer
      * @param node
      * @return SQL rowid of root node
      */
-    private void insertNode(SQLiteDatabase db, TAMEditorNode node)
+    private void insertNode(SQLiteDatabase db, TAMENode node)
     {
-        ITAMNode core = node.getCore();
+        ITAMGNode core = node.getCore();
         
         ContentValues values = new ContentValues();
         values.put("id", node.getId());
@@ -199,11 +199,11 @@ public class Serializer
      * @param childId
      * @param connection
      */
-    private void insertConnection(SQLiteDatabase db, TAMEditorConnection connection)
+    private void insertConnection(SQLiteDatabase db, TAMEConnection connection)
     {
         ContentValues values = new ContentValues();
  
-        ITAMConnection core = connection.getCore();
+        ITAMGConnection core = connection.getCore();
         values.put("id", connection.getId());
         values.put("parent", connection.getParent().getId());
         values.put("child", connection.getChild().getId());
@@ -214,7 +214,7 @@ public class Serializer
         db.insert("connections", null, values);
     }
 
-    private void importGraph(SQLiteDatabase db, TAMEditor editor, SparseArray<TAMEditorNode> nodes)
+    private void importGraph(SQLiteDatabase db, TAMEditor editor, SparseArray<TAMENode> nodes)
     {
         Cursor cur = db.query("graph", COLUMNS_GRAPH, null, null, null, null, null);
         HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_GRAPH);
@@ -236,9 +236,9 @@ public class Serializer
      * @param factory
      * @return
      */
-    private SparseArray<TAMEditorNode> importNodes(SQLiteDatabase db, TAMEditorFactory factory)
+    private SparseArray<TAMENode> importNodes(SQLiteDatabase db, TAMEItemFactory factory)
     {
-        SparseArray<TAMEditorNode> result = new SparseArray<TAMEditorNode>();
+        SparseArray<TAMENode> result = new SparseArray<TAMENode>();
         
         Cursor cur = db.query("nodes", COLUMNS_NODES, null, null, null, null, null);
         HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_NODES);
@@ -251,8 +251,8 @@ public class Serializer
             int type = cur.getInt(indexes.get("type"));
             int x = cur.getInt(indexes.get("x"));
             int y = cur.getInt(indexes.get("y"));
-            TAMEditorNode node = factory.importNode(id, x, y, title, body, type);
-            ITAMNode core = node.getCore();
+            TAMENode node = factory.importNode(id, x, y, title, body, type);
+            ITAMGNode core = node.getCore();
             node.setChildsVisible(intToboolean(cur.getInt(indexes.get("hasVisibleChilds"))));
             core.setBackground(cur.getInt(indexes.get("background")));
             core.setForeground(cur.getInt(indexes.get("foreground")));
@@ -271,7 +271,7 @@ public class Serializer
      * @param factory
      * @param nodes
      */
-    private void importConnections(SQLiteDatabase db, TAMEditorFactory factory, SparseArray<TAMEditorNode> nodes)
+    private void importConnections(SQLiteDatabase db, TAMEItemFactory factory, SparseArray<TAMENode> nodes)
     {
         Cursor cur = db.query("connections", COLUMNS_CONNECTIONS, null, null, null, null, null);
         HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_CONNECTIONS);
@@ -279,10 +279,10 @@ public class Serializer
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
         {
             int id = cur.getInt(indexes.get("id"));
-            TAMEditorNode parent = nodes.get(cur.getInt(indexes.get("parent")));
-            TAMEditorNode child = nodes.get(cur.getInt(indexes.get("child")));
+            TAMENode parent = nodes.get(cur.getInt(indexes.get("parent")));
+            TAMENode child = nodes.get(cur.getInt(indexes.get("child")));
             int type = cur.getInt(indexes.get("type"));
-            ITAMConnection core = factory.importConnection(id, parent, child, type).getCore();
+            ITAMGConnection core = factory.importConnection(id, parent, child, type).getCore();
             core.setBackground(cur.getInt(indexes.get("background")));
             core.setHighlightColor(cur.getInt(indexes.get("highlightColor")));
         }        

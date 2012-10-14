@@ -2,25 +2,25 @@ package cz.vutbr.fit.testmind.graphics;
 
 import java.util.List;
 
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 
 import android.graphics.Point;
 import android.graphics.Rect;
 
-public interface ITAMNode extends ITAMItem {
+public interface ITAMGNode extends ITAMGItem {
 	
 	public interface OnNodeSelectListener{
-		public void onSelectNodeEvent(ITAMNode node);
-		public void onUnselectNodeEvent(ITAMNode node);
-		public void onMoveNodeEvent(ITAMNode node);
+		public void onSelectNodeEvent(ITAMGNode node);
+		public void onUnselectNodeEvent(ITAMGNode node);
+		public void onMoveNodeEvent(ITAMGNode node);
 	}
 		
 	public final int NODE_TYPE_RECTANGLE = 1;
 	public final int NODE_TYPE_ROUND_RECTANGLE = 2;
 	
-	public ITAMItem addChild(int x, int y, String text);
+	public ITAMGItem addChild(int x, int y, String text);
 	
-	public ITAMItem addChild(int type, int x, int y, String text);
+	public ITAMGItem addChild(int type, int x, int y, String text);
 	
 	public Rect getBounds();
 	
@@ -40,9 +40,9 @@ public interface ITAMNode extends ITAMItem {
 	
 	public void setText(String text);
 	
-	public List<ITAMConnection> getListOfParentConnections();
+	public List<ITAMGConnection> getListOfParentConnections();
 	
-	public List<ITAMConnection> getListOfChildConnections();
+	public List<ITAMGConnection> getListOfChildConnections();
 
     public int getBackgroundStroke();
     

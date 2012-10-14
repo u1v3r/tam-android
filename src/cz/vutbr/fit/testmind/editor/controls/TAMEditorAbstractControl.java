@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode.OnNodeSelectListener;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode.OnNodeSelectListener;
 
 public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
 	
@@ -43,7 +43,7 @@ public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
 	 * Zobrazí dialog na pridanie uzlu
 	 * @param parent 
 	 */
-	protected void showAddNodeDialog(TAMEditorNode parent) {
+	protected void showAddNodeDialog(TAMENode parent) {
 			
 		FragmentManager fm = activity.getSupportFragmentManager();		
 		AddNodeDialog dialog = new AddNodeDialog(parent, this);

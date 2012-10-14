@@ -17,14 +17,14 @@ import android.util.Log;
  * @author jurij
  *
  */
-public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode {
+public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNode {
 	
 	private static final float STROKE_WIDTH = 5f;
 	
 	private TAMGraph graph;
 	private String text;
-	private List<ITAMConnection> listOfChildConnections;
-	private List<ITAMConnection> listOfParentConnections;
+	private List<ITAMGConnection> listOfChildConnections;
+	private List<ITAMGConnection> listOfParentConnections;
 	private Object object;
 	
 	private int type;
@@ -46,13 +46,13 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 	private OnNodeSelectListener selectListener;
 	
 	
-	public TAMAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
+	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
 		
 		this.graph = graph;
 		this.text = text;
-		this.listOfChildConnections = new ArrayList<ITAMConnection>();
-		this.listOfParentConnections = new ArrayList<ITAMConnection>();
+		this.listOfChildConnections = new ArrayList<ITAMGConnection>();
+		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
 		this.type = type;
 		this.background = graph.getResources().getColor(R.color.node_background);
@@ -136,17 +136,17 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		this.highlightColor = highlightColor;
 	}
 
-	public ITAMItem addChild(int x, int y, String text) {
+	public ITAMGItem addChild(int x, int y, String text) {
 		return addChild(type, x, y, text);
 	}
 
-	public ITAMItem addChild(int type, int x, int y, String text) {
+	public ITAMGItem addChild(int type, int x, int y, String text) {
 		
 		// create new node from item factory //
-		ITAMNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
+		ITAMGNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
 		
 		// create new connection between these nodes from item factory //
-		graph.getItemFactory().createConnection(graph, this, node, ITAMConnection.CONNECTION_TYPE_DEFAULT);
+		graph.getItemFactory().createConnection(graph, this, node, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
 		
 		return node;
 	}
@@ -209,8 +209,8 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		
 		if(isEnabled != enable) {
 			
-			for(ITAMConnection parentConnection : listOfParentConnections) {
-				ITAMNode parentNode = parentConnection.getParentNode();
+			for(ITAMGConnection parentConnection : listOfParentConnections) {
+				ITAMGNode parentNode = parentConnection.getParentNode();
 				if(parentNode.isEnabled() != enable) {
 					if(enable) {
 						graph.listOfDrawableItems.add(parentConnection);
@@ -221,8 +221,8 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 				}
 			}
 			
-			for(ITAMConnection childConnection : listOfChildConnections) {
-				ITAMNode childNode = childConnection.getChildNode();
+			for(ITAMGConnection childConnection : listOfChildConnections) {
+				ITAMGNode childNode = childConnection.getChildNode();
 				if(childNode.isEnabled() != enable) {
 					if(enable) {
 						graph.listOfDrawableItems.add(childConnection);
@@ -247,11 +247,11 @@ public abstract class TAMAbstractNode extends ShapeDrawable implements ITAMNode 
 		return isEnabled;
 	}
 	
-	public List<ITAMConnection> getListOfParentConnections() {
+	public List<ITAMGConnection> getListOfParentConnections() {
 		return listOfParentConnections;
 	}
 
-	public List<ITAMConnection> getListOfChildConnections() {
+	public List<ITAMGConnection> getListOfChildConnections() {
 		return listOfChildConnections;
 	}
 

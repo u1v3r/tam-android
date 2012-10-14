@@ -17,12 +17,12 @@ import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorGesturesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode.OnNodeSelectListener;
-import cz.vutbr.fit.testmind.graphics.TAMAbstractNode;
+import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMEItemFactory;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode.OnNodeSelectListener;
+import cz.vutbr.fit.testmind.graphics.TAMGAbstractNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 
@@ -34,13 +34,13 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	
 	private static final String TAG = "TAMEditor";
 		
-	private TAMEditorNode root;
+	private TAMENode root;
 	
-	private List<TAMEditorNode> listOfNodes;
-	private List<TAMEditorConnection> listOfConnections;
+	private List<TAMENode> listOfNodes;
+	private List<TAMEConnection> listOfConnections;
 	private List<TAMEditorAbstractControl> listOfControls;
 
-	private TAMEditorFactory factory;
+	private TAMEItemFactory factory;
 
 	
 			
@@ -65,22 +65,22 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	}
 	
 	public void initialize() {
-		this.listOfNodes = new ArrayList<TAMEditorNode>();
-		this.listOfConnections = new ArrayList<TAMEditorConnection>();
+		this.listOfNodes = new ArrayList<TAMENode>();
+		this.listOfConnections = new ArrayList<TAMEConnection>();
 		this.listOfControls = new ArrayList<TAMEditorAbstractControl>();
 		listOfControls.add(new TAMEditorNodesControl(this));
 		listOfControls.add(new TAMEditorZoomControl(this,R.id.zoom_controls));
 		listOfControls.add(new TAMEditorGesturesControl(this));
 		
-		this.factory = new TAMEditorFactory(this);		
+		this.factory = new TAMEItemFactory(this);		
 	}
 	
 
-	public TAMEditorNode createRoot(int type, int x, int y, String title, String body) {
+	public TAMENode createRoot(int type, int x, int y, String title, String body) {
 		
 		if(root != null) return root;
 		
-		TAMEditorNode node = new TAMEditorNode(this, x, y, title, body, type);
+		TAMENode node = new TAMENode(this, x, y, title, body, type);
 		listOfNodes.add(node);
 		
 		setRoot(node);
@@ -92,7 +92,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#containsNode(int)
 	 */
 	public boolean containsNode(int id) {
-		for(TAMEditorNode node : listOfNodes) {
+		for(TAMENode node : listOfNodes) {
 			if(id == node.getId()) {
 				return true;
 			}
@@ -104,8 +104,8 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	/* (non-Javadoc)
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getNode(int)
 	 */
-	public TAMEditorNode getNode(int id) {
-		for(TAMEditorNode node : listOfNodes) {
+	public TAMENode getNode(int id) {
+		for(TAMENode node : listOfNodes) {
 			if(id == node.getId()) {
 				return node;
 			}
@@ -118,7 +118,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#containsConnection(int)
 	 */
 	public boolean containsConnection(int id) {
-		for(TAMEditorConnection connection : listOfConnections) {
+		for(TAMEConnection connection : listOfConnections) {
 			if(id == connection.getId()) {
 				return true;
 			}
@@ -131,8 +131,8 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	/* (non-Javadoc)
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getConnection(int)
 	 */
-	public TAMEditorConnection getConnection(int id) {
-		for(TAMEditorConnection connection : listOfConnections) {
+	public TAMEConnection getConnection(int id) {
+		for(TAMEConnection connection : listOfConnections) {
 			if(id == connection.getId()) {
 				return connection;
 			}
@@ -144,18 +144,18 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	/* (non-Javadoc)
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getRoot()
 	 */
-	public TAMEditorNode getRoot() {
+	public TAMENode getRoot() {
 		return root;
 	}
 
 	/* (non-Javadoc)
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getFactory()
 	 */
-	public TAMEditorFactory getFactory() {
+	public TAMEItemFactory getFactory() {
 		return factory;
 	}
 
-	private void setRoot(TAMEditorNode root) {
+	private void setRoot(TAMENode root) {
 		
 		if(this.root == null){
 			this.root = root;
@@ -165,14 +165,14 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	/* (non-Javadoc)
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getListOfNodes()
 	 */
-	public List<TAMEditorNode> getListOfNodes() {
+	public List<TAMENode> getListOfNodes() {
 		return listOfNodes;
 	}
 
 	/* (non-Javadoc)
 	 * @see cz.vutbr.fit.testmind.editor.TAMIEditor#getListOfConnections()
 	 */
-	public List<TAMEditorConnection> getListOfConnections() {
+	public List<TAMEConnection> getListOfConnections() {
 		return listOfConnections;
 	}
 	
@@ -212,13 +212,13 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		return super.onTouchEvent(e);
 	}
 	
-	public void onSelectEvent(ITAMNode node){
+	public void onSelectEvent(ITAMGNode node){
 		for(TAMEditorAbstractControl control : listOfControls) {			 
 			control.onSelectNodeEvent(node);
 		}
 	}
 
-	public void onUnselectEvent(ITAMNode node) {
+	public void onUnselectEvent(ITAMGNode node) {
 		for(TAMEditorAbstractControl control : listOfControls) {			 
 			control.onUnselectNodeEvent(node);
 		}

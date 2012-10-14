@@ -29,12 +29,12 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	protected DrawingThread drawingThread;
 	protected Paint paint = new Paint();
-	protected List<ITAMNode> listOfNodes;
-	protected List<ITAMConnection> listOfConnections;
-	protected List<ITAMItem> listOfDrawableItems;
-	protected List<ITAMItem> listOfSelectedItems;
-	protected ITAMNode lastSelectedNode;
-	protected TAMItemFactory factory;
+	protected List<ITAMGNode> listOfNodes;
+	protected List<ITAMGConnection> listOfConnections;
+	protected List<ITAMGItem> listOfDrawableItems;
+	protected List<ITAMGItem> listOfSelectedItems;
+	protected ITAMGNode lastSelectedNode;
+	protected TAMGItemFactory factory;
 	protected Point actualPoint;
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
@@ -52,11 +52,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	public TAMGraph(Context context, AttributeSet attrs, int defStyle) {
 		super(context,attrs,defStyle);
-		factory = new TAMItemFactory();
-		listOfNodes = new ArrayList<ITAMNode>();
-		listOfConnections = new ArrayList<ITAMConnection>();
-		listOfSelectedItems = new ArrayList<ITAMItem>();
-		listOfDrawableItems = new ArrayList<ITAMItem>();
+		factory = new TAMGItemFactory();
+		listOfNodes = new ArrayList<ITAMGNode>();
+		listOfConnections = new ArrayList<ITAMGConnection>();
+		listOfSelectedItems = new ArrayList<ITAMGItem>();
+		listOfDrawableItems = new ArrayList<ITAMGItem>();
 		actualPoint = new Point();	
 		setLongClickable(true);		
 		setFocusable(true);// umozni dotyky
@@ -77,7 +77,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 * 
 	 * @return itemFactory
 	 */
-	public TAMItemFactory getItemFactory() {
+	public TAMGItemFactory getItemFactory() {
 		return factory;
 	}
 	
@@ -89,47 +89,47 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 * @param text
 	 * @return rootNode
 	 */
-	public ITAMNode addRoot(int type, int x, int y, String text) {
-		ITAMNode node = factory.createNode(this, type, x, y, text);
+	public ITAMGNode addRoot(int type, int x, int y, String text) {
+		ITAMGNode node = factory.createNode(this, type, x, y, text);
 		return node;
 	}
 	
-	public void moveOnTop(ITAMItem selectedItem) {
+	public void moveOnTop(ITAMGItem selectedItem) {
 		
 		// move items to the end of the drawable list, so they will be drawn on the top of all items //
-		if(selectedItem instanceof ITAMNode) {
+		if(selectedItem instanceof ITAMGNode) {
 			
-			ITAMNode selectedNode = (ITAMNode) selectedItem;
+			ITAMGNode selectedNode = (ITAMGNode) selectedItem;
 			
-			for(ITAMConnection parentConnection : selectedNode.getListOfParentConnections()) {
+			for(ITAMGConnection parentConnection : selectedNode.getListOfParentConnections()) {
 				listOfDrawableItems.remove(parentConnection);
 				listOfDrawableItems.add(parentConnection);
-				ITAMNode parentNode = parentConnection.getParentNode();
+				ITAMGNode parentNode = parentConnection.getParentNode();
 				listOfDrawableItems.remove(parentNode);
 				listOfDrawableItems.add(parentNode);
 			}
 			
-			for(ITAMConnection childConnection : selectedNode.getListOfChildConnections()) {
+			for(ITAMGConnection childConnection : selectedNode.getListOfChildConnections()) {
 				listOfDrawableItems.remove(childConnection);
 				listOfDrawableItems.add(childConnection);
-				ITAMNode childNode = childConnection.getChildNode();
+				ITAMGNode childNode = childConnection.getChildNode();
 				listOfDrawableItems.remove(childNode);
 				listOfDrawableItems.add(childNode);
 			}
 			
 			listOfDrawableItems.remove(selectedItem);
 			listOfDrawableItems.add(selectedItem);
-		} else if(selectedItem instanceof ITAMConnection) {
+		} else if(selectedItem instanceof ITAMGConnection) {
 			
-			ITAMConnection selectedConnection = (ITAMConnection) selectedItem;
+			ITAMGConnection selectedConnection = (ITAMGConnection) selectedItem;
 			listOfDrawableItems.remove(selectedConnection);
 			listOfDrawableItems.add(selectedConnection);
 			
-			ITAMNode parentNode = selectedConnection.getParentNode();
+			ITAMGNode parentNode = selectedConnection.getParentNode();
 			listOfDrawableItems.remove(parentNode);
 			listOfDrawableItems.add(parentNode);
 			
-			ITAMNode childNode = selectedConnection.getChildNode();
+			ITAMGNode childNode = selectedConnection.getChildNode();
 			listOfDrawableItems.remove(childNode);
 			listOfDrawableItems.add(childNode);
 		}
@@ -192,7 +192,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 * 
 	 * @return lastSelectedNode
 	 */
-	public ITAMNode getLastSelectedNode() {
+	public ITAMGNode getLastSelectedNode() {
 		return lastSelectedNode;
 	}
 	
@@ -207,7 +207,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		}
 	}
 	
-	public void unselectAllWithout(ITAMItem actual) {
+	public void unselectAllWithout(ITAMGItem actual) {
 		
 		if(actual == null) {
 			unselectAll();
@@ -217,7 +217,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			System.out.println(size);
 			for(int i = 0; i < size; i++) {
 				System.out.println(i);
-				ITAMItem item = listOfSelectedItems.get(a);
+				ITAMGItem item = listOfSelectedItems.get(a);
 				if(item != actual) {
 					item.setSelected(false);
 				} else {
@@ -345,7 +345,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 */
 	public void disableAll() {
 		
-		for(ITAMItem item : listOfDrawableItems) {
+		for(ITAMGItem item : listOfDrawableItems) {
 			item.setEnabled(false);
 		}
 		
@@ -366,7 +366,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 */
 	public void unhighlightAllNodes() {
 		
-		for(ITAMNode node : listOfNodes) {
+		for(ITAMGNode node : listOfNodes) {
 			node.setHighlighted(false);
 		}
 	}
@@ -376,7 +376,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 */
 	public void unhighlightAllConnections() {
 		
-		for(ITAMConnection connection : listOfConnections) {
+		for(ITAMGConnection connection : listOfConnections) {
 			connection.setHighlighted(false);
 		}
 	}
@@ -399,7 +399,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 				node.draw(canvas);
 		}*/
 		
-		for(ITAMItem item : listOfDrawableItems) {
+		for(ITAMGItem item : listOfDrawableItems) {
 			item.draw(canvas, paint);
 		}
 	}
@@ -421,7 +421,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 
 				//System.out.println("click: " + e.getX() + " " + e.getY());
 
-				ITAMItem result = null;
+				ITAMGItem result = null;
 				
 				float dx = px-px*sx;
 				float dy = py-py*sy;
@@ -429,13 +429,13 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 				float ax = ((x-dx)/sy);
 				float ay = ((y-dy)/sy);
 				
-				for(ITAMItem item : listOfConnections) {
+				for(ITAMGItem item : listOfConnections) {
 					if(item.hit(ax, ay)) {
 						result = item;
 					}
 				}
 
-				for(ITAMItem item : listOfNodes) {
+				for(ITAMGItem item : listOfNodes) {
 					if(item.hit(ax, ay)) {
 						result = item;
 					}
@@ -446,12 +446,12 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 				if(result == null) {
 					lastSelectedNode = null;
 				} else {
-					if(result instanceof ITAMNode) {
-						lastSelectedNode = (ITAMNode) result;
-					} else if(result instanceof ITAMConnection) {
+					if(result instanceof ITAMGNode) {
+						lastSelectedNode = (ITAMGNode) result;
+					} else if(result instanceof ITAMGConnection) {
 						System.out.println(result.isSelected());
 						if(result.isSelected()) {
-							((ITAMConnection) result).setSelectedPoint(ax, ay);
+							((ITAMGConnection) result).setSelectedPoint(ax, ay);
 						}
 					}
 					if(!result.isSelected()) {
@@ -479,18 +479,18 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 					
 					if(!listOfSelectedItems.isEmpty()) {
 
-						for(ITAMItem item : listOfSelectedItems) {
-							if(item instanceof ITAMNode) {
+						for(ITAMGItem item : listOfSelectedItems) {
+							if(item instanceof ITAMGNode) {
 								item.move(ddx,ddy);
-							} else if(item instanceof ITAMConnection) {
-								((ITAMConnection) item).moveSelectedPoint(ddx,ddy);
+							} else if(item instanceof ITAMGConnection) {
+								((ITAMGConnection) item).moveSelectedPoint(ddx,ddy);
 							}
 						}
 					} else {
-						for(ITAMItem item : listOfNodes) {
+						for(ITAMGItem item : listOfNodes) {
 							item.move(ddx,ddy);
 						}
-						for(ITAMItem item : listOfConnections) {
+						for(ITAMGItem item : listOfConnections) {
 							item.move(ddx,ddy);
 						}
 					}

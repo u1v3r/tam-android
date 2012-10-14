@@ -9,8 +9,8 @@ import android.view.View.OnClickListener;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class TAMEditorZoomControl extends TAMEditorAbstractControl {
@@ -80,17 +80,17 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 		
 	}
 
-	public void onSelectNodeEvent(ITAMNode node) {
+	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void onUnselectNodeEvent(ITAMNode node) {
+	public void onUnselectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void onMoveNodeEvent(ITAMNode node) {
+	public void onMoveNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}

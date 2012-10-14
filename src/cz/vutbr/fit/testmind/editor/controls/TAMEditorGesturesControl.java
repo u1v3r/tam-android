@@ -11,15 +11,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 
 public class TAMEditorGesturesControl extends TAMEditorAbstractControl implements OnGestureListener,AddNodeDialogListener {
 		
 	
 	private static final String TAG = "TAMEditorGesturesControl";
 	
-	private List<TAMEditorNode> selectedNodesList;	
+	private List<TAMENode> selectedNodesList;	
 	
 	private GestureDetector gDetector;	
 	
@@ -28,7 +28,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 	public TAMEditorGesturesControl(ITAMEditor editor) {
 		super(editor);
 		gDetector = new GestureDetector(editor.getContext(),this);
-		selectedNodesList = new ArrayList<TAMEditorNode>();
+		selectedNodesList = new ArrayList<TAMENode>();
 	}
 		
 	@Override
@@ -48,8 +48,8 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 		gDetector.onTouchEvent(e);
 	}
 
-	public void onSelectNodeEvent(ITAMNode node) {		
-		TAMEditorNode selectedNode = (TAMEditorNode)node.getHelpObject();
+	public void onSelectNodeEvent(ITAMGNode node) {		
+		TAMENode selectedNode = (TAMENode)node.getHelpObject();
 		
 		Log.d(TAG,"select node: " + selectedNode.getCore().getText());
 		
@@ -58,9 +58,9 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 		};
 	}
 
-	public void onUnselectNodeEvent(ITAMNode node) {
+	public void onUnselectNodeEvent(ITAMGNode node) {
 		
-		TAMEditorNode selectedNode = (TAMEditorNode)node.getHelpObject();
+		TAMENode selectedNode = (TAMENode)node.getHelpObject();
 		
 		Log.d(TAG,"unselect node: " + selectedNode.getCore().getText());
 		
@@ -69,7 +69,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 		};
 	}
 
-	public void onMoveNodeEvent(ITAMNode node) {
+	public void onMoveNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -103,14 +103,14 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 			
 			creatingNewNode = true;
 			
-			TAMEditorNode selectedNode = selectedNodesList.get(0);
+			TAMENode selectedNode = selectedNodesList.get(0);
 			/*
 			for (ITAMNode node : selectedNodesList) {
 				selectedNode = node;
 			}*/
 			
 					
-			TAMEditorNode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+			TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
 						
 			selectedNode.getCore().setSelected(false);
 			newNode.getCore().setSelected(true);

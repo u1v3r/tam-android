@@ -7,47 +7,47 @@ import android.util.Log;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.graphics.ITAMConnection;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 
-public class TAMEditorNode {
+public class TAMENode {
 	
 	private static final String TAG = "TAMEditorNode";
 	
 	private int id;
 	private ITAMEditor editor;
-	private ITAMNode core;
+	private ITAMGNode core;
 	private String body;
-	private List<TAMEditorNode> listOfChildNodes;
+	private List<TAMENode> listOfChildNodes;
 	
 	private static int counter = 0;
-	private static int defaultType = ITAMConnection.CONNECTION_TYPE_DEFAULT;
+	private static int defaultType = ITAMGConnection.CONNECTION_TYPE_DEFAULT;
 	
 	private boolean hasVisibleChilds;
 	
-	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type) {
+	public TAMENode(TAMEditor editor, int x, int y, String title, String body, int type) {
 		this(editor, x, y, title, body, type, getNewSequenceNumber());
 	}	
 	
-	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
+	public TAMENode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
 		this.id = id;
 		this.editor = editor;
 		this.body = body;
-		this.listOfChildNodes = new ArrayList<TAMEditorNode>();
+		this.listOfChildNodes = new ArrayList<TAMENode>();
 		this.hasVisibleChilds = true;
 		this.core = editor.getItemFactory().createNode(editor, type, x, y, title);
 		this.core.setHelpObject(this);
-		this.core.setSelectEventListener(new ITAMNode.OnNodeSelectListener() {
+		this.core.setSelectEventListener(new ITAMGNode.OnNodeSelectListener() {
 
-			public void onSelectNodeEvent(ITAMNode tamAbstractNode) {
+			public void onSelectNodeEvent(ITAMGNode tamAbstractNode) {
 				getEditor().onSelectEvent(core);
 			}
 
-			public void onUnselectNodeEvent(ITAMNode tamAbstractNode) {
+			public void onUnselectNodeEvent(ITAMGNode tamAbstractNode) {
 				getEditor().onUnselectEvent(core);				
 			}
 
-			public void onMoveNodeEvent(ITAMNode node) {
+			public void onMoveNodeEvent(ITAMGNode node) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -62,11 +62,11 @@ public class TAMEditorNode {
 		this.body = body;
 	}
 
-	public ITAMNode getCore() {
+	public ITAMGNode getCore() {
 		return core;
 	}
 	
-	public void setCore(ITAMNode core) {
+	public void setCore(ITAMGNode core) {
 		this.core = core;
 	}
 
@@ -85,18 +85,18 @@ public class TAMEditorNode {
 		return counter;
 	}
 
-	public List<TAMEditorNode> getListOfChildNodes() {
+	public List<TAMENode> getListOfChildNodes() {
 		return listOfChildNodes;
 	}
 	
-	public TAMEditorNode addChild(int x, int y, String title, String body) {
+	public TAMENode addChild(int x, int y, String title, String body) {
 		
-		return addChild(x, y, title, body, getDefaultType(), TAMEditorConnection.getDefaultType());
+		return addChild(x, y, title, body, getDefaultType(), TAMEConnection.getDefaultType());
 	}
 	
-	public TAMEditorNode addChild(int x, int y, String title, String body, int nodeType, int connectionType) {
+	public TAMENode addChild(int x, int y, String title, String body, int nodeType, int connectionType) {
 		
-		TAMEditorNode node = editor.getFactory().createNode(x, y, title, body, nodeType);
+		TAMENode node = editor.getFactory().createNode(x, y, title, body, nodeType);
 		editor.getFactory().createConnection(this, node, connectionType);
 		
 		return node;
@@ -107,7 +107,7 @@ public class TAMEditorNode {
 	}
 
 	public static void setDefaultType(int defaultType) {
-		TAMEditorNode.defaultType = defaultType;
+		TAMENode.defaultType = defaultType;
 	}
 	
 	public boolean hasVisibleChilds() {
@@ -130,7 +130,7 @@ public class TAMEditorNode {
 		core.setEnabled(true);
 		
 		if(hasVisibleChilds == enable) {
-			for(TAMEditorNode node : listOfChildNodes) {
+			for(TAMENode node : listOfChildNodes) {
 				node.enable(enable);
 			}
 		}

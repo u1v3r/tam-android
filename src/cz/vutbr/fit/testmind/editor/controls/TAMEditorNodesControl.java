@@ -16,10 +16,10 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
-import cz.vutbr.fit.testmind.graphics.TAMRectangleNode;
+import cz.vutbr.fit.testmind.graphics.TAMGRectangleNode;
 
 
 /**
@@ -52,7 +52,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		
 		Point position = new Point(this.editor.getWidth()/2, this.editor.getHeight()/2);
 		
-		editor.createRoot(TAMRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
+		editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
 				DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);	
 		
 	}
@@ -69,7 +69,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			Toast.makeText(editor.getContext(), 
 					R.string.node_not_selected, Toast.LENGTH_LONG).show();
 		} else {
-			TAMEditorNode parent = (TAMEditorNode) editor.getLastSelectedNode().getHelpObject();
+			TAMENode parent = (TAMENode) editor.getLastSelectedNode().getHelpObject();
 			showAddNodeDialog(parent);
 		}
 	}
@@ -81,7 +81,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 * @param title Titulok uzlu
 	 * @param parent Rodicovsky uzol 
 	 */
-	public void addChildNode(String title, TAMEditorNode parent) {
+	public void addChildNode(String title, TAMENode parent) {
 			
 		/*
 		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
@@ -97,7 +97,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 * @param body Telo uzlu
 	 * @param parent Rodicovsky uzol 
 	 */
-	public void addChildNode(String title, String body, TAMEditorNode parent) {
+	public void addChildNode(String title, String body, TAMENode parent) {
 			
 		/*
 		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
@@ -114,7 +114,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 * @param parent Rodicovsky uzol 
 	 * @param position Pozicia child uzlu
 	 */
-	public void addChildNode(String title, String body, TAMEditorNode parent, Point position){		
+	public void addChildNode(String title, String body, TAMENode parent, Point position){		
 		
 		int posX = position.x;
 		int posY = position.y;
@@ -148,7 +148,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 	
 	public void onFinishAddChildNodeDialog(String title) {
-		addChildNode(title, (TAMEditorNode) editor.getLastSelectedNode().getHelpObject());
+		addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
 	}
 
 
@@ -196,19 +196,19 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 
-	public void onSelectNodeEvent(ITAMNode node) {
+	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	public void onUnselectNodeEvent(ITAMNode node) {
+	public void onUnselectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
-	public void onMoveNodeEvent(ITAMNode node) {
+	public void onMoveNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}	

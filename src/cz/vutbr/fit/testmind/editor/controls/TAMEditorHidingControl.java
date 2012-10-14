@@ -1,8 +1,8 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import android.graphics.Canvas;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -32,17 +32,17 @@ public class TAMEditorHidingControl extends TAMEditorAbstractControl {
 		
 	}
 
-	public void onSelectNodeEvent(ITAMNode node) {
+	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void onUnselectNodeEvent(ITAMNode node) {
+	public void onUnselectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void onMoveNodeEvent(ITAMNode node) {
+	public void onMoveNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}

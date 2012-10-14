@@ -7,36 +7,36 @@ import android.content.res.Resources;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.view.View;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorConnection;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorFactory;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-import cz.vutbr.fit.testmind.graphics.ITAMNode;
+import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMEItemFactory;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public interface ITAMEditor {
 
-	public TAMEditorNode createRoot(int type, int x, int y,
+	public TAMENode createRoot(int type, int x, int y,
 			String title, String body);
 
 	public boolean containsNode(int id);
 
-	public TAMEditorNode getNode(int id);
+	public TAMENode getNode(int id);
 
 	public boolean containsConnection(int id);
 
-	public TAMEditorConnection getConnection(int id);
+	public TAMEConnection getConnection(int id);
 
-	public TAMEditorNode getRoot();
+	public TAMENode getRoot();
 		
-	public TAMEditorFactory getFactory();
+	public TAMEItemFactory getFactory();
 
-	public List<TAMEditorNode> getListOfNodes();
+	public List<TAMENode> getListOfNodes();
 
-	public List<TAMEditorConnection> getListOfConnections();
+	public List<TAMEConnection> getListOfConnections();
 	
 	public boolean hasRootNode();
 	
-	public ITAMNode getLastSelectedNode();
+	public ITAMGNode getLastSelectedNode();
 
 	public Context getContext();
 
@@ -50,7 +50,7 @@ public interface ITAMEditor {
 	
 	public boolean onOptionsItemSelected(MenuItem item);
 	
-	public void onSelectEvent(ITAMNode node);
+	public void onSelectEvent(ITAMGNode node);
 
-	public void onUnselectEvent(ITAMNode node);
+	public void onUnselectEvent(ITAMGNode node);
 }
