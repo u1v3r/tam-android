@@ -35,12 +35,9 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	private static final String TAG = "TAMEditorNodes";
 	private static final String INTENT_MIME_TYPE = "text/xml";
 		
-	private ITAMEditor editor;
-	private FragmentActivity activity;
-	
+
 	public TAMEditorNodesControl(ITAMEditor editor) {
-		this.editor = editor;
-		this.activity = (FragmentActivity)this.editor.getContext();
+		super(editor);
 		createDefaultRootNode();
 	}
 	
@@ -76,19 +73,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			showAddNodeDialog(parent);
 		}
 	}
-	
-	/**
-	 * Zobrazí dialog na pridanie uzlu
-	 * @param parent 
-	 */
-	private void showAddNodeDialog(TAMEditorNode parent) {
-			
-		FragmentManager fm = activity.getSupportFragmentManager();		
-		AddNodeDialog dialog = new AddNodeDialog(parent, this);
-		dialog.show(fm, "fragment_add_node");
-		
-	}
-	
+
+
 	/**
 	 * Prida child uzol k parent uzlu s automatickym umiestnenim
 	 * 

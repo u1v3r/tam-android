@@ -3,7 +3,7 @@ package cz.vutbr.fit.testmind.graphics;
 
 public class TAMItemFactory {
 	
-	public ITAMNode createNode(TAMGraph graph, int type, int x, int y, String text) {
+	public ITAMNode createNode(TAMGraph graph, int type, float x, float y, String text) {
 		
 		ITAMNode node = null;
 		

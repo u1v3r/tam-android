@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
@@ -25,7 +26,7 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 	private TAMGraph graph;
 
 	public TAMEditorZoomControl(TAMEditor editor, int id) {
-		setEditor(editor);
+		super(editor);
 		this.zoomControls = (ZoomControls) ((FragmentActivity) editor.getContext()).findViewById(R.id.zoom_controls);
 		System.out.println(zoomControls);
 		this.graph = (TAMGraph) getEditor();

@@ -6,24 +6,29 @@ import java.util.List;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.GestureDetector.OnGestureListener;
+import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 
-public class TAMEditorGesturesControl extends TAMEditorAbstractControl implements OnGestureListener {
+public class TAMEditorGesturesControl extends TAMEditorAbstractControl implements OnGestureListener,AddNodeDialogListener {
+		
 	
 	private static final String TAG = "TAMEditorGesturesControl";
 	
-	private List<ITAMNode> selectedNodesList;	
+	private List<TAMEditorNode> selectedNodesList;	
 	
 	private GestureDetector gDetector;	
 	
+	private boolean creatingNewNode = false;
+	
 	public TAMEditorGesturesControl(ITAMEditor editor) {
-		setEditor(editor);
+		super(editor);
 		gDetector = new GestureDetector(editor.getContext(),this);
-		selectedNodesList = new ArrayList<ITAMNode>();
+		selectedNodesList = new ArrayList<TAMEditorNode>();
 	}
 		
 	@Override
@@ -44,20 +49,23 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 	}
 
 	public void onSelectNodeEvent(ITAMNode node) {		
+		TAMEditorNode selectedNode = (TAMEditorNode)node.getHelpObject();
 		
-		Log.d(TAG,"select node: " + node.getText());
+		Log.d(TAG,"select node: " + selectedNode.getCore().getText());
 		
 		synchronized (selectedNodesList) {
-			selectedNodesList.add(node);
+			selectedNodesList.add(selectedNode);
 		};
 	}
 
 	public void onUnselectNodeEvent(ITAMNode node) {
 		
-		Log.d(TAG,"unselect node: " + node.getText());
+		TAMEditorNode selectedNode = (TAMEditorNode)node.getHelpObject();
+		
+		Log.d(TAG,"unselect node: " + selectedNode.getCore().getText());
 		
 		synchronized (selectedNodesList) {
-			selectedNodesList.remove(node);
+			selectedNodesList.remove(selectedNode);
 		};
 	}
 
@@ -90,11 +98,44 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl implement
 	public void onLongPress(MotionEvent e) {
 		Log.d(TAG,"onLongPress");
 		
+		// musi byt vybrany prave jeden uzol
+		if(selectedNodesList.size() == 1){
+			
+			creatingNewNode = true;
+			
+			TAMEditorNode selectedNode = selectedNodesList.get(0);
+			/*
+			for (ITAMNode node : selectedNodesList) {
+				selectedNode = node;
+			}*/
+			
+					
+			TAMEditorNode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+						
+			selectedNode.getCore().setSelected(false);
+			newNode.getCore().setSelected(true);
+			
+			editor.invalidate();
+			
+			
+			//showAddNodeDialog(selectedNode);
+			
+			
+		}	
+		
+		
 	}
 
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 		Log.d(TAG,"onFling");
+		
+		
 		return true;
+	}
+
+	public void onFinishAddChildNodeDialog(String title) {
+		// TODO Auto-generated method stub
+		
 	}
 }

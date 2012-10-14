@@ -1,22 +1,30 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import java.util.List;
-
 import android.graphics.Canvas;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode.OnNodeSelectListener;
 
 public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
 	
-	private boolean enabled;
-	private ITAMEditor editor;
+	protected ITAMEditor editor;
+	protected FragmentActivity activity;
 	
+	private boolean enabled;
 		
-	public void setEditor(ITAMEditor editor){
+	public TAMEditorAbstractControl(ITAMEditor editor) {
 		this.editor = editor;
+		this.activity = (FragmentActivity)editor.getContext();
+	}
+	
+	public void setEditor(ITAMEditor editor){
+		this.editor = editor;		
 	}
 	
 	public ITAMEditor getEditor(){
@@ -30,10 +38,23 @@ public abstract class TAMEditorAbstractControl implements OnNodeSelectListener{
 	public boolean isEnabled() {
 		return enabled;
 	}
+	
+	/**
+	 * Zobrazí dialog na pridanie uzlu
+	 * @param parent 
+	 */
+	protected void showAddNodeDialog(TAMEditorNode parent) {
+			
+		FragmentManager fm = activity.getSupportFragmentManager();		
+		AddNodeDialog dialog = new AddNodeDialog(parent, this);
+		dialog.show(fm, "fragment_add_node");
+		
+	}
 
 	public abstract boolean onOptionsItemSelected(MenuItem item);
 
 	public abstract void onDraw(Canvas canvas);
 
 	public abstract void onTouchEvent(MotionEvent e);
+
 }

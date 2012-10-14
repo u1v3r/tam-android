@@ -404,11 +404,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		}
 	}
 	
-	@Override
-	public boolean onDragEvent(DragEvent event) {
-		//System.out.println(event);
-		return super.onDragEvent(event);
-	}
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {

@@ -2,6 +2,8 @@ package cz.vutbr.fit.testmind.graphics;
 
 import java.util.List;
 
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
+
 import android.graphics.Point;
 import android.graphics.Rect;
 
@@ -12,7 +14,7 @@ public interface ITAMNode extends ITAMItem {
 		public void onUnselectNodeEvent(ITAMNode node);
 		public void onMoveNodeEvent(ITAMNode node);
 	}
-	
+		
 	public final int NODE_TYPE_RECTANGLE = 1;
 	public final int NODE_TYPE_ROUND_RECTANGLE = 2;
 	

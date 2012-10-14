@@ -1,11 +1,17 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.ITAMNode;
 import android.graphics.Canvas;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 
 public class TAMEditorHidingControl extends TAMEditorAbstractControl {
+
+	public TAMEditorHidingControl(ITAMEditor editor) {
+		super(editor);
+	}
 
 	private static final String TAG = "TAMEditorHidingControl";
 

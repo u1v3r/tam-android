@@ -46,6 +46,8 @@ public interface ITAMEditor {
 
 	public int getHeight();
 	
+	public void invalidate();
+	
 	public boolean onOptionsItemSelected(MenuItem item);
 	
 	public void onSelectEvent(ITAMNode node);

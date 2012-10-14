@@ -26,7 +26,7 @@ public class TAMEditorNode {
 	private boolean hasVisibleChilds;
 	
 	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type) {
-		this(editor, x, type, title, body, type, getNewSequenceNumber());
+		this(editor, x, y, title, body, type, getNewSequenceNumber());
 	}	
 	
 	public TAMEditorNode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
@@ -38,14 +38,13 @@ public class TAMEditorNode {
 		this.core = editor.getItemFactory().createNode(editor, type, x, y, title);
 		this.core.setHelpObject(this);
 		this.core.setSelectEventListener(new ITAMNode.OnNodeSelectListener() {
-			
-			public void onSelectNodeEvent(ITAMNode node) {				
-				getEditor().onSelectEvent(node);			
+
+			public void onSelectNodeEvent(ITAMNode tamAbstractNode) {
+				getEditor().onSelectEvent(core);
 			}
 
-			public void onUnselectNodeEvent(ITAMNode node) {
-				getEditor().onUnselectEvent(node);
-				
+			public void onUnselectNodeEvent(ITAMNode tamAbstractNode) {
+				getEditor().onUnselectEvent(core);				
 			}
 
 			public void onMoveNodeEvent(ITAMNode node) {
