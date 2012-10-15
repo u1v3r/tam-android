@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
@@ -30,7 +31,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	
 	private List<ITAMENode> listOfENodes;
 	private List<ITAMEConnection> listOfEConnections;
-	protected List<ITAMMenuListener> listOfMenuListeners;
+	//protected List<ITAMMenuListener> listOfMenuListeners;
 			
 	public TAMEditor(Context context) {
 		this(context, null);
@@ -41,7 +42,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		
 		this.listOfENodes = new ArrayList<ITAMENode>();
 		this.listOfEConnections = new ArrayList<ITAMEConnection>();
-		this.listOfMenuListeners = new ArrayList<ITAMMenuListener>();
+		//this.listOfMenuListeners = new ArrayList<ITAMMenuListener>();
 	}
 	
 	public void initialize() {
@@ -101,16 +102,18 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		listOfEConnections.add(connection);
 		return connection;
 	}
-
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		boolean selected = false;
 		
-		for(ITAMMenuListener control : listOfMenuListeners) {
+		for(ITAMMenuListener control : getListOfMenuControls()) {
 			selected = control.onOptionsItemSelected(item);
 		}
 		
 		return selected;
 	}
+
+	
 	
 }

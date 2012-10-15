@@ -61,8 +61,7 @@ public class MainActivity extends FragmentActivity {
     }
     
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	
+    public boolean onOptionsItemSelected(MenuItem item) {    	
     	EventObjects.editor.onOptionsItemSelected(item);
 		return super.onOptionsItemSelected(item);
 		    	

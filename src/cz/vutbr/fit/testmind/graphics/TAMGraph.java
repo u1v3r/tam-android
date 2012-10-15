@@ -3,6 +3,7 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl.ZoomInOutEventListener;
 
 import android.content.ClipData;
@@ -47,6 +48,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	protected List<ITAMItemListener> listOfItemControls;
 	protected List<ITAMGestureListener> listOfGestureControls;
 	protected List<ITAMTouchListener> listOfTouchControls;
+	protected List<ITAMMenuListener> listOfMenuControls;
 	
 	public interface ITAMDrawListener {
 		public void onDraw(Canvas canvas);
@@ -91,6 +93,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		listOfItemControls = new ArrayList<ITAMItemListener>();
 		listOfGestureControls = new ArrayList<ITAMGestureListener>();
 		listOfTouchControls = new ArrayList<ITAMTouchListener>();
+		listOfMenuControls = new ArrayList<ITAMMenuListener>();
+		
 		
 		actualPoint = new Point();	
 		setLongClickable(true);		
@@ -162,6 +166,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 */
 	public List<ITAMTouchListener> getListOfTouchControls() {
 		return listOfTouchControls;
+	}
+	
+	public List<ITAMMenuListener> getListOfMenuControls(){
+		return listOfMenuControls;
 	}
 
 	/**

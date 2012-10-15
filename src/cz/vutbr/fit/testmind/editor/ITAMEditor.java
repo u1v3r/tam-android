@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.MenuItem;
+import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
@@ -47,6 +48,8 @@ public interface ITAMEditor {
 	public List<ITAMDrawListener> getListOfDrawControls();
 
 	public List<ITAMItemListener> getListOfItemControls();
+	
+	public List<ITAMMenuListener> getListOfMenuControls();
 	
 	// Surface View functions //
 

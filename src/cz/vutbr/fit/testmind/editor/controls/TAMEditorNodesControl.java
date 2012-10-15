@@ -3,6 +3,7 @@ package cz.vutbr.fit.testmind.editor.controls;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
@@ -23,7 +24,8 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
  * @author Radovan Dvorsky
  *
  */
-public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener, ITAMMenuListener {
+public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener,
+	ITAMMenuListener {
 		
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
@@ -34,6 +36,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	public TAMEditorNodesControl(ITAMEditor editor) {
 		super(editor);
 		createDefaultRootNode();
+		
+		editor.getListOfMenuControls().add(this);
 	}
 	
 
@@ -153,7 +157,6 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
 		
 		switch (item.getItemId()) {
 			case MenuItems.add:		
