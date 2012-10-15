@@ -1,12 +1,12 @@
 package cz.vutbr.fit.testmind.graphics;
 
-public interface ITAMConnection extends ITAMItem {
+public interface ITAMGConnection extends ITAMGItem {
 
 	public final int CONNECTION_TYPE_DEFAULT = 1;
 	
-	public ITAMNode getParentNode();
+	public ITAMGNode getParentNode();
 	
-	public ITAMNode getChildNode();
+	public ITAMGNode getChildNode();
 	
 	public void setSelectedPoint(float x, float y);
 	

@@ -8,14 +8,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 
-public class TAMDefaultConnection implements ITAMConnection {
+public class TAMGDefaultConnection implements ITAMGConnection {
 	
 	private static final int type = CONNECTION_TYPE_DEFAULT;
 	private static final int HIGHLIGHT_COLOR = 0x7f040004;
 	private int background;
 	private int highlightColor;
-	private ITAMNode parent;
-	private ITAMNode child;
+	private ITAMGNode parent;
+	private ITAMGNode child;
 	private TAMGraph graph;
 	private Object object;
 	
@@ -31,7 +31,7 @@ public class TAMDefaultConnection implements ITAMConnection {
 	
 	public static int OFFSET = 10;
 
-	public TAMDefaultConnection(TAMGraph graph, ITAMNode parent, ITAMNode child) {
+	public TAMGDefaultConnection(TAMGraph graph, ITAMGNode parent, ITAMGNode child) {
 		this.graph = graph;
 		this.parent = parent;
 		this.child = child;
@@ -50,11 +50,11 @@ public class TAMDefaultConnection implements ITAMConnection {
 		return type;
 	}
 	
-	public ITAMNode getParentNode() {
+	public ITAMGNode getParentNode() {
 		return parent;
 	}
 
-	public ITAMNode getChildNode() {
+	public ITAMGNode getChildNode() {
 		return child;
 	}
 

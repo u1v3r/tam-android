@@ -1,68 +1,79 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import cz.vutbr.fit.testmind.MainActivity;
-import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import android.graphics.Canvas;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ZoomControls;
+import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class TAMEditorZoomControl extends TAMEditorAbstractControl {
+	
+	public interface ZoomInOutEventListener {
+		
+		void onZoomIn();
+		void onZoomOut();
+		
+	}
 	
 	private ZoomControls zoomControls;
 	private TAMGraph graph;
 
 	public TAMEditorZoomControl(TAMEditor editor, int id) {
-		setEditor(editor);
+		super(editor);
 		this.zoomControls = (ZoomControls) ((FragmentActivity) editor.getContext()).findViewById(R.id.zoom_controls);
 		System.out.println(zoomControls);
 		this.graph = (TAMGraph) getEditor();
 		addListeners();
 	}
-	
+	/*
 	public void zoom(float sx, float sy, float px, float py) {
 		getEditor().zoom(sx, sy, px, py);
 	}
+	*/
 	
 	private void addListeners() {
 
 		zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				//controller.zoomIn(EventObjects.editor);
-				graph.zoom(graph.sx*2, graph.sy*2, graph.getWidth()*0.5f, graph.getHeight()*0.5f);
+				zoomIn(graph);				
 			}
 		});
         zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				graph.zoom(graph.sx*0.5f, graph.sy*0.5f, graph.getWidth()*0.5f, graph.getHeight()*0.5f);
+				zoomOut(graph);				
 			}
 		});
 	}
 
-
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		return false;
+	private void zoomIn(ZoomInOutEventListener object){
+		object.onZoomIn();		
+	}
+	
+	private void zoomOut(ZoomInOutEventListener object){
+		object.onZoomOut();		
 	}
 
-	@Override
-	public void onDraw(Canvas canvas) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTouchEvent(MotionEvent e) {
+	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	public void onUnselectNodeEvent(ITAMGNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMoveNodeEvent(ITAMGNode node) {
+		// TODO Auto-generated method stub
+		
+	}
 }

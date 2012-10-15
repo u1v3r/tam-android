@@ -20,10 +20,11 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
-import cz.vutbr.fit.testmind.graphics.TAMRectangleNode;
 import cz.vutbr.fit.testmind.io.FreeMind;
+import cz.vutbr.fit.testmind.graphics.TAMGRectangleNode;
 
 
 /**
@@ -32,19 +33,16 @@ import cz.vutbr.fit.testmind.io.FreeMind;
  * @author Radovan Dvorsky
  *
  */
-public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener {
+public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener, ITAMMenuListener {
 		
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
 	private static final String TAG = "TAMEditorNodes";
 	private static final String INTENT_MIME_TYPE = "text/xml";
 		
-	private ITAMEditor editor;
-	private FragmentActivity activity;
-	
+
 	public TAMEditorNodesControl(ITAMEditor editor) {
-		this.editor = editor;
-		this.activity = (FragmentActivity)this.editor.getContext();
+		super(editor);
 		createDefaultRootNode();
 	}
 	
@@ -59,7 +57,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		
 		Point position = new Point(this.editor.getWidth()/2, this.editor.getHeight()/2);
 		
-		editor.createRoot(TAMRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
+		editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
 				DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);	
 		
 	}
@@ -76,30 +74,19 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			Toast.makeText(editor.getContext(), 
 					R.string.node_not_selected, Toast.LENGTH_LONG).show();
 		} else {
-			TAMEditorNode parent = (TAMEditorNode) editor.getLastSelectedNode().getHelpObject();
+			TAMENode parent = (TAMENode) editor.getLastSelectedNode().getHelpObject();
 			showAddNodeDialog(parent);
 		}
 	}
-	
-	/**
-	 * Zobrazí dialog na pridanie uzlu
-	 * @param parent 
-	 */
-	private void showAddNodeDialog(TAMEditorNode parent) {
-			
-		FragmentManager fm = activity.getSupportFragmentManager();		
-		AddNodeDialog dialog = new AddNodeDialog(parent, this);
-		dialog.show(fm, "fragment_add_node");
-		
-	}
-	
+
+
 	/**
 	 * Prida child uzol k parent uzlu s automatickym umiestnenim
 	 * 
 	 * @param title Titulok uzlu
 	 * @param parent Rodicovsky uzol 
 	 */
-	public void addChildNode(String title, TAMEditorNode parent) {
+	public void addChildNode(String title, TAMENode parent) {
 			
 		/*
 		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
@@ -115,7 +102,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 * @param body Telo uzlu
 	 * @param parent Rodicovsky uzol 
 	 */
-	public void addChildNode(String title, String body, TAMEditorNode parent) {
+	public void addChildNode(String title, String body, TAMENode parent) {
 			
 		/*
 		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
@@ -132,26 +119,13 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 * @param parent Rodicovsky uzol 
 	 * @param position Pozicia child uzlu
 	 */
-	public void addChildNode(String title, String body, TAMEditorNode parent, Point position){		
+	public void addChildNode(String title, String body, TAMENode parent, Point position){		
 		
 		int posX = position.x;
 		int posY = position.y;
 		
 		parent.addChild(posX, posY, title, body);
 	}
-
-
-	public void zoomIn(ZoomEventListener graph) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void zoomOut(ZoomEventListener graph) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 	/**
 	 *  Zobrazi file manager s moznostou vyberu suboru
@@ -179,13 +153,11 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 	
 	public void onFinishAddChildNodeDialog(String title) {
-		addChildNode(title, (TAMEditorNode) editor.getLastSelectedNode().getHelpObject());
+		addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
 	}
 
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+/*		
 		if(item.getItemId() == MenuItems.add) {
 			showAddChildNodeDialog();
 			return true;
@@ -204,21 +176,48 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		} else {
 			return false;
 		}
+*/		
+		switch (item.getItemId()) {
+			case MenuItems.add:		
+				showAddChildNodeDialog();
+				return true;
+			case MenuItems.edit:
+				
+				break;
+			case MenuItems.delete:
+							
+				break;
+			case MenuItems.save:
+				
+				break;
+			case MenuItems.importFile:
+				importFile();
+				return true;
+			case MenuItems.settings:
+	
+				break;
+			default: 
+				return false;    	
+    	} 	
+    	
+    	return true;		
 	}
 
 
-	@Override
-	public void onDraw(Canvas canvas) {
-		// do nothing //
-	}
-
-
-	@Override
-	public void onTouchEvent(MotionEvent e) {
+	public void onSelectNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
-	
+
+
+	public void onUnselectNodeEvent(ITAMGNode node) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onMoveNodeEvent(ITAMGNode node) {
+		// TODO Auto-generated method stub
+		
+	}	
 }

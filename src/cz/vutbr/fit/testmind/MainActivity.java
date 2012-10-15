@@ -7,13 +7,8 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 import android.widget.ZoomControls;
-import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 
 public class MainActivity extends FragmentActivity {
 	

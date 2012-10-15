@@ -1,17 +1,17 @@
 package cz.vutbr.fit.testmind.graphics;
 
 
-public class TAMItemFactory {
+public class TAMGItemFactory {
 	
-	public ITAMNode createNode(TAMGraph graph, int type, int x, int y, String text) {
+	public ITAMGNode createNode(TAMGraph graph, int type, float x, float y, String text) {
 		
-		ITAMNode node = null;
+		ITAMGNode node = null;
 		
 		float dx = graph.px-graph.px*graph.sx;
 		float dy = graph.py-graph.py*graph.sy;
 		
-		if(type == ITAMNode.NODE_TYPE_RECTANGLE) {
-			node = new TAMRectangleNode(graph, (int)((x-dx)/graph.sx), (int)((y-dy)/graph.sy), text);
+		if(type == ITAMGNode.NODE_TYPE_RECTANGLE) {
+			node = new TAMGRectangleNode(graph, (int)((x-dx)/graph.sx), (int)((y-dy)/graph.sy), text);
 		}
 		
 		graph.listOfNodes.add(node);
@@ -20,12 +20,12 @@ public class TAMItemFactory {
 		return node;
 	}
 	
-	public ITAMConnection createConnection(TAMGraph graph, ITAMNode parent, ITAMNode child, int type) {
+	public ITAMGConnection createConnection(TAMGraph graph, ITAMGNode parent, ITAMGNode child, int type) {
 		
-		ITAMConnection connection = null;
+		ITAMGConnection connection = null;
 		
-		if(type == ITAMConnection.CONNECTION_TYPE_DEFAULT) {
-			connection = new TAMDefaultConnection(graph, parent, child);
+		if(type == ITAMGConnection.CONNECTION_TYPE_DEFAULT) {
+			connection = new TAMGDefaultConnection(graph, parent, child);
 		}
 		
 		graph.listOfConnections.add(connection);

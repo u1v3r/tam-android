@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorAbstractControl;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 
 public class AddNodeDialog extends DialogFragment implements OnEditorActionListener{
 	
@@ -28,7 +28,7 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 	private Button cancelButton;
 	private Button okButton;
 	
-	private TAMEditorNode parent;
+	private TAMENode parent;
 	private AddNodeDialogListener control;
 	
 	private View.OnClickListener buttonsHandler = new View.OnClickListener() {
@@ -43,7 +43,7 @@ public class AddNodeDialog extends DialogFragment implements OnEditorActionListe
 		}
 	};
 			
-	public AddNodeDialog(TAMEditorNode parent, TAMEditorAbstractControl control) {
+	public AddNodeDialog(TAMENode parent, TAMEditorAbstractControl control) {
 		this.parent = parent;
 		this.control = (AddNodeDialogListener) control;
 	}

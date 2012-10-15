@@ -3,6 +3,7 @@ package cz.vutbr.fit.testmind.graphics;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.shapes.RectShape;
+import android.util.Log;
 
 /**
  * Default rectangle node.
@@ -10,14 +11,16 @@ import android.graphics.drawable.shapes.RectShape;
  * @author jurij
  *
  */
-public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
+public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	
-	public static final int TEXT_SIZE = 64;
+	private static final String TAG = "TAMRectangleNode";
 	private static final int type = NODE_TYPE_RECTANGLE;
+	
+	public static final int TEXT_SIZE = 64;	
 	public static final int OFFSET_X = 80;
 	public static final int OFFSET_Y = 80;
-	
-	public TAMRectangleNode(TAMGraph graph, int x, int y, String text) {
+		
+	public TAMGRectangleNode(TAMGraph graph, int x, int y, String text) {
 		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
 	}
 	
@@ -48,7 +51,11 @@ public class TAMRectangleNode extends TAMAbstractNode implements ITAMNode {
 	}
 
 	public void move(int dx, int dy) {
-		
+		/*
+		Log.d(TAG,"Bounds(top,right,bottom,left): " + 
+				this.getBounds().top + "," + this.getBounds().right + "," +
+				this.getBounds().bottom + "," + this.getBounds().left);
+		*/
 		setPosition(getPosition().x+dx, getPosition().y+dy);
 		
 		Rect rect = this.getBounds();

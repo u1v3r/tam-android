@@ -9,8 +9,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.util.Log;
 import android.util.Xml;
 
@@ -20,14 +19,14 @@ import android.util.Xml;
 public class FreeMind2
 {
 	TAMEditor editor = null;
-    private TAMEditorNode rootNode = null;
+    private TAMENode rootNode = null;
     private String source = "/data/testMind/test.mm";//null;
     
     static final String MAP = "map";
     static final String NODE = "node";
     static final int MAX_TITLE_LENGTH = 10;
    
-    public TAMEditorNode getMindMap() throws XmlPullParserException, IOException
+    public TAMENode getMindMap() throws XmlPullParserException, IOException
     {
     	if (rootNode == null) {
         	if (source == null) {
@@ -42,7 +41,7 @@ public class FreeMind2
         return this.rootNode;
     }
     
-    public TAMEditorNode getMindMap(String source) throws XmlPullParserException, IOException {
+    public TAMENode getMindMap(String source) throws XmlPullParserException, IOException {
     	this.source = source;
     	importXML();
     	return this.rootNode;
@@ -71,9 +70,9 @@ public class FreeMind2
         }
 	}
 
-	private TAMEditorNode getRoot(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private TAMENode getRoot(XmlPullParser parser) throws XmlPullParserException, IOException {
 		editor = new TAMEditor(null);
-		TAMEditorNode rootNodeEditor = null;
+		TAMENode rootNodeEditor = null;
 		
 	    parser.require(XmlPullParser.START_TAG, null, MAP);
 
@@ -88,7 +87,7 @@ public class FreeMind2
 	    return rootNodeEditor;
 	}
 
-	private void readNode(TAMEditorNode nodeEditor, XmlPullParser parser) throws IOException, XmlPullParserException {
+	private void readNode(TAMENode nodeEditor, XmlPullParser parser) throws IOException, XmlPullParserException {
 	    parser.require(XmlPullParser.START_TAG, null, NODE);
 	    String tag = parser.getName();
 	    if (tag.equals(NODE)) {

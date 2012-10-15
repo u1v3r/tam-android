@@ -2,23 +2,23 @@ package cz.vutbr.fit.testmind.editor.items;
 
 import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.graphics.ITAMConnection;
+import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 
-public class TAMEditorConnection {
+public class TAMEConnection {
 	
 	private int id;
 	private ITAMEditor editor;
-	private ITAMConnection core;
-	private TAMEditorNode parent;
-	private TAMEditorNode child;
+	private ITAMGConnection core;
+	private TAMENode parent;
+	private TAMENode child;
 	private static int counter = 0;
-	private static int defaultType = ITAMConnection.CONNECTION_TYPE_DEFAULT;
+	private static int defaultType = ITAMGConnection.CONNECTION_TYPE_DEFAULT;
 	
-	public TAMEditorConnection(TAMEditor editor, TAMEditorNode parent, TAMEditorNode child, int type) {
+	public TAMEConnection(TAMEditor editor, TAMENode parent, TAMENode child, int type) {
 		this(editor, parent, child, type, getnewSequenceNumber());
 	}
 	
-	public TAMEditorConnection(TAMEditor editor, TAMEditorNode parent, TAMEditorNode child, int type, int id) {
+	public TAMEConnection(TAMEditor editor, TAMENode parent, TAMENode child, int type, int id) {
 		this.id = id;
 		this.editor = editor;
 		this.parent = parent;
@@ -32,15 +32,15 @@ public class TAMEditorConnection {
 		return id;
 	}
 	
-	public ITAMConnection getCore() {
+	public ITAMGConnection getCore() {
 		return core;
 	}
 	
-	public TAMEditorNode getParent() {
+	public TAMENode getParent() {
 		return parent;
 	}
 	
-	public TAMEditorNode getChild() {
+	public TAMENode getChild() {
 		return child;
 	}
 
@@ -60,7 +60,7 @@ public class TAMEditorConnection {
 	}
 
 	public static void setDefaultType(int defaultConnectionType) {
-		TAMEditorConnection.defaultType = defaultConnectionType;
+		TAMEConnection.defaultType = defaultConnectionType;
 	}
 	
 	

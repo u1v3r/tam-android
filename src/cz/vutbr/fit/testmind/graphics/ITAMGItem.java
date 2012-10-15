@@ -3,7 +3,7 @@ package cz.vutbr.fit.testmind.graphics;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public interface ITAMItem {
+public interface ITAMGItem {
 	
 	public int getType();
 	

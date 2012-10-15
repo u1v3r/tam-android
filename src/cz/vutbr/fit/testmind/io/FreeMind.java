@@ -9,8 +9,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
-
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.util.Log;
 import android.util.Xml;
 
@@ -51,7 +50,7 @@ public class FreeMind
     
     private void createTree() {
     	editor = new TAMEditor(null);
-    	TAMEditorNode rootNodeEditor = editor.createRoot(0, 0, 0, rootNode.getName(), rootNode.getContent());
+    	TAMENode rootNodeEditor = editor.createRoot(0, 0, 0, rootNode.getName(), rootNode.getContent());
     	
     	for (IXMLNode child : rootNode.getChilds()) {
     		buildTree(rootNodeEditor.addChild(0, 0, child.getName(), child.getContent()), child);
@@ -59,7 +58,7 @@ public class FreeMind
     	}
     }
     
-    private void buildTree(TAMEditorNode nodeEditor, IXMLNode node) {
+    private void buildTree(TAMENode nodeEditor, IXMLNode node) {
     	for (IXMLNode child : node.getChilds()) {
     		buildTree(nodeEditor.addChild(0, 0, child.getName(), child.getContent()), child);
     		Log.d("node", child.getName());
