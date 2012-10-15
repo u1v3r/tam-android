@@ -30,7 +30,7 @@ public class FreeMind
     	if (rootNode == null) {
         	if (source == null) {
         		//source = "/data/testMind/test.mm";
-        		//importXML(); // pro testování
+        		//importXML(); // pro testovï¿½nï¿½
         		// TODO: error -> missing source
         	} else {
         		importXML();
@@ -50,17 +50,35 @@ public class FreeMind
     
     private void createTree() {
     	editor = new TAMEditor(null);
+    	
+    	
+    	
+    	/* TODO: TREBA OPRAVIT
     	TAMENode rootNodeEditor = editor.createRoot(0, 0, 0, rootNode.getName(), rootNode.getContent());
+    	*/
+    	
     	
     	for (IXMLNode child : rootNode.getChilds()) {
+    		
+    		
+    		/* TODO: TREBA OPRAVIT
     		buildTree(rootNodeEditor.addChild(0, 0, child.getName(), child.getContent()), child);
+    		*/
+    		
+    		
     		Log.d("root", child.getName());
     	}
     }
     
     private void buildTree(TAMENode nodeEditor, IXMLNode node) {
     	for (IXMLNode child : node.getChilds()) {
+    		
+    		
+    		
+    		/* TODO: TREBA OPRAVIT
     		buildTree(nodeEditor.addChild(0, 0, child.getName(), child.getContent()), child);
+    		*/
+    		
     		Log.d("node", child.getName());
     	}
     }
