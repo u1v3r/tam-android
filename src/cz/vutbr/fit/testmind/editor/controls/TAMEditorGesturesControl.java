@@ -142,6 +142,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 		if(selectedNodesList.size() == 1){
 			selectedNodesList.get(0).getGui().setText(title);			
 		}
+		editor.invalidate();
 				
 		
 	}
