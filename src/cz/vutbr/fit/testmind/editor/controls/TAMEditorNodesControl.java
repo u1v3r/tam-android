@@ -1,5 +1,9 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.io.IOException;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -19,6 +23,7 @@ import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMEditorNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.graphics.TAMRectangleNode;
+import cz.vutbr.fit.testmind.io.FreeMind;
 
 
 /**
@@ -181,8 +186,20 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		if(item.getItemId() == MenuItems.add)	 {
+		if(item.getItemId() == MenuItems.add) {
 			showAddChildNodeDialog();
+			return true;
+		} else if(item.getItemId() == MenuItems.importFile) {
+			FreeMind freeMind = new FreeMind();
+			try {
+				freeMind.getMindMap();
+			} catch (XmlPullParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return true;
 		} else {
 			return false;
