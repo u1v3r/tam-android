@@ -42,5 +42,7 @@ public interface ITAMGItem {
 	public void setHelpObject(Object object);
 	
 	public Object getHelpObject();
+	
+	public void dispose();
 
 }

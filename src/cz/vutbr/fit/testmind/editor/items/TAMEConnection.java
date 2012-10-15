@@ -3,56 +3,39 @@ package cz.vutbr.fit.testmind.editor.items;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
 
-public class TAMEConnection {
+public class TAMEConnection implements ITAMEConnection {
 	
-	private int id;
 	private ITAMEditor editor;
-	private ITAMGConnection core;
-	private TAMENode parent;
-	private TAMENode child;
-	private static int counter = 0;
+	private ITAMGConnection gui;
+	private TAMPConnection profile;
 	private static int defaultType = ITAMGConnection.CONNECTION_TYPE_DEFAULT;
 	
-	public TAMEConnection(TAMEditor editor, TAMENode parent, TAMENode child, int type) {
-		this(editor, parent, child, type, getnewSequenceNumber());
+	public TAMEConnection(TAMEditor editor, TAMPConnection profile) {
+		this(editor, profile, defaultType);
 	}
 	
-	public TAMEConnection(TAMEditor editor, TAMENode parent, TAMENode child, int type, int id) {
-		this.id = id;
+	public TAMEConnection(TAMEditor editor, TAMPConnection profile, int type) {
 		this.editor = editor;
-		this.parent = parent;
-		this.child = child;
-		this.core = editor.getItemFactory().createConnection(editor, parent.getCore(), child.getCore(), type);
-		this.core.setHelpObject(this);
-		this.parent.getListOfChildNodes().add(child);
+		this.profile = profile;
+		this.gui = editor.getItemFactory().createConnection(editor,
+				(ITAMGNode) (((ITAMEItem) (profile.getParent().getEReference(editor))).getGui()),
+				(ITAMGNode) (((ITAMEItem) (profile.getChild().getEReference(editor))).getGui()), type);
+		this.gui.setHelpObject(this);
 	}
 	
-	public int getId() {
-		return id;
-	}
-	
-	public ITAMGConnection getCore() {
-		return core;
-	}
-	
-	public TAMENode getParent() {
-		return parent;
-	}
-	
-	public TAMENode getChild() {
-		return child;
-	}
-
 	public ITAMEditor getEditor() {
 		return editor;
 	}
+	
+	public TAMPConnection getProfile() {
+		return profile;
+	}
 
-	public static int getnewSequenceNumber() {
-		
-		counter++;
-		
-		return counter;
+	public ITAMGConnection getGui() {
+		return gui;
 	}
 
 	public static int getDefaultType() {
@@ -62,7 +45,12 @@ public class TAMEConnection {
 	public static void setDefaultType(int defaultConnectionType) {
 		TAMEConnection.defaultType = defaultConnectionType;
 	}
-	
-	
+
+	public void dispose() {
+		gui.dispose();
+		gui = null;
+		editor = null;
+		profile = null;
+	}
 
 }

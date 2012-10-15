@@ -86,7 +86,7 @@ public class Serializer
         
         insertGraph(db, editor);
         
-        for (Iterator<TAMENode> i = editor.getListOfNodes().iterator(); i.hasNext(); )
+        /*for (Iterator<TAMENode> i = editor.getListOfNodes().iterator(); i.hasNext(); )
         {
              TAMENode currentNode = (TAMENode) i.next();
              insertNode(db, currentNode);
@@ -96,7 +96,7 @@ public class Serializer
         {
              TAMEConnection currentConnection = (TAMEConnection) i.next();
              insertConnection(db, currentConnection);
-        }   
+        } */  
         
         db.close();
     }
@@ -109,12 +109,12 @@ public class Serializer
     {
         SQLiteDatabase db = openDB();
         
-        TAMEItemFactory factory = editor.getFactory();
+        /*TAMEItemFactory factory = editor.getFactory();
         
         SparseArray<TAMENode> nodes = importNodes(db, factory);
         
         importGraph(db, editor, nodes);
-        importConnections(db, factory, nodes);
+        importConnections(db, factory, nodes);*/
         
         db.close();
     }
@@ -154,7 +154,7 @@ public class Serializer
     {
         
         ContentValues values = new ContentValues();
-        values.put("root", editor.getRoot().getId());
+        //values.put("root", editor.getRoot().getId());
         // TODO values.put("nodeCounter", );
         // TODO values.put("connectionCounter", );
         values.put("sx", editor.getScaleX());
@@ -173,12 +173,12 @@ public class Serializer
      */
     private void insertNode(SQLiteDatabase db, TAMENode node)
     {
-        ITAMGNode core = node.getCore();
+        ITAMGNode core = node.getGui();
         
         ContentValues values = new ContentValues();
-        values.put("id", node.getId());
+        //values.put("id", node.getId());
         values.put("title", core.getText());
-        values.put("body", node.getBody());
+        //values.put("body", node.getBody());
         values.put("type", core.getType());
         Point position = core.getPosition();
         values.put("x", position.x);
@@ -203,10 +203,10 @@ public class Serializer
     {
         ContentValues values = new ContentValues();
  
-        ITAMGConnection core = connection.getCore();
-        values.put("id", connection.getId());
-        values.put("parent", connection.getParent().getId());
-        values.put("child", connection.getChild().getId());
+        ITAMGConnection core = connection.getGui();
+        //values.put("id", connection.getId());
+        //values.put("parent", connection.getParent().getId());
+        //values.put("child", connection.getChild().getId());
         values.put("type", core.getType());
         values.put("background", core.getBackground());
         values.put("highlightColor", core.getHighlightColor());
@@ -251,15 +251,15 @@ public class Serializer
             int type = cur.getInt(indexes.get("type"));
             int x = cur.getInt(indexes.get("x"));
             int y = cur.getInt(indexes.get("y"));
-            TAMENode node = factory.importNode(id, x, y, title, body, type);
-            ITAMGNode core = node.getCore();
+            /*TAMENode node = factory.importNode(id, x, y, title, body, type);
+            ITAMGNode core = node.getGui();
             node.setChildsVisible(intToboolean(cur.getInt(indexes.get("hasVisibleChilds"))));
             core.setBackground(cur.getInt(indexes.get("background")));
             core.setForeground(cur.getInt(indexes.get("foreground")));
             core.setBackgroundStroke(cur.getInt(indexes.get("backgroundStroke")));
-            core.setHighlightColor(cur.getInt(indexes.get("highlightColor")));
+            core.setHighlightColor(cur.getInt(indexes.get("highlightColor")));*/
             
-            result.append(id, node);
+            //result.append(id, node);
         }
         
         return result;
@@ -282,9 +282,9 @@ public class Serializer
             TAMENode parent = nodes.get(cur.getInt(indexes.get("parent")));
             TAMENode child = nodes.get(cur.getInt(indexes.get("child")));
             int type = cur.getInt(indexes.get("type"));
-            ITAMGConnection core = factory.importConnection(id, parent, child, type).getCore();
+            /*ITAMGConnection core = factory.importConnection(id, parent, child, type).getGui();
             core.setBackground(cur.getInt(indexes.get("background")));
-            core.setHighlightColor(cur.getInt(indexes.get("highlightColor")));
+            core.setHighlightColor(cur.getInt(indexes.get("highlightColor")));*/
         }        
     }
     

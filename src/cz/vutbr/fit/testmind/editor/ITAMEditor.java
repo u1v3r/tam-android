@@ -4,59 +4,59 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
-import android.view.View;
-import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
-import cz.vutbr.fit.testmind.editor.items.TAMEItemFactory;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
+import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
+import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public interface ITAMEditor {
+	
+	public ITAMENode createNode(TAMPNode profile, int x, int y);
 
-	public TAMENode createRoot(int type, int x, int y,
-			String title, String body);
+	public ITAMENode createNode(TAMPNode profile, int x, int y, int type);
+
+	public ITAMEConnection createConnection(TAMPConnection profile);
+
+	public ITAMEConnection createConnection(TAMPConnection profile, int type);
 
 	public boolean containsNode(int id);
 
-	public TAMENode getNode(int id);
-
 	public boolean containsConnection(int id);
 
-	public TAMEConnection getConnection(int id);
+	public List<ITAMENode> getListOfENodes();
 
-	public TAMENode getRoot();
-		
-	public TAMEItemFactory getFactory();
-
-	public List<TAMENode> getListOfNodes();
-
-	public List<TAMEConnection> getListOfConnections();
+	public List<ITAMEConnection> getListOfEConnections();
 	
-	public boolean hasRootNode();
+	public boolean onOptionsItemSelected(MenuItem item);
+	
+	// TAMGraph functions //
 	
 	public ITAMGNode getLastSelectedNode();
-
-	public Context getContext();
-
-	public Resources getResources();
-
+	
 	public int getWidth();
 
 	public int getHeight();
 	
-	public void invalidate();
-	
-	public boolean onOptionsItemSelected(MenuItem item);
-
 	public List<ITAMTouchListener> getListOfTouchControls();
 
 	public List<ITAMDrawListener> getListOfDrawControls();
 
 	public List<ITAMItemListener> getListOfItemControls();
+	
+	public List<ITAMMenuListener> getListOfMenuControls();
+	
+	// Surface View functions //
+
+	public Context getContext();
+
+	public Resources getResources();
+	
+	public void invalidate();
 	
 }

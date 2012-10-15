@@ -1,30 +1,20 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.Point;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
-import cz.vutbr.fit.testmind.io.FreeMind;
-import cz.vutbr.fit.testmind.graphics.TAMGRectangleNode;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
+
 
 
 /**
@@ -33,7 +23,8 @@ import cz.vutbr.fit.testmind.graphics.TAMGRectangleNode;
  * @author Radovan Dvorsky
  *
  */
-public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener, ITAMMenuListener {
+public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener,
+	ITAMMenuListener {
 		
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
@@ -44,6 +35,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	public TAMEditorNodesControl(ITAMEditor editor) {
 		super(editor);
 		createDefaultRootNode();
+		
+		editor.getListOfMenuControls().add(this);
 	}
 	
 
@@ -53,12 +46,15 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	public void createDefaultRootNode(){
 		
 		// ak uz je jeden root uzol vytvoreny nesmie sa vytvorit druhy
-		if(editor.hasRootNode()) return;
+		//if(editor.hasRootNode()) return;
+		
+		System.out.println("profile: " + MainActivity.getProfile());
 		
 		Point position = new Point(this.editor.getWidth()/2, this.editor.getHeight()/2);
-		
-		editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
-				DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);	
+		TAMPNode pNode = MainActivity.getProfile().createRoot(DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);
+		pNode.addEReference(editor, position.x, position.y);
+		//editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
+		//		DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);	
 		
 	}
 		
@@ -92,7 +88,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
 		 */
 		addChildNode(title, "", parent, 
-				new Point(parent.getCore().getPosition().x, parent.getCore().getPosition().y));
+				new Point(parent.getGui().getPosition().x, parent.getGui().getPosition().y));
 	}
 	
 	/**
@@ -108,7 +104,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		 * TODO: Treba vytovorit triedu, ktora bude rozmiestnovat nove uzly po ploche
 		 */
 		addChildNode(title, body, parent, 
-				new Point(parent.getCore().getPosition().x, parent.getCore().getPosition().y));
+				new Point(parent.getGui().getPosition().x, parent.getGui().getPosition().y));
 	}
 	
 	/**
@@ -124,7 +120,10 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		int posX = position.x;
 		int posY = position.y;
 		
-		parent.addChild(posX, posY, title, body);
+		TAMPNode pNode = MainActivity.getProfile().createNode("", "");
+		pNode.addEReference(editor, posX, posY);
+		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent.getProfile(), pNode);
+		pConnection.addEReference(editor);
 	}
 
 	/**
@@ -157,6 +156,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
+
 /*		
 		if(item.getItemId() == MenuItems.add) {
 			showAddChildNodeDialog();
@@ -177,6 +177,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			return false;
 		}
 */		
+
 		switch (item.getItemId()) {
 			case MenuItems.add:		
 				showAddChildNodeDialog();

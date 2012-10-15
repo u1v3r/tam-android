@@ -31,7 +31,7 @@ public class FreeMind2
     	if (rootNode == null) {
         	if (source == null) {
         		//source = "/data/testMind/test.mm";
-        		//importXML(); // pro testování
+        		//importXML(); // pro testovani
         		// TODO: error -> missing source
         	} else {
         		importXML();
@@ -81,7 +81,14 @@ public class FreeMind2
 		if (name.equals(NODE)) {
 			String content = parser.getAttributeValue(null, "TEXT");
 			String title = getTitle(content);
+
+			
+			/* TODO: TREBA OPRAVIT
 			rootNodeEditor = editor.createRoot(0, 0, 0, title, content);
+			*/
+			
+			
+			
 			readNode(rootNodeEditor, parser);
         }
 	    return rootNodeEditor;
@@ -94,7 +101,13 @@ public class FreeMind2
 		    while (parser.nextTag() != XmlPullParser.END_TAG) {
 				String content = parser.getAttributeValue(null, "TEXT");
 				String title = getTitle(content);
-		    	readNode(nodeEditor.addChild(0, 0, title, content), parser);
+	    	
+				
+				
+				/* TODO: TREBA OPRAVIT
+				readNode(nodeEditor.addChild(0, 0, title, content), parser);
+				*/
+
 		    }
 	    }
 	}

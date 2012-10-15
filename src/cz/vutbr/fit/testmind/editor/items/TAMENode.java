@@ -1,90 +1,43 @@
 package cz.vutbr.fit.testmind.editor.items;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.util.Log;
-
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 
-public class TAMENode {
+public class TAMENode implements ITAMENode {
 	
 	private static final String TAG = "TAMEditorNode";
 	
-	private int id;
 	private ITAMEditor editor;
-	private ITAMGNode core;
-	private String body;
-	private List<TAMENode> listOfChildNodes;
-	
-	private static int counter = 0;
-	private static int defaultType = ITAMGConnection.CONNECTION_TYPE_DEFAULT;
-	
+	private ITAMGNode gui;
+	private TAMPNode profile;
 	private boolean hasVisibleChilds;
 	
-	public TAMENode(TAMEditor editor, int x, int y, String title, String body, int type) {
-		this(editor, x, y, title, body, type, getNewSequenceNumber());
-	}	
+	private static int defaultType = ITAMGNode.NODE_TYPE_RECTANGLE;
 	
-	public TAMENode(TAMEditor editor, int x, int y, String title, String body, int type, int id) {
-		this.id = id;
+	public TAMENode(TAMEditor editor, TAMPNode profile, int x, int y) {
+		this(editor, profile, x, y, defaultType);
+	}
+	
+	public TAMENode(TAMEditor editor, TAMPNode profile, int x, int y, int type) {
 		this.editor = editor;
-		this.body = body;
-		this.listOfChildNodes = new ArrayList<TAMENode>();
+		this.profile = profile;
+		this.gui = editor.getItemFactory().createNode(editor, type, x, y, profile.getTitle());
+		this.gui.setHelpObject(this);
 		this.hasVisibleChilds = true;
-		this.core = editor.getItemFactory().createNode(editor, type, x, y, title);
-		this.core.setHelpObject(this);
-	}
-
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
-	}
-
-	public ITAMGNode getCore() {
-		return core;
-	}
-	
-	public void setCore(ITAMGNode core) {
-		this.core = core;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public ITAMEditor getEditor() {
 		return editor;
 	}
-
-	public static int getNewSequenceNumber() {
-		
-		counter++;
-		
-		return counter;
-	}
-
-	public List<TAMENode> getListOfChildNodes() {
-		return listOfChildNodes;
+	
+	public TAMPNode getProfile() {
+		return profile;
 	}
 	
-	public TAMENode addChild(int x, int y, String title, String body) {
-		
-		return addChild(x, y, title, body, getDefaultType(), TAMEConnection.getDefaultType());
-	}
-	
-	public TAMENode addChild(int x, int y, String title, String body, int nodeType, int connectionType) {
-		
-		TAMENode node = editor.getFactory().createNode(x, y, title, body, nodeType);
-		editor.getFactory().createConnection(this, node, connectionType);
-		
-		return node;
+	public ITAMGNode getGui() {
+		return gui;
 	}
 
 	public static int getDefaultType() {
@@ -110,15 +63,22 @@ public class TAMENode {
 	
 	private void enable(boolean enable) {
 		
-		if(core.isEnabled() == enable) return;
+		if(gui.isEnabled() == enable) return;
 		
-		core.setEnabled(true);
+		gui.setEnabled(true);
 		
 		if(hasVisibleChilds == enable) {
-			for(TAMENode node : listOfChildNodes) {
-				node.enable(enable);
+			for(TAMPNode node : profile.getListOfChildNodes()) {
+				((TAMENode) (node.getEReference(editor))).enable(enable);
 			}
 		}
+	}
+
+	public void dispose() {
+		gui.dispose();
+		gui = null;
+		editor = null;
+		profile = null;
 	}
 
 }

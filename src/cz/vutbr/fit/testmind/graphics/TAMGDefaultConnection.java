@@ -332,4 +332,12 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		return object;
 	}
 
+	public void dispose() {
+		this.graph = null;
+		this.parent = null;
+		this.child = null;
+		this.selectedPoint = null;
+		this.listOfMiddlePoints.clear();
+	}
+
 }
