@@ -120,7 +120,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		int posX = position.x;
 		int posY = position.y;
 		
-		TAMPNode pNode = MainActivity.getProfile().createNode("", "");
+		TAMPNode pNode = MainActivity.getProfile().createNode(title, body);
 		pNode.addEReference(editor, posX, posY);
 		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent.getProfile(), pNode);
 		pConnection.addEReference(editor);
