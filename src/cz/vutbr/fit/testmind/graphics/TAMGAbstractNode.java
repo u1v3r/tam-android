@@ -282,4 +282,12 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	public Object getHelpObject() {
 		return object;
 	}
+	
+	public void dispose() {
+		graph = null;
+		text = null;
+		listOfChildConnections.clear();
+		listOfParentConnections.clear();
+		object = null;
+	}
 }

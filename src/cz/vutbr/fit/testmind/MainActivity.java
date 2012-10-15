@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public class MainActivity extends FragmentActivity {
 	
@@ -34,10 +35,17 @@ public class MainActivity extends FragmentActivity {
 	
 	private static final String TAG = "MainActivity";
 	
+	private static TAMProfile profile;
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {    	
     	super.onCreate(savedInstanceState);
+    	
+    	//if(profile != null) {
+    		profile = new TAMProfile();
+    	//}
+    	
     	setContentView(R.layout.activity_main);
     	
     	EventObjects.editor = (TAMEditor) findViewById(R.id.tam_editor);
@@ -75,6 +83,10 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	public static TAMProfile getProfile() {
+		return profile;
 	}
 
 }

@@ -11,8 +11,10 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
+import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
@@ -20,6 +22,8 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public class TAMEditorGesturesControl extends TAMEditorAbstractControl 
 	implements OnGestureListener,OnDoubleTapListener, AddNodeDialogListener, 
@@ -53,7 +57,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 
 	public void onSelectNodeEvent(TAMENode node) {		
 		
-		Log.d(TAG,"select node: " + node.getCore().getText());
+		//Log.d(TAG,"select node: " + node.getGui().getText());
 		
 		synchronized (selectedNodesList) {
 			selectedNodesList.add(node);
@@ -62,7 +66,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 
 	public void onUnselectNodeEvent(TAMENode node) {
 		
-		Log.d(TAG,"unselect node: " + node.getCore().getText());
+		//Log.d(TAG,"unselect node: " + node.getGui().getText());
 		
 		synchronized (selectedNodesList) {
 			selectedNodesList.remove(node);
@@ -70,29 +74,29 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 	}
 	
 	public boolean onDown(MotionEvent e) {
-		Log.d(TAG,"onDown");
+		//Log.d(TAG,"onDown");
 				
 		return true;
 	}
 
 	public void onShowPress(MotionEvent e) {
-		Log.d(TAG,"onShowPress");
+		//Log.d(TAG,"onShowPress");
 		
 	}
 
 	public boolean onSingleTapUp(MotionEvent e) {
-		Log.d(TAG,"onSingleTapUp");
+		//Log.d(TAG,"onSingleTapUp");
 		return true;
 	}
 
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		Log.d(TAG,"onScroll");
+		//Log.d(TAG,"onScroll");
 		return true;
 	}
 
 	public void onLongPress(MotionEvent e) {
-		Log.d(TAG,"onLongPress");
+		//Log.d(TAG,"onLongPress");
 
 		
 		// musi byt vybrany prave jeden uzol
@@ -112,11 +116,14 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 				selectedNode = node;
 			}*/
 			
-					
-			TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+			TAMPNode pNode = MainActivity.getProfile().createNode("", "");
+			ITAMENode eNode = pNode.addEReference(editor, (int)e.getX(), (int)e.getY());
+			TAMPConnection pConnection = MainActivity.getProfile().createConnection(selectedNode.getProfile(), pNode);
+			pConnection.addEReference(editor);
+			//TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
 						
-			selectedNode.getCore().setSelected(false);
-			newNode.getCore().setSelected(true);
+			selectedNode.getGui().setSelected(false);
+			eNode.getGui().setSelected(true);
 			
 			editor.invalidate();					
 		}		
@@ -133,7 +140,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 	public void onFinishAddChildNodeDialog(String title) {		
 		
 		if(selectedNodesList.size() == 1){
-			selectedNodesList.get(0).getCore().setText(title);			
+			selectedNodesList.get(0).getGui().setText(title);			
 		}
 				
 		

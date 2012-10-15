@@ -4,7 +4,9 @@ import cz.vutbr.fit.testmind.editor.TAMEditor;
 
 public class TAMEItemFactory {
 	
-	TAMEditor editor;
+	// TODO probably delete this class
+	
+	/*TAMEditor editor;
 	
 	public TAMEItemFactory(TAMEditor editor) {
 		this.editor = editor;
@@ -50,6 +52,6 @@ public class TAMEItemFactory {
 		editor.getListOfConnections().add(connection);
 		
 		return connection;
-	}
+	}*/
 
 }
