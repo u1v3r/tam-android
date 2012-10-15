@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -13,6 +14,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.ZoomControls;
 
 public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
@@ -39,6 +41,16 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean activeTouchEvent = false;
 
 	public float sx, sy, px, py;
+
+	private OnLongClickListener longClickListener = new OnLongClickListener() {
+		
+		public boolean onLongClick(View v) {
+			
+			Log.d(TAG, "x:" + getX() + ",y:" + getY());
+			
+			return true;
+		}
+	};
        
 	public TAMGraph(Context context) {
 		this(context,null);		
@@ -62,7 +74,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
 		setWillNotDraw(false);
-				
+		setOnLongClickListener(longClickListener);
 		// default zoom na stred 
 		sx = sy = DEFAULT_ZOOM;
 		px = getWidth()/2;
@@ -358,6 +370,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback {
 		synchronized (drawingThread.getSurfaceHolder()) {
 						
 			activeTouchEvent = true;
+			
+			
+			
 			
 			int x = (int) e.getX();
 			int y = (int) e.getY();
