@@ -25,6 +25,13 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 
+
+/**
+ * @deprecated Nepouziva sa
+ * 
+ * @author Radovan Dvorsky
+ *
+ */
 public class TAMEditorGesturesControl extends TAMEditorAbstractControl 
 	implements OnGestureListener,OnDoubleTapListener, AddNodeDialogListener, 
 	ITAMTouchListener,ITAMDrawListener,ITAMItemListener{

@@ -47,8 +47,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	
 	public void initialize() {
 		new TAMEditorZoomControl(this, R.id.zoom_controls);
-		new TAMEditorNodesControl(this);
-		new TAMEditorGesturesControl(this);		
+		new TAMEditorNodesControl(this);	
 	}
 	
 	public boolean containsNode(int id) {

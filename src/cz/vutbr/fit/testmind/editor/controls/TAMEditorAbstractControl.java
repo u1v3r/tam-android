@@ -12,6 +12,7 @@ public abstract class TAMEditorAbstractControl {
 	protected ITAMEditor editor;
 	protected FragmentActivity activity;
 	
+	public boolean isDialogOpen = false;
 	private boolean enabled;
 		
 	public TAMEditorAbstractControl(ITAMEditor editor) {
@@ -45,9 +46,12 @@ public abstract class TAMEditorAbstractControl {
 	 */
 	protected void showAddNodeDialog(TAMENode parent) {
 			
-		FragmentManager fm = activity.getSupportFragmentManager();		
-		AddNodeDialog dialog = new AddNodeDialog(parent, this);
-		dialog.show(fm, "fragment_add_node");
+		if(isDialogOpen == false){
+			isDialogOpen = true;
+			FragmentManager fm = activity.getSupportFragmentManager();		
+			AddNodeDialog dialog = new AddNodeDialog(parent, this);
+			dialog.show(fm, "fragment_add_node");
+		}
 		
 	}
 
