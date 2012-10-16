@@ -27,37 +27,29 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public class TAMEditorGesturesControl extends TAMEditorAbstractControl 
 	implements OnGestureListener,OnDoubleTapListener, AddNodeDialogListener, 
-	ITAMTouchListener,ITAMDrawListener, ITAMItemListener{
+	ITAMTouchListener,ITAMDrawListener{
 		
 	
 	private static final String TAG = "TAMEditorGesturesControl";
 
 	private static final long VIBRATE_DRUATION = 100;
 	
-	private List<TAMENode> selectedNodesList;	
-	
-	private GestureDetector gDetector;	
+	private List<TAMENode> selectedNodesList;
 	
 	private boolean creatingNewNode = false;
 	
 	public TAMEditorGesturesControl(ITAMEditor editor) {
 		super(editor);
-		gDetector = new GestureDetector(editor.getContext(),this);
-		selectedNodesList = new ArrayList<TAMENode>();
-		
+		setOnGestureListner(this);
+		selectedNodesList = new ArrayList<TAMENode>();		
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfDrawControls().add(this);
-		editor.getListOfItemControls().add(this);
-	}
-
-	public boolean onTouchEvent(MotionEvent e) {
-		gDetector.onTouchEvent(e);		
-		return true;
+		//editor.getListOfItemControls().add(this);
 	}
 
 	public void onSelectNodeEvent(TAMENode node) {		
 		
-		//Log.d(TAG,"select node: " + node.getGui().getText());
+		Log.d(TAG,"select node: " + node.getGui().getText());
 		
 		synchronized (selectedNodesList) {
 			selectedNodesList.add(node);
@@ -66,7 +58,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 
 	public void onUnselectNodeEvent(TAMENode node) {
 		
-		//Log.d(TAG,"unselect node: " + node.getGui().getText());
+		Log.d(TAG,"unselect node: " + node.getGui().getText());
 		
 		synchronized (selectedNodesList) {
 			selectedNodesList.remove(node);
@@ -96,7 +88,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 	}
 
 	public void onLongPress(MotionEvent e) {
-		//Log.d(TAG,"onLongPress");
+		Log.d(TAG,"onLongPress" + selectedNodesList.size());
 
 		
 		// musi byt vybrany prave jeden uzol
@@ -212,5 +204,10 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 				onUnselectNodeEvent(node);
 			}
 		}
+	}
+
+	public boolean onTouchEvent(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

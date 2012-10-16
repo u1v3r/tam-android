@@ -1,14 +1,11 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import android.graphics.Canvas;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.MenuItem;
-import android.view.MotionEvent;
+import android.view.GestureDetector.OnGestureListener;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
-import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 
 public abstract class TAMEditorAbstractControl {
 	
@@ -36,6 +33,10 @@ public abstract class TAMEditorAbstractControl {
 
 	public boolean isEnabled() {
 		return enabled;
+	}
+	
+	public void setOnGestureListner(OnGestureListener listener){
+		editor.addOnGestureLisener(listener,editor.getContext());
 	}
 	
 	/**
