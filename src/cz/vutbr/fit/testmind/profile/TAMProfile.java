@@ -19,15 +19,6 @@ public class TAMProfile {
 		root = null;
 	}
 	
-	public TAMPNode getNode(int id) {
-		for(TAMPNode node : listOfPNodes) {
-			if(node.getId() == id) {
-				return node;
-			}
-		}
-		return null;
-	}
-	
 	public List<TAMPNode> getListOfPNodes() {
         return listOfPNodes;
     }
@@ -38,6 +29,19 @@ public class TAMProfile {
 
     public List<ITAMEditor> getListOfEditors() {
 		return listOfEditors;
+	}
+	
+	public TAMPNode getRoot() {
+		return root;
+	}
+
+	public TAMPNode getNode(int id) {
+		for(TAMPNode node : listOfPNodes) {
+			if(node.getId() == id) {
+				return node;
+			}
+		}
+		return null;
 	}
 
 	public TAMPConnection getConnection(int id) {
