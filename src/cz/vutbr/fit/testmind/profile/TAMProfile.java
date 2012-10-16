@@ -24,7 +24,17 @@ public class TAMProfile {
 		return null;
 	}
 	
-	public TAMPConnection getConnection(int id) {
+	public List<TAMPNode> getListOfPNodes()
+    {
+        return listOfPNodes;
+    }
+
+    public List<TAMPConnection> getListOfPConnections()
+    {
+        return listOfPConnections;
+    }
+
+    public TAMPConnection getConnection(int id) {
 		for(TAMPConnection connection : listOfPConnections) {
 			if(connection.getId() == id) {
 				return connection;
