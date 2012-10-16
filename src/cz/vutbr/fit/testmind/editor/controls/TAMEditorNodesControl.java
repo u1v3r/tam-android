@@ -52,7 +52,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	private static final long VIBRATE_DRUATION = 100;	
 	private List<TAMENode> selectedNodesList;	
 	private boolean creatingByGesture = false;
-
+	private boolean creatingNewChild = false;
+	
 	public TAMEditorNodesControl(ITAMEditor editor) {
 		super(editor);
 		createDefaultRootNode();
@@ -90,6 +91,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 */
 	public void showAddChildNodeDialog() {		
 		//showAddChildNodeDialog((TAMEditorNode) editor.getLastSelectedNode().getHelpObject());
+		
+		creatingNewChild = true;
 		
 		if(editor.getLastSelectedNode() == null) {
 			//System.out.println("context " + editor.getContext());
@@ -181,19 +184,20 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	
 	public void onFinishAddChildNodeDialog(String title) {
 		
-		// ak vytvara cez gesto, tak len prepise text uzlu
-		if(creatingByGesture){
+		if(creatingNewChild){
+			
+			addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
+			creatingNewChild = false;
+			
+		} else{
+			
+			// ak vytvara cez gesto, tak len prepise text uzlu		
 			if(selectedNodesList.size() == 1){
 				selectedNodesList.get(0).getGui().setText(title);			
 			}
-			creatingByGesture = false;
-			editor.invalidate();
-		}else {
-			// ak vytvara cez menu dialog, tak vytvori child uzol
-			addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
-		}	
-		
-		isDialogOpen = false;
+			
+			editor.invalidate();		
+		}
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -305,7 +309,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 				
 			if(selectedNodesList.size() == 1){
 				  
-				//creatingByGesture = false;
+				creatingByGesture = false;
 				
 				showAddNodeDialog(selectedNodesList.get(0));					
 			}
