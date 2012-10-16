@@ -3,15 +3,19 @@ package cz.vutbr.fit.testmind.profile;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
+
 public class TAMProfile {
 	
 	protected List<TAMPNode> listOfPNodes;
 	protected List<TAMPConnection> listOfPConnections;
+	protected List<ITAMEditor> listOfEditors;
 	protected TAMPNode root;
 	
 	public TAMProfile() {
 		listOfPNodes = new ArrayList<TAMPNode>();
 		listOfPConnections = new ArrayList<TAMPConnection>();
+		listOfEditors = new ArrayList<ITAMEditor>();
 		root = null;
 	}
 	
@@ -24,17 +28,19 @@ public class TAMProfile {
 		return null;
 	}
 	
-	public List<TAMPNode> getListOfPNodes()
-    {
+	public List<TAMPNode> getListOfPNodes() {
         return listOfPNodes;
     }
 
-    public List<TAMPConnection> getListOfPConnections()
-    {
+    public List<TAMPConnection> getListOfPConnections() {
         return listOfPConnections;
     }
 
-    public TAMPConnection getConnection(int id) {
+    public List<ITAMEditor> getListOfEditors() {
+		return listOfEditors;
+	}
+
+	public TAMPConnection getConnection(int id) {
 		for(TAMPConnection connection : listOfPConnections) {
 			if(connection.getId() == id) {
 				return connection;
