@@ -7,11 +7,13 @@ public class TAMGItemFactory {
 		
 		ITAMGNode node = null;
 		
-		float dx = graph.px-graph.px*graph.sx;
-		float dy = graph.py-graph.py*graph.sy;
+		TAMGZoom zoom = graph.getZoom();
+		
+		float dx = zoom.px-zoom.px*zoom.sx;
+		float dy = zoom.py-zoom.py*zoom.sy;
 		
 		if(type == ITAMGNode.NODE_TYPE_RECTANGLE) {
-			node = new TAMGRectangleNode(graph, (int)((x-dx)/graph.sx), (int)((y-dy)/graph.sy), text);
+			node = new TAMGRectangleNode(graph, (int)((x-dx)/zoom.sx), (int)((y-dy)/zoom.sy), text);
 		}
 		
 		graph.listOfNodes.add(node);

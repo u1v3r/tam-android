@@ -28,7 +28,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	private static final String TAG = "TAMGraph";
 
 	//private static final float ZOOM_STEP = 0.125f;
-	private static final float DEFAULT_ZOOM = 0.5f;
+	protected static final float DEFAULT_ZOOM = 0.5f;
 
 	private static final float MIN_ZOOM = 0.03125f;
 	private static final float MAX_ZOOM = 2;
@@ -45,6 +45,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	protected ZoomControls zoomControls;
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
+	private TAMGZoom zoom;
 	
 	
 	protected List<GestureDetector> listOfGestureControls;
@@ -74,8 +75,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		public boolean onTouchEvent(MotionEvent e);
 	}
 
-	public float sx, sy, px, py;
-
 	public boolean isDragging = false;
 
 	
@@ -104,6 +103,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		listOfMenuControls = new ArrayList<ITAMMenuListener>();
 		listOfGestureControls = new ArrayList<GestureDetector>();
 		
+		zoom = new TAMGZoom(this);
 		
 		actualPoint = new Point();	
 		setLongClickable(true);		
@@ -112,11 +112,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
 		setWillNotDraw(false);
-				
-		// default zoom na stred 
-		sx = sy = DEFAULT_ZOOM;
-		px = getWidth()/2;
-		py = getHeight()/2;
 		
 		invalidate();
 	}
@@ -347,7 +342,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	@Override
 	protected void onDraw(Canvas canvas) { 
 		
-		canvas.scale(sx, sy, px, py);
+		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		
 		for(ITAMGItem item : listOfDrawableItems) {
 			item.draw(canvas, paint);
@@ -380,11 +375,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 								
 				ITAMGItem result = null;
 				
-				float dx = px-px*sx;
-				float dy = py-py*sy;
+				float dx = zoom.px-zoom.px*zoom.sx;
+				float dy = zoom.py-zoom.py*zoom.sy;
 				
-				float ax = ((x-dx)/sy);
-				float ay = ((y-dy)/sy);
+				float ax = ((x-dx)/zoom.sy);
+				float ay = ((y-dy)/zoom.sy);
 				
 				for(ITAMGItem item : listOfConnections) {
 					if(item.hit(ax, ay)) {
@@ -418,8 +413,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 
 				if(dx > 0 || dy > 0 || dx < 0 || dy < 0) {
 					
-					int ddx = (int) (dx/sx);
-					int ddy = (int) (dy/sy);
+					int ddx = (int) (dx/zoom.sx);
+					int ddy = (int) (dy/zoom.sy);
 					
 					if(!listOfSelectedItems.isEmpty()) {
 
@@ -520,22 +515,24 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		if(scaleX < MIN_ZOOM || scaleY < MIN_ZOOM) return;
 		if(scaleY >= MAX_ZOOM || scaleY >= MAX_ZOOM) return;
 		
-		px = pivotX;
-		py = pivotY;
-		sx = scaleX;
-		sy = scaleY;
+		zoom.px = pivotX;
+		zoom.py = pivotY;
+		zoom.sx = scaleX;
+		zoom.sy = scaleY;
 		invalidate();	
 	}
 	
 	public void onZoomIn() {
-		zoom(sx*2, sy*2, getWidth()*0.5f, getHeight()*0.5f);
+		zoom(zoom.sx*2, zoom.sy*2, getWidth()*0.5f, getHeight()*0.5f);
 	}
 
 	public void onZoomOut() {		
-		zoom(sx*0.5f, sy*0.5f, getWidth()*0.5f, getHeight()*0.5f);
+		zoom(zoom.sx*0.5f, zoom.sy*0.5f, getWidth()*0.5f, getHeight()*0.5f);
 	}
 	
-	
+	public TAMGZoom getZoom() {
+		return zoom;
+	}	
 	
 	
 	
@@ -612,4 +609,5 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			}
 		}
 	}
+
 }

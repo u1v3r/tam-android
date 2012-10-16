@@ -127,8 +127,8 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 			
 			float num = up*up/down;
 			
-			if(graph.sx > 1) {
-				num*=graph.sx;
+			if(graph.getZoom().sx > 1) {
+				num*=graph.getZoom().sx;
 			}
 			
 			if(num < OFFSET*OFFSET) {
