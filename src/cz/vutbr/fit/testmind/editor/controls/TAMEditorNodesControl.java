@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,6 +30,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
+import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 
@@ -234,8 +237,10 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 							
 				break;
 			case MenuItems.save:
-				
-				break;
+			    File cardDirectory = Environment.getExternalStorageDirectory();
+				Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
+				serializer.serialize(MainActivity.getProfile());
+			    return true;
 			case MenuItems.importFile:
 				importFile();
 				return true;

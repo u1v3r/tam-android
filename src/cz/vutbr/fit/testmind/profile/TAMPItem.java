@@ -46,4 +46,8 @@ public abstract class TAMPItem {
 		}
 	}
 
+    public Map<ITAMEditor, ITAMEItem> getEditorReferences()
+    {
+        return editorReferences;
+    }
 }
