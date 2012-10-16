@@ -64,8 +64,8 @@ public class TAMPNode extends TAMPItem {
 		return counter;
 	}
 	
-	protected static void resetSequenceNumber() {
-		counter = 0;
+	protected static void resetSequenceNumber(int counter) {
+		TAMPNode.counter = counter;
 	}
 
 	public void dispose() {

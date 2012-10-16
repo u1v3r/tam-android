@@ -161,7 +161,7 @@ public class TAMProfile {
 		}
 	}
 	
-	public void reset() {
+	public void reset(int counter) {
 		
 		for(TAMPNode node : listOfPNodes) {
 			node.dispose();
@@ -171,7 +171,15 @@ public class TAMProfile {
 			connection.dispose();
 		}
 		
+		TAMPNode.resetSequenceNumber(counter);
+		TAMPConnection.resetSequenceNumber(counter);
+		
 		root = null;
+	}
+	
+	public void reset() {
+		
+		reset(0);
 	}
 	
 	public class TAMItemException extends RuntimeException {
