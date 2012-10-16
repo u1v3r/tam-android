@@ -44,6 +44,10 @@ public class TAMPConnection extends TAMPItem {
 		TAMPConnection.counter = counter;
 	}
 
+	public static int getCounter() {
+		return counter;
+	}
+
 	public void dispose() {
 		super.dispose();
 		
