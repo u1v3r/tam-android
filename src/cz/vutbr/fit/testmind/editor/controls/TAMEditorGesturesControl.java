@@ -27,7 +27,7 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public class TAMEditorGesturesControl extends TAMEditorAbstractControl 
 	implements OnGestureListener,OnDoubleTapListener, AddNodeDialogListener, 
-	ITAMTouchListener,ITAMDrawListener{
+	ITAMTouchListener,ITAMDrawListener,ITAMItemListener{
 		
 	
 	private static final String TAG = "TAMEditorGesturesControl";
@@ -44,7 +44,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 		selectedNodesList = new ArrayList<TAMENode>();		
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfDrawControls().add(this);
-		//editor.getListOfItemControls().add(this);
+		editor.getListOfItemControls().add(this);
 	}
 
 	public void onSelectNodeEvent(TAMENode node) {		
@@ -103,10 +103,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 			creatingNewNode = true;
 			
 			TAMENode selectedNode = selectedNodesList.get(0);
-			/*
-			for (ITAMNode node : selectedNodesList) {
-				selectedNode = node;
-			}*/
+
 			
 			TAMPNode pNode = MainActivity.getProfile().createNode("", "");
 			ITAMENode eNode = pNode.addEReference(editor, (int)e.getX(), (int)e.getY());
@@ -151,7 +148,7 @@ public class TAMEditorGesturesControl extends TAMEditorAbstractControl
 	}
 */
 	public void onDraw(Canvas canvas) {
-		Log.d(TAG,"draw");
+		//Log.d(TAG,"draw");
 				
 		if(creatingNewNode){
 			
