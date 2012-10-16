@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
@@ -56,6 +57,8 @@ public interface ITAMEditor {
 	public Context getContext();
 
 	public Resources getResources();
+	
+	public void addOnGestureLisener(OnGestureListener listener, Context context);
 	
 	public void invalidate();
 	

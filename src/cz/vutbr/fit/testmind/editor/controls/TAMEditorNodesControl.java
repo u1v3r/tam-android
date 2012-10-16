@@ -1,17 +1,33 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.Vibrator;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 
@@ -24,19 +40,30 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
  *
  */
 public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener,
-	ITAMMenuListener {
-		
+	ITAMMenuListener,OnGestureListener,OnDoubleTapListener, 
+	ITAMTouchListener,ITAMDrawListener,ITAMItemListener {	
+	
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
 	private static final String TAG = "TAMEditorNodes";
 	private static final String INTENT_MIME_TYPE = "text/xml";
 		
-
+	
+	private static final long VIBRATE_DRUATION = 100;	
+	private List<TAMENode> selectedNodesList;	
+	private boolean creatingByGesture = false;
+	private boolean creatingNewChild = false;
+	
 	public TAMEditorNodesControl(ITAMEditor editor) {
 		super(editor);
 		createDefaultRootNode();
-		
+		setOnGestureListner(this);
+		selectedNodesList = new ArrayList<TAMENode>();
 		editor.getListOfMenuControls().add(this);
+				
+		editor.getListOfTouchControls().add(this);
+		editor.getListOfDrawControls().add(this);
+		editor.getListOfItemControls().add(this);
 	}
 	
 
@@ -64,6 +91,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 */
 	public void showAddChildNodeDialog() {		
 		//showAddChildNodeDialog((TAMEditorNode) editor.getLastSelectedNode().getHelpObject());
+		
+		creatingNewChild = true;
 		
 		if(editor.getLastSelectedNode() == null) {
 			//System.out.println("context " + editor.getContext());
@@ -127,6 +156,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 	/**
+	 * @deprecated Nepouzivat bude sa presuvat do noveho control
+	 * 
 	 *  Zobrazi file manager s moznostou vyberu suboru
 	 */
 	public void importFile() {
@@ -152,7 +183,21 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 	
 	public void onFinishAddChildNodeDialog(String title) {
-		addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
+		
+		if(creatingNewChild){
+			
+			addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
+			creatingNewChild = false;
+			
+		} else{
+			
+			// ak vytvara cez gesto, tak len prepise text uzlu		
+			if(selectedNodesList.size() == 1){
+				selectedNodesList.get(0).getGui().setText(title);			
+			}
+			
+			editor.invalidate();		
+		}
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -205,20 +250,159 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 
-	public void onSelectNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
+	private void onSelectNodeEvent(TAMENode node) {		
 		
+		Log.d(TAG,"select node: " + node.getGui().getText());
+		
+		synchronized (selectedNodesList) {
+			selectedNodesList.add(node);
+		};
 	}
 
-
-	public void onUnselectNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
+	private void onUnselectNodeEvent(TAMENode node) {
 		
+		Log.d(TAG,"unselect node: " + node.getGui().getText());
+		
+		synchronized (selectedNodesList) {
+			selectedNodesList.remove(node);
+		};
 	}
 
 
 	public void onMoveNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
+		if(item instanceof ITAMGNode) {
+			TAMENode node = (TAMENode) item.getHelpObject();
+			
+			if(selection) {
+				onSelectNodeEvent(node);
+			} else {
+				onUnselectNodeEvent(node);
+			}
+		}
+	}
+
+	public void onDraw(Canvas canvas) {
+		
+		if(creatingByGesture){
+			
+			if(((TAMGraph)editor).isDragging) return;
+			
+			Log.d(TAG,"drop");
+				
+			if(selectedNodesList.size() == 1){
+				  
+				creatingByGesture = false;
+				
+				showAddNodeDialog(selectedNodesList.get(0));					
+			}
+			
+		}
+	}
+
+
+	
+	public boolean onTouchEvent(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public boolean onSingleTapConfirmed(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public boolean onDoubleTap(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public boolean onDoubleTapEvent(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public void onLongPress(MotionEvent e) {
+		Log.d(TAG,"onLongPress" + selectedNodesList.size());
+
+		
+		// musi byt vybrany prave jeden uzol
+		if(selectedNodesList.size() == 1){
+			
+			
+			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+			if(vibrator.hasVibrator()){
+				vibrator.vibrate(VIBRATE_DRUATION);
+			}
+			
+			creatingByGesture = true;
+			
+			TAMENode selectedNode = selectedNodesList.get(0);
+
+			
+			TAMPNode pNode = MainActivity.getProfile().createNode("", "");
+			ITAMENode eNode = pNode.addEReference(editor, (int)e.getX(), (int)e.getY());
+			TAMPConnection pConnection = MainActivity.getProfile().createConnection(selectedNode.getProfile(), pNode);
+			pConnection.addEReference(editor);
+			//TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+						
+			selectedNode.getGui().setSelected(false);
+			eNode.getGui().setSelected(true);
+			
+			editor.invalidate();					
+		}		
+	}
+
+
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		return false;
 	}	
 }

@@ -1,20 +1,18 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import android.graphics.Canvas;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.MenuItem;
-import android.view.MotionEvent;
+import android.view.GestureDetector.OnGestureListener;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
-import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 
 public abstract class TAMEditorAbstractControl {
 	
 	protected ITAMEditor editor;
 	protected FragmentActivity activity;
 	
+	//public boolean isDialogOpen = false;
 	private boolean enabled;
 		
 	public TAMEditorAbstractControl(ITAMEditor editor) {
@@ -38,15 +36,22 @@ public abstract class TAMEditorAbstractControl {
 		return enabled;
 	}
 	
+	public void setOnGestureListner(OnGestureListener listener){
+		editor.addOnGestureLisener(listener,editor.getContext());
+	}
+	
 	/**
 	 * Zobrazí dialog na pridanie uzlu
 	 * @param parent 
 	 */
 	protected void showAddNodeDialog(TAMENode parent) {
 			
-		FragmentManager fm = activity.getSupportFragmentManager();		
-		AddNodeDialog dialog = new AddNodeDialog(parent, this);
-		dialog.show(fm, "fragment_add_node");
+		//if(isDialogOpen == false){
+			//isDialogOpen = true;
+			FragmentManager fm = activity.getSupportFragmentManager();		
+			AddNodeDialog dialog = new AddNodeDialog(parent, this);
+			dialog.show(fm, "fragment_add_node");
+		//}
 		
 	}
 

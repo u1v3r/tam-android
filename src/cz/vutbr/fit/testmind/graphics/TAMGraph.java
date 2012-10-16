@@ -14,6 +14,8 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -44,11 +46,15 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
 	
+	
+	protected List<GestureDetector> listOfGestureControls;
 	protected List<ITAMDrawListener> listOfDrawControls;
 	protected List<ITAMItemListener> listOfItemControls;
-	protected List<ITAMGestureListener> listOfGestureControls;
+	protected List<ITAMMoveGestureListener> listOfMoveGestureControls;
 	protected List<ITAMTouchListener> listOfTouchControls;
 	protected List<ITAMMenuListener> listOfMenuControls;
+	
+	//private List<OnGestureListener> listOfGestureControls;
 	
 	public interface ITAMDrawListener {
 		public void onDraw(Canvas canvas);
@@ -60,7 +66,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		public void onItemSelectEvent(ITAMGItem item, boolean selection);
 	};
 	
-	public interface ITAMGestureListener {
+	public interface ITAMMoveGestureListener {
 		public void onMoveEvent(MotionEvent e, int dx, int dy);
 	}
 	
@@ -70,7 +76,9 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 
 	public float sx, sy, px, py;
 
-	public boolean isDragging = false;;
+	public boolean isDragging = false;
+
+	
        
 	public TAMGraph(Context context) {
 		this(context,null);
@@ -91,9 +99,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		
 		listOfDrawControls = new ArrayList<ITAMDrawListener>();
 		listOfItemControls = new ArrayList<ITAMItemListener>();
-		listOfGestureControls = new ArrayList<ITAMGestureListener>();
+		listOfMoveGestureControls = new ArrayList<ITAMMoveGestureListener>();
 		listOfTouchControls = new ArrayList<ITAMTouchListener>();
 		listOfMenuControls = new ArrayList<ITAMMenuListener>();
+		listOfGestureControls = new ArrayList<GestureDetector>();
 		
 		
 		actualPoint = new Point();	
@@ -156,8 +165,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 * 
 	 * @return
 	 */
-	public List<ITAMGestureListener> getListOfGestureControls() {
-		return listOfGestureControls;
+	public List<ITAMMoveGestureListener> getListOfMoveGestureControls() {
+		return listOfMoveGestureControls;
 	}
 
 	/**
@@ -171,7 +180,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	public List<ITAMMenuListener> getListOfMenuControls(){
 		return listOfMenuControls;
 	}
-
+	
+	public List<GestureDetector> getListOfGestureControls(){
+		return listOfGestureControls;
+	}
+	
 	/**
 	 * 
 	 * @param type
@@ -183,6 +196,17 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	public ITAMGNode addRoot(int type, int x, int y, String text) {
 		ITAMGNode node = factory.createNode(this, type, x, y, text);
 		return node;
+	}
+	
+	/**
+	 * Prida triedu implementujucu rozhranie {@link OnGestureListener}
+	 * do zoznamu tried odchytavajucich gesta
+	 * 
+	 * @param control Trieda implementujuca {@link OnGestureListener}
+	 * @param context 
+	 */
+	public void addOnGestureLisener(OnGestureListener control,Context context){
+		listOfGestureControls.add(new GestureDetector(context,control));
 	}
 	
 	public void moveOnTop(ITAMGItem selectedItem) {
@@ -420,7 +444,11 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			for(ITAMTouchListener control : listOfTouchControls) {
 				control.onTouchEvent(e);
 			}
-
+			
+			for(GestureDetector gDetector : listOfGestureControls){
+				gDetector.onTouchEvent(e);				
+			}
+			
 			return super.onTouchEvent(e);
 		}	
 	}
@@ -462,7 +490,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			item.move(dx,dy);
 		}
 		
-		for(ITAMGestureListener control : listOfGestureControls) {
+		for(ITAMMoveGestureListener control : listOfMoveGestureControls) {
 			control.onMoveEvent(e, dx, dy);
 		}
 	}

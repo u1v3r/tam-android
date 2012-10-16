@@ -6,11 +6,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorGesturesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
@@ -47,8 +45,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	
 	public void initialize() {
 		new TAMEditorZoomControl(this, R.id.zoom_controls);
-		new TAMEditorNodesControl(this);
-		new TAMEditorGesturesControl(this);		
+		new TAMEditorNodesControl(this);	
 	}
 	
 	public boolean containsNode(int id) {
