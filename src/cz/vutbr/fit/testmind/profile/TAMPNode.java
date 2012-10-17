@@ -10,8 +10,8 @@ public class TAMPNode extends TAMPItem {
 	private int id;
 	private String title;
 	private String body;
-	private List<TAMPNode> listOfChildNodes;
-	private TAMPNode parent;
+	protected List<TAMPNode> listOfChildNodes;
+	protected TAMPNode parent;
 	
 	private static int counter = 0;
 	
@@ -74,6 +74,10 @@ public class TAMPNode extends TAMPItem {
 
 	public void dispose() {
 		super.dispose();
+		
+		if(parent != null) {
+			parent.listOfChildNodes.remove(this);
+		}
 		
 		listOfChildNodes.clear();
 		parent = null;
