@@ -16,15 +16,6 @@
         <requestFocus />
     </EditText>
 
-    <EditText
-        android:id="@+id/edit_text_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="top|left"
-        android:hint="@string/node_add_dialog_body"
-        android:inputType="textMultiLine" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
