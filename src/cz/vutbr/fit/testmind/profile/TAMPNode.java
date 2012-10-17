@@ -99,4 +99,11 @@ public class TAMPNode extends TAMPItem {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "TAMPNode [id=" + id + ", title=" + title + ", body=" + body
+				+ ", parent=" + parent + "]";
+	}
+	
+
 }

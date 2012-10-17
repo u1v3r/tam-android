@@ -80,7 +80,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		
 		System.out.println("profile: " + MainActivity.getProfile());
 		
-		Point position = new Point(this.editor.getWidth()/2, this.editor.getHeight()/2);
+		Point position = new Point(editor.getWidth()/2, editor.getHeight()/2);
 		TAMPNode pNode = MainActivity.getProfile().createRoot(DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);
 		pNode.addEReference(editor, position.x, position.y);
 		//editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
@@ -149,13 +149,17 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	 */
 	public void addChildNode(String title, String body, TAMENode parent, Point position){		
 		
-		int posX = position.x;
-		int posY = position.y;
 		
+		createNode(title, body, parent.getProfile(), position.x, position.y);
+		
+		/*
 		TAMPNode pNode = MainActivity.getProfile().createNode(title, body);
 		pNode.addEReference(editor, posX, posY);
 		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent.getProfile(), pNode);
 		pConnection.addEReference(editor);
+		*/
+		
+		Log.d(TAG,MainActivity.getProfile().getListOfPNodes().toString());
 	}
 
 	/**
@@ -196,7 +200,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			
 			// ak vytvara cez gesto, tak len prepise text uzlu		
 			if(selectedNodesList.size() == 1){
-				selectedNodesList.get(0).getGui().setText(title);			
+				selectedNodesList.get(0).getGui().setText(title);
+				selectedNodesList.get(0).getProfile().setTitle(title);
 			}
 			
 			editor.invalidate();		
@@ -388,20 +393,27 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			
 			creatingByGesture = true;
 			
-			TAMENode selectedNode = selectedNodesList.get(0);
-
-			
-			TAMPNode pNode = MainActivity.getProfile().createNode("", "");
-			ITAMENode eNode = pNode.addEReference(editor, (int)e.getX(), (int)e.getY());
-			TAMPConnection pConnection = MainActivity.getProfile().createConnection(selectedNode.getProfile(), pNode);
-			pConnection.addEReference(editor);
-			//TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+			// vytvori prazdny uzol
+			TAMENode selectedNode = selectedNodesList.get(0);			
+			ITAMENode eNode = createNode("","",selectedNode.getProfile(),(int)e.getX(),(int)e.getY());
 						
 			selectedNode.getGui().setSelected(false);
 			eNode.getGui().setSelected(true);
 			
 			editor.invalidate();					
 		}		
+	}
+
+
+	private ITAMENode createNode(String title, String body, TAMPNode parent, int posX, int posY) {
+		
+		TAMPNode newProfileNode = MainActivity.getProfile().createNode(title, body);
+		ITAMENode newEditorNode = newProfileNode.addEReference(editor, posX, posY);
+		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent, newProfileNode);
+		pConnection.addEReference(editor);
+		//TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+		
+		return newEditorNode;		
 	}
 
 
