@@ -140,6 +140,7 @@ public class TAMProfile {
 	public void deleteNode(TAMPNode node) {
 		
 		if(listOfPNodes.contains(node)) {
+			node.dispose();
 			listOfPNodes.remove(node);
 		}
 	}
@@ -157,6 +158,7 @@ public class TAMProfile {
 	public void deleteConnection(TAMPConnection connection) {
 		
 		if(listOfPConnections.contains(connection)) {
+			connection.dispose();
 			listOfPConnections.remove(connection);
 		}
 	}

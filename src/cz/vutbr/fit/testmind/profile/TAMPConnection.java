@@ -19,6 +19,10 @@ public class TAMPConnection extends TAMPItem {
 		this.id = id;
 		this.parent = parent;
 		this.child = child;
+		if(parent != null) {
+			parent.listOfChildNodes.add(child);
+		}
+		child.parent = parent;
 	}
 	
 	public int getId() {
