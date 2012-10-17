@@ -1,31 +1,23 @@
 package cz.vutbr.fit.testmind.io;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMEItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
-import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
-import cz.vutbr.fit.testmind.editor.items.TAMEItemFactory;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
-import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
-import android.R.integer;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
-import android.util.Log;
 import android.util.SparseArray;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,14 +70,19 @@ public class Serializer
             "FOREIGN KEY(parent) REFERENCES node(id)," +
             "FOREIGN KEY(child) REFERENCES node(id))";
 
-//    static private final String[] COLUMNS_PROFILE = {"root", "nodeCounter", "connectionCounter"};
-//    
-//    static private final String[] COLUMNS_EDITOR = {"name", "sx", "sy", "px", "py"};
-//
-//    static private final String[] COLUMNS_NODES = {"id", "title", "body", "type", "x", "y", "hasVisibleChilds",
-//                                                   "background", "foreground", "backgroundStroke", "highlightColor"};
-//
-//    static private final String[] COLUMNS_CONNECTIONS = {"id", "parent", "child", "type", "background", "highlightColor"};
+    static private final String SELECT_PROFILE = "SELECT profile.nodeCounter, profile.connectionCounter, " +
+            "nodes.id, nodes.title, nodes.body" +
+            "from profile inner join nodes on profile.root = nodes.id";
+    
+    static private final String[] COLUMNS_PROFILE = {"nodeCounter", "connectionCounter", "id", "title", "body"};    
+    static private final String[] COLUMNS_EDITORS = {"name", "sx", "sy", "px", "py"};
+    static private final String[] COLUMNS_NODES = {"id", "title", "body"};
+    static private final String[] COLUMNS_CONNECTIONS = {"id", "parent", "child"};
+    static private final String[] COLUMNS_NODE_REFERENCES = {"node", "editor", "type", "x", "y",
+                                                   "background", "backgroundStroke", "foreground", "highlightColor"};
+    static private final String[] COLUMNS_CONNECTION_REFERENCES = {"connection", "editor", "type",
+                                                                   "background", "highlightColor"};
+
     
     private File fileDB;
     
@@ -150,16 +147,18 @@ public class Serializer
      * load nodes and connections from db file
      * @param editor
      */
-    public void deserialize(TAMEditor editor)
+    public void deserialize(TAMProfile profile)
     {
         SQLiteDatabase db = openDB();
         
-        /*TAMEItemFactory factory = editor.getFactory();
-        
-        SparseArray<TAMENode> nodes = importNodes(db, factory);
-        
-        importGraph(db, editor, nodes);
-        importConnections(db, factory, nodes);*/
+        SparseArray<TAMPNode> nodes = loadProfile(db, profile);
+        HashMap<String, ITAMEditor> editors = loadEditors(db, profile);
+
+        loadNodes(db, profile, nodes);
+        SparseArray<TAMPConnection> connections = loadConnections(db, profile, nodes);
+
+        loadNodeReferences(db, editors, nodes);
+        loadConnectionReferences(db, editors, connections);
         
         db.close();
     }
@@ -311,79 +310,158 @@ public class Serializer
         db.insert("connection_references", null, values);        
     }
     
-//    private void importGraph(SQLiteDatabase db, TAMEditor editor, SparseArray<TAMENode> nodes)
-//    {
-//        Cursor cur = db.query("graph", COLUMNS_GRAPH, null, null, null, null, null);
-//        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_GRAPH);
-//
-//        cur.moveToFirst();
-//        // TODO editor.setRoot(nodes.get(cur.getInt(indexes.get("root"))));
-//        // TODO node counter
-//        // TODO connection counter
-//        
-//        editor.setScaleX(cur.getInt(indexes.get("sx")));
-//        editor.setScaleY(cur.getInt(indexes.get("sy")));
-//        editor.setPivotX(cur.getInt(indexes.get("px")));
-//        editor.setPivotY(cur.getInt(indexes.get("py")));
-//    }    
-//    
-//    /**
-//     * import all nodes
-//     * @param db
-//     * @param factory
-//     * @return
-//     */
-//    private SparseArray<TAMENode> importNodes(SQLiteDatabase db, TAMEItemFactory factory)
-//    {
-//        SparseArray<TAMENode> result = new SparseArray<TAMENode>();
-//        
-//        Cursor cur = db.query("nodes", COLUMNS_NODES, null, null, null, null, null);
-//        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_NODES);
-//
-//        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
-//        {
-//            int id = cur.getInt(indexes.get("id"));
-//            String title = cur.getString(indexes.get("title"));
-//            String body = cur.getString(indexes.get("body"));
-//            int type = cur.getInt(indexes.get("type"));
-//            int x = cur.getInt(indexes.get("x"));
-//            int y = cur.getInt(indexes.get("y"));
-//            /*TAMENode node = factory.importNode(id, x, y, title, body, type);
-//            ITAMGNode core = node.getGui();
-//            node.setChildsVisible(intToboolean(cur.getInt(indexes.get("hasVisibleChilds"))));
-//            core.setBackground(cur.getInt(indexes.get("background")));
-//            core.setForeground(cur.getInt(indexes.get("foreground")));
-//            core.setBackgroundStroke(cur.getInt(indexes.get("backgroundStroke")));
-//            core.setHighlightColor(cur.getInt(indexes.get("highlightColor")));*/
-//            
-//            //result.append(id, node);
-//        }
-//        
-//        return result;
-//    }
-//
-//    /**
-//     * import all connections
-//     * @param db
-//     * @param factory
-//     * @param nodes
-//     */
-//    private void importConnections(SQLiteDatabase db, TAMEItemFactory factory, SparseArray<TAMENode> nodes)
-//    {
-//        Cursor cur = db.query("connections", COLUMNS_CONNECTIONS, null, null, null, null, null);
-//        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_CONNECTIONS);
-//
-//        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
-//        {
-//            int id = cur.getInt(indexes.get("id"));
-//            TAMENode parent = nodes.get(cur.getInt(indexes.get("parent")));
-//            TAMENode child = nodes.get(cur.getInt(indexes.get("child")));
-//            int type = cur.getInt(indexes.get("type"));
-//            /*ITAMGConnection core = factory.importConnection(id, parent, child, type).getGui();
-//            core.setBackground(cur.getInt(indexes.get("background")));
-//            core.setHighlightColor(cur.getInt(indexes.get("highlightColor")));*/
-//        }        
-//    }
+    /**
+     * load profile from db
+     * @param db
+     * @param profile
+     * @return
+     */
+    private SparseArray<TAMPNode> loadProfile(SQLiteDatabase db, TAMProfile profile)
+    {
+        Cursor cur = db.rawQuery(SELECT_PROFILE, null);
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_PROFILE);
+    
+        cur.moveToFirst();
+          
+        profile.reset(cur.getInt(indexes.get("nodeCounter")), cur.getInt(indexes.get("connectionCounter")));
+        String title = cur.getString(indexes.get("title"));
+        String body = cur.getString(indexes.get("body"));
+        int id = cur.getInt(indexes.get("id"));
+        
+        SparseArray<TAMPNode> nodes = new SparseArray<TAMPNode>();
+        nodes.put(id, profile.importRoot(title, body, id));
+        
+        return nodes;
+    }
+    
+    /**
+     * load editors from database
+     * @param db
+     * @param profile
+     */
+    private HashMap<String, ITAMEditor> loadEditors(SQLiteDatabase db, TAMProfile profile)
+    {
+        HashMap<String, ITAMEditor> editors = new HashMap<String, ITAMEditor>();
+        for (ITAMEditor editor: profile.getListOfEditors())
+        {       
+            editors.put(editor.getClass().getName(), editor);
+        }
+        
+        Cursor cur = db.query("editors", COLUMNS_EDITORS, null, null, null, null, null);
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_EDITORS);
+
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            ITAMEditor editor = editors.get(cur.getString(indexes.get("name")));
+            int sx = cur.getInt(indexes.get("sx"));
+            int sy = cur.getInt(indexes.get("sy"));
+            int px = cur.getInt(indexes.get("px"));
+            int py = cur.getInt(indexes.get("py"));
+            editor.zoom(sx, sy, px, py);
+        }
+        
+        return editors;
+    }    
+    
+    /**
+     * load all nodes
+     * @param db
+     * @param profile
+     * @param nodes
+     */
+    private void loadNodes(SQLiteDatabase db, TAMProfile profile, SparseArray<TAMPNode> nodes)
+    {
+        String[] arguments = {Integer.toString(profile.getRoot().getId())};
+        Cursor cur = db.query("nodes", COLUMNS_NODES, "id != ?", arguments, null, null, null);
+        
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_NODES);
+
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            int id = cur.getInt(indexes.get("id"));
+            String title = cur.getString(indexes.get("title"));
+            String body = cur.getString(indexes.get("body"));
+            
+            nodes.append(id, profile.importNode(title, body, id));
+        }
+    }
+
+    /**
+     * load all connections
+     * @param db
+     * @param profile
+     * @param nodes
+     * @return
+     */
+    private SparseArray<TAMPConnection> loadConnections(SQLiteDatabase db, TAMProfile profile, SparseArray<TAMPNode> nodes)
+    {
+        SparseArray<TAMPConnection> connections = new SparseArray<TAMPConnection>();
+        Cursor cur = db.query("connections", COLUMNS_CONNECTIONS, null, null, null, null, null);
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_CONNECTIONS);
+
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            int id = cur.getInt(indexes.get("id"));
+            int parent = cur.getInt(indexes.get("parent"));
+            int child = cur.getInt(indexes.get("child"));
+            
+            connections.append(id, profile.importConnection(nodes.get(parent), nodes.get(child), id));
+        }
+        
+        return connections;
+    }
+    
+    /**
+     * load node references
+     * @param db
+     * @param editors
+     * @param nodes
+     */
+    private void loadNodeReferences(SQLiteDatabase db,
+            HashMap<String, ITAMEditor> editors, SparseArray<TAMPNode> nodes)
+    {
+        Cursor cur = db.query("node_references", COLUMNS_NODE_REFERENCES, null, null, null, null, null);
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_NODE_REFERENCES);
+        
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            TAMPNode node = nodes.get(cur.getInt(indexes.get("node")));
+            ITAMEditor editor = editors.get(cur.getString(indexes.get("editor")));
+            int type = cur.getInt(indexes.get("type"));
+            int x = cur.getInt(indexes.get("x"));
+            int y = cur.getInt(indexes.get("y"));
+            ITAMGNode gNode = node.addEReference(editor, x, y, type).getGui();
+            
+            gNode.setBackground(cur.getInt(indexes.get("background")));
+            gNode.setBackgroundStroke(cur.getInt(indexes.get("backgroundStroke")));
+            gNode.setForeground(cur.getInt(indexes.get("foreground")));
+            gNode.setHighlightColor(cur.getInt(indexes.get("highlightColor")));
+        }           
+    }
+    
+    /**
+     * load connection references
+     * @param db
+     * @param editors
+     * @param connections
+     */
+    private void loadConnectionReferences(SQLiteDatabase db,
+            HashMap<String, ITAMEditor> editors, SparseArray<TAMPConnection> connections)
+    {
+        Cursor cur = db.query("connection_references", COLUMNS_CONNECTION_REFERENCES, null, null, null, null, null);
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_CONNECTION_REFERENCES);
+        
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            TAMPConnection connection = connections.get(cur.getInt(indexes.get("connection")));
+            ITAMEditor editor = editors.get(cur.getString(indexes.get("editor")));
+            int type = cur.getInt(indexes.get("type"));
+            ITAMGConnection gConnection = connection.addEReference(editor, type).getGui();
+            
+            gConnection.setBackground(cur.getInt(indexes.get("background")));
+            gConnection.setHighlightColor(cur.getInt(indexes.get("highlightColor")));
+        }           
+    }
     
     // static private methods =================================================
     
