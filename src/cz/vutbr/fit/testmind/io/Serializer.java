@@ -49,7 +49,7 @@ public class Serializer
             "\"py\" int NOT NULL)";
     static private final String CREATE_TABLE_NODE_REFERENCES = "CREATE TABLE \"node_references\" (" +
             "\"node\" int NOT NULL," +
-            "\"editor\" TEXT UNIQUE NOT NULL," +
+            "\"editor\" TEXT NOT NULL," +
             "\"type\" int NOT NULL," +
             "\"x\" int NOT NULL," +
             "\"y\" int NOT NULL," +
@@ -61,7 +61,7 @@ public class Serializer
             "FOREIGN KEY(editor) REFERENCES editor(id))";
     static private final String CREATE_TABLE_CONNECTION_REFERENCES = "CREATE TABLE \"connection_references\" (" +
             "\"connection\" int NOT NULL," +
-            "\"editor\" TEXT UNIQUE NOT NULL," +
+            "\"editor\" TEXT NOT NULL," +
             "\"type\" int NOT NULL," +
             "\"background\" int," +
             "\"highlightColor\" int," +
