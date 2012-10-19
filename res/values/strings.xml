@@ -16,5 +16,7 @@
     <string name="select_file_to_upload">Select a File to Import</string>
 	<string name="install_file_manager">Please install a File Manager</string>
 	<string name="node_add_dialog_body">Body</string>
+	<string name="menu_export">Export</string>
+	<string name="menu_open">Open</string>
 	
 </resources>

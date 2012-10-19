@@ -231,6 +231,10 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		}
 */		
 
+		/**
+		 * TODO: open, save, import, export menu treba presunut do vlastnych control
+		 */
+		
 		switch (item.getItemId()) {
 			case MenuItems.add:		
 				showAddChildNodeDialog();
