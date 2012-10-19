@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.profile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
@@ -23,6 +24,7 @@ public class TAMPNode extends TAMPItem {
 		this.id = id;
 		setTitle(title);
 		setBody(body);
+		listOfChildNodes = new ArrayList<TAMPNode>();
 	}
 	
 	public String getTitle() {
