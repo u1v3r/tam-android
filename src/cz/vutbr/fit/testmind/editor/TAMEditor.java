@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
@@ -53,6 +54,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		new TAMEditorZoomControl(this, R.id.acitity_main_zoom_controls);
 		new TAMEditorNodesControl(this);
 		new TAMEditorOpenSaveControl(this);
+		new TAMEditorIOControl(this);
 		
 		MainActivity.getProfile().getListOfEditors().add(this);
 	}
