@@ -5,14 +5,14 @@
     android:layout_height="match_parent" >
 
     <cz.vutbr.fit.testmind.editor.TAMEditor
-        android:id="@+id/tam_editor"
+        android:id="@+id/acitity_main_tam_editor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/drawing_surface"
         android:overScrollMode="always" />
 
     <ZoomControls
-        android:id="@+id/zoom_controls"
+        android:id="@+id/acitity_main_zoom_controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"

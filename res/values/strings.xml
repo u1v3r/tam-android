@@ -18,5 +18,12 @@
 	<string name="node_add_dialog_body">Body</string>
 	<string name="menu_export">Export</string>
 	<string name="menu_open">Open</string>
+	<string name="edit_dialog_edit">Edit Node</string>
+	<string name="green">Green</string>
+	<string name="blue">Blue</string>
+	<string name="red">Red</string>
+	<string name="purple">Purple</string>
+	<string name="edit_node_select_node_color">Node color</string>
+	<string name="edit_node_content">Content</string>
 	
 </resources>

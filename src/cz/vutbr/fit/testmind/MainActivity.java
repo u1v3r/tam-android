@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
@@ -32,9 +33,7 @@ public class MainActivity extends FragmentActivity {
 		public static ZoomControls zoomControls;
 		public static TAMEditor editor;
 	}
-	
-	public static final int PICK_FILE_RESULT_CODE = 0;
-	
+		
 	private static final String TAG = "MainActivity";
 	
 	private static TAMProfile profile;
@@ -50,8 +49,8 @@ public class MainActivity extends FragmentActivity {
     	
     	setContentView(R.layout.activity_main);
     	
-    	EventObjects.editor = (TAMEditor) findViewById(R.id.tam_editor);
-    	EventObjects.zoomControls = (ZoomControls) findViewById(R.id.zoom_controls);
+    	EventObjects.editor = (TAMEditor) findViewById(R.id.acitity_main_tam_editor);
+    	EventObjects.zoomControls = (ZoomControls) findViewById(R.id.acitity_main_zoom_controls);
     	
     	EventObjects.editor.initialize();
     }
@@ -71,19 +70,7 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if(PICK_FILE_RESULT_CODE == requestCode && RESULT_OK == resultCode){
-			
-			Uri uri = data.getData();
-			Log.d(TAG,"File selected: " + uri.toString());
-			
-			// TODO: implementovat import suboru
-			
-			
-
-		}
-		
-		super.onActivityResult(requestCode, resultCode, data);
+		EventObjects.editor.onActivityResult(requestCode, resultCode, data);		
 	}
 
 	public static TAMProfile getProfile() {

@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
 import java.io.File;
+import java.lang.annotation.Inherited;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,15 +10,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Vibrator;
+import android.preference.PreferenceManager.OnActivityResultListener;
+import android.sax.StartElementListener;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.widget.Toast;
+import cz.vutbr.fit.testmind.EditNodeActivity;
 import cz.vutbr.fit.testmind.MainActivity;
+import cz.vutbr.fit.testmind.EditNodeActivity.RadioButtonItems;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.AddNodeDialog.AddNodeDialogListener;
@@ -44,28 +51,39 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
  */
 public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener,
 	ITAMMenuListener,OnGestureListener,OnDoubleTapListener, 
-	ITAMTouchListener,ITAMDrawListener,ITAMItemListener {	
-	
+	ITAMTouchListener,ITAMDrawListener,ITAMItemListener, OnActivityResultListener {	
+		
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
 	private static final String TAG = "TAMEditorNodes";
-	private static final String INTENT_MIME_TYPE = "text/xml";
+	private static final String INTENT_MIME_TYPE = "text/xml";	
+	private static final long VIBRATE_DRUATION = 100;
 		
+	public static final int PICK_FILE_RESULT_CODE = 0;
+	public static final int EDIT_NODE_RESULT_CODE = 1;
 	
-	private static final long VIBRATE_DRUATION = 100;	
-	private List<TAMENode> selectedNodesList;	
+	public static final String NODE_TITLE = "title";
+	public static final String NODE_BODY = "body";
+	public static final String NODE_COLOR = "color";
+	
+	public static enum BackgroundStyle{
+		GREEN,BLUE,RED,PURPLE;
+	}
+	
+	private List<TAMENode> listOfSelectedNodes;	
 	private boolean creatingByGesture = false;
 	private boolean creatingNewChild = false;
 	
 	public TAMEditorNodesControl(ITAMEditor editor) {
 		super(editor);		
 		setOnGestureListner(this);
-		selectedNodesList = new ArrayList<TAMENode>();
+		listOfSelectedNodes = new ArrayList<TAMENode>();
 		
 		editor.getListOfMenuControls().add(this);				
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfDrawControls().add(this);
 		editor.getListOfItemControls().add(this);
+		editor.getListOfOnActivityResultControls().add(this);
 	}
 	
 
@@ -131,7 +149,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	public void addChildNode(String title, String body, TAMENode parent, Point position){		
 		
 		
-		createNode(title, body, parent.getProfile(), position.x, position.y);
+		createNode(title, body, parent, position.x, position.y);
 		
 		/*
 		TAMPNode pNode = MainActivity.getProfile().createNode(title, body);
@@ -159,7 +177,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
             		
                     Intent.createChooser(intent, 
                     		editor.getResources().getString(R.string.select_file_to_upload)),
-                    		MainActivity.PICK_FILE_RESULT_CODE);
+                    		PICK_FILE_RESULT_CODE);
             
         } catch (ActivityNotFoundException e) {
             
@@ -182,9 +200,9 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		} else{// na vytvaranie bolo pouzite gesto, takze uzol uz existuje
 			
 			// ak vytvara cez gesto, tak len prepise text uzlu		
-			if(selectedNodesList.size() == 1){
-				selectedNodesList.get(0).getGui().setText(title);
-				selectedNodesList.get(0).getProfile().setTitle(title);
+			if(listOfSelectedNodes.size() == 1){
+				listOfSelectedNodes.get(0).getGui().setText(title);
+				listOfSelectedNodes.get(0).getProfile().setTitle(title);
 			}
 			
 			editor.invalidate();		
@@ -221,36 +239,70 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		switch (item.getItemId()) {
 			case MenuItems.add:		
 				showAddChildNodeDialog();
-				return true;
+				break;
 			case MenuItems.edit:
-				
+				showEditNodeDialog();				
 				break;
 			case MenuItems.delete:
 							
 				break;
-			case MenuItems.save:
-			    
-			    break;
-			case MenuItems.importFile:
-				importFile();
-				return true;
-			case MenuItems.settings:
-	
-				break;
 			default: 
-				return false;    	
+				return true;    	
     	} 	
     	
     	return true;		
 	}
 
 
+	private void showEditNodeDialog() {
+
+		if(listOfSelectedNodes.size() > 1) return;
+			
+		
+		TAMENode selectedNode = listOfSelectedNodes.get(0);
+		Intent intent = new Intent(editor.getContext(), EditNodeActivity.class);	
+				
+		intent.putExtra(NODE_TITLE, selectedNode.getProfile().getTitle());
+		intent.putExtra(NODE_BODY, selectedNode.getProfile().getBody());				
+		intent.putExtra(NODE_COLOR, genrateColorId(selectedNode.getGui().getBackground()));				
+				
+		
+		activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
+		
+	}
+
+
+
+	private BackgroundStyle genrateColorId(int background) {
+        
+		BackgroundStyle color = BackgroundStyle.BLUE;
+		
+		int blue = editor.getResources().getColor(R.color.node_background_1);
+		int green = editor.getResources().getColor(R.color.node_background_2);
+		int red = editor.getResources().getColor(R.color.node_background_3);
+		int purple = editor.getResources().getColor(R.color.node_background_4);
+		
+    	if(background == blue){
+    		color = BackgroundStyle.BLUE;
+    	}else if(background == green){
+    		color = BackgroundStyle.GREEN;
+    	}else if(background == red){
+    		color = BackgroundStyle.RED;
+    	}else if(background == purple){
+    		color = BackgroundStyle.PURPLE;
+    	}
+    	
+    	return color;
+	}
+
+
+
 	private void onSelectNodeEvent(TAMENode node) {		
 		
 		Log.d(TAG,"select node: " + node.getGui().getText());
 		
-		synchronized (selectedNodesList) {
-			selectedNodesList.add(node);
+		synchronized (listOfSelectedNodes) {
+			listOfSelectedNodes.add(node);
 		};
 	}
 
@@ -258,12 +310,12 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		
 		Log.d(TAG,"unselect node: " + node.getGui().getText());
 		
-		synchronized (selectedNodesList) {
-			selectedNodesList.remove(node);
+		synchronized (listOfSelectedNodes) {
+			listOfSelectedNodes.remove(node);
 		};
 	}
-
-
+	
+	
 	public void onMoveNodeEvent(ITAMGNode node) {
 		// TODO Auto-generated method stub
 		
@@ -303,11 +355,11 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			
 			Log.d(TAG,"drop");
 				
-			if(selectedNodesList.size() == 1){
+			if(listOfSelectedNodes.size() == 1){
 				  
 				creatingByGesture = false;
 				
-				showAddNodeDialog(selectedNodesList.get(0));					
+				showAddNodeDialog(listOfSelectedNodes.get(0));					
 			}
 			
 		}
@@ -365,11 +417,11 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 
 
 	public void onLongPress(MotionEvent e) {
-		Log.d(TAG,"onLongPress" + selectedNodesList.size());
+		Log.d(TAG,"onLongPress" + listOfSelectedNodes.size());
 
 		
 		// musi byt vybrany prave jeden uzol
-		if(selectedNodesList.size() == 1){
+		if(listOfSelectedNodes.size() == 1){
 			
 			
 			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -380,9 +432,9 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			creatingByGesture = true;
 			
 			// vytvori prazdny uzol
-			TAMENode selectedNode = selectedNodesList.get(0);			
-			ITAMENode eNode = createNode("","",selectedNode.getProfile(),(int)e.getX(),(int)e.getY());
-						
+			TAMENode selectedNode = listOfSelectedNodes.get(0);			
+			ITAMENode eNode = createNode("","",selectedNode,(int)e.getX(),(int)e.getY());
+			
 			selectedNode.getGui().setSelected(false);
 			eNode.getGui().setSelected(true);
 			
@@ -391,13 +443,14 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 
-	private ITAMENode createNode(String title, String body, TAMPNode parent, int posX, int posY) {
+	private ITAMENode createNode(String title, String body, TAMENode parent, int posX, int posY) {
 		
 		TAMPNode newProfileNode = MainActivity.getProfile().createNode(title, body);
 		ITAMENode newEditorNode = newProfileNode.addEReference(editor, posX, posY);
-		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent, newProfileNode);
-		pConnection.addEReference(editor);
+		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent.getProfile(), newProfileNode);
+		pConnection.addEReference(editor);		
 		//TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+		newEditorNode.getGui().setBackgroundStyle(parent.getGui().getBackgroundStyle());
 		
 		return newEditorNode;		
 	}
@@ -407,5 +460,43 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			float velocityY) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	
+	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		/*
+		if(resultCode == activity.RESULT_OK){		
+			if(PICK_FILE_RESULT_CODE == requestCode){				
+				Uri uri = data.getData();
+				Log.d(TAG,"File selected: " + uri.toString());
+
+				// TODO: implementovat import suboru
+
+
+
+			}	
+		}else 
+		*/
+		
+		if(resultCode == EDIT_NODE_RESULT_CODE){
+
+			String nodeTitle = data.getStringExtra(NODE_TITLE);
+			String nodeBody = data.getStringExtra(NODE_BODY);
+			BackgroundStyle nodeColor = (BackgroundStyle)data.getSerializableExtra(NODE_COLOR);
+			
+			if(listOfSelectedNodes.size() == 1){
+				TAMENode node = listOfSelectedNodes.get(0);
+				node.getGui().setText(nodeTitle);
+				node.getProfile().setTitle(nodeTitle);
+				node.getProfile().setBody(nodeBody);				
+				node.getGui().setBackgroundStyle(nodeColor);
+				
+				editor.invalidate();
+			}
+		}
+
+		return true;
 	}	
 }

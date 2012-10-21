@@ -5,6 +5,7 @@ import java.io.File;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.io.Serializer;
@@ -15,6 +16,8 @@ import cz.vutbr.fit.testmind.io.Serializer;
  *
  */
 public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implements ITAMMenuListener{
+
+	private static final String TAG = "TAMEditorOpenSaveControl";
 
 	public TAMEditorOpenSaveControl(ITAMEditor editor) {
 		super(editor);
@@ -36,7 +39,7 @@ public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implement
 
 	public void saveFile()
 	{
-	    Log.d("testmind", "Saving");
+	    Log.d(TAG, "Saving");
         File cardDirectory = Environment.getExternalStorageDirectory();
         Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
         serializer.serialize(MainActivity.getProfile());		
@@ -44,7 +47,7 @@ public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implement
 
 	public void openFile()
 	{
-	    Log.d("testmind", "Loading");
+	    Log.d(TAG, "Loading");
         File cardDirectory = Environment.getExternalStorageDirectory();
         Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
         serializer.deserialize(MainActivity.getProfile());    

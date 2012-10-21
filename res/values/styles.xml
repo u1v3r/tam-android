@@ -1,6 +1,28 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="android:Theme.Holo" />
     <style name="button_style" parent="android:style/Widget.Holo.Light.Button.Borderless.Small"></style>
+	  
+    
+    <style name="AppThemeEmptyActionBar" parent="android:Theme.Holo.Light" >
+        <item name="android:actionBarStyle">@style/MyActionBarStyle</item>
+    </style>
 
+    <style name="MyActionBarStyle" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:displayOptions"></item>
+    </style>
+    
+    
+    
+    <style name="RadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radio_button_selector</item>
+    </style>
+    
+    <style name="DialogTextStyle">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textStyle">bold</item>        
+    </style>
+    
+    
 </resources>

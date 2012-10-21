@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl.BackgroundStyle;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
+import android.util.Log;
 
 /**
  * Abstract rectangle class providing basic functionality of drawable nodes.
@@ -19,6 +23,8 @@ import android.graphics.drawable.shapes.Shape;
 public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNode {
 	
 	private static final float STROKE_WIDTH = 5f;
+
+	private static final String TAG = "TAMGAbstractNode";
 	
 	private TAMGraph graph;
 	private String text;
@@ -40,7 +46,9 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	
 	private boolean isHighlited;
 	private boolean isEnabled;
-	private boolean isSelected;	
+	private boolean isSelected;
+
+	private BackgroundStyle backgroundStyle;	
 	
 	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
@@ -51,8 +59,8 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
 		this.type = type;
-		this.background = graph.getResources().getColor(R.color.node_background);
-		this.backgroundStroke = graph.getResources().getColor(R.color.node_background_stroke);
+		this.background = graph.getResources().getColor(R.color.node_background_1);		
+		this.backgroundStroke = graph.getResources().getColor(R.color.node_background_stroke_1);
 		this.foreground = graph.getResources().getColor(R.color.node_text);
 		this.highlightColor = graph.getResources().getColor(R.color.node_highlight_background);
 		this.highlightColorStroke = graph.getResources().getColor(R.color.node_highlight_background_stroke);
@@ -167,6 +175,32 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
     public void setBackgroundStroke(int backgroundStroke)
     {
         this.backgroundStroke = backgroundStroke;
+    }
+    
+    public void setBackgroundStyle(TAMEditorNodesControl.BackgroundStyle style){
+    	
+    	Resources res = graph.getResources();
+    	if(BackgroundStyle.BLUE == style){
+    		backgroundStyle = style;
+    		setBackground(res.getColor(R.color.node_background_1));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_1));
+    	}else if(BackgroundStyle.GREEN == style){
+    		backgroundStyle = style;
+    		setBackground(res.getColor(R.color.node_background_2));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_2));
+    	}else if(BackgroundStyle.RED == style){
+    		backgroundStyle = style;
+    		setBackground(res.getColor(R.color.node_background_3));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_3));
+    	}else if(BackgroundStyle.PURPLE == style){
+    		backgroundStyle = style;
+    		setBackground(res.getColor(R.color.node_background_4));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_4));
+    	}
+    }
+    
+    public TAMEditorNodesControl.BackgroundStyle getBackgroundStyle(){
+    	return backgroundStyle;
     }
 
     public void setSelected(boolean enable) {
