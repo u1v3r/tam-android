@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
@@ -13,7 +14,7 @@ public class TAMEditorIOControl extends TAMEditorAbstractControl implements ITAM
 
 	public TAMEditorIOControl(ITAMEditor editor) {
 		super(editor);
-		// TODO Auto-generated constructor stub
+		editor.getListOfMenuControls().add(this);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -31,7 +32,6 @@ public class TAMEditorIOControl extends TAMEditorAbstractControl implements ITAM
 
 	public void exportFile() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void importFile() {
