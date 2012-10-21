@@ -68,7 +68,6 @@
             android:layout_height="35dp"
             android:layout_marginLeft="10dp"
             android:background="@color/node_background_1"
-            android:checked="true"
             android:onClick="onSelectColorClicked"
             android:textColor="@color/node_background_stroke_1" />
         

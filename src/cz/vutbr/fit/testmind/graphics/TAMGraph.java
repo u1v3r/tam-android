@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
@@ -54,7 +55,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	protected List<ITAMMoveGestureListener> listOfMoveGestureControls;
 	protected List<ITAMTouchListener> listOfTouchControls;
 	protected List<ITAMMenuListener> listOfMenuControls;
-	
+	protected List<OnActivityResultListener> listOfOnActivityResultControls;
 	//private List<OnGestureListener> listOfGestureControls;
 	
 	public interface ITAMDrawListener {
@@ -79,6 +80,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 
 	private int height = 0;
 	private int width = 0;
+
+	
 	
        
 	public TAMGraph(Context context) {
@@ -104,7 +107,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		listOfTouchControls = new ArrayList<ITAMTouchListener>();
 		listOfMenuControls = new ArrayList<ITAMMenuListener>();
 		listOfGestureControls = new ArrayList<GestureDetector>();
-		
+		listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
 		zoom = new TAMGZoom(this);
 		
 		actualPoint = new Point();	
@@ -118,6 +121,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		invalidate();
 	}
 	
+
+
 	/**
 	 * 
 	 * @return itemFactory
@@ -180,6 +185,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	
 	public List<GestureDetector> getListOfGestureControls(){
 		return listOfGestureControls;
+	}
+	
+	public List<OnActivityResultListener> getListOfOnActivityResultControls() {
+		return listOfOnActivityResultControls;
 	}
 	
 	/**

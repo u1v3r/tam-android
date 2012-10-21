@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl.BackgroundStyle;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -54,8 +57,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
 		this.type = type;
-		this.background = graph.getResources().getColor(R.color.node_background_1);
-		Log.d(TAG, "farba" + this.background);
+		this.background = graph.getResources().getColor(R.color.node_background_1);		
 		this.backgroundStroke = graph.getResources().getColor(R.color.node_background_stroke_1);
 		this.foreground = graph.getResources().getColor(R.color.node_text);
 		this.highlightColor = graph.getResources().getColor(R.color.node_highlight_background);
@@ -171,6 +173,24 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
     public void setBackgroundStroke(int backgroundStroke)
     {
         this.backgroundStroke = backgroundStroke;
+    }
+    
+    public void setBackgroundStyle(TAMEditorNodesControl.BackgroundStyle style){
+    	
+    	Resources res = graph.getResources();
+    	if(BackgroundStyle.BLUE == style){
+    		setBackground(res.getColor(R.color.node_background_1));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_1));
+    	}else if(BackgroundStyle.GREEN == style){
+    		setBackground(res.getColor(R.color.node_background_2));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_2));
+    	}else if(BackgroundStyle.RED == style){
+    		setBackground(res.getColor(R.color.node_background_3));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_3));
+    	}else if(BackgroundStyle.PURPLE == style){
+    		setBackground(res.getColor(R.color.node_background_4));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_4));
+    	}
     }
 
     public void setSelected(boolean enable) {

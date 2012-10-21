@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.graphics;
 
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -10,7 +11,7 @@ public interface ITAMGItem {
 	public boolean hit(float x, float y);
 	
 	public void setBackground(int background);
-	
+		
 	public int getBackground();
 	
 	public void setForeground(int foreground);

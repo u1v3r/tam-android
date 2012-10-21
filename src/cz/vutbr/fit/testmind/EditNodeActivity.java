@@ -1,10 +1,15 @@
 package cz.vutbr.fit.testmind;
 
+import java.io.Serializable;
+
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl.BackgroundStyle;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +28,8 @@ public class EditNodeActivity extends Activity {
 		public static final int RED = R.id.edit_node_radio3;
 		public static final int PURPLE = R.id.edit_node_radio4;
 	}
+
+	private static final String TAG = "EditNodeActivity";
 	
 	private EditText title;
 	private EditText body;
@@ -34,7 +41,7 @@ public class EditNodeActivity extends Activity {
 	private RadioButton radioButtonPurple;
 	
 	private TAMENode selectedNode;
-	private int color = 0;
+	private BackgroundStyle color;
 
 	
 	@Override
@@ -55,34 +62,31 @@ public class EditNodeActivity extends Activity {
 
 		
 		Intent intent = getIntent();		
-		String titleString = intent.getStringExtra(MainActivity.NODE_TITLE);
-		String bodyString = intent.getStringExtra(MainActivity.NODE_BODY);
+		String titleString = intent.getStringExtra(TAMEditorNodesControl.NODE_TITLE);
+		String bodyString = intent.getStringExtra(TAMEditorNodesControl.NODE_BODY);
 				
-		// prenasat farbu asi nebude treba
-		//int backgroundColor = (int)Long.parseLong(intent.getStringExtra(MainActivity.NODE_COLOR),16);	
+		// prenasat farbu asi nebude treba		
+		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodesControl.NODE_COLOR);	
 		
 		title.setText(titleString);
 		body.setText(bodyString);
 		
-		//setRadioButtnColor(backgroundColor);
+		
+		setRadioButtnColor(backgroundColor);
+		
 	}
 	
-    private void setRadioButtnColor(int backgroundColor) {
+    private void setRadioButtnColor(BackgroundStyle backgroundColor) {
     	
-    	switch(backgroundColor) {
-	        case RadioButtonItems.BLUE:
-	            radioButtonBlue.setSelected(true);	        	              
-	            break;
-	        case RadioButtonItems.RED:
-	        	radioButtonRed.setSelected(true);              
-	            break;
-	        case RadioButtonItems.GREEN:
-	        	radioButtonGreen.setSelected(true);
-	            break;
-	        case RadioButtonItems.PURPLE:
-	        	radioButtonPurple.setSelected(true);
-	            break;
-	    }			
+    	if(backgroundColor.equals(BackgroundStyle.BLUE)){
+    		radioButtonBlue.setChecked(true);
+    	}else if(backgroundColor.equals(BackgroundStyle.GREEN)){
+    		radioButtonGreen.setChecked(true);
+    	}else if(backgroundColor.equals(BackgroundStyle.RED)){
+    		radioButtonRed.setChecked(true);  
+    	}else if(backgroundColor.equals(BackgroundStyle.PURPLE)){
+    		radioButtonPurple.setChecked(true);
+    	}
 	}
 
 	@Override
@@ -98,8 +102,7 @@ public class EditNodeActivity extends Activity {
     	if(item.getItemId() == R.id.edit_node_acitivty_ok){
     		saveValues();
     	}else if(item.getItemId() == R.id.edit_node_acitivty_cancel){
-    		finishActivity(RESULT_CANCELED);
-    		
+    		finish();
     	}
     	    	
 		return super.onOptionsItemSelected(item);
@@ -112,10 +115,10 @@ public class EditNodeActivity extends Activity {
     	String bodyText = body.getText().toString();
 		
     	Intent intent = new Intent();
-    	intent.putExtra(MainActivity.NODE_TITLE, titleText);
-    	intent.putExtra(MainActivity.NODE_BODY, bodyText);
-    	
-    	setResult(MainActivity.EDIT_NODE_RESULT_CODE, intent);
+    	intent.putExtra(TAMEditorNodesControl.NODE_TITLE, titleText);
+    	intent.putExtra(TAMEditorNodesControl.NODE_BODY, bodyText);
+    	intent.putExtra(TAMEditorNodesControl.NODE_COLOR,color);
+    	setResult(TAMEditorNodesControl.EDIT_NODE_RESULT_CODE, intent);
     	finish();
 	}
 
@@ -125,16 +128,16 @@ public class EditNodeActivity extends Activity {
         
     	switch(view.getId()) {
 	        case RadioButtonItems.BLUE:
-	            if (checked) color = R.color.node_background_1;              
+	            if (checked) color = BackgroundStyle.BLUE;              
 	            break;
 	        case RadioButtonItems.RED:
-	        	if (checked) color = R.color.node_background_3;               
+	        	if (checked) color = BackgroundStyle.RED;               
 	            break;
 	        case RadioButtonItems.GREEN:
-	        	if (checked) color = R.color.node_background_2;               
+	        	if (checked) color = BackgroundStyle.GREEN;               
 	            break;
 	        case RadioButtonItems.PURPLE:
-	        	if (checked) color = R.color.node_background_4;             
+	        	if (checked) color = BackgroundStyle.PURPLE;             
 	            break;
 	    }	
     }

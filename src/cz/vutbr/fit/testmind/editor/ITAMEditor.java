@@ -3,12 +3,15 @@ package cz.vutbr.fit.testmind.editor;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
@@ -37,6 +40,8 @@ public interface ITAMEditor {
 	
 	public boolean onOptionsItemSelected(MenuItem item);
 	
+	public void onActivityResult(int requestCode, int resultCode, Intent data);
+	
 	// TAMGraph functions //
 	
 	public ITAMGNode getLastSelectedNode();
@@ -53,6 +58,8 @@ public interface ITAMEditor {
 	
 	public List<ITAMMenuListener> getListOfMenuControls();
 	
+	public List<OnActivityResultListener> getListOfOnActivityResultControls();
+	
 	// Surface View functions //
 
 	public Context getContext();
@@ -66,4 +73,6 @@ public interface ITAMEditor {
 	public TAMGZoom getZoom();
 	
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
+
+	
 }

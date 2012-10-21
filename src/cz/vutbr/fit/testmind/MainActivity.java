@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
@@ -32,14 +33,7 @@ public class MainActivity extends FragmentActivity {
 		public static ZoomControls zoomControls;
 		public static TAMEditor editor;
 	}
-	
-	public static final int PICK_FILE_RESULT_CODE = 0;
-	public static final int EDIT_NODE_RESULT_CODE = 1;
-	
-	public static final String NODE_TITLE = "title";
-	public static final String NODE_BODY = "body";
-	public static final String NODE_COLOR = "color";
-	
+		
 	private static final String TAG = "MainActivity";
 	
 	private static TAMProfile profile;
@@ -76,23 +70,7 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//EventObjects.editor.
-		if(resultCode == RESULT_OK){		
-			if(PICK_FILE_RESULT_CODE == requestCode){				
-				Uri uri = data.getData();
-				Log.d(TAG,"File selected: " + uri.toString());
-				
-				// TODO: implementovat import suboru
-				
-				
-	
-			}	
-		}else if(resultCode == EDIT_NODE_RESULT_CODE){
-			
-			
-		}
-		
-		super.onActivityResult(requestCode, resultCode, data);
+		EventObjects.editor.onActivityResult(requestCode, resultCode, data);		
 	}
 
 	public static TAMProfile getProfile() {

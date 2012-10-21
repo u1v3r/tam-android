@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
@@ -147,6 +149,12 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		}
 		
 		return selected;
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		for (OnActivityResultListener control : getListOfOnActivityResultControls()) {
+			control.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	
