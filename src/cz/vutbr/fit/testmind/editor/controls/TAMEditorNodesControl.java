@@ -149,7 +149,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	public void addChildNode(String title, String body, TAMENode parent, Point position){		
 		
 		
-		createNode(title, body, parent.getProfile(), position.x, position.y);
+		createNode(title, body, parent, position.x, position.y);
 		
 		/*
 		TAMPNode pNode = MainActivity.getProfile().createNode(title, body);
@@ -241,20 +241,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 				showAddChildNodeDialog();
 				break;
 			case MenuItems.edit:
-				// jeden vybrany uzol
-				if(listOfSelectedNodes.size() > 1) break;
-					
-				
-				TAMENode selectedNode = listOfSelectedNodes.get(0);
-				Intent intent = new Intent(editor.getContext(), EditNodeActivity.class);	
-						
-				intent.putExtra(NODE_TITLE, selectedNode.getProfile().getTitle());
-				intent.putExtra(NODE_BODY, selectedNode.getProfile().getBody());				
-				intent.putExtra(NODE_COLOR, genrateColorId(selectedNode.getGui().getBackground()));				
-						
-				
-				activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
-				
+				showEditNodeDialog();				
 				break;
 			case MenuItems.delete:
 							
@@ -265,6 +252,25 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
     	
     	return true;		
 	}
+
+
+	private void showEditNodeDialog() {
+
+		if(listOfSelectedNodes.size() > 1) return;
+			
+		
+		TAMENode selectedNode = listOfSelectedNodes.get(0);
+		Intent intent = new Intent(editor.getContext(), EditNodeActivity.class);	
+				
+		intent.putExtra(NODE_TITLE, selectedNode.getProfile().getTitle());
+		intent.putExtra(NODE_BODY, selectedNode.getProfile().getBody());				
+		intent.putExtra(NODE_COLOR, genrateColorId(selectedNode.getGui().getBackground()));				
+				
+		
+		activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
+		
+	}
+
 
 
 	private BackgroundStyle genrateColorId(int background) {
@@ -427,8 +433,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 			
 			// vytvori prazdny uzol
 			TAMENode selectedNode = listOfSelectedNodes.get(0);			
-			ITAMENode eNode = createNode("","",selectedNode.getProfile(),(int)e.getX(),(int)e.getY());
-						
+			ITAMENode eNode = createNode("","",selectedNode,(int)e.getX(),(int)e.getY());
+			
 			selectedNode.getGui().setSelected(false);
 			eNode.getGui().setSelected(true);
 			
@@ -437,13 +443,14 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 
-	private ITAMENode createNode(String title, String body, TAMPNode parent, int posX, int posY) {
+	private ITAMENode createNode(String title, String body, TAMENode parent, int posX, int posY) {
 		
 		TAMPNode newProfileNode = MainActivity.getProfile().createNode(title, body);
 		ITAMENode newEditorNode = newProfileNode.addEReference(editor, posX, posY);
-		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent, newProfileNode);
-		pConnection.addEReference(editor);
+		TAMPConnection pConnection = MainActivity.getProfile().createConnection(parent.getProfile(), newProfileNode);
+		pConnection.addEReference(editor);		
 		//TAMENode newNode = selectedNode.addChild((int)e.getX(), (int)e.getY(), "","");
+		newEditorNode.getGui().setBackgroundStyle(parent.getGui().getBackgroundStyle());
 		
 		return newEditorNode;		
 	}

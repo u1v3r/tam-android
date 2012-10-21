@@ -18,6 +18,8 @@ public interface ITAMGNode extends ITAMGItem {
 	
 	public void setBackgroundStyle(TAMEditorNodesControl.BackgroundStyle background);
 	
+	public TAMEditorNodesControl.BackgroundStyle getBackgroundStyle();
+	
 	public Rect getBounds();
 	
 	public Point getPosition();

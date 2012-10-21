@@ -46,7 +46,9 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	
 	private boolean isHighlited;
 	private boolean isEnabled;
-	private boolean isSelected;	
+	private boolean isSelected;
+
+	private BackgroundStyle backgroundStyle;	
 	
 	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
@@ -179,18 +181,26 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
     	
     	Resources res = graph.getResources();
     	if(BackgroundStyle.BLUE == style){
+    		backgroundStyle = style;
     		setBackground(res.getColor(R.color.node_background_1));
     		setBackgroundStroke(res.getColor(R.color.node_background_stroke_1));
     	}else if(BackgroundStyle.GREEN == style){
+    		backgroundStyle = style;
     		setBackground(res.getColor(R.color.node_background_2));
     		setBackgroundStroke(res.getColor(R.color.node_background_stroke_2));
     	}else if(BackgroundStyle.RED == style){
+    		backgroundStyle = style;
     		setBackground(res.getColor(R.color.node_background_3));
     		setBackgroundStroke(res.getColor(R.color.node_background_stroke_3));
     	}else if(BackgroundStyle.PURPLE == style){
+    		backgroundStyle = style;
     		setBackground(res.getColor(R.color.node_background_4));
     		setBackgroundStroke(res.getColor(R.color.node_background_stroke_4));
     	}
+    }
+    
+    public TAMEditorNodesControl.BackgroundStyle getBackgroundStyle(){
+    	return backgroundStyle;
     }
 
     public void setSelected(boolean enable) {
