@@ -64,4 +64,6 @@ public interface ITAMEditor {
 	public void invalidate();
 	
 	public TAMGZoom getZoom();
+	
+	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
 }
