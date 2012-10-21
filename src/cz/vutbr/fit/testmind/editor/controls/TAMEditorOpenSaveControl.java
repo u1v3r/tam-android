@@ -1,8 +1,13 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.io.File;
+
+import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.io.Serializer;
 
 /**
  * 
@@ -29,14 +34,20 @@ public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implement
 			
 	}
 
-	public void saveFile() {
-		// TODO Auto-generated method stub
-		
+	public void saveFile()
+	{
+	    Log.d("testmind", "Saving");
+        File cardDirectory = Environment.getExternalStorageDirectory();
+        Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
+        serializer.serialize(MainActivity.getProfile());		
 	}
 
-	public void openFile() {
-		// TODO Auto-generated method stub
-		
+	public void openFile()
+	{
+	    Log.d("testmind", "Loading");
+        File cardDirectory = Environment.getExternalStorageDirectory();
+        Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
+        serializer.deserialize(MainActivity.getProfile());    
 	}
 
 }
