@@ -13,7 +13,7 @@ public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implement
 
 	public TAMEditorOpenSaveControl(ITAMEditor editor) {
 		super(editor);
-		// TODO Auto-generated constructor stub
+		editor.getListOfMenuControls().add(this);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
