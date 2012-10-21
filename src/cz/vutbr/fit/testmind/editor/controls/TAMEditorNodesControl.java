@@ -254,7 +254,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	}
 
 
-	private void showEditNodeDialog() {
+	public void showEditNodeDialog() {
 
 		if(listOfSelectedNodes.size() > 1) return;
 			
@@ -380,7 +380,11 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 
 
 	public boolean onDoubleTap(MotionEvent e) {
-		// TODO Auto-generated method stub
+		
+		if(listOfSelectedNodes.size() == 1){
+			showEditNodeDialog();
+		}
+		
 		return false;
 	}
 
