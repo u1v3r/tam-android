@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
@@ -31,6 +33,8 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	private List<ITAMENode> listOfENodes;
 	private List<ITAMEConnection> listOfEConnections;
 	//protected List<ITAMMenuListener> listOfMenuListeners;
+
+	private boolean hasRoot = false;
 			
 	public TAMEditor(Context context) {
 		this(context, null);
@@ -69,6 +73,33 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasWindowFocus) {
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasWindowFocus);
+		
+		// ak neexistuje root uzol treba ho vytvorit
+		if(!hasRoot){
+			createDefaultRootNode();
+		}
+	}
+	
+	/**
+	 * Vytvori root node do stredu kresliacej plochy
+	 */
+	public void createDefaultRootNode(){
+		
+		
+		Point position = new Point(getWidth()/2, getHeight()/2);
+		TAMPNode pNode = MainActivity.getProfile().createRoot("", "");
+		pNode.addEReference(this, position.x, position.y);
+		//editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
+		//		DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);
+		
+		this.hasRoot = true;
+		
 	}
 
 	public List<ITAMENode> getListOfENodes() {

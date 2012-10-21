@@ -1,15 +1,10 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import android.graphics.Canvas;
 import android.support.v4.app.FragmentActivity;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 

@@ -353,11 +353,12 @@ public class Serializer
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
         {
             ITAMEditor editor = editors.get(cur.getString(indexes.get("name")));
-            int sx = cur.getInt(indexes.get("sx"));
-            int sy = cur.getInt(indexes.get("sy"));
-            int px = cur.getInt(indexes.get("px"));
-            int py = cur.getInt(indexes.get("py"));
-            editor.zoom(sx, sy, px, py);
+                       
+            editor.getZoom().sx = cur.getInt(indexes.get("sx"));
+            editor.getZoom().sy = cur.getInt(indexes.get("sy"));
+            editor.getZoom().px = cur.getInt(indexes.get("px"));
+            editor.getZoom().py = cur.getInt(indexes.get("py"));
+            
         }
         
         return editors;

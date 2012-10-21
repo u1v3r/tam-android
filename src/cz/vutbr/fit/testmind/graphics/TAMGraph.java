@@ -77,6 +77,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 
 	public boolean isDragging = false;
 
+	private int height = 0;
+	private int width = 0;
 	
        
 	public TAMGraph(Context context) {
@@ -535,17 +537,18 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	}	
 	
 	
-	
-	
 	public void surfaceCreated(SurfaceHolder holder) {
-		this.drawingThread.setRunning(true);
-		this.drawingThread.start();
+		
+		if(drawingThread.isRunning()){
+			this.drawingThread.setRunning(true);
+			this.drawingThread.start();
+		}
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		
 	}
-
+	
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
 	    drawingThread.setRunning(false);
@@ -577,6 +580,10 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			this.panel = panel;
 		}
 		
+		public boolean isRunning() {
+			return this.run;
+		}
+
 		public SurfaceHolder getSurfaceHolder() {
 			return this.surfaceHolder;
 		}

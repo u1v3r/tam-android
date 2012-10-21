@@ -58,37 +58,18 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	private boolean creatingNewChild = false;
 	
 	public TAMEditorNodesControl(ITAMEditor editor) {
-		super(editor);
-		createDefaultRootNode();
+		super(editor);		
 		setOnGestureListner(this);
 		selectedNodesList = new ArrayList<TAMENode>();
-		editor.getListOfMenuControls().add(this);
-				
+		
+		editor.getListOfMenuControls().add(this);				
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfDrawControls().add(this);
 		editor.getListOfItemControls().add(this);
 	}
 	
 
-	/**
-	 * Vytvori root node do stredu kresliacej plochy
-	 */
-	public void createDefaultRootNode(){
-		
-		// ak uz je jeden root uzol vytvoreny nesmie sa vytvorit druhy
-		//if(editor.hasRootNode()) return;
-		
-		System.out.println("profile: " + MainActivity.getProfile());
-		
-		Point position = new Point(editor.getWidth()/2, editor.getHeight()/2);
-		TAMPNode pNode = MainActivity.getProfile().createRoot(DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);
-		pNode.addEReference(editor, position.x, position.y);
-		//editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
-		//		DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);	
-		
-	}
-		
-	
+
 	/**
 	 * Cez dialog vytvori child pre vybrany parrent uzol
 	 */
@@ -191,12 +172,14 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 	
 	public void onFinishAddChildNodeDialog(String title) {
 		
+		
+		// treba urcit, ci sa bude vytvarat child alebo len upravovat uz vytvoreny uzol
 		if(creatingNewChild){
 			
 			addChildNode(title, (TAMENode) editor.getLastSelectedNode().getHelpObject());
 			creatingNewChild = false;
 			
-		} else{
+		} else{// na vytvaranie bolo pouzite gesto, takze uzol uz existuje
 			
 			// ak vytvara cez gesto, tak len prepise text uzlu		
 			if(selectedNodesList.size() == 1){
@@ -231,6 +214,10 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		}
 */		
 
+		/**
+		 * TODO: open, save, import, export menu treba presunut do vlastnych control
+		 */
+		
 		switch (item.getItemId()) {
 			case MenuItems.add:		
 				showAddChildNodeDialog();
@@ -311,6 +298,7 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 
 	public void onDraw(Canvas canvas) {
 		
+		// na drop neexistuje ziadny event, preto treba rucne odchytit zastavenie pohybu
 		if(creatingByGesture){
 			
 			if(((TAMGraph)editor).isDragging) return;
