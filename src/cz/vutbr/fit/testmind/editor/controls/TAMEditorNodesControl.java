@@ -229,10 +229,8 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 							
 				break;
 			case MenuItems.save:
-			    File cardDirectory = Environment.getExternalStorageDirectory();
-				Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
-				serializer.serialize(MainActivity.getProfile());
-			    return true;
+			    
+			    break;
 			case MenuItems.importFile:
 				importFile();
 				return true;

@@ -71,7 +71,7 @@ public class Serializer
             "FOREIGN KEY(child) REFERENCES node(id))";
 
     static private final String SELECT_PROFILE = "SELECT profile.nodeCounter, profile.connectionCounter, " +
-            "nodes.id, nodes.title, nodes.body" +
+            "nodes.id, nodes.title, nodes.body " +
             "from profile inner join nodes on profile.root = nodes.id";
     
     static private final String[] COLUMNS_PROFILE = {"nodeCounter", "connectionCounter", "id", "title", "body"};    
