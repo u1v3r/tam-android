@@ -508,7 +508,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 * @param pivotX
 	 * @param pivotY
 	 */
-	protected void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
+	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY){
 		//Log.d(TAG,"pivotX: " + px + " ,pivotY" + py
 		//		+ ", scaleX:"+ sx + ", scaleY"	 + sy);
 		
