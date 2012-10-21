@@ -34,6 +34,11 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public static final int PICK_FILE_RESULT_CODE = 0;
+	public static final int EDIT_NODE_RESULT_CODE = 1;
+	
+	public static final String NODE_TITLE = "title";
+	public static final String NODE_BODY = "body";
+	public static final String NODE_COLOR = "color";
 	
 	private static final String TAG = "MainActivity";
 	
@@ -50,8 +55,8 @@ public class MainActivity extends FragmentActivity {
     	
     	setContentView(R.layout.activity_main);
     	
-    	EventObjects.editor = (TAMEditor) findViewById(R.id.tam_editor);
-    	EventObjects.zoomControls = (ZoomControls) findViewById(R.id.zoom_controls);
+    	EventObjects.editor = (TAMEditor) findViewById(R.id.acitity_main_tam_editor);
+    	EventObjects.zoomControls = (ZoomControls) findViewById(R.id.acitity_main_zoom_controls);
     	
     	EventObjects.editor.initialize();
     }
@@ -71,16 +76,20 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if(PICK_FILE_RESULT_CODE == requestCode && RESULT_OK == resultCode){
+		//EventObjects.editor.
+		if(resultCode == RESULT_OK){		
+			if(PICK_FILE_RESULT_CODE == requestCode){				
+				Uri uri = data.getData();
+				Log.d(TAG,"File selected: " + uri.toString());
+				
+				// TODO: implementovat import suboru
+				
+				
+	
+			}	
+		}else if(resultCode == EDIT_NODE_RESULT_CODE){
 			
-			Uri uri = data.getData();
-			Log.d(TAG,"File selected: " + uri.toString());
 			
-			// TODO: implementovat import suboru
-			
-			
-
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);

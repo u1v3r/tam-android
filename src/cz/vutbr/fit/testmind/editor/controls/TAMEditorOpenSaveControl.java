@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
 import android.view.MenuItem;
+import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
@@ -13,7 +14,7 @@ public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implement
 
 	public TAMEditorOpenSaveControl(ITAMEditor editor) {
 		super(editor);
-		// TODO Auto-generated constructor stub
+		editor.getListOfMenuControls().add(this);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -31,7 +32,7 @@ public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implement
 
 	public void saveFile() {
 		// TODO Auto-generated method stub
-		
+		Toast.makeText(activity, "je tu", Toast.LENGTH_LONG).show();
 	}
 
 	public void openFile() {

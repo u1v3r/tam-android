@@ -13,6 +13,7 @@ import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -49,8 +50,9 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	}
 	
 	public void initialize() {
-		new TAMEditorZoomControl(this, R.id.zoom_controls);
+		new TAMEditorZoomControl(this, R.id.acitity_main_zoom_controls);
 		new TAMEditorNodesControl(this);
+		new TAMEditorOpenSaveControl(this);
 		
 		MainActivity.getProfile().getListOfEditors().add(this);
 	}

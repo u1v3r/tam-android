@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
+import android.util.Log;
 
 /**
  * Abstract rectangle class providing basic functionality of drawable nodes.
@@ -19,6 +20,8 @@ import android.graphics.drawable.shapes.Shape;
 public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNode {
 	
 	private static final float STROKE_WIDTH = 5f;
+
+	private static final String TAG = "TAMGAbstractNode";
 	
 	private TAMGraph graph;
 	private String text;
@@ -51,8 +54,9 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
 		this.type = type;
-		this.background = graph.getResources().getColor(R.color.node_background);
-		this.backgroundStroke = graph.getResources().getColor(R.color.node_background_stroke);
+		this.background = graph.getResources().getColor(R.color.node_background_1);
+		Log.d(TAG, "farba" + this.background);
+		this.backgroundStroke = graph.getResources().getColor(R.color.node_background_stroke_1);
 		this.foreground = graph.getResources().getColor(R.color.node_text);
 		this.highlightColor = graph.getResources().getColor(R.color.node_highlight_background);
 		this.highlightColorStroke = graph.getResources().getColor(R.color.node_highlight_background_stroke);

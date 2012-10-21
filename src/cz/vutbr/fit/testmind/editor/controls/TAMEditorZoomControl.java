@@ -22,7 +22,7 @@ public class TAMEditorZoomControl extends TAMEditorAbstractControl {
 
 	public TAMEditorZoomControl(TAMEditor editor, int id) {
 		super(editor);
-		this.zoomControls = (ZoomControls) ((FragmentActivity) editor.getContext()).findViewById(R.id.zoom_controls);
+		this.zoomControls = (ZoomControls) ((FragmentActivity) editor.getContext()).findViewById(R.id.acitity_main_zoom_controls);
 		System.out.println(zoomControls);
 		this.graph = (TAMGraph) getEditor();
 		addListeners();

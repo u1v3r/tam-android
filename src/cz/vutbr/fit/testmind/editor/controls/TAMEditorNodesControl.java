@@ -11,12 +11,16 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Environment;
 import android.os.Vibrator;
+import android.preference.PreferenceManager.OnActivityResultListener;
+import android.sax.StartElementListener;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.widget.Toast;
+import cz.vutbr.fit.testmind.EditNodeActivity;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
@@ -44,15 +48,14 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
  */
 public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements AddNodeDialogListener,
 	ITAMMenuListener,OnGestureListener,OnDoubleTapListener, 
-	ITAMTouchListener,ITAMDrawListener,ITAMItemListener {	
-	
+	ITAMTouchListener,ITAMDrawListener,ITAMItemListener, OnActivityResultListener {	
+		
 	private static final String DEFAULT_ROOT_TITLE = "root";
 	private static final String DEFAULT_ROOT_BODY = "root body";
 	private static final String TAG = "TAMEditorNodes";
-	private static final String INTENT_MIME_TYPE = "text/xml";
+	private static final String INTENT_MIME_TYPE = "text/xml";	
+	private static final long VIBRATE_DRUATION = 100;
 		
-	
-	private static final long VIBRATE_DRUATION = 100;	
 	private List<TAMENode> selectedNodesList;	
 	private boolean creatingByGesture = false;
 	private boolean creatingNewChild = false;
@@ -221,26 +224,29 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 		switch (item.getItemId()) {
 			case MenuItems.add:		
 				showAddChildNodeDialog();
-				return true;
+				break;
 			case MenuItems.edit:
+				// jeden vybrany uzol
+				if(selectedNodesList.size() > 1) break;
+					
+				
+				TAMENode selectedNode = selectedNodesList.get(0);
+				Intent intent = new Intent(editor.getContext(), EditNodeActivity.class);	
+						
+				intent.putExtra(MainActivity.NODE_TITLE, selectedNode.getProfile().getTitle());
+				intent.putExtra(MainActivity.NODE_BODY, selectedNode.getProfile().getBody());
+							
+				intent.putExtra(MainActivity.NODE_COLOR, selectedNode.getGui().getBackground());				
+						
+				
+				activity.startActivityForResult(intent, MainActivity.EDIT_NODE_RESULT_CODE);
 				
 				break;
 			case MenuItems.delete:
 							
 				break;
-			case MenuItems.save:
-			    File cardDirectory = Environment.getExternalStorageDirectory();
-				Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
-				serializer.serialize(MainActivity.getProfile());
-			    return true;
-			case MenuItems.importFile:
-				importFile();
-				return true;
-			case MenuItems.settings:
-	
-				break;
 			default: 
-				return false;    	
+				return true;    	
     	} 	
     	
     	return true;		
@@ -407,6 +413,13 @@ public class TAMEditorNodesControl extends TAMEditorAbstractControl  implements 
 
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		return false;
 	}	
