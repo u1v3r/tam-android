@@ -135,6 +135,22 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 * 
 	 * @return
 	 */
+	public List<ITAMGNode> getListOfNodes() {
+		return listOfNodes;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMGConnection> getListOfConnections() {
+		return listOfConnections;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
 	public List<ITAMGItem> getListOfDrawableItems() {
 		return listOfDrawableItems;
 	}

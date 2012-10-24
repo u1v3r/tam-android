@@ -75,6 +75,7 @@ public class TAMENode implements ITAMENode {
 	}
 
 	public void dispose() {
+		editor.getListOfENodes().remove(this);
 		gui.dispose();
 		gui = null;
 		editor = null;

@@ -66,7 +66,7 @@ public class TAMProfile {
 		if(root != null) {
 			throw new TAMItemException("Root already exists");
 		} else {
-			root = createNode(title, body);
+			root = importNode(title, body, id);
 			return root;
 		}
 	}

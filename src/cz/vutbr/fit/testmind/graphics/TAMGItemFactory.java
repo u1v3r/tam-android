@@ -44,5 +44,36 @@ public class TAMGItemFactory {
 		
 		return connection;
 	}
+	
+	public void deleteNode(ITAMGNode node, boolean withDisposeConnections) {
+		
+		for(ITAMGConnection connection : node.getListOfChildConnections()) {
+			if(withDisposeConnections) {
+				deleteConnection(connection);
+			} else {
+				connection.setEnabled(false);
+			}
+		}
+		
+		TAMGraph graph = node.getGraph();
+		
+		node.dispose();
+		
+		if(graph != null) {
+			graph.getListOfNodes().remove(node);
+		}
+	}
+	
+	public void deleteConnection(ITAMGConnection connection) {
+		
+		TAMGraph graph = connection.getGraph();
+		
+		if(graph != null) {
+			
+			graph.getListOfConnections().remove(connection);
+		}
+		
+		connection.dispose();
+	}
 
 }
