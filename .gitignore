@@ -5,3 +5,4 @@ bin/
 gen/cz/vutbr/fit/testmind/R.java
 *.swp
 class_diagram*
+*~

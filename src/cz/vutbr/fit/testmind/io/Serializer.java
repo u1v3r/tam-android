@@ -322,7 +322,7 @@ public class Serializer
         HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_PROFILE);
     
         cur.moveToFirst();
-          
+
         profile.reset(cur.getInt(indexes.get("nodeCounter")), cur.getInt(indexes.get("connectionCounter")));
         String title = cur.getString(indexes.get("title"));
         String body = cur.getString(indexes.get("body"));
