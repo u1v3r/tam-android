@@ -85,7 +85,7 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 	public void addChild() {
 		
 		if(editor.getLastSelectedNode() == null) {
-			Toast.makeText(editor.getContext(), R.string.node_not_selected, Toast.LENGTH_LONG).show();
+			Toast.makeText(editor.getContext(), R.string.parent_node_not_selected, Toast.LENGTH_LONG).show();
 		} else {
 			selectedNode = (ITAMENode) editor.getLastSelectedNode().getHelpObject();
 			Toast.makeText(editor.getContext(), R.string.click, Toast.LENGTH_LONG).show();
@@ -100,7 +100,9 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 		ITAMGNode gNode = editor.getLastSelectedNode();
 		
 		if(gNode != null) {
-			showEditNodeDialog((ITAMENode) gNode);
+			showEditNodeDialog((ITAMENode) (gNode.getHelpObject()));
+		} else {
+			Toast.makeText(editor.getContext(), R.string.node_not_selected, Toast.LENGTH_LONG).show();
 		}
 	}
 	
