@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl.BackgroundStyle;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -177,7 +177,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
         this.backgroundStroke = backgroundStroke;
     }
     
-    public void setBackgroundStyle(TAMEditorNodesControl.BackgroundStyle style){
+    public void setBackgroundStyle(TAMEditorNodeControl.BackgroundStyle style){
     	
     	Resources res = graph.getResources();
     	if(BackgroundStyle.BLUE == style){
@@ -199,7 +199,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
     	}
     }
     
-    public TAMEditorNodesControl.BackgroundStyle getBackgroundStyle(){
+    public TAMEditorNodeControl.BackgroundStyle getBackgroundStyle(){
     	return backgroundStyle;
     }
 

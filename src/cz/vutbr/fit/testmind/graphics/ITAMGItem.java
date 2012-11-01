@@ -1,6 +1,6 @@
 package cz.vutbr.fit.testmind.graphics;
 
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 

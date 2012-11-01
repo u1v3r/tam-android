@@ -6,25 +6,21 @@ import java.util.List;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl.ZoomInOutEventListener;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnDragListener;
 import android.widget.ZoomControls;
 
-public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,ZoomInOutEventListener {
+public class TAMGraph extends SurfaceView implements OnGestureListener, OnDoubleTapListener, SurfaceHolder.Callback,ZoomInOutEventListener {
 	
 	private static final String TAG = "TAMGraph";
 
@@ -47,15 +43,17 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	//Canvas canvas;
 	private boolean activeTouchEvent = false;
 	private TAMGZoom zoom;
+	private GestureDetector gestureDetector;
 	
 	
 	protected List<GestureDetector> listOfGestureControls;
 	protected List<ITAMDrawListener> listOfDrawControls;
 	protected List<ITAMItemListener> listOfItemControls;
-	protected List<ITAMMoveGestureListener> listOfMoveGestureControls;
+	protected List<ITAMBlankAreaGestureListener> listOfBlankAreaGestureControls;
 	protected List<ITAMTouchListener> listOfTouchControls;
 	protected List<ITAMMenuListener> listOfMenuControls;
 	protected List<OnActivityResultListener> listOfOnActivityResultControls;
+	protected List<ITAMItemGestureListener> listOfItemGestureControls;
 	//private List<OnGestureListener> listOfGestureControls;
 	
 	public interface ITAMDrawListener {
@@ -68,21 +66,23 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		public void onItemSelectEvent(ITAMGItem item, boolean selection);
 	};
 	
-	public interface ITAMMoveGestureListener {
-		public void onMoveEvent(MotionEvent e, int dx, int dy);
+	public interface ITAMItemGestureListener {
+		public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node);
+		public void onItemLongReleaseEvent(MotionEvent e, ITAMGNode node);
+		public void onItemDoubleTapEvent(MotionEvent e, ITAMGNode node);
+	}
+	
+	public interface ITAMBlankAreaGestureListener {
+		public void onBlankMoveEvent(MotionEvent e, int dx, int dy);
+		public void onBlankLongPressEvent(MotionEvent e);
+		public void onBlankDoubleTapEvent(MotionEvent e);
 	}
 	
 	public interface ITAMTouchListener {
 		public boolean onTouchEvent(MotionEvent e);
 	}
 
-	public boolean isDragging = false;
-
-	private int height = 0;
-	private int width = 0;
-
-	
-	
+	public boolean isLongPressed = false;
        
 	public TAMGraph(Context context) {
 		this(context,null);
@@ -103,11 +103,12 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		
 		listOfDrawControls = new ArrayList<ITAMDrawListener>();
 		listOfItemControls = new ArrayList<ITAMItemListener>();
-		listOfMoveGestureControls = new ArrayList<ITAMMoveGestureListener>();
+		listOfBlankAreaGestureControls = new ArrayList<ITAMBlankAreaGestureListener>();
 		listOfTouchControls = new ArrayList<ITAMTouchListener>();
 		listOfMenuControls = new ArrayList<ITAMMenuListener>();
 		listOfGestureControls = new ArrayList<GestureDetector>();
 		listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
+		listOfItemGestureControls = new ArrayList<ITAMItemGestureListener>();
 		zoom = new TAMGZoom(this);
 		
 		actualPoint = new Point();	
@@ -117,6 +118,8 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		drawingThread = new DrawingThread(getHolder(), this);
 		getHolder().addCallback(this);	
 		setWillNotDraw(false);
+		
+		gestureDetector = new GestureDetector(this.getContext(), this);
 		
 		invalidate();
 	}
@@ -183,8 +186,16 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	 * 
 	 * @return
 	 */
-	public List<ITAMMoveGestureListener> getListOfMoveGestureControls() {
-		return listOfMoveGestureControls;
+	public List<ITAMItemGestureListener> getListOfItemGestureControls() {
+		return listOfItemGestureControls;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMBlankAreaGestureListener> getListOfMoveGestureControls() {
+		return listOfBlankAreaGestureControls;
 	}
 
 	/**
@@ -381,14 +392,6 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 	}
 	
 	@Override
-	public boolean onDragEvent(DragEvent event) {
-		// TODO Auto-generated method stub
-		
-		Log.e(TAG,"drag event");
-		return true;
-	}
-	
-	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		
 		synchronized (drawingThread.getSurfaceHolder()) {
@@ -431,7 +434,7 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 				actualPoint.x = x;
 				actualPoint.y = y;
 				
-				isDragging = true;
+				isLongPressed = false;
 				
 			} else if (e.getAction() == MotionEvent.ACTION_MOVE) {
 
@@ -456,12 +459,17 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 					actualPoint.y = y;
 				}
 				
-				isDragging  = true;
 			} else if(e.getAction() == MotionEvent.ACTION_UP){
-				isDragging = false;
+				
+				if(isLongPressed) {
+					if(!listOfSelectedItems.isEmpty()) {
+						ITAMGItem item = listOfSelectedItems.get(listOfSelectedItems.size()-1);
+						if(item instanceof ITAMGNode) {
+							onItemLongReleaseEvent(e, (ITAMGNode) item);
+						}
+					}
+				}
 			}
-
-			invalidate();
 			
 			for(ITAMTouchListener control : listOfTouchControls) {
 				control.onTouchEvent(e);
@@ -471,17 +479,109 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 				gDetector.onTouchEvent(e);				
 			}
 			
+			gestureDetector.onTouchEvent(e);
+			
+			invalidate();
+			
 			return super.onTouchEvent(e);
 		}	
 	}
 
+	public boolean onDown(MotionEvent e) {
+		//System.out.println("G: onDown");
+		return false;
+	}
+
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		//System.out.println("G: onFling");
+		return false;
+	}
+
+	public void onLongPress(MotionEvent e) {
+		//System.out.println("G: onLongPress");
+		
+		isLongPressed = true;
+		
+		if(listOfSelectedItems.isEmpty()) {
+			
+			// could open some settings //
+			onBlankLongPress(e);
+			
+		} else {
+			
+			ITAMGItem item = listOfSelectedItems.get(listOfSelectedItems.size()-1);
+			
+			if(item instanceof ITAMGConnection) {
+				
+				((ITAMGConnection) item).modifySelectedPoint();
+				
+			} else if(item instanceof ITAMGNode) {
+				
+				// could do something with node //
+				onItemLongSelectEvent(e, (ITAMGNode) item);
+				
+			}
+		}
+		
+		invalidate();
+	}
+
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		//System.out.println("G: onScroll");
+		return false;
+	}
+
+	public void onShowPress(MotionEvent e) {
+		//System.out.println("G: onShowPress");
+		
+	}
+
+	public boolean onSingleTapUp(MotionEvent e) {
+		//System.out.println("G: onSingleTapUp");
+		return false;
+	}
+	
+	public boolean onDoubleTap(MotionEvent e) {
+		if(lastSelectedNode == null) {
+			for(ITAMBlankAreaGestureListener control : listOfBlankAreaGestureControls) {
+				control.onBlankDoubleTapEvent(e);
+			}
+		} else {
+			for(ITAMItemGestureListener control : listOfItemGestureControls) {
+				control.onItemDoubleTapEvent(e, lastSelectedNode);
+			}
+		}
+		return false;
+	}
+
+	public boolean onDoubleTapEvent(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean onSingleTapConfirmed(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+	
+	/**
+	 * 
+	 * Private listener used in controls when some item is hit.
+	 * 
+	 * @param e
+	 * @param item
+	 * @param ax
+	 * @param ay
+	 */
 	public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay) {
 		if(item instanceof ITAMGNode) {
 			lastSelectedNode = (ITAMGNode) item;
 		} else if(item instanceof ITAMGConnection) {
-			if(item.isSelected()) {
-				((ITAMGConnection) item).setSelectedPoint(ax, ay);
-			}
+			//if(item.isSelected()) {
+				((ITAMGConnection) item).selectPoint(ax, ay);
+			//}
 		}
 		if(!item.isSelected()) {
 			item.setSelected(true);
@@ -492,6 +592,15 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		}
 	}
 	
+	/**
+	 * 
+	 * Private listener used in controls when some item is moved.
+	 * 
+	 * @param e
+	 * @param item
+	 * @param dx
+	 * @param dy
+	 */
 	public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy) {
 		if(item instanceof ITAMGNode) {
 			item.move(dx,dy);
@@ -504,6 +613,14 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 		}
 	}
 	
+	/**
+	 * 
+	 * Private listener used in controls when blank area is moved.
+	 * 
+	 * @param e
+	 * @param dx
+	 * @param dy
+	 */
 	public void onMoveEvent(MotionEvent e, int dx, int dy) {
 		for(ITAMGItem item : listOfNodes) {
 			item.move(dx,dy);
@@ -512,15 +629,63 @@ public class TAMGraph extends SurfaceView implements SurfaceHolder.Callback,Zoom
 			item.move(dx,dy);
 		}
 		
-		for(ITAMMoveGestureListener control : listOfMoveGestureControls) {
-			control.onMoveEvent(e, dx, dy);
+		for(ITAMBlankAreaGestureListener control : listOfBlankAreaGestureControls) {
+			control.onBlankMoveEvent(e, dx, dy);
 		}
 	}
 	
+	/**
+	 * 
+	 * Private listener used in controls when some item is selected.
+	 * 
+	 * @param item
+	 * @param selection
+	 */
 	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
 		
 		for(ITAMItemListener control : listOfItemControls) {
 			control.onItemSelectEvent(item, selection);
+		}
+	}
+	
+	/**
+	 * 
+	 * Private listener used in controls when blank area is long pressed.
+	 * 
+	 * @param e
+	 */
+	private void onBlankLongPress(MotionEvent e) {
+		for(ITAMBlankAreaGestureListener control : listOfBlankAreaGestureControls) {
+			control.onBlankLongPressEvent(e);
+		}
+	}
+	
+	/**
+	 * 
+	 * Private listener used in controls when some item is long selected.
+	 * 
+	 * @param e
+	 * @param node
+	 */
+	private void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
+		
+		System.out.println("long select");
+		
+		for(ITAMItemGestureListener control : listOfItemGestureControls) {
+			control.onItemLongSelectEvent(e, node);
+		}
+	}
+	
+	/**
+	 * 
+	 * Private listener used in controls when some actually selected item is released after long press.
+	 * 
+	 * @param e
+	 * @param node
+	 */
+	private void onItemLongReleaseEvent(MotionEvent e, ITAMGNode node) {
+		for(ITAMItemGestureListener control : listOfItemGestureControls) {
+			control.onItemLongReleaseEvent(e, node);
 		}
 	}
 	

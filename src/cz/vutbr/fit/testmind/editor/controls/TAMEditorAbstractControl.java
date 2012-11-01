@@ -12,6 +12,9 @@ public abstract class TAMEditorAbstractControl {
 	protected ITAMEditor editor;
 	protected FragmentActivity activity;
 	
+	public static final int PICK_FILE_RESULT_CODE = 0;
+	public static final int EDIT_NODE_RESULT_CODE = 1;
+	
 	//public boolean isDialogOpen = false;
 	private boolean enabled;
 		

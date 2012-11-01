@@ -11,16 +11,20 @@ import android.view.MenuItem;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public interface ITAMEditor {
+	
+	public TAMProfile getProfile();
 	
 	public ITAMENode createNode(TAMPNode profile, int x, int y);
 
@@ -42,6 +46,8 @@ public interface ITAMEditor {
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
 	
+	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY);
+	
 	// TAMGraph functions //
 	
 	public ITAMGNode getLastSelectedNode();
@@ -56,9 +62,13 @@ public interface ITAMEditor {
 
 	public List<ITAMItemListener> getListOfItemControls();
 	
+	public List<ITAMItemGestureListener> getListOfItemGestureControls();
+	
 	public List<ITAMMenuListener> getListOfMenuControls();
 	
 	public List<OnActivityResultListener> getListOfOnActivityResultControls();
+	
+	public List<ITAMGItem> getListOfSelectedItems();
 	
 	// Surface View functions //
 
@@ -73,6 +83,8 @@ public interface ITAMEditor {
 	public TAMGZoom getZoom();
 	
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
+	
+	public void unselectAll();
 
 	
 }

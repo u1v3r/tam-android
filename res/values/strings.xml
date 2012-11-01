@@ -26,5 +26,6 @@
 	<string name="edit_node_select_node_color">Node color</string>
 	<string name="edit_node_content">Content</string>
     <string name="title_activity_test">Testing</string>
+    <string name="click">Click on screen</string>
 	
 </resources>

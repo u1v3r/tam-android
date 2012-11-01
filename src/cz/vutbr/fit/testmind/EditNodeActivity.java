@@ -3,8 +3,8 @@ package cz.vutbr.fit.testmind;
 import java.io.Serializable;
 
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl.BackgroundStyle;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -52,7 +53,7 @@ public class EditNodeActivity extends Activity {
 		setContentView(R.layout.activity_edit_node);
 		
 		title = (EditText)findViewById(R.id.edit_node_title);
-		body = (EditText)findViewById(R.id.edit_node_body);		
+		body = (EditText)findViewById(R.id.edit_node_body);	
 		radioButtonBlue = (RadioButton)findViewById(R.id.edit_node_radio2);
 		radioButtonRed = (RadioButton)findViewById(R.id.edit_node_radio3); 
 		radioButtonGreen = (RadioButton)findViewById(R.id.edit_node_radio1);
@@ -62,17 +63,20 @@ public class EditNodeActivity extends Activity {
 
 		
 		Intent intent = getIntent();		
-		String titleString = intent.getStringExtra(TAMEditorNodesControl.NODE_TITLE);
-		String bodyString = intent.getStringExtra(TAMEditorNodesControl.NODE_BODY);
+		String titleString = intent.getStringExtra(TAMEditorNodeControl.NODE_TITLE);
+		String bodyString = intent.getStringExtra(TAMEditorNodeControl.NODE_BODY);
 				
 		// prenasat farbu asi nebude treba		
-		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodesControl.NODE_COLOR);	
+		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodeControl.NODE_COLOR);	
 		
 		title.setText(titleString);
 		body.setText(bodyString);
 		
 		
 		setRadioButtnColor(backgroundColor);
+		
+		title.requestFocus();
+		getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		
 	}
 	
@@ -115,10 +119,10 @@ public class EditNodeActivity extends Activity {
     	String bodyText = body.getText().toString();
 		
     	Intent intent = new Intent();
-    	intent.putExtra(TAMEditorNodesControl.NODE_TITLE, titleText);
-    	intent.putExtra(TAMEditorNodesControl.NODE_BODY, bodyText);
-    	intent.putExtra(TAMEditorNodesControl.NODE_COLOR,color);
-    	setResult(TAMEditorNodesControl.EDIT_NODE_RESULT_CODE, intent);
+    	intent.putExtra(TAMEditorNodeControl.NODE_TITLE, titleText);
+    	intent.putExtra(TAMEditorNodeControl.NODE_BODY, bodyText);
+    	intent.putExtra(TAMEditorNodeControl.NODE_COLOR,color);
+    	setResult(TAMEditorNodeControl.EDIT_NODE_RESULT_CODE, intent);
     	finish();
 	}
 

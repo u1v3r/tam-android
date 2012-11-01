@@ -52,7 +52,7 @@ public class MainActivity extends FragmentActivity {
     	EventObjects.editor = (TAMEditor) findViewById(R.id.acitity_main_tam_editor);
     	EventObjects.zoomControls = (ZoomControls) findViewById(R.id.acitity_main_zoom_controls);
     	
-    	EventObjects.editor.initialize();
+    	EventObjects.editor.initialize(profile);
     }
         
     @Override

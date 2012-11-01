@@ -9,13 +9,12 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorIOControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodesControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
@@ -25,6 +24,7 @@ import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
  * Obsahuje zakladne funkcie na pracu s grafom 
@@ -36,6 +36,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	
 	private List<ITAMENode> listOfENodes;
 	private List<ITAMEConnection> listOfEConnections;
+	private TAMProfile profile;
 	//protected List<ITAMMenuListener> listOfMenuListeners;
 
 	private boolean hasRoot = false;
@@ -52,9 +53,10 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		//this.listOfMenuListeners = new ArrayList<ITAMMenuListener>();
 	}
 	
-	public void initialize() {
+	public void initialize(TAMProfile profile) {
+		this.profile = profile;
 		new TAMEditorZoomControl(this, R.id.acitity_main_zoom_controls);
-		new TAMEditorNodesControl(this);
+		new TAMEditorNodeControl(this);
 		new TAMEditorOpenSaveControl(this);
 		new TAMEditorIOControl(this);
 		
@@ -114,6 +116,20 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 
 	public List<ITAMEConnection> getListOfEConnections() {
 		return listOfEConnections;
+	}
+	
+	public TAMProfile getProfile() {
+		return profile;
+	}
+
+	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY) {
+		TAMPNode newProfileNode = profile.createNode(title, body);
+		ITAMENode newEditorNode = newProfileNode.addEReference(this, posX, posY);
+		TAMPConnection pConnection = profile.createConnection(parent.getProfile(), newProfileNode);
+		pConnection.addEReference(this);		
+		newEditorNode.getGui().setBackgroundStyle(parent.getGui().getBackgroundStyle());
+		
+		return newEditorNode;
 	}
 
 	public ITAMENode createNode(TAMPNode profile, int x, int y) {

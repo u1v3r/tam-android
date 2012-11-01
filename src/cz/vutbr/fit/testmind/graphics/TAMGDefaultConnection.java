@@ -3,6 +3,8 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.R;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,9 +13,10 @@ import android.graphics.Point;
 public class TAMGDefaultConnection implements ITAMGConnection {
 	
 	private static final int type = CONNECTION_TYPE_DEFAULT;
-	private static final int HIGHLIGHT_COLOR = 0x7f040004;
+	private static final int HIGHLIGHT_COLOR = R.color.node_highlight_background;
 	private int background;
 	private int highlightColor;
+	private int highlightColorStroke;
 	private ITAMGNode parent;
 	private ITAMGNode child;
 	private TAMGraph graph;
@@ -37,6 +40,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		this.child = child;
 		this.background = Color.RED;
 		this.highlightColor = graph.getResources().getColor(HIGHLIGHT_COLOR);
+		this.highlightColorStroke = graph.getResources().getColor(R.color.node_highlight_background_stroke);
 		
 		this.isHighlighted = false;
 		this.isEnabled = true;
@@ -89,6 +93,11 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 			paint.setColor(Color.BLACK);
 			
 			for(Point point : listOfMiddlePoints) {
+				if(point == selectedPoint) {
+					paint.setColor(Color.RED);
+				} else {
+					paint.setColor(highlightColorStroke);
+				}
 				canvas.drawRect(point.x-10, point.y-10, point.x+10, point.y+10, paint);
 			}
 		}
@@ -267,28 +276,29 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 			return false;
 		}
 	}
-
-	public void setSelectedPoint(float x, float y) {
+	
+	public void modifySelectedPoint() {
 		
-		if(laysNearPoint((int) x, (int) y, from)) {
-			selectedPoint = from;
-		} else if(laysNearPoint((int) x, (int) y, to)) {
-			selectedPoint = to;
+		if(listOfMiddlePoints.contains(selectedPoint)) {
+			listOfMiddlePoints.remove(selectedPoint);
 		} else {
 			int newX;
 			int newY;
+			float width = Math.abs(from.x-to.x);
+			float height = Math.abs(from.y-to.y);
 			
-			if(from.x > to.x-OFFSET && from.x < to.x+OFFSET) {
-				newY = (int) y;
-				float t = getLineParameter(y, from.y, to.y);
+			if(width/height < 0.2f) {
+				System.out.println("same Y");
+				newY = (int) selectedPoint.y;
+				float t = getLineParameter(selectedPoint.y, from.y, to.y);
 				newX = (int) (from.x+t*(to.x-from.x));
-			} else if(from.y > to.y-OFFSET && from.y < to.y+OFFSET) {
-				newX = (int) x;
-				float t = getLineParameter(x, from.x, to.x);
+			} else if(height/width < 0.2f) {
+				newX = (int) selectedPoint.x;
+				float t = getLineParameter(selectedPoint.x, from.x, to.x);
 				newY = (int) (from.y+t*(to.y-from.y));
 			} else {
-				float left = getLineParameter(x, from.x, to.x);
-				float right = getLineParameter(y, from.y, to.y);
+				float left = getLineParameter(selectedPoint.x, from.x, to.x);
+				float right = getLineParameter(selectedPoint.y, from.y, to.y);
 				
 				//float left1 = left-(left*0.2f);
 				//float left2 = left+(left*0.2f);
@@ -322,6 +332,20 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 				}
 			//}
 		}
+	}
+
+	public boolean selectPoint(float x, float y) {
+		
+		if(laysNearPoint((int) x, (int) y, from)) {
+			selectedPoint = from;
+		} else if(laysNearPoint((int) x, (int) y, to)) {
+			selectedPoint = to;
+		} else {
+			selectedPoint = new Point((int)x, (int)y);
+			return false;
+		}
+		
+		return true;
 	}
 
 	public void setHelpObject(Object object) {
