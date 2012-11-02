@@ -1,30 +1,24 @@
 package cz.vutbr.fit.testmind;
 
-import java.io.Serializable;
-
-import com.commonsware.cwac.richedit.RichEditText;
-
-import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.Toast;
 import android.widget.TextView.BufferType;
+
+import com.commonsware.cwac.richedit.RichEditText;
+
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 
 public class EditNodeActivity extends Activity {
 	
