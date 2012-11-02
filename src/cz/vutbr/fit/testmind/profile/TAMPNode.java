@@ -3,6 +3,8 @@ package cz.vutbr.fit.testmind.profile;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.SpannableString;
+
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 
@@ -10,7 +12,7 @@ public class TAMPNode extends TAMPItem {
 	
 	private int id;
 	private String title;
-	private String body;
+	private SpannableString body;
 	protected List<TAMPNode> listOfChildNodes;
 	protected TAMPNode parent;
 	
@@ -35,11 +37,15 @@ public class TAMPNode extends TAMPItem {
 		this.title = title;
 	}
 	
-	public String getBody() {
+	public SpannableString getBody() {
 		return body;
 	}
 	
-	public void setBody(String body) {
+	private void setBody(String body) {		
+		this.body = new SpannableString(body);
+	}
+	
+	public void setBody(SpannableString body){
 		this.body = body;
 	}
 	

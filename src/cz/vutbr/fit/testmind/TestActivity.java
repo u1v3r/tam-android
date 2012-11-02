@@ -76,7 +76,7 @@ public class TestActivity extends FragmentActivity {
     
     private void loadBody()
     {
-        String body = node.getBody();
+        String body = node.getBody().toString();
         WebView bodyView = (WebView) findViewById(R.id.test_linearLayout_path);
         // load data
         bodyView.loadDataWithBaseURL(null, body, "text/html", "UTF-8", null);        

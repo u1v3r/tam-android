@@ -2,6 +2,8 @@ package cz.vutbr.fit.testmind;
 
 import java.io.Serializable;
 
+import com.commonsware.cwac.richedit.RichEditText;
+
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
@@ -9,6 +11,9 @@ import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
+import android.widget.TextView.BufferType;
 
 public class EditNodeActivity extends Activity {
 	
@@ -33,7 +39,7 @@ public class EditNodeActivity extends Activity {
 	private static final String TAG = "EditNodeActivity";
 	
 	private EditText title;
-	private EditText body;
+	private RichEditText body;
 	private Button okBtn;
 	private Button cancelBtn;
 	private RadioButton radioButtonBlue;
@@ -53,24 +59,26 @@ public class EditNodeActivity extends Activity {
 		setContentView(R.layout.activity_edit_node);
 		
 		title = (EditText)findViewById(R.id.edit_node_title);
-		body = (EditText)findViewById(R.id.edit_node_body);	
+		body = (RichEditText)findViewById(R.id.edit_node_body);	
 		radioButtonBlue = (RadioButton)findViewById(R.id.edit_node_radio2);
 		radioButtonRed = (RadioButton)findViewById(R.id.edit_node_radio3); 
 		radioButtonGreen = (RadioButton)findViewById(R.id.edit_node_radio1);
 		radioButtonPurple = (RadioButton)findViewById(R.id.edit_node_radio4);
 		okBtn = (Button)findViewById(R.id.edit_node_acitivty_ok);
 		cancelBtn = (Button)findViewById(R.id.edit_node_acitivty_cancel);
-
+		
+		// zobrazi tlacidlo formatovania pri vybrati textu
+		body.enableActionModes(true);
 		
 		Intent intent = getIntent();		
 		String titleString = intent.getStringExtra(TAMEditorNodeControl.NODE_TITLE);
-		String bodyString = intent.getStringExtra(TAMEditorNodeControl.NODE_BODY);
-				
-		// prenasat farbu asi nebude treba		
+		SpannableString bodyString = new SpannableString(intent.getCharSequenceExtra(TAMEditorNodeControl.NODE_BODY));
+			
+
 		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodeControl.NODE_COLOR);	
 		
 		title.setText(titleString);
-		body.setText(bodyString);
+		body.setText(bodyString,BufferType.SPANNABLE);
 		
 		
 		setRadioButtnColor(backgroundColor);
@@ -116,9 +124,9 @@ public class EditNodeActivity extends Activity {
     private void saveValues() {
     	
     	String titleText = title.getText().toString();
-    	String bodyText = body.getText().toString();
-		
-    	Intent intent = new Intent();
+    	Editable bodyText = body.getEditableText();
+    	    	
+    	Intent intent = new Intent();    	
     	intent.putExtra(TAMEditorNodeControl.NODE_TITLE, titleText);
     	intent.putExtra(TAMEditorNodeControl.NODE_BODY, bodyText);
     	intent.putExtra(TAMEditorNodeControl.NODE_COLOR,color);

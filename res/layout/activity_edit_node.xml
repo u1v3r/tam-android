@@ -5,35 +5,8 @@
     android:layout_gravity="center|fill"
     android:layout_margin="2dp"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/TextView01"
-        style="@style/DialogTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/edit_node_content" />
-
-    <EditText
-        android:id="@+id/edit_node_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/node_add_dialog_title" >
-
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/edit_node_body"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/node_add_dialog_body"
-        android:inputType="textMultiLine" />
-
+   
+    
     <TextView
         android:id="@+id/textView1"
         style="@style/DialogTextStyle"
@@ -91,6 +64,50 @@
             android:onClick="onSelectColorClicked"
             android:textColor="@color/node_background_stroke_4" />
 
-    </RadioGroup>
+    </RadioGroup>   
+    
+    
+    <TextView
+        android:id="@+id/TextView01"
+        style="@style/DialogTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/edit_node_content" />
 
+    <EditText
+        android:id="@+id/edit_node_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/node_add_dialog_title" >
+
+        <requestFocus />
+    </EditText>
+	
+    <com.commonsware.cwac.richedit.RichEditText
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/edit_node_body"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top|left"
+        android:inputType="textMultiLine" 
+        android:hint="@string/node_add_dialog_body"
+        android:imeOptions="flagNoExtractUi">
+        
+    </com.commonsware.cwac.richedit.RichEditText>
+    
+    <!-- <EditText
+        android:id="@+id/edit_node_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/node_add_dialog_body"
+        android:inputType="textMultiLine" />
+ -->
+ 
+
+    
 </LinearLayout>

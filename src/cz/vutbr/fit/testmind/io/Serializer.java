@@ -241,7 +241,7 @@ public class Serializer
         ContentValues values = new ContentValues();
         values.put("id", node.getId());
         values.put("title", node.getTitle());
-        values.put("body", node.getBody());
+        values.put("body", node.getBody().toString());
         
         db.insert("nodes", null, values);
     }

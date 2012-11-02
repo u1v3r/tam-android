@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -189,12 +191,21 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 		if(resultCode == EDIT_NODE_RESULT_CODE){
 
 			String nodeTitle = data.getStringExtra(NODE_TITLE);
-			String nodeBody = data.getStringExtra(NODE_BODY);
+			SpannableString nodeBody = (SpannableString)data.getCharSequenceExtra(NODE_BODY);
 			BackgroundStyle nodeColor = (BackgroundStyle)data.getSerializableExtra(NODE_COLOR);
+		
+			if(nodeTitle != null){			
+				Log.d(TAG, nodeTitle);
+				if(selectedNode == null) Log.d(TAG, "je to null");
+				selectedNode.getGui().setText(nodeTitle);
+				selectedNode.getProfile().setTitle(nodeTitle);				
+			}
 			
-			selectedNode.getGui().setText(nodeTitle);
-			selectedNode.getProfile().setTitle(nodeTitle);
-			selectedNode.getProfile().setBody(nodeBody);				
+			if(nodeBody != null){
+				Log.d(TAG, nodeBody.toString());				
+				selectedNode.getProfile().setBody(nodeBody);				
+			}
+						
 			selectedNode.getGui().setBackgroundStyle(nodeColor);
 				
 			editor.invalidate();
