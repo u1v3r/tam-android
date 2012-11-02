@@ -10,9 +10,12 @@ import android.graphics.Point;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorOpenSaveControl;
@@ -37,6 +40,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	private List<ITAMENode> listOfENodes;
 	private List<ITAMEConnection> listOfEConnections;
 	private TAMProfile profile;
+	private int mode;
 	//protected List<ITAMMenuListener> listOfMenuListeners;
 
 	private boolean hasRoot = false;
@@ -59,8 +63,11 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		new TAMEditorNodeControl(this);
 		new TAMEditorOpenSaveControl(this);
 		new TAMEditorIOControl(this);
+		new TAMEditorHidingControl(this);
 		
-		MainActivity.getProfile().getListOfEditors().add(this);
+		mode = MenuItems.create_mode;
+		
+		this.profile.getListOfEditors().add(this);
 	}
 	
 	public boolean containsNode(int id) {
@@ -108,6 +115,10 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		
 		this.hasRoot = true;
 		
+	}
+
+	public int getMode() {
+		return mode;
 	}
 
 	public List<ITAMENode> getListOfENodes() {
@@ -158,13 +169,25 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		boolean selected = false;
+		int id = item.getItemId();
 		
-		for(ITAMMenuListener control : getListOfMenuControls()) {
-			selected = control.onOptionsItemSelected(item);
+		switch (id) {
+			case MenuItems.create_mode:
+			case MenuItems.edit_mode:
+			case MenuItems.view_mode:
+			case MenuItems.file_mode:
+				Toast.makeText(getContext(), item.getTitle().toString() + " " + getResources().getText(R.string.mode_active), Toast.LENGTH_SHORT).show();
+				mode = id;
+				return true;
+			default:
+				boolean selected = false;
+				
+				for(ITAMMenuListener control : getListOfMenuControls()) {
+					selected = control.onOptionsItemSelected(item);
+				}
+				
+				return selected;
 		}
-		
-		return selected;
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

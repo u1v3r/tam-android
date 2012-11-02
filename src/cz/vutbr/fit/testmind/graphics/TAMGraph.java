@@ -244,42 +244,50 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	
 	public void moveOnTop(ITAMGItem selectedItem) {
 		
-		// move items to the end of the drawable list, so they will be drawn on the top of all items //
-		if(selectedItem instanceof ITAMGNode) {
+		// only if item is enabled (is in list of drawable items), it can be moved on top of drawable list//
+		if(selectedItem.isEnabled()) {
 			
-			ITAMGNode selectedNode = (ITAMGNode) selectedItem;
-			
-			for(ITAMGConnection parentConnection : selectedNode.getListOfParentConnections()) {
-				listOfDrawableItems.remove(parentConnection);
-				listOfDrawableItems.add(parentConnection);
-				ITAMGNode parentNode = parentConnection.getParentNode();
+			// move items to the end of the drawable list, so they will be drawn on the top of all items //
+			if(selectedItem instanceof ITAMGNode) {
+				
+				ITAMGNode selectedNode = (ITAMGNode) selectedItem;
+				
+				for(ITAMGConnection parentConnection : selectedNode.getListOfParentConnections()) {
+					if(parentConnection.isEnabled()) {
+						listOfDrawableItems.remove(parentConnection);
+						listOfDrawableItems.add(parentConnection);
+						ITAMGNode parentNode = parentConnection.getParentNode();
+						listOfDrawableItems.remove(parentNode);
+						listOfDrawableItems.add(parentNode);
+					}
+				}
+				
+				for(ITAMGConnection childConnection : selectedNode.getListOfChildConnections()) {
+					if(childConnection.isEnabled()) {
+						listOfDrawableItems.remove(childConnection);
+						listOfDrawableItems.add(childConnection);
+						ITAMGNode childNode = childConnection.getChildNode();
+						listOfDrawableItems.remove(childNode);
+						listOfDrawableItems.add(childNode);
+					}
+				}
+				
+				listOfDrawableItems.remove(selectedItem);
+				listOfDrawableItems.add(selectedItem);
+			} else if(selectedItem instanceof ITAMGConnection) {
+				
+				ITAMGConnection selectedConnection = (ITAMGConnection) selectedItem;
+				listOfDrawableItems.remove(selectedConnection);
+				listOfDrawableItems.add(selectedConnection);
+				
+				ITAMGNode parentNode = selectedConnection.getParentNode();
 				listOfDrawableItems.remove(parentNode);
 				listOfDrawableItems.add(parentNode);
-			}
-			
-			for(ITAMGConnection childConnection : selectedNode.getListOfChildConnections()) {
-				listOfDrawableItems.remove(childConnection);
-				listOfDrawableItems.add(childConnection);
-				ITAMGNode childNode = childConnection.getChildNode();
+				
+				ITAMGNode childNode = selectedConnection.getChildNode();
 				listOfDrawableItems.remove(childNode);
 				listOfDrawableItems.add(childNode);
 			}
-			
-			listOfDrawableItems.remove(selectedItem);
-			listOfDrawableItems.add(selectedItem);
-		} else if(selectedItem instanceof ITAMGConnection) {
-			
-			ITAMGConnection selectedConnection = (ITAMGConnection) selectedItem;
-			listOfDrawableItems.remove(selectedConnection);
-			listOfDrawableItems.add(selectedConnection);
-			
-			ITAMGNode parentNode = selectedConnection.getParentNode();
-			listOfDrawableItems.remove(parentNode);
-			listOfDrawableItems.add(parentNode);
-			
-			ITAMGNode childNode = selectedConnection.getChildNode();
-			listOfDrawableItems.remove(childNode);
-			listOfDrawableItems.add(childNode);
 		}
 	}
 	
@@ -378,7 +386,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	@Override
-	protected void onDraw(Canvas canvas) { 
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
 		
 		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		
@@ -411,13 +420,19 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				float ax = ((x-dx)/zoom.sy);
 				float ay = ((y-dy)/zoom.sy);
 				
-				for(ITAMGItem item : listOfConnections) {
+				/*for(ITAMGItem item : listOfConnections) {
 					if(item.hit(ax, ay)) {
 						result = item;
 					}
 				}
 
 				for(ITAMGItem item : listOfNodes) {
+					if(item.hit(ax, ay)) {
+						result = item;
+					}
+				}*/
+				
+				for(ITAMGItem item : listOfDrawableItems) {
 					if(item.hit(ax, ay)) {
 						result = item;
 					}

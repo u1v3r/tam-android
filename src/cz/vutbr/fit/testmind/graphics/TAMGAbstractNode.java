@@ -228,37 +228,36 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 		if(isEnabled != enable) {
 			
-			for(ITAMGConnection parentConnection : listOfParentConnections) {
-				ITAMGNode parentNode = parentConnection.getParentNode();
-				if(parentNode.isEnabled() != enable) {
-					if(enable) {
-						graph.listOfDrawableItems.add(parentConnection);
-					} else {
-						graph.listOfDrawableItems.remove(parentConnection);
-					}
-					parentConnection.setEnabled(enable);
-				}
-			}
-			
-			for(ITAMGConnection childConnection : listOfChildConnections) {
-				ITAMGNode childNode = childConnection.getChildNode();
-				if(childNode.isEnabled() != enable) {
-					if(enable) {
-						graph.listOfDrawableItems.add(childConnection);
-					} else {
-						graph.listOfDrawableItems.remove(childConnection);
-					}
-					childConnection.setEnabled(enable);
-				}
-			}
-			
+			this.isEnabled = enable;
 			if(enable) {
 				graph.listOfDrawableItems.add(this);
 			} else {
 				graph.listOfDrawableItems.remove(this);
 			}
 			
-			this.isEnabled = enable;
+			for(ITAMGConnection parentConnection : listOfParentConnections) {
+				//ITAMGNode parentNode = parentConnection.getParentNode();
+				//if(parentNode.isEnabled() != enable) {
+				//	if(enable) {
+				//		graph.listOfDrawableItems.add(parentConnection);
+				//	} else {
+				//		graph.listOfDrawableItems.remove(parentConnection);
+				//	}
+					parentConnection.setEnabled(enable);
+				//}
+			}
+			
+			for(ITAMGConnection childConnection : listOfChildConnections) {
+				//ITAMGNode childNode = childConnection.getChildNode();
+				//if(childNode.isEnabled() != enable) {
+				//	if(enable) {
+				//		graph.listOfDrawableItems.add(childConnection);
+				//	} else {
+				//		graph.listOfDrawableItems.remove(childConnection);
+				//	}
+					childConnection.setEnabled(enable);
+				//}
+			}
 		}
 	}
 	

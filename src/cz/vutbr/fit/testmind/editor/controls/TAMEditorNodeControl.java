@@ -147,19 +147,21 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 	 */
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
-		Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-		if(vibrator.hasVibrator()){
-			vibrator.vibrate(VIBRATE_DURATION);
+		if(editor.getMode() == MenuItems.create_mode) {
+			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+			if(vibrator.hasVibrator()){
+				vibrator.vibrate(VIBRATE_DURATION);
+			}
+			
+			creatingByGesture = true;
+			
+			// vytvori prazdny uzol
+			TAMENode selectedNode = (TAMENode) node.getHelpObject();			
+			ITAMENode eNode = editor.createNodeWithProfileAndConnection("","",selectedNode,(int)e.getX(),(int)e.getY());
+			
+			editor.unselectAll();
+			eNode.getGui().setSelected(true);
 		}
-		
-		creatingByGesture = true;
-		
-		// vytvori prazdny uzol
-		TAMENode selectedNode = (TAMENode) node.getHelpObject();			
-		ITAMENode eNode = editor.createNodeWithProfileAndConnection("","",selectedNode,(int)e.getX(),(int)e.getY());
-		
-		editor.unselectAll();
-		eNode.getGui().setSelected(true);
 	}
 
 	/**
@@ -178,7 +180,12 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 	 * When user double clicks on node, edit dialog is opened.
 	 */
 	public void onItemDoubleTapEvent(MotionEvent e, ITAMGNode node) {
-		showEditNodeDialog((TAMENode)node.getHelpObject());
+		
+		int mode = editor.getMode();
+		
+		if(mode == MenuItems.create_mode || mode == MenuItems.edit_mode) {
+			showEditNodeDialog((TAMENode)node.getHelpObject());
+		}
 	}
 	
 	/**
@@ -239,7 +246,7 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 				break;
 			default: 
 				return true;    	
-    	} 	
+    	}
     	
     	return true;		
 	}

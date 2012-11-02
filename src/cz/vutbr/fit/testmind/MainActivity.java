@@ -26,7 +26,11 @@ public class MainActivity extends FragmentActivity {
 		public static final int save = R.id.menu_save;
 		public static final int settings = R.id.menu_settings;
 		public static final int importFile = R.id.menu_import;
-		public static final int exportFile = R.id.menu_export;		
+		public static final int exportFile = R.id.menu_export;
+		public static final int create_mode = R.id.menu_create_mode;
+		public static final int edit_mode = R.id.menu_edit_mode;
+		public static final int view_mode = R.id.menu_view_mode;
+		public static final int file_mode = R.id.menu_file_mode;
 	}
 	
 	public static class EventObjects{

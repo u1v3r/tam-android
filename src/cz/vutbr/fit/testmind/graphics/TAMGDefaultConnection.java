@@ -219,17 +219,28 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		
 		if(isEnabled != enable) {
 			
-			if(enable) {
+			if(enable && parent.isEnabled() && child.isEnabled()) {
 				graph.listOfDrawableItems.add(this);
-			} else {
+				
+				// move nodes above connection //
+				//if(parent.isEnabled()) {
+					graph.listOfDrawableItems.remove(parent);
+					graph.listOfDrawableItems.add(parent);
+				//}
+				//if(child.isEnabled()) {
+					graph.listOfDrawableItems.remove(child);
+					graph.listOfDrawableItems.add(child);
+				//}
+				isEnabled = true;
+			} else /*if(!enable && (!parent.isEnabled() || !child.isEnabled()))*/ {
 				graph.listOfDrawableItems.remove(this);
+				isEnabled = false;
 			}
 			
-			parent.setEnabled(enable);
-			child.setEnabled(enable);
+			//parent.setEnabled(enable);
+			//child.setEnabled(enable);
+			//isEnabled = enable;
 		}
-		
-		isEnabled = enable;
 	}
 
 	public boolean isEnabled() {
