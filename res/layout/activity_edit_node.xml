@@ -87,18 +87,17 @@
         <requestFocus />
     </EditText>
 	
-    <com.commonsware.cwac.richedit.RichEditText
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/edit_node_body"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="top|left"
-        android:inputType="textMultiLine" 
-        android:hint="@string/node_add_dialog_body"
-        android:imeOptions="flagNoExtractUi">
-        
-    </com.commonsware.cwac.richedit.RichEditText>
+    <FrameLayout 
+        android:id="@+id/edit_node_rich_text_fragment"        
+        android:layout_width="match_parent" 
+        android:layout_height="match_parent" />
     
+<!-- 	<FrameLayout 
+	    android:id="@+id/edit_node_rich_text_editor_container"
+	    android:layout_width="match_parent"
+		android:layout_height="0dp">
+	</FrameLayout>
+ -->    
     <!-- <EditText
         android:id="@+id/edit_node_body"
         android:layout_width="match_parent"

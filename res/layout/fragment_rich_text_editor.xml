@@ -3,6 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+        <ImageButton
+	        android:id="@+id/fragment_rich_text_boldbtn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/ic_menu_text_editor_bold"/>
+
+        <ImageButton
+            android:id="@+id/fragment_rich_text_italicbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_text_editor_italic" />
+
+        <ImageButton
+            android:id="@+id/fragment_rich_text_underlinebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_text_editor_underline" />
+
+        <ImageButton
+            android:id="@+id/fragment_rich_text_tagbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_text_editor_tag" />
+        
+    </LinearLayout>
+        
+    <com.commonsware.cwac.richedit.RichEditText
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_rich_text_node_text"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top|left"
+        android:inputType="textMultiLine" 
+        android:hint="@string/node_add_dialog_body"
+        android:imeOptions="flagNoExtractUi">
+        
+    </com.commonsware.cwac.richedit.RichEditText>
+    
 </LinearLayout>

@@ -1,16 +1,22 @@
 package cz.vutbr.fit.testmind;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.SpannableString;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView.BufferType;
 
@@ -19,8 +25,9 @@ import com.commonsware.cwac.richedit.RichEditText;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.fragments.RichTextEditorFragment;
 
-public class EditNodeActivity extends Activity {
+public class EditNodeActivity extends FragmentActivity {
 	
 	
 	public final static class RadioButtonItems{
@@ -33,7 +40,6 @@ public class EditNodeActivity extends Activity {
 	private static final String TAG = "EditNodeActivity";
 	
 	private EditText title;
-	private RichEditText body;
 	private Button okBtn;
 	private Button cancelBtn;
 	private RadioButton radioButtonBlue;
@@ -49,35 +55,31 @@ public class EditNodeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		// prijme intent z main acitivity
+		Intent intent = getIntent();	
+				
+		RichTextEditorFragment fragment = RichTextEditorFragment.newInstance(
+				intent.getCharSequenceExtra(TAMEditorNodeControl.NODE_BODY));
+		
+		getSupportFragmentManager().beginTransaction().add(R.id.edit_node_rich_text_fragment, fragment).commit();
 		
 		setContentView(R.layout.activity_edit_node);
 		
-		title = (EditText)findViewById(R.id.edit_node_title);
-		body = (RichEditText)findViewById(R.id.edit_node_body);	
+		title = (EditText)findViewById(R.id.edit_node_title);			
 		radioButtonBlue = (RadioButton)findViewById(R.id.edit_node_radio2);
 		radioButtonRed = (RadioButton)findViewById(R.id.edit_node_radio3); 
 		radioButtonGreen = (RadioButton)findViewById(R.id.edit_node_radio1);
 		radioButtonPurple = (RadioButton)findViewById(R.id.edit_node_radio4);
 		okBtn = (Button)findViewById(R.id.edit_node_acitivty_ok);
 		cancelBtn = (Button)findViewById(R.id.edit_node_acitivty_cancel);
-		
-		// zobrazi tlacidlo formatovania pri vybrati textu
-		body.enableActionModes(true);
-		
-		Intent intent = getIntent();		
-		String titleString = intent.getStringExtra(TAMEditorNodeControl.NODE_TITLE);
-		SpannableString bodyString = new SpannableString(intent.getCharSequenceExtra(TAMEditorNodeControl.NODE_BODY));
 			
-
+		String titleString = intent.getStringExtra(TAMEditorNodeControl.NODE_TITLE);		
 		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodeControl.NODE_COLOR);	
 		
-		title.setText(titleString);
-		body.setText(bodyString,BufferType.SPANNABLE);
-		
+		title.setText(titleString);		
 		
 		setRadioButtnColor(backgroundColor);
-		
-		title.requestFocus();
+				
 		getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		
 	}
@@ -117,9 +119,13 @@ public class EditNodeActivity extends Activity {
     
     private void saveValues() {
     	
+    	RichTextEditorFragment richTextEditorFragment = 
+    			(RichTextEditorFragment)getSupportFragmentManager().findFragmentById(
+    						R.id.edit_node_rich_text_fragment);
+    	
     	String titleText = title.getText().toString();
-    	Editable bodyText = body.getEditableText();
-    	    	
+    	Editable bodyText = richTextEditorFragment.getSpannedText();
+    	    	   	
     	Intent intent = new Intent();    	
     	intent.putExtra(TAMEditorNodeControl.NODE_TITLE, titleText);
     	intent.putExtra(TAMEditorNodeControl.NODE_BODY, bodyText);
