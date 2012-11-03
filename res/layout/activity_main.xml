@@ -11,84 +11,113 @@
         android:background="@color/drawing_surface"
         android:overScrollMode="always" />
 
-    <Button
-        android:id="@+id/button_add"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:visibility="gone"
-        android:onClick="buttonPressed"
-        android:text="@string/btn_add" >
-
-    </Button>
-
-    <Button
-        android:id="@+id/button_delete"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="60dip"
-        android:visibility="gone"
-        android:onClick="buttonPressed" 
-        android:text="@string/btn_del" />
-    
-    <Button
-        android:id="@+id/button_edit"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="120dip"
-        android:visibility="gone"
-        android:onClick="buttonPressed"
-        android:text="@string/btn_edit" />
-    
-    <Button
-        android:id="@+id/button_hide_one"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:visibility="gone"
-        android:onClick="buttonPressed"
-        android:text="@string/btn_one" >
-
-    </Button>
-
-    <Button
-        android:id="@+id/button_hide_all"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="60dip"
-        android:visibility="gone"
-        android:onClick="buttonPressed"
-        android:text="@string/btn_hide" />
-    
-    <Button
-        android:id="@+id/button_view"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="120dip"
-        android:visibility="gone"
-        android:onClick="buttonPressed"
-        android:text="@string/btn_view" />
-    
-    <Button
-        android:id="@+id/button_zoom_in"
-        android:layout_width="60dp"
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
-        android:layout_marginRight="60dip"
-        android:onClick="buttonPressed"
-        android:text="@string/btn_zoom_in" />
-    
-    <Button
-        android:id="@+id/button_zoom_out"
-        android:layout_width="60dp"
+        android:background="@drawable/toolbar_border_right" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageButton
+                android:id="@+id/button_zoom_in"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:src="@drawable/ic_action_zoom_in"
+                android:contentDescription="@string/btn_zoom_in" />
+
+            <ImageButton
+                android:id="@+id/button_zoom_out"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:src="@drawable/ic_action_zoom_out"
+                android:contentDescription="@string/btn_zoom_out" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/main_activity_action_toolbar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_marginLeft="60dip"
-        android:onClick="buttonPressed"
-        android:text="@string/btn_zoom_out" />
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/toolbar_border_left" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <!-- CREATE -->
+
+            <ImageButton
+                android:id="@+id/button_add"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:src="@drawable/ic_action_add"
+                android:contentDescription="@string/btn_add"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/button_edit"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:src="@drawable/ic_action_edit"
+                android:contentDescription="@string/btn_edit"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/button_delete"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:src="@drawable/ic_action_delete"
+                android:contentDescription="@string/btn_del"
+                android:visibility="gone" />
+
+            <!-- VIEW -->
+
+            <ImageButton
+                android:id="@+id/button_hide_one"
+                style="@style/button_style"
+                android:contentDescription="@string/btn_one"                
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:src="@drawable/ic_action_delete"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/button_hide_all"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:contentDescription="@string/btn_hide"
+                android:src="@drawable/ic_action_delete"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/button_view"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:contentDescription="@string/btn_view"
+                android:src="@drawable/ic_action_delete"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </FrameLayout>
 
 </FrameLayout>
