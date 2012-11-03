@@ -10,20 +10,26 @@ import android.graphics.Point;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
+import cz.vutbr.fit.testmind.MainActivity.ButtonItems;
+import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
+import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorOpenSaveControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorToolbarContol;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
@@ -41,6 +47,8 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	private List<ITAMEConnection> listOfEConnections;
 	private TAMProfile profile;
 	private int mode;
+	protected List<ITAMMenuListener> listOfMenuControls;
+	protected List<ITAMButtonListener> listOfButtonControls;
 	//protected List<ITAMMenuListener> listOfMenuListeners;
 
 	private boolean hasRoot = false;
@@ -54,16 +62,19 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		
 		this.listOfENodes = new ArrayList<ITAMENode>();
 		this.listOfEConnections = new ArrayList<ITAMEConnection>();
-		//this.listOfMenuListeners = new ArrayList<ITAMMenuListener>();
+		this.listOfMenuControls = new ArrayList<ITAMMenuListener>();
+		this.listOfButtonControls = new ArrayList<ITAMButtonListener>();
 	}
 	
 	public void initialize(TAMProfile profile) {
 		this.profile = profile;
-		new TAMEditorZoomControl(this, R.id.acitity_main_zoom_controls);
+		super.initialize();
+		new TAMEditorZoomControl(this);
 		new TAMEditorNodeControl(this);
 		new TAMEditorOpenSaveControl(this);
 		new TAMEditorIOControl(this);
 		new TAMEditorHidingControl(this);
+		new TAMEditorToolbarContol(this);
 		
 		mode = MenuItems.create_mode;
 		
@@ -129,6 +140,14 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		return listOfEConnections;
 	}
 	
+	public List<ITAMMenuListener> getListOfMenuControls() {
+		return listOfMenuControls;
+	}
+	
+	public List<ITAMButtonListener> getListOfButtonControls() {
+		return listOfButtonControls;
+	}
+	
 	public TAMProfile getProfile() {
 		return profile;
 	}
@@ -167,27 +186,47 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		return connection;
 	}
 	
+	public void showMenu() {
+		showMenu(mode);
+	}
+	
+	public void showMenu(int mode) {
+		
+		if(mode == MenuItems.create_mode) {
+			EventObjects.btn_add.setVisibility(VISIBLE);
+			EventObjects.btn_delete.setVisibility(VISIBLE);
+			EventObjects.btn_edit.setVisibility(VISIBLE);
+		} else if(mode == MenuItems.view_mode) {
+			EventObjects.btn_hide_all.setVisibility(VISIBLE);
+			EventObjects.btn_hide_one.setVisibility(VISIBLE);
+			EventObjects.btn_view.setVisibility(VISIBLE);
+		}
+	}
+	
+	public void hideMenu() {
+		if(mode == MenuItems.create_mode) {
+			//EventObjects.btn_add.startAnimation(EventObjects.animAlpha);
+			EventObjects.btn_add.setVisibility(GONE);
+			EventObjects.btn_delete.setVisibility(GONE);
+			EventObjects.btn_edit.setVisibility(GONE);
+		} else if(mode == MenuItems.view_mode) {
+			EventObjects.btn_hide_all.setVisibility(GONE);
+			EventObjects.btn_hide_one.setVisibility(GONE);
+			EventObjects.btn_view.setVisibility(GONE);
+		}
+	}
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		int id = item.getItemId();
-		
-		switch (id) {
-			case MenuItems.create_mode:
-			case MenuItems.edit_mode:
-			case MenuItems.view_mode:
-			case MenuItems.file_mode:
-				Toast.makeText(getContext(), item.getTitle().toString() + " " + getResources().getText(R.string.mode_active), Toast.LENGTH_SHORT).show();
-				mode = id;
-				return true;
-			default:
-				boolean selected = false;
+		boolean selected = false;
 				
-				for(ITAMMenuListener control : getListOfMenuControls()) {
-					selected = control.onOptionsItemSelected(item);
-				}
-				
-				return selected;
+		for(ITAMMenuListener control : listOfMenuControls) {
+			selected = control.onOptionsItemSelected(item);
 		}
+		
+		mode = item.getItemId();
+				
+		return selected;
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -196,6 +235,11 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		}
 	}
 
-	
+	public void onButtonSelected(View item) {
+		
+		for(ITAMButtonListener control : listOfButtonControls) {
+			control.onButtonSelected(item);
+		}
+	}
 	
 }

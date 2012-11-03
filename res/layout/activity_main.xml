@@ -11,11 +11,84 @@
         android:background="@color/drawing_surface"
         android:overScrollMode="always" />
 
-    <ZoomControls
-        android:id="@+id/acitity_main_zoom_controls"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button_add"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:orientation="horizontal" />
+        android:visibility="gone"
+        android:onClick="buttonPressed"
+        android:text="@string/btn_add" >
+
+    </Button>
+
+    <Button
+        android:id="@+id/button_delete"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="60dip"
+        android:visibility="gone"
+        android:onClick="buttonPressed" 
+        android:text="@string/btn_del" />
+    
+    <Button
+        android:id="@+id/button_edit"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="120dip"
+        android:visibility="gone"
+        android:onClick="buttonPressed"
+        android:text="@string/btn_edit" />
+    
+    <Button
+        android:id="@+id/button_hide_one"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:visibility="gone"
+        android:onClick="buttonPressed"
+        android:text="@string/btn_one" >
+
+    </Button>
+
+    <Button
+        android:id="@+id/button_hide_all"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="60dip"
+        android:visibility="gone"
+        android:onClick="buttonPressed"
+        android:text="@string/btn_hide" />
+    
+    <Button
+        android:id="@+id/button_view"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="120dip"
+        android:visibility="gone"
+        android:onClick="buttonPressed"
+        android:text="@string/btn_view" />
+    
+    <Button
+        android:id="@+id/button_zoom_in"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_marginRight="60dip"
+        android:onClick="buttonPressed"
+        android:text="@string/btn_zoom_in" />
+    
+    <Button
+        android:id="@+id/button_zoom_out"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_marginLeft="60dip"
+        android:onClick="buttonPressed"
+        android:text="@string/btn_zoom_out" />
 
 </FrameLayout>

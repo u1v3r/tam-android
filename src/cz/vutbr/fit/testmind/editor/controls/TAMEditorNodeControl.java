@@ -13,6 +13,7 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
@@ -121,13 +122,13 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 				
 		intent.putExtra(NODE_TITLE, selectedNode.getProfile().getTitle());
 		intent.putExtra(NODE_BODY, selectedNode.getProfile().getBody());				
-		intent.putExtra(NODE_COLOR, genrateColorId(selectedNode.getGui().getBackground()));						
+		intent.putExtra(NODE_COLOR, genrateColorId(selectedNode.getGui().getColorBackground()));						
 		
 		activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
 		
 	}
 	
-	public boolean onTouchEvent(MotionEvent e) {
+	public void onTouchEvent(MotionEvent e) {
 		
 		if(waitingForClick) {
 			if(e.getAction() == MotionEvent.ACTION_DOWN) {
@@ -139,7 +140,6 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 				showEditNodeDialog(node);
 			}
 		}
-		return false;
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 		
 		int mode = editor.getMode();
 		
-		if(mode == MenuItems.create_mode || mode == MenuItems.edit_mode) {
+		if(mode == MenuItems.create_mode) {
 			showEditNodeDialog((TAMENode)node.getHelpObject());
 		}
 	}
@@ -249,5 +249,9 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
     	}
     	
     	return true;		
+	}
+
+	public void onHitEvent(MotionEvent e, ITAMGItem item) {
+		// do nothing //
 	}
 }

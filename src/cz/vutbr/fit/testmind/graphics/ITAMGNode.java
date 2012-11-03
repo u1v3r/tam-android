@@ -34,10 +34,6 @@ public interface ITAMGNode extends ITAMGItem {
 	
 	public void actualizeSize();
 	
-	public String getText();
-	
-	public void setText(String text);
-	
 	public List<ITAMGConnection> getListOfParentConnections();
 	
 	public List<ITAMGConnection> getListOfChildConnections();

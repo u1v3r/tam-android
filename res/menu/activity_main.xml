@@ -1,9 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"><group android:id="@+id/menu_group">
     <item android:id="@+id/menu_create_mode" android:showAsAction="always|withText" android:title="@string/create">
     </item>
-    <item android:id="@+id/menu_edit_mode" android:title="@string/edit" android:showAsAction="always|withText"></item>
     <item android:id="@+id/menu_view_mode" android:title="@string/view" android:showAsAction="always|withText"></item>
-    <item android:id="@+id/menu_file_mode" android:showAsAction="always|withText" android:title="@string/file"></item>
 </group><item android:id="@+id/menu_add" android:title="@string/add" android:showAsAction="withText" android:icon="@drawable/ic_action_add"></item>
     <item android:id="@+id/menu_edit" android:title="@string/edit" android:showAsAction="withText" android:icon="@drawable/ic_action_edit"></item>
     <item android:id="@+id/menu_delete" android:title="@string/delete" android:showAsAction="withText" android:icon="@drawable/ic_action_delete"></item>
