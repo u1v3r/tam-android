@@ -24,7 +24,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView.BufferType;
-
+/**
+ * @deprecated Odstranit
+ */
 public class RichTextEditorFragment extends Fragment implements Callback{
 
 	private static final String TAG = "RichTextEditorFragment";
@@ -50,7 +52,7 @@ public class RichTextEditorFragment extends Fragment implements Callback{
 			Bundle savedInstanceState) {
 					
 		setRetainInstance(true);	
-		
+		/*
 	    View result = inflater.inflate(R.layout.fragment_rich_text_editor, container, false);
 
 	    editor = (RichEditText)result.findViewById(R.id.fragment_rich_text_node_text);	    
@@ -103,9 +105,9 @@ public class RichTextEditorFragment extends Fragment implements Callback{
 				
 			}
 		});
-	    
-	    //return super.onCreateView(inflater, container, savedInstanceState);
-	    return(result);
+	    */
+	    return super.onCreateView(inflater, container, savedInstanceState);
+	    //return(result);
 	}
 	
 	public void setSpannedText(SpannableString text){	

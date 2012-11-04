@@ -86,7 +86,7 @@
             <EditText
                 android:id="@+id/edit_node_title"
                 android:layout_width="match_parent"
-                android:layout_height="0dip"
+                android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/node_add_dialog_title" >
 
@@ -95,7 +95,7 @@
 
             <com.commonsware.cwac.richedit.RichEditText
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/fragment_rich_text_node_text"
+                android:id="@+id/edit_node_text_node_text"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="top|left"
@@ -133,33 +133,46 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/edit_node_format_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right" >
 
         <ImageButton
-            android:id="@+id/fragment_rich_text_boldbtn"
+            android:id="@+id/edit_node_hidebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onHideBtnClick"
+            android:src="@drawable/ic_menu_hide_from_left" />
+
+        <ImageButton
+            android:id="@+id/edit_node_text_boldbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onBoldBtnClick"
             android:src="@drawable/ic_menu_text_editor_bold" />
 
         <ImageButton
-            android:id="@+id/fragment_rich_text_italicbtn"
+            android:id="@+id/edit_node_text_italicbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onItalicBtnClick"
             android:src="@drawable/ic_menu_text_editor_italic" />
 
         <ImageButton
-            android:id="@+id/fragment_rich_text_underlinebtn"
+            android:id="@+id/edit_node_text_underlinebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onUnderlineBtnClick"
             android:src="@drawable/ic_menu_text_editor_underline" />
 
         <ImageButton
-            android:id="@+id/fragment_rich_text_tagbtn"
+            android:id="@+id/edit_node_text_tagbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onTagBtnClick"
             android:src="@drawable/ic_menu_text_editor_tag" />
+
     </LinearLayout>
 
 </FrameLayout>
