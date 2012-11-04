@@ -24,6 +24,7 @@ import cz.vutbr.fit.testmind.editor.controls.TAMEditorIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorToolbarContol;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorToolbarContol.ITAMToolbarConstrolItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -39,7 +40,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
  * Obsahuje zakladne funkcie na pracu s grafom 
  *
  */
-public class TAMEditor extends TAMGraph implements ITAMEditor{
+public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstrolItem {
 	
 	private static final String TAG = "TAMEditor";
 	
@@ -49,6 +50,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	private int mode;
 	protected List<ITAMMenuListener> listOfMenuControls;
 	protected List<ITAMButtonListener> listOfButtonControls;
+	protected MenuItem actualItem;
 	//protected List<ITAMMenuListener> listOfMenuListeners;
 
 	private boolean hasRoot = false;
@@ -77,6 +79,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 		new TAMEditorToolbarContol(this);
 		
 		mode = MenuItems.create_mode;
+		//actualItem = EventObjects.menu_create;
 		
 		this.profile.getListOfEditors().add(this);
 	}
@@ -225,14 +228,33 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		boolean selected = false;
-				
-		for(ITAMMenuListener control : listOfMenuControls) {
-			selected = control.onOptionsItemSelected(item);
+		
+		int id = item.getItemId();
+		
+		switch (id) {
+			case MenuItems.create_mode:
+			case MenuItems.view_mode:
+				hideMenu();
+				showMenu(item.getItemId());
+				//Toast.makeText(editor.getContext(), item.getTitle().toString() + " " + getEditor().getResources().getText(R.string.mode_active), Toast.LENGTH_SHORT).show();
+				mode = id;
+				/*if(item != actualItem) {
+					if(actualItem != null) {
+						actualItem.setChecked(false);
+					}
+					item.setEnabled(true);
+					actualItem = item;
+				}*/
+				break;
+			default:
+				for(ITAMMenuListener control : listOfMenuControls) {
+					selected = control.onOptionsItemSelected(item);
+				}
+				break;
 		}
 		
-		mode = item.getItemId();
-				
 		return selected;
+
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
