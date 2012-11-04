@@ -44,11 +44,12 @@ public final class R {
         public static final int radio_button_selector=0x7f02000f;
     }
     public static final class id {
-        public static final int TextView01=0x7f080006;
-        public static final int acitity_main_tam_editor=0x7f08000a;
-        public static final int acitity_main_zoom_controls=0x7f08000b;
-        public static final int add_dialog_button_cancel=0x7f080010;
-        public static final int add_dialog_button_ok=0x7f080011;
+        public static final int FrameLayout1=0x7f080000;
+        public static final int TextView01=0x7f080007;
+        public static final int acitity_main_tam_editor=0x7f08000f;
+        public static final int acitity_main_zoom_controls=0x7f080010;
+        public static final int add_dialog_button_cancel=0x7f080015;
+        public static final int add_dialog_button_ok=0x7f080016;
         public static final int cwac_richedittext_bold=0x7f08002c;
         public static final int cwac_richedittext_center=0x7f08002a;
         public static final int cwac_richedittext_effects=0x7f08002e;
@@ -66,19 +67,18 @@ public final class R {
         public static final int cwac_richedittext_underline=0x7f080021;
         public static final int edit_node_acitivty_cancel=0x7f080017;
         public static final int edit_node_acitivty_ok=0x7f080018;
-        public static final int edit_node_radio1=0x7f080002;
-        public static final int edit_node_radio2=0x7f080003;
-        public static final int edit_node_radio3=0x7f080004;
-        public static final int edit_node_radio4=0x7f080005;
-        public static final int edit_node_rich_text_fragment=0x7f080008;
-        public static final int edit_node_title=0x7f080007;
-        public static final int edit_text_node_title=0x7f08000f;
-        public static final int fragment_rich_text_boldbtn=0x7f080012;
-        public static final int fragment_rich_text_italicbtn=0x7f080013;
-        public static final int fragment_rich_text_node_text=0x7f080016;
-        public static final int fragment_rich_text_tagbtn=0x7f080015;
-        public static final int fragment_rich_text_underlinebtn=0x7f080014;
-        public static final int main_view=0x7f080009;
+        public static final int edit_node_radio1=0x7f080003;
+        public static final int edit_node_radio2=0x7f080004;
+        public static final int edit_node_radio3=0x7f080005;
+        public static final int edit_node_radio4=0x7f080006;
+        public static final int edit_node_title=0x7f080008;
+        public static final int edit_text_node_title=0x7f080014;
+        public static final int fragment_rich_text_boldbtn=0x7f08000a;
+        public static final int fragment_rich_text_italicbtn=0x7f08000b;
+        public static final int fragment_rich_text_node_text=0x7f080009;
+        public static final int fragment_rich_text_tagbtn=0x7f08000d;
+        public static final int fragment_rich_text_underlinebtn=0x7f08000c;
+        public static final int main_view=0x7f08000e;
         public static final int menu_add=0x7f080019;
         public static final int menu_delete=0x7f08001b;
         public static final int menu_edit=0x7f08001a;
@@ -87,11 +87,11 @@ public final class R {
         public static final int menu_open=0x7f08001c;
         public static final int menu_save=0x7f08001d;
         public static final int menu_settings=0x7f08001e;
-        public static final int radioGroup1=0x7f080001;
-        public static final int test_linearLayout_path=0x7f08000c;
-        public static final int test_textView_title=0x7f08000d;
-        public static final int test_webView_body=0x7f08000e;
-        public static final int textView1=0x7f080000;
+        public static final int radioGroup1=0x7f080002;
+        public static final int test_linearLayout_path=0x7f080011;
+        public static final int test_textView_title=0x7f080012;
+        public static final int test_webView_body=0x7f080013;
+        public static final int textView1=0x7f080001;
     }
     public static final class layout {
         public static final int activity_edit_node=0x7f030000;

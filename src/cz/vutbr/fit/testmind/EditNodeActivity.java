@@ -57,12 +57,12 @@ public class EditNodeActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		// prijme intent z main acitivity
 		Intent intent = getIntent();	
-				
+		/*		
 		RichTextEditorFragment fragment = RichTextEditorFragment.newInstance(
 				intent.getCharSequenceExtra(TAMEditorNodeControl.NODE_BODY));
 		
 		getSupportFragmentManager().beginTransaction().add(R.id.edit_node_rich_text_fragment, fragment).commit();
-		
+		*/
 		setContentView(R.layout.activity_edit_node);
 		
 		title = (EditText)findViewById(R.id.edit_node_title);			
@@ -118,7 +118,7 @@ public class EditNodeActivity extends FragmentActivity {
     }
     
     private void saveValues() {
-    	
+    	/*
     	RichTextEditorFragment richTextEditorFragment = 
     			(RichTextEditorFragment)getSupportFragmentManager().findFragmentById(
     						R.id.edit_node_rich_text_fragment);
@@ -132,6 +132,7 @@ public class EditNodeActivity extends FragmentActivity {
     	intent.putExtra(TAMEditorNodeControl.NODE_COLOR,color);
     	setResult(TAMEditorNodeControl.EDIT_NODE_RESULT_CODE, intent);
     	finish();
+    	*/
 	}
 
 	public void onSelectColorClicked(View view){
