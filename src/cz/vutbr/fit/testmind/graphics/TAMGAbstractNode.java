@@ -21,7 +21,7 @@ import android.graphics.drawable.shapes.Shape;
  */
 public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNode {
 	
-	private static final float STROKE_WIDTH = 5f;
+	private static final float [] STROKE_WIDTH = { 5f , 15f };
 
 	private static final String TAG = "TAMGAbstractNode";
 	
@@ -32,6 +32,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	private Object object;
 	
 	private int type;
+	private int state = NODE_STATE_DEFAULT;
 	
 	private Point position;
 	private int offsetX;
@@ -87,6 +88,16 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 	public Point getPosition() {
 		return position;
+	}
+	
+	public int getNodeState() {
+		return state;
+	}
+	
+	public void setNodeState(int state) {
+		if(state == NODE_STATE_DEFAULT || state == NODE_STATE_COLLAPSE) {
+			this.state = state;
+		}
 	}
 	
 	protected void setPosition(int x, int y) {
@@ -301,7 +312,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 					
 		super.onDraw(shape, canvas, paint);
 		
-		paint.setStrokeWidth(STROKE_WIDTH);
+		paint.setStrokeWidth(STROKE_WIDTH[state]);
 		paint.setStyle(Paint.Style.STROKE);
 		
 		if(isHighlited) {
