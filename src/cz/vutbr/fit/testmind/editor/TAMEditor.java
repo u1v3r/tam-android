@@ -201,6 +201,9 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 			EventObjects.btn_hide_one.setVisibility(VISIBLE);
 			EventObjects.btn_view.setVisibility(VISIBLE);
 		}
+		
+		EventObjects.btn_zoom_in.setVisibility(GONE);
+		EventObjects.btn_zoom_out.setVisibility(GONE);
 	}
 	
 	public void hideMenu() {
@@ -214,6 +217,9 @@ public class TAMEditor extends TAMGraph implements ITAMEditor{
 			EventObjects.btn_hide_one.setVisibility(GONE);
 			EventObjects.btn_view.setVisibility(GONE);
 		}
+		
+		EventObjects.btn_zoom_in.setVisibility(VISIBLE);
+		EventObjects.btn_zoom_out.setVisibility(VISIBLE);
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
