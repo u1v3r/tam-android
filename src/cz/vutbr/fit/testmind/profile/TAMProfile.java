@@ -186,6 +186,9 @@ public class TAMProfile {
 		TAMPNode.resetSequenceNumber(nodeCounter);
 		TAMPConnection.resetSequenceNumber(connectionCounter);
 		
+		listOfPNodes.clear();
+		listOfPConnections.clear();
+		
 		root = null;
 	}
 	
