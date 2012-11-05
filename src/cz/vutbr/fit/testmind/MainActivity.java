@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity {
 	private static final String TAG = "MainActivity";
 	
 	private static TAMProfile profile;
-	
+	private static MainActivity mainActivityInstance;	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {    	
@@ -101,6 +101,8 @@ public class MainActivity extends FragmentActivity {
 		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
     	
     	EventObjects.editor.initialize(profile);
+    	
+    	mainActivityInstance = this;
     }
         
     @Override
@@ -128,4 +130,8 @@ public class MainActivity extends FragmentActivity {
 	public static TAMProfile getProfile() {
 		return profile;
 	}
+	
+    public static MainActivity getMainActivityInstance() {
+        return mainActivityInstance;
+    }
 }

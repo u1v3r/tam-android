@@ -19,6 +19,7 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMEditorActivityControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
@@ -77,6 +78,7 @@ public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstr
 		new TAMEditorIOControl(this);
 		new TAMEditorHidingControl(this);
 		new TAMEditorToolbarContol(this);
+		new TAMEditorActivityControl(this);
 		
 		mode = MenuItems.create_mode;
 		//actualItem = EventObjects.menu_create;

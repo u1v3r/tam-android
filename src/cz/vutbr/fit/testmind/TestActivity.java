@@ -21,11 +21,11 @@ public class TestActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         
-        if(node == null)
-        {
-            set_node(profile.getRoot());
-        }
-        loadNode();
+//        if(node == null)
+//        {
+//            set_node(profile.getRoot());
+//        }
+//        loadNode();
     }
     
     public void set_node(TAMPNode node)
