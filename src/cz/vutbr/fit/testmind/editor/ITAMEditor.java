@@ -50,6 +50,8 @@ public interface ITAMEditor {
 	
 	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY);
 	
+	public void reset();
+	
 	// TAMGraph functions //
 	
 	public ITAMGNode getLastSelectedNode();

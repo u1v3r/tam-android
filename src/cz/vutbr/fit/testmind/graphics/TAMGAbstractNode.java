@@ -54,7 +54,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		super(shape);
 		
 		this.graph = graph;
-		this.text = text;
 		this.listOfChildConnections = new ArrayList<ITAMGConnection>();
 		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
@@ -74,8 +73,9 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.offsetY = offsetY;
 		
 		position = new Point(x, y);
+		setText(text);
 		
-		actualizeSize();
+		//actualizeSize();
 	}
 	
 	public abstract boolean hit(float x, float y);
@@ -118,7 +118,11 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	}
 
 	public void setText(String text) {
-		this.text = text;
+	    if(text == null) {
+	        this.text = "";
+	    } else {
+	        this.text = text;
+	    }
 		actualizeSize();
 	}
 

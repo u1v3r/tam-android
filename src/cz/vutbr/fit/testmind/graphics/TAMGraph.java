@@ -850,6 +850,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		}
 	}
 
+	public void reset() {
+		listOfNodes.clear();
+		listOfConnections.clear();
+		listOfSelectedItems.clear();
+		listOfDrawableItems.clear();
+		lastSelectedNode = null;
+	}
+
 	/*public void organizeButtons() {
 		System.out.println(getWidth() + " " + getHeight());
 		int x = getWidth()-TAMGMenuButton.WIDTH-10;
