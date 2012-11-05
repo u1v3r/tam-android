@@ -1,13 +1,18 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    
-    <item android:id="@+id/menu_add" android:title="@string/add" android:showAsAction="always|withText" android:icon="@drawable/ic_action_add"></item>
-    <item android:id="@+id/menu_edit" android:title="@string/edit" android:showAsAction="always|withText" android:icon="@drawable/ic_action_edit"></item>
-    <item android:id="@+id/menu_delete" android:title="@string/delete" android:showAsAction="always|withText" android:icon="@drawable/ic_action_delete"></item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"><group android:id="@+id/menu_group">
+    <item android:id="@+id/menu_create_mode" android:showAsAction="always|withText" android:title="@string/create">
+    </item>
+    <item android:id="@+id/menu_view_mode" android:title="@string/view" android:showAsAction="always|withText"></item>
+</group><item android:id="@+id/menu_add" android:title="@string/add" android:showAsAction="withText" android:icon="@drawable/ic_action_add"></item>
+    <item android:id="@+id/menu_edit" android:title="@string/edit" android:showAsAction="withText" android:icon="@drawable/ic_action_edit"></item>
+    <item android:id="@+id/menu_delete" android:title="@string/delete" android:showAsAction="withText" android:icon="@drawable/ic_action_delete"></item>
     <item android:id="@+id/menu_open" android:showAsAction="never|withText" android:title="@string/menu_open"></item>
     <item android:id="@+id/menu_save" android:title="@string/save" android:showAsAction="never|withText" android:icon="@drawable/ic_action_save"></item>
     <item android:id="@+id/menu_settings" android:title="@string/menu_settings" android:orderInCategory="100" android:showAsAction="never" />
     <item android:id="@+id/menu_import" android:title="@string/import_file" android:showAsAction="never|withText"></item>
     <item android:id="@+id/menu_export" android:title="@string/menu_export" android:showAsAction="never|withText"></item>
+    
+    
+    
+    
        
 </menu>

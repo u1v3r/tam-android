@@ -263,10 +263,10 @@ public class Serializer
         Point position = gui.getPosition();
         values.put("x", position.x);
         values.put("y", position.y);
-        values.put("background", gui.getBackground());
-        values.put("foreground", gui.getForeground());
+        values.put("background", gui.getColorBackground());
+        values.put("foreground", gui.getColorText());
         values.put("backgroundStroke", gui.getBackgroundStroke());
-        values.put("highlightColor", gui.getHighlightColor());
+        values.put("highlightColor", gui.getColorBackgroundHighlight());
         
         db.insert("node_references", null, values);
     }
@@ -304,8 +304,8 @@ public class Serializer
         values.put("connection", connection.getProfile().getId());
         values.put("editor", editor.getClass().getName());
         values.put("type", gui.getType());
-        values.put("background", gui.getBackground());
-        values.put("highlightColor", gui.getHighlightColor());
+        values.put("background", gui.getColorBackground());
+        values.put("highlightColor", gui.getColorBackgroundHighlight());
         
         db.insert("connection_references", null, values);        
     }
@@ -433,10 +433,10 @@ public class Serializer
             int y = cur.getInt(indexes.get("y"));
             ITAMGNode gNode = node.addEReference(editor, x, y, type).getGui();
             
-            gNode.setBackground(cur.getInt(indexes.get("background")));
+            gNode.setColorBackground(cur.getInt(indexes.get("background")));
             gNode.setBackgroundStroke(cur.getInt(indexes.get("backgroundStroke")));
-            gNode.setForeground(cur.getInt(indexes.get("foreground")));
-            gNode.setHighlightColor(cur.getInt(indexes.get("highlightColor")));
+            gNode.setColorText(cur.getInt(indexes.get("foreground")));
+            gNode.setColorBackgroundHighlight(cur.getInt(indexes.get("highlightColor")));
         }           
     }
     
@@ -459,8 +459,8 @@ public class Serializer
             int type = cur.getInt(indexes.get("type"));
             ITAMGConnection gConnection = connection.addEReference(editor, type).getGui();
             
-            gConnection.setBackground(cur.getInt(indexes.get("background")));
-            gConnection.setHighlightColor(cur.getInt(indexes.get("highlightColor")));
+            gConnection.setColorBackground(cur.getInt(indexes.get("background")));
+            gConnection.setColorBackgroundHighlight(cur.getInt(indexes.get("highlightColor")));
         }           
     }
     

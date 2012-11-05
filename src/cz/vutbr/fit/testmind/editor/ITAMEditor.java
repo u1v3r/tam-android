@@ -26,6 +26,14 @@ public interface ITAMEditor {
 	
 	public TAMProfile getProfile();
 	
+	public int getMode();
+	
+	public void hideMenu();
+
+	public void showMenu();
+	
+	public void showMenu(int mode);
+	
 	public ITAMENode createNode(TAMPNode profile, int x, int y);
 
 	public ITAMENode createNode(TAMPNode profile, int x, int y, int type);

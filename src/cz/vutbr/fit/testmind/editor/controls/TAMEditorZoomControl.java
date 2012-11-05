@@ -1,74 +1,28 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.ZoomControls;
-import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
-public class TAMEditorZoomControl extends TAMEditorAbstractControl {
-	
-	public interface ZoomInOutEventListener {
-		
-		void onZoomIn();
-		void onZoomOut();
-		
-	}
-	
-	private ZoomControls zoomControls;
-	private TAMGraph graph;
+public class TAMEditorZoomControl extends TAMEditorAbstractControl implements ITAMButtonListener {
 
-	public TAMEditorZoomControl(TAMEditor editor, int id) {
+	public TAMEditorZoomControl(TAMEditor editor) {
 		super(editor);
-		this.zoomControls = (ZoomControls) ((FragmentActivity) editor.getContext()).findViewById(R.id.acitity_main_zoom_controls);
-		System.out.println(zoomControls);
-		this.graph = (TAMGraph) getEditor();
-		addListeners();
+		editor.getListOfButtonControls().add(this);
 	}
 	/*
 	public void zoom(float sx, float sy, float px, float py) {
 		getEditor().zoom(sx, sy, px, py);
 	}
 	*/
-	
-	private void addListeners() {
 
-		zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				zoomIn(graph);				
-			}
-		});
-        zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {
-				zoomOut(graph);				
-			}
-		});
-	}
-
-	private void zoomIn(ZoomInOutEventListener object){
-		object.onZoomIn();		
-	}
-	
-	private void zoomOut(ZoomInOutEventListener object){
-		object.onZoomOut();		
-	}
-
-	public void onSelectNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
+	public void onButtonSelected(View item) {
 		
-	}
-
-	public void onUnselectNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void onMoveNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
-		
+		if(item == EventObjects.btn_zoom_in) {
+			((TAMGraph)editor).onZoomIn();
+		} else if(item == EventObjects.btn_zoom_out) {
+			((TAMGraph)editor).onZoomOut();
+		}
 	}
 }

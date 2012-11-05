@@ -75,5 +75,20 @@ public class TAMGItemFactory {
 		
 		connection.dispose();
 	}
+	
+	public ITAMGButton createButton(TAMGraph graph, int type) {
+		
+		ITAMGButton button = null;
+		
+		if(type == ITAMGButton.BUTTON_TYPE_MENU) {
+			button = new TAMGMenuButton(graph, type);
+		}
+		
+		graph.getListOfButtons().add(button);
+		//graph.organizeButtons();
+		
+		return button;
+		
+	}
 
 }

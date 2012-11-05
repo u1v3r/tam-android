@@ -1,33 +1,53 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
-import android.graphics.Canvas;
-import android.view.MenuItem;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import android.view.MotionEvent;
 
-public class TAMEditorHidingControl extends TAMEditorAbstractControl {
+public class TAMEditorHidingControl extends TAMEditorAbstractControl implements ITAMItemGestureListener {
+	
+	private static final String TAG = "TAMEditorHidingControl";
+	
+	public interface ITAMHidingControlNode {
+		public void setChildsVisible(boolean visible, boolean oneLevel);
+		public boolean hasVisibleChilds();
+	}
 
 	public TAMEditorHidingControl(ITAMEditor editor) {
 		super(editor);
+		editor.getListOfItemGestureControls().add(this);
 	}
 
-	private static final String TAG = "TAMEditorHidingControl";
-
-	public void onSelectNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
+	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
+		
+		setBranchVisible(node, false);
 		
 	}
 
-	public void onUnselectNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
-		
+	public void onItemLongReleaseEvent(MotionEvent e, ITAMGNode node) {
+		// do nothing //
 	}
 
-	public void onMoveNodeEvent(ITAMGNode node) {
-		// TODO Auto-generated method stub
+	public void onItemDoubleTapEvent(MotionEvent e, ITAMGNode node) {
 		
+		setBranchVisible(node, true);
+	}
+	
+	private void setBranchVisible(ITAMGNode node, boolean oneLevel) {
+		
+		if(getEditor().getMode() == MenuItems.view_mode) {
+			// this control supports only instances of node which implements ITAMHidingControlNode interface //
+			// (supports child nodes hiding functionality) //
+			
+			if(node != null && (node.getHelpObject()) instanceof ITAMHidingControlNode) {
+				
+				ITAMHidingControlNode selectedNode = (ITAMHidingControlNode) (node.getHelpObject());
+				selectedNode.setChildsVisible(!selectedNode.hasVisibleChilds(), oneLevel);
+				getEditor().invalidate();
+			}
+		}
 	}
 
 }
