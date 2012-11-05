@@ -8,28 +8,16 @@ import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 
-public class TAMEditorToolbarContol extends TAMEditorAbstractControl implements ITAMMenuListener, ITAMTouchListener {
-
-	public TAMEditorToolbarContol(ITAMEditor editor) {
-		super(editor);
-		editor.getListOfMenuControls().add(this);
-		editor.getListOfTouchControls().add(this);
+public class TAMEditorToolbarContol extends TAMEditorAbstractControl implements ITAMTouchListener {
+	
+	public interface ITAMToolbarConstrolItem {
+		public void showMenu();
+		public void hideMenu();
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		int id = item.getItemId();
-		
-		switch (id) {
-			case MenuItems.create_mode:
-			case MenuItems.view_mode:
-				editor.hideMenu();
-				editor.showMenu(item.getItemId());
-				//Toast.makeText(editor.getContext(), item.getTitle().toString() + " " + getEditor().getResources().getText(R.string.mode_active), Toast.LENGTH_SHORT).show();
-				return true;
-			default:
-				return false;
-		}
+	public TAMEditorToolbarContol(ITAMToolbarConstrolItem editor) {
+		super((ITAMEditor) editor);
+		((ITAMEditor)editor).getListOfTouchControls().add(this);
 	}
 
 	public void onTouchEvent(MotionEvent e) {
@@ -39,9 +27,9 @@ public class TAMEditorToolbarContol extends TAMEditorAbstractControl implements 
 	public void onHitEvent(MotionEvent e, ITAMGItem item) {
 		
 		if(item != null && item instanceof ITAMGNode) {
-			editor.showMenu();
+			((ITAMToolbarConstrolItem)editor).showMenu();
 		} else {
-			editor.hideMenu();
+			((ITAMToolbarConstrolItem)editor).hideMenu();
 		}
 	}
 

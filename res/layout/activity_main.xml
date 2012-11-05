@@ -28,7 +28,8 @@
                 android:layout_height="wrap_content"
                 android:onClick="buttonPressed"
                 android:src="@drawable/ic_action_zoom_in"
-                android:contentDescription="@string/btn_zoom_in" />
+                android:contentDescription="@string/btn_zoom_in"
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/button_zoom_out"
@@ -37,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:onClick="buttonPressed"
                 android:src="@drawable/ic_action_zoom_out"
-                android:contentDescription="@string/btn_zoom_out" />
+                android:contentDescription="@string/btn_zoom_out"
+                android:visibility="gone" />
 
         </LinearLayout>
     </FrameLayout>

@@ -62,6 +62,9 @@ public class MainActivity extends FragmentActivity {
 		public static View btn_zoom_in;
 		public static View btn_zoom_out;
 		
+		//public static MenuItem menu_create;
+		//public static MenuItem menu_view;
+		
 		public static Animation animAlpha;
 	}
 		
@@ -90,6 +93,9 @@ public class MainActivity extends FragmentActivity {
 		EventObjects.btn_view = findViewById(R.id.button_view);
 		EventObjects.btn_zoom_in = findViewById(R.id.button_zoom_in);
 		EventObjects.btn_zoom_out = findViewById(R.id.button_zoom_out);
+		
+		//EventObjects.menu_create = (MenuItem) findViewById(R.id.menu_create_mode);
+		//EventObjects.menu_view = (MenuItem) findViewById(R.id.menu_view_mode);
 		
 		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
     	

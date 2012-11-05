@@ -68,10 +68,19 @@ public class TAMENode implements ITAMENode, ITAMHidingControlNode {
 			if(child.getGui().isEnabled() != visible) {
 				if(oneLevel && visible) {
 					child.getGui().setEnabled(visible);
+					if(!child.getProfile().getListOfChildNodes().isEmpty()) {
+						child.gui.setNodeState(ITAMGNode.NODE_STATE_COLLAPSE);
+					}
 				} else {
 					child.enable(visible);
 				}
 			}
+		}
+		
+		if(visible) {
+			gui.setNodeState(ITAMGNode.NODE_STATE_DEFAULT);
+		} else {
+			gui.setNodeState(ITAMGNode.NODE_STATE_COLLAPSE);
 		}
 		
 		//this.hasVisibleChilds = visible;

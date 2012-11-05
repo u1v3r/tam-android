@@ -12,6 +12,13 @@ public interface ITAMGNode extends ITAMGItem {
 	public final int NODE_TYPE_RECTANGLE = 1;
 	public final int NODE_TYPE_ROUND_RECTANGLE = 2;
 	
+	public final int NODE_STATE_DEFAULT = 0;
+	public final int NODE_STATE_COLLAPSE = 1;
+	
+	public int getNodeState();
+	
+	public void setNodeState(int state);
+	
 	public ITAMGItem addChild(int x, int y, String text);
 	
 	public ITAMGItem addChild(int type, int x, int y, String text);
