@@ -1,38 +1,37 @@
 package cz.vutbr.fit.testmind;
 
-import android.app.Activity;
-import android.content.Context;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.SpannableString;
-import android.util.AttributeSet;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView.BufferType;
 
+import com.commonsware.cwac.richedit.Effect;
 import com.commonsware.cwac.richedit.RichEditText;
+import com.commonsware.cwac.richedit.RichEditText.OnSelectionChangedListener;
 
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
-import cz.vutbr.fit.testmind.fragments.RichTextEditorFragment;
 
-public class EditNodeActivity extends FragmentActivity implements AnimationListener {
+public class EditNodeActivity extends FragmentActivity implements AnimationListener, 
+	OnSelectionChangedListener,TextWatcher {
 	
 	
 	public final static class RadioButtonItems{
@@ -45,14 +44,11 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	private static final String TAG = "EditNodeActivity";
 	
 	private EditText title;
-	private Button okBtn;
-	private Button cancelBtn;
 	private RadioButton radioButtonBlue;
 	private RadioButton radioButtonRed;
 	private RadioButton radioButtonGreen;
 	private RadioButton radioButtonPurple;
-	
-	private TAMENode selectedNode;
+		
 	private BackgroundStyle color;
 
 	private LinearLayout formatToolbar;
@@ -60,72 +56,97 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	private Animation animFromRight;
 	private Animation animFromLeft;
 
-	private RichEditText editor;
-
+	private RichEditText richTextEditor;
 	private ImageButton boldBtn;
-
 	private ImageButton italicBtn;
-
 	private ImageButton underlineBtn;
-
 	private ImageButton tagBtn;
-
 	private ImageButton hideBtn;
 
 	private boolean isToolbarVisible = false;
-	private boolean firstAnimation = true;
+
+	private boolean isSelectionBold = false;
+	private boolean isSelectionItalic = false;
+	private boolean isSelectionUnderline = false;
+	
+	private boolean isBoldBtnActive = false;
+	private boolean isItalicBtnActive = false;
+	private boolean isUnderlineBtnActive = false;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
-		// prijme intent z main acitivity
-		Intent intent = getIntent();
-		setContentView(R.layout.activity_edit_node);
 		
+		setContentView(R.layout.activity_edit_node);
+				
 		/* acitity buttons */
 		title = (EditText)findViewById(R.id.edit_node_title);			
 		radioButtonBlue = (RadioButton)findViewById(R.id.edit_node_radio2);
 		radioButtonRed = (RadioButton)findViewById(R.id.edit_node_radio3); 
 		radioButtonGreen = (RadioButton)findViewById(R.id.edit_node_radio1);
-		radioButtonPurple = (RadioButton)findViewById(R.id.edit_node_radio4);
-		okBtn = (Button)findViewById(R.id.edit_node_acitivty_ok);
-		cancelBtn = (Button)findViewById(R.id.edit_node_acitivty_cancel);
+		radioButtonPurple = (RadioButton)findViewById(R.id.edit_node_radio4);		
+		
 			
+		
+		/* prijme intent z main acitivity */
+		Intent intent = getIntent();
 		String titleString = intent.getStringExtra(TAMEditorNodeControl.NODE_TITLE);		
 		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodeControl.NODE_COLOR);	
 		CharSequence bodyText = intent.getCharSequenceExtra(TAMEditorNodeControl.NODE_BODY);
+		
+		/* nastavenie titulku */
 		title.setText(titleString);		
 		
+		/* nastavenie radio button pre zvolenie farby */
 		setRadioButtonColor(backgroundColor);
 				
 		getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		
-		/* natavenie textu pre editor */
-	    editor = (RichEditText)findViewById(R.id.edit_node_text_node_text);
-	    editor.setText(new SpannableString(bodyText), BufferType.SPANNABLE);	    
-	    
-	    // v action menu zobrazi formatovaci button
-	    editor.enableActionModes(false);
-	    
-	    /* toolbar buttons */
-	    boldBtn = (ImageButton)findViewById(R.id.edit_node_text_boldbtn);
-	    italicBtn = (ImageButton)findViewById(R.id.edit_node_text_italicbtn);
-	    underlineBtn = (ImageButton)findViewById(R.id.edit_node_text_underlinebtn);
-	    tagBtn = (ImageButton)findViewById(R.id.edit_node_text_tagbtn);
-		hideBtn = (ImageButton)findViewById(R.id.edit_node_hidebtn);
-		
-		/* animacia toolbar */
+		/* nastavenie animacie pre toolbar */
 		formatToolbar = (LinearLayout)findViewById(R.id.edit_node_format_toolbar);
 		animFromRight = AnimationUtils.loadAnimation(this, R.anim.anim_slide_from_right);
 		animFromLeft = AnimationUtils.loadAnimation(this, R.anim.anim_slide_from_left);
 				
 		animFromRight.setAnimationListener(this);
 		animFromLeft.setAnimationListener(this);
-		
-		formatToolbar.clearAnimation();
-		formatToolbar.startAnimation(animFromRight);
-		
+				
+		/* natavenie textu pre editor */
+	    richTextEditor = (RichEditText)findViewById(R.id.edit_node_text_node_text);
+	    richTextEditor.setText(new SpannableString(bodyText), BufferType.SPANNABLE);
+	    richTextEditor.setOnSelectionChangedListener(this);
+	    richTextEditor.addTextChangedListener(this);
+	    
+	    title.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			public void onFocusChange(View v, boolean hasFocus) {				
+				if(hasFocus){
+					formatToolbar.setVisibility(View.GONE);
+				}
+			}
+		});
+	    
+	    // zobrazit toolbar az ked ziska focus
+	    richTextEditor.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus){
+					formatToolbar.setVisibility(View.VISIBLE);
+					formatToolbar.clearAnimation();
+					formatToolbar.startAnimation(animFromRight);
+				}
+			}
+		});
+	    
+	    
+	    // v action menu (ne)zobrazi formatovaci button
+	    richTextEditor.enableActionModes(false);
+	    
+	    /* toolbar buttons */
+	    boldBtn = (ImageButton)findViewById(R.id.edit_node_text_boldbtn);
+	    italicBtn = (ImageButton)findViewById(R.id.edit_node_text_italicbtn);
+	    underlineBtn = (ImageButton)findViewById(R.id.edit_node_text_underlinebtn);
+	    tagBtn = (ImageButton)findViewById(R.id.edit_node_text_tagbtn);
+		hideBtn = (ImageButton)findViewById(R.id.edit_node_hidebtn);		
 	}
 	
     private void setRadioButtonColor(BackgroundStyle backgroundColor) {
@@ -164,7 +185,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     private void saveValues() {
     	
     	String titleText = title.getText().toString();
-    	Editable bodyText = editor.getEditableText();
+    	Editable bodyText = richTextEditor.getEditableText();
     	    	   	
     	Intent intent = new Intent();    	
     	intent.putExtra(TAMEditorNodeControl.NODE_TITLE, titleText);
@@ -197,13 +218,51 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	
 	public void onBoldBtnClick(View w){
 		
+		// ma dva stavy
+		if(isBoldBtnActive){
+			isBoldBtnActive = false;
+		}else{
+			isBoldBtnActive = true;
+		}
+		
+		setSelectionBooleanEffect(RichEditText.BOLD, isSelectionBold);
+		
+		// umozni prepinat efekt ked je text zvyrazneny
+		if(isSelectionBold){			
+			isSelectionBold = false;
+		}else{
+			isSelectionBold = true;
+		}
 	}
 	
 	public void onItalicBtnClick(View w){
+		setSelectionBooleanEffect(RichEditText.ITALIC, isSelectionItalic);
+
+		// umozni prepinat efekt ked je text zvyrazneny
+		if(isSelectionItalic){			
+			isSelectionItalic = false;
+		}else{
+			isSelectionItalic = true;
+		}
+	}
+
+	public void onUnderlineBtnClick(View w){
+		setSelectionBooleanEffect(RichEditText.UNDERLINE, isSelectionUnderline);
+
+		// umozni prepinat efekt ked je text zvyrazneny
+		if(isSelectionUnderline){			
+			isSelectionUnderline = false;
+		}else{
+			isSelectionUnderline = true;
+		}
 	}
 	
-	public void onUnderlineBtnClick(View w){
-		
+	private void setSelectionBooleanEffect(Effect<Boolean> effect, boolean isSelectionEnabled){
+		if(isSelectionEnabled){
+			richTextEditor.applyEffect(effect, false);
+		}else{
+			richTextEditor.applyEffect(effect, true);
+		}
 	}
 	
 	public void onTagBtnClick(View w){
@@ -225,20 +284,23 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	public void onAnimationStart(Animation animation) {
 		
 		if(isToolbarVisible == false){
-			boldBtn.setVisibility(View.VISIBLE);
-			italicBtn.setVisibility(View.VISIBLE);
-			underlineBtn.setVisibility(View.VISIBLE);
-			tagBtn.setVisibility(View.VISIBLE);			
+			showToolbar();				
 		}
+	}
+
+	private void showToolbar() {
+		
+		hideBtn.setVisibility(View.VISIBLE);
+		boldBtn.setVisibility(View.VISIBLE);
+		italicBtn.setVisibility(View.VISIBLE);
+		underlineBtn.setVisibility(View.VISIBLE);
+		tagBtn.setVisibility(View.VISIBLE);		
 	}
 
 	public void onAnimationEnd(Animation animation) {
 				
 		if(isToolbarVisible){
-			boldBtn.setVisibility(View.GONE);
-			italicBtn.setVisibility(View.GONE);
-			underlineBtn.setVisibility(View.GONE);
-			tagBtn.setVisibility(View.GONE);
+			hideToolbar();			
 			isToolbarVisible = false;			
 		}else {
 			isToolbarVisible = true;
@@ -246,8 +308,79 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		
 	}
 
-	public void onAnimationRepeat(Animation animation) {
+	private void hideToolbar() {
 		
+		boldBtn.setVisibility(View.GONE);
+		italicBtn.setVisibility(View.GONE);
+		underlineBtn.setVisibility(View.GONE);
+		tagBtn.setVisibility(View.GONE);
+	}
+	
+	
+
+	public void onAnimationRepeat(Animation animation) {
+		// no op		
+	}
+
+	public void onSelectionChanged(int start, int end, List<Effect<?>> effects) {
+				
+		isSelectionBold = false;
+		isSelectionItalic = false;
+		isSelectionUnderline = false;
+		
+		for (Effect<?> effect : effects) {
+			
+			if(effect.equals(RichEditText.BOLD)){
+				// TODO: zmenit stav BOLD button
+				isSelectionBold = true;
+			}
+			
+			if(effect.equals(RichEditText.ITALIC)){
+				// TODO: zmenit stav ITALIC button
+				isSelectionItalic = true;
+			}
+					
+			if(effect.equals(RichEditText.UNDERLINE)){
+				// TODO: zmenit stav UNDERLINE button
+				isSelectionUnderline = true;
+			}
+		
+		}
+		
+		
+		Log.d(TAG,"bold " + isSelectionBold + ",italic " 
+				+ isSelectionItalic + ", under " + isSelectionUnderline);
+		
+	}
+
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {		
+		
+	}
+
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		/*
+		if(isBoldBtnActive){
+			Log.d(TAG, "start " + start + ",before " + before + ", count " + count + ",chars " + s);
+			
+			
+				
+			CharSequence charsBefore = s.subSequence(0,s.length()-1);			
+			CharSequence lastChar = s.subSequence(s.length()-1, s.length());
+			
+			Log.d(TAG, charsBefore + " " + lastChar);
+			
+			
+			SpannableString lastCharSpan = new SpannableString(lastChar);
+			lastCharSpan.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			
+			
+			
+		}
+		*/
+	}
+
+	public void afterTextChanged(Editable s) {	
 		
 	}
 }

@@ -136,43 +136,84 @@
         android:id="@+id/edit_node_format_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right" >
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/toolbar_rich_text_format" >
 
         <ImageButton
             android:id="@+id/edit_node_hidebtn"
+            style="@style/button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="48dip"
             android:onClick="onHideBtnClick"
-            android:src="@drawable/ic_menu_hide_from_left" />
+            android:paddingLeft="0dip"
+            android:paddingRight="0dip"
+            android:scaleType="center"
+            android:src="@drawable/ic_menu_hide_from_left"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerHorizontal" />
 
         <ImageButton
             android:id="@+id/edit_node_text_boldbtn"
+            style="@style/button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onBoldBtnClick"
-            android:src="@drawable/ic_menu_text_editor_bold" />
+            android:src="@drawable/ic_menu_text_editor_bold"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerHorizontal" />
 
         <ImageButton
             android:id="@+id/edit_node_text_italicbtn"
+            style="@style/button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onItalicBtnClick"
-            android:src="@drawable/ic_menu_text_editor_italic" />
+            android:src="@drawable/ic_menu_text_editor_italic"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerHorizontal" />
 
         <ImageButton
             android:id="@+id/edit_node_text_underlinebtn"
+            style="@style/button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onUnderlineBtnClick"
-            android:src="@drawable/ic_menu_text_editor_underline" />
+            android:src="@drawable/ic_menu_text_editor_underline"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerHorizontal" />
 
         <ImageButton
             android:id="@+id/edit_node_text_tagbtn"
+            style="@style/button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onTagBtnClick"
-            android:src="@drawable/ic_menu_text_editor_tag" />
-
+            android:src="@drawable/ic_menu_text_editor_tag"
+            android:visibility="gone" />
     </LinearLayout>
-
 </FrameLayout>

@@ -47,6 +47,7 @@ public final class R {
         public static final int ic_menu_text_editor_tag=0x7f02000e;
         public static final int ic_menu_text_editor_underline=0x7f02000f;
         public static final int radio_button_selector=0x7f020010;
+        public static final int toolbar_rich_text_format=0x7f020011;
     }
     public static final class id {
         public static final int FrameLayout1=0x7f090000;
@@ -105,7 +106,6 @@ public final class R {
         public static final int activity_main=0x7f030001;
         public static final int activity_test=0x7f030002;
         public static final int fragment_add_node=0x7f030003;
-        public static final int fragment_rich_text_editor=0x7f030004;
     }
     public static final class menu {
         public static final int activity_edit_node=0x7f080000;
