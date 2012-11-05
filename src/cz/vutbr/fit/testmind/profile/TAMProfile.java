@@ -183,6 +183,10 @@ public class TAMProfile {
 			connection.dispose();
 		}
 		
+		for(ITAMEditor editor : listOfEditors) {
+			editor.reset();
+		}
+		
 		TAMPNode.resetSequenceNumber(nodeCounter);
 		TAMPConnection.resetSequenceNumber(connectionCounter);
 		

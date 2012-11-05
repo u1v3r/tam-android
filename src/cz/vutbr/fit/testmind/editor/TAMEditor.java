@@ -269,5 +269,10 @@ public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstr
 			control.onButtonSelected(item);
 		}
 	}
+
+	public void reset() {
+		super.reset();
+	}
+	// TODO Auto-generated method stub
 	
 }
