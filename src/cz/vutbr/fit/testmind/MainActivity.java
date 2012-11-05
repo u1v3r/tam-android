@@ -26,12 +26,13 @@ public class MainActivity extends FragmentActivity {
 		public static final int edit = R.id.menu_edit;
 		public static final int delete = R.id.menu_delete;
 		public static final int open = R.id.menu_open;
-		public static final int save = R.id.menu_save;
+		public static final int save = R.id.menu_save;		
 		public static final int settings = R.id.menu_settings;
 		public static final int importFile = R.id.menu_import;
 		public static final int exportFile = R.id.menu_export;
 		public static final int create_mode = R.id.menu_create_mode;
 		public static final int view_mode = R.id.menu_view_mode;
+		public static final int testing = R.id.menu_testing;
 	}
 	
 	/**

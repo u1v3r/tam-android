@@ -10,8 +10,7 @@
     <item android:id="@+id/menu_settings" android:title="@string/menu_settings" android:orderInCategory="100" android:showAsAction="never" />
     <item android:id="@+id/menu_import" android:title="@string/import_file" android:showAsAction="never|withText"></item>
     <item android:id="@+id/menu_export" android:title="@string/menu_export" android:showAsAction="never|withText"></item>
-    
-    
+    <item android:id="@+id/menu_testing" android:showAsAction="never|withText" android:title="Testing"></item> 
     
     
        
