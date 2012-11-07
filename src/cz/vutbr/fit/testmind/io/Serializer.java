@@ -35,10 +35,10 @@ public class Serializer
             "FOREIGN KEY(root) REFERENCES node(id))";
     static private final String CREATE_TABLE_EDITORS = "CREATE TABLE \"editors\" (" +
             "\"name\" TEXT UNIQUE NOT NULL," +
-            "\"sx\" int NOT NULL," +
-            "\"sy\" int NOT NULL," +
-            "\"px\" int NOT NULL," +
-            "\"py\" int NOT NULL)";
+            "\"sx\" real NOT NULL," +
+            "\"sy\" real NOT NULL," +
+            "\"px\" real NOT NULL," +
+            "\"py\" real NOT NULL)";
     static private final String CREATE_TABLE_NODE_REFERENCES = "CREATE TABLE \"node_references\" (" +
             "\"node\" int NOT NULL," +
             "\"editor\" TEXT NOT NULL," +
@@ -353,12 +353,13 @@ public class Serializer
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
         {
             ITAMEditor editor = editors.get(cur.getString(indexes.get("name")));
-                       
-            editor.getZoom().sx = cur.getInt(indexes.get("sx"));
-            editor.getZoom().sy = cur.getInt(indexes.get("sy"));
-            editor.getZoom().px = cur.getInt(indexes.get("px"));
-            editor.getZoom().py = cur.getInt(indexes.get("py"));
+                    
+            float sx = cur.getFloat(indexes.get("sx"));
+            float sy = cur.getFloat(indexes.get("sy"));
+            float px = cur.getFloat(indexes.get("px"));
+            float py = cur.getFloat(indexes.get("py"));
             
+            editor.zoom(sx, sy, px, py);            
         }
         
         return editors;
