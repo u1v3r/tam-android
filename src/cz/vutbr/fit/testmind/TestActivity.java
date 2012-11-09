@@ -2,8 +2,8 @@ package cz.vutbr.fit.testmind;
 
 import java.util.ArrayList;
 
-import cz.vutbr.fit.testmind.profile.TAMPNode;
-import cz.vutbr.fit.testmind.profile.TAMProfile;
+import cz.vutbr.fit.testmind.testing.TestingNode;
+import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -12,8 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class TestActivity extends FragmentActivity {
-    private TAMProfile profile = MainActivity.getProfile();
-    private TAMPNode node;
+    private TestingNode node;
     
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -21,14 +20,11 @@ public class TestActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         
-//        if(node == null)
-//        {
-//            set_node(profile.getRoot());
-//        }
-//        loadNode();
+        Bundle b = getIntent().getExtras();
+        TestingParcelable nodeParcelable = (TestingParcelable)b.getParcelable("cz.vutbr.fit.testmind.testing.TestingParcelable");
     }
     
-    public void set_node(TAMPNode node)
+    public void set_node(TestingNode node)
     {
         this.node = node;
         loadNode();
@@ -48,9 +44,9 @@ public class TestActivity extends FragmentActivity {
     
     private void loadPath()
     {
-        ArrayList<TAMPNode> path_nodes = new ArrayList<TAMPNode>();
+        ArrayList<TestingNode> path_nodes = new ArrayList<TestingNode>();
         
-        TAMPNode temp_node = node;
+        TestingNode temp_node = node;
         
         while(temp_node.getParent() != null)
         {
@@ -63,7 +59,7 @@ public class TestActivity extends FragmentActivity {
         TextView rootSep = new TextView(this);
         rootSep.setText("/");
         pathView.addView(rootSep);
-        for(TAMPNode parent_node: path_nodes)
+        for(TestingNode parent_node: path_nodes)
         {
             TextView text = new TextView(this);
             text.setText(parent_node.getTitle());

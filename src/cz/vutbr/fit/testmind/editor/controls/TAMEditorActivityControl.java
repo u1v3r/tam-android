@@ -6,6 +6,8 @@ import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.TestActivity;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.testing.TestingNode;
+import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 /**
  *  class for control open other activity
@@ -46,6 +48,10 @@ public class TAMEditorActivityControl extends TAMEditorAbstractControl implement
     {
         MainActivity mainActivityInstance = MainActivity.getMainActivityInstance();
         Intent i = new Intent(mainActivityInstance, TestActivity.class);
+        
+        TestingParcelable nodeParcelable = new TestingParcelable(MainActivity.getProfile().getRoot());
+        i.putExtra("cz.vutbr.fit.testmind.testing.TestingParcelable", nodeParcelable);
+        
         mainActivityInstance.startActivity(i);
     }
 }
