@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.testing;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.profile.TAMPNode;
@@ -12,8 +13,7 @@ public class TestingParcelable implements Parcelable
 {
     private String title;
     private String body;
-    private int count_childs;
-    private TestingParcelable[] childs;
+    private List<TestingParcelable> childs;
     
     public TestingParcelable(TAMPNode node)
     {
@@ -22,15 +22,11 @@ public class TestingParcelable implements Parcelable
         
         List<TAMPNode> nodeChilds = node.getListOfChildNodes();
         
-        count_childs = nodeChilds.size();
-        if(count_childs > 0)
-        {
-            childs = new TestingParcelable[count_childs];
-        }
+        childs = new ArrayList<TestingParcelable>();
         
-        for(int i = 0; i < count_childs; i++)
+        for(TAMPNode childNode: nodeChilds)
         {
-            childs[i] = new TestingParcelable(nodeChilds.get(i));
+            childs.add(new TestingParcelable(childNode));
         }
     }
     
@@ -49,22 +45,15 @@ public class TestingParcelable implements Parcelable
     {
         out.writeString(title);
         out.writeString(body);
-        out.writeInt(count_childs);
-        if(count_childs > 0)
-        {
-            out.writeParcelableArray(childs, flags);
-        }
+        out.writeList(childs);
     }
 
     private void readFromParcel(Parcel in)
     {   
         title = in.readString();
         body = in.readString();
-        count_childs = in.readInt();
-        if(count_childs > 0)
-        {
-            childs = (TestingParcelable[])in.readParcelableArray(TestingParcelable.class.getClassLoader());
-        }
+        childs = new ArrayList<TestingParcelable>();
+        in.readList(childs, TestingParcelable.class.getClassLoader());
     }
     
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
