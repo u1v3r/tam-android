@@ -7,17 +7,17 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 
 public class TAMERootInitializeControl extends TAMEAbstractControl implements ITAMTouchListener {
 	
-	public interface ITAMRootListener {
+	public interface ITAMRootControlListener {
 		public boolean createDefaultRootNode(int x, int y);
 	}
 
-	public TAMERootInitializeControl(ITAMRootListener editor) {
+	public TAMERootInitializeControl(ITAMRootControlListener editor) {
 		super((ITAMEditor) editor);
 		((ITAMEditor) editor).getListOfTouchControls().add(this);
 	}
 
 	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
-		if(((ITAMRootListener) getEditor()).createDefaultRootNode((int) ge.dx, (int) ge.dy)) {
+		if(((ITAMRootControlListener) getEditor()).createDefaultRootNode((int) ge.dx, (int) ge.dy)) {
 			getEditor().getListOfTouchControls().remove(this);
 		}
 	}

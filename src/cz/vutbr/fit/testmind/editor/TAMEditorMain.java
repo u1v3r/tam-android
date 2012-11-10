@@ -13,7 +13,8 @@ import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
-import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.ITAMNodeControlListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -27,7 +28,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
  * Obsahuje zakladne funkcie na pracu s grafom 
  *
  */
-public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, ITAMRootListener {
+public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, ITAMRootControlListener, ITAMNodeControlListener {
 	
 	private static final String TAG = "TAMEditor";
 	

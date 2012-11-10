@@ -145,7 +145,7 @@ public class Serializer
     
     /**
      * load nodes and connections from db file
-     * @param editor
+     * @param editor_main
      */
     public void deserialize(TAMProfile profile)
     {

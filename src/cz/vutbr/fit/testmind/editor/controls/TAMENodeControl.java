@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -15,7 +14,6 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
-import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
@@ -43,13 +41,20 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		GREEN,BLUE,RED,PURPLE;
 	}
 	
+	public interface ITAMNodeControlListener {
+		public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY);
+	}
+	
 	private boolean creatingByGesture = false;
 	private boolean waitingForClick = false;
 	private float x,y;
 	
-	public TAMENodeControl(ITAMEditor editor) {
-		super(editor);
-				
+	public TAMENodeControl(ITAMNodeControlListener editor) {
+		super((ITAMEditor) editor);
+		initializeListeners((ITAMEditor) editor);
+	}
+	
+	private void initializeListeners(ITAMEditor editor) {
 		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
@@ -147,7 +152,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			
 			// vytvori prazdny uzol
 			TAMENode selectedNode = (TAMENode) node.getHelpObject();			
-			ITAMENode eNode = editor.createNodeWithProfileAndConnection("","",selectedNode,(int) x, (int) y);
+			ITAMENode eNode = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("","",selectedNode,(int) x, (int) y);
 			
 			editor.unselectAll();
 			eNode.getGui().setSelected(true);
@@ -229,7 +234,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				
 				waitingForClick = false;
 				
-				ITAMENode node = editor.createNodeWithProfileAndConnection("", "", selectedNode, (int) ge.dx, (int) ge.dy);
+				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("", "", selectedNode, (int) ge.dx, (int) ge.dy);
 				
 				showEditNodeDialog(node);
 			//}

@@ -50,8 +50,6 @@ public interface ITAMEditor {
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
 	
-	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY);
-	
 	public void reset();
 	
 	public List<ITAMMenuListener> getListOfMenuControls();

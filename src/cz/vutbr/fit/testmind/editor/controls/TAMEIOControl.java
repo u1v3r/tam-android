@@ -44,12 +44,12 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 		} else {
 			return false;
 		}
-*/	
+*/
+		int id = item.getItemId();
 		
-		if(MainActivity.MenuItems.importFile == item.getItemId()){
+		if(MainActivity.MenuItems.importFile == id){
 			importFile();
-		}
-		else if(MainActivity.MenuItems.exportFile == item.getItemId()){
+		} else if(MainActivity.MenuItems.exportFile == id){
 			exportFile();
 		}
 		

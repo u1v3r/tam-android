@@ -12,7 +12,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import android.widget.ZoomControls;
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
+import cz.vutbr.fit.testmind.editor.TAMEditorTest;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public class MainActivity extends FragmentActivity {
@@ -29,7 +31,9 @@ public class MainActivity extends FragmentActivity {
 		public static final int exportFile = R.id.menu_export;
 		public static final int create_mode = R.id.menu_create_mode;
 		public static final int view_mode = R.id.menu_view_mode;
-		public static final int testing = R.id.menu_test_structure;
+		public static final int test_structure = R.id.menu_test_structure;
+		public static final int edit_structure = R.id.menu_edit_structure;
+		public static final int test_content = R.id.menu_test_content;
 	}
 	
 	/**
@@ -49,7 +53,8 @@ public class MainActivity extends FragmentActivity {
 	
 	public static class EventObjects {
 		public static ZoomControls zoomControls;
-		public static TAMEditorMain editor;
+		public static TAMEditorMain editor_main;
+		public static TAMEditorTest editor_test;
 		
 		public static View btn_add;
 		public static View btn_delete;
@@ -67,6 +72,7 @@ public class MainActivity extends FragmentActivity {
 	}
 		
 	private static final String TAG = "MainActivity";
+	private ITAMEditor actualEditor;
 	
 	private static TAMProfile profile;
 	private static MainActivity mainActivityInstance;	
@@ -81,7 +87,10 @@ public class MainActivity extends FragmentActivity {
     	
     	setContentView(R.layout.activity_main);
     	
-    	EventObjects.editor = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
+    	EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
+    	EventObjects.editor_test = (TAMEditorTest) findViewById(R.id.acitity_test_tam_editor);
+    	
+    	actualEditor = EventObjects.editor_main;
     	
     	EventObjects.btn_add = findViewById(R.id.button_add);
 		EventObjects.btn_delete = findViewById(R.id.button_delete);
@@ -97,7 +106,7 @@ public class MainActivity extends FragmentActivity {
 		
 		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
     	
-    	EventObjects.editor.initialize(profile);
+    	EventObjects.editor_main.initialize(profile);
     	
     	mainActivityInstance = this;
     }
@@ -109,19 +118,38 @@ public class MainActivity extends FragmentActivity {
     }
     
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {    	
-    	EventObjects.editor.onOptionsItemSelected(item);
-		return super.onOptionsItemSelected(item);
-		    	
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	int id = item.getItemId();
+    	
+    	if(MenuItems.edit_structure == id){
+			if(actualEditor != EventObjects.editor_main) {
+				((View) actualEditor).setVisibility(View.GONE);
+				actualEditor = EventObjects.editor_main;
+				((View) actualEditor).setVisibility(View.VISIBLE);
+			}
+		} else if(MenuItems.test_structure == id){
+			if(actualEditor != EventObjects.editor_test) {
+				((View) actualEditor).setVisibility(View.GONE);
+				actualEditor = EventObjects.editor_test;
+				((View) actualEditor).setVisibility(View.VISIBLE);
+			}
+		} else if(MenuItems.test_content == id){
+			// TODO: open another activity //
+		} else {
+			EventObjects.editor_main.onOptionsItemSelected(item);
+			return super.onOptionsItemSelected(item);
+		}
+    	return true;
     }
     
     public void buttonPressed(View view) {
-    	EventObjects.editor.onButtonSelected(view);
+    	EventObjects.editor_main.onButtonSelected(view);
     }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		EventObjects.editor.onActivityResult(requestCode, resultCode, data);		
+		EventObjects.editor_main.onActivityResult(requestCode, resultCode, data);		
 	}
 
 	public static TAMProfile getProfile() {

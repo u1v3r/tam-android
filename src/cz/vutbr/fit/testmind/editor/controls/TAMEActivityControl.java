@@ -30,7 +30,7 @@ public class TAMEActivityControl extends TAMEAbstractControl implements ITAMMenu
     public boolean onOptionsItemSelected(MenuItem item)
     {
         
-        if(MainActivity.MenuItems.testing == item.getItemId())
+        if(MainActivity.MenuItems.test_structure == item.getItemId())
         {
             openTestActivity();
         }
