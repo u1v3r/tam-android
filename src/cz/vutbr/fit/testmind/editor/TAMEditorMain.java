@@ -2,6 +2,8 @@ package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MenuItem;
+import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
@@ -126,11 +128,30 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	}
 
 	@Override
-	protected void modeChanged(int id) {
+	protected void modeChanged(MenuItem item) {
+		int id = item.getItemId();
 		hideMenu();
 		showMenu(id);
 		//Toast.makeText(editor.getContext(), item.getTitle().toString() + " " + getEditor().getResources().getText(R.string.mode_active), Toast.LENGTH_SHORT).show();
+		if(item == EventObjects.menu_create) {
+			EventObjects.menu.findItem(MenuItems.create_mode).setEnabled(false);
+			EventObjects.menu.findItem(MenuItems.view_mode).setEnabled(true);
+		} else if(item == EventObjects.menu_view) {
+			EventObjects.menu.findItem(MenuItems.create_mode).setEnabled(true);
+			EventObjects.menu.findItem(MenuItems.view_mode).setEnabled(false);
+		}
 		mode = id;
+	}
+
+	@Override
+	protected void actualizeModeMenu(int visibility) {
+		if(visibility == View.VISIBLE) {
+			EventObjects.menu_create.setVisible(true);
+			EventObjects.menu_view.setVisible(true);
+		} else {
+			EventObjects.menu_create.setVisible(false);
+			EventObjects.menu_view.setVisible(false);
+		}
 	}
 	
 }

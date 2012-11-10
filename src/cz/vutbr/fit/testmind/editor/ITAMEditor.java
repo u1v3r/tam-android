@@ -28,6 +28,8 @@ public interface ITAMEditor {
 	
 	public TAMProfile getProfile();
 	
+	public void setVisibility(int gone);
+	
 	public int getMode();
 	
 	public ITAMENode createNode(TAMPNode profile, int x, int y);
@@ -93,6 +95,5 @@ public interface ITAMEditor {
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
 	
 	public void unselectAll();
-
 	
 }

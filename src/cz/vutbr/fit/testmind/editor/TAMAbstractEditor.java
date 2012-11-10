@@ -129,7 +129,7 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		switch (id) {
 			case MenuItems.create_mode:
 			case MenuItems.view_mode:
-				modeChanged(id);
+				modeChanged(item);
 				break;
 			default:
 				for(ITAMMenuListener control : listOfMenuControls) {
@@ -142,7 +142,7 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 
 	}
 
-	protected abstract void modeChanged(int id);
+	protected abstract void modeChanged(MenuItem item);
 	
 	public void onButtonSelected(View item) {
 		
@@ -156,5 +156,13 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 			control.onActivityResult(requestCode, resultCode, data);
 		}
 	}
+	
+	@Override
+	public void setVisibility(int visibility) {
+		super.setVisibility(visibility);
+		actualizeModeMenu(visibility);
+	}
+
+	protected abstract void actualizeModeMenu(int visibility);
 
 }
