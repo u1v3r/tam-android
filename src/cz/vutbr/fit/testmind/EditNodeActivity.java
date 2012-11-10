@@ -3,8 +3,8 @@ package cz.vutbr.fit.testmind;
 import java.io.Serializable;
 
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.app.Activity;
 import android.content.Intent;
@@ -63,11 +63,11 @@ public class EditNodeActivity extends Activity {
 
 		
 		Intent intent = getIntent();		
-		String titleString = intent.getStringExtra(TAMEditorNodeControl.NODE_TITLE);
-		String bodyString = intent.getStringExtra(TAMEditorNodeControl.NODE_BODY);
+		String titleString = intent.getStringExtra(TAMENodeControl.NODE_TITLE);
+		String bodyString = intent.getStringExtra(TAMENodeControl.NODE_BODY);
 				
 		// prenasat farbu asi nebude treba		
-		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodeControl.NODE_COLOR);	
+		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMENodeControl.NODE_COLOR);	
 		
 		title.setText(titleString);
 		body.setText(bodyString);
@@ -119,10 +119,10 @@ public class EditNodeActivity extends Activity {
     	String bodyText = body.getText().toString();
 		
     	Intent intent = new Intent();
-    	intent.putExtra(TAMEditorNodeControl.NODE_TITLE, titleText);
-    	intent.putExtra(TAMEditorNodeControl.NODE_BODY, bodyText);
-    	intent.putExtra(TAMEditorNodeControl.NODE_COLOR,color);
-    	setResult(TAMEditorNodeControl.EDIT_NODE_RESULT_CODE, intent);
+    	intent.putExtra(TAMENodeControl.NODE_TITLE, titleText);
+    	intent.putExtra(TAMENodeControl.NODE_BODY, bodyText);
+    	intent.putExtra(TAMENodeControl.NODE_COLOR,color);
+    	setResult(TAMENodeControl.EDIT_NODE_RESULT_CODE, intent);
     	finish();
 	}
 

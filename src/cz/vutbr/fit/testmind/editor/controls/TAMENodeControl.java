@@ -17,6 +17,7 @@ import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 
 /**
  * Stara sa o zakladne operacie s uzlom (pridanie, odstranenie, uprava)
@@ -24,7 +25,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
  * @author Radovan Dvorsky
  *
  */
-public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements ITAMMenuListener, ITAMItemGestureListener,
+public class TAMENodeControl extends TAMEAbstractControl  implements ITAMMenuListener, ITAMItemGestureListener,
                                                                                ITAMTouchListener, OnActivityResultListener {	
 	
 	private static final String TAG = "TAMEditorNodes";
@@ -42,8 +43,9 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 	
 	private boolean creatingByGesture = false;
 	private boolean waitingForClick = false;
+	private float x,y;
 	
-	public TAMEditorNodeControl(ITAMEditor editor) {
+	public TAMENodeControl(ITAMEditor editor) {
 		super(editor);
 		
 		editor.getListOfMenuControls().add(this);			
@@ -127,20 +129,6 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 		activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
 		
 	}
-	
-	public void onTouchEvent(MotionEvent e) {
-		
-		if(waitingForClick) {
-			if(e.getAction() == MotionEvent.ACTION_DOWN) {
-				
-				waitingForClick = false;
-				
-				ITAMENode node = editor.createNodeWithProfileAndConnection("", "", selectedNode, (int) (e.getX()), (int) (e.getY()));
-				
-				showEditNodeDialog(node);
-			}
-		}
-	}
 
 	/**
 	 * Some item is pressed for long time. As result of this action is created new child of pressed node.
@@ -157,7 +145,7 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 			
 			// vytvori prazdny uzol
 			TAMENode selectedNode = (TAMENode) node.getHelpObject();			
-			ITAMENode eNode = editor.createNodeWithProfileAndConnection("","",selectedNode,(int)e.getX(),(int)e.getY());
+			ITAMENode eNode = editor.createNodeWithProfileAndConnection("","",selectedNode,(int) x, (int) y);
 			
 			editor.unselectAll();
 			eNode.getGui().setSelected(true);
@@ -251,7 +239,20 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
     	return true;		
 	}
 
-	public void onHitEvent(MotionEvent e, ITAMGItem item) {
-		// do nothing //
+	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
+		
+		x = ge.dx;
+		y = ge.dy;
+		
+		if(waitingForClick) {
+			//if(e.getAction() == MotionEvent.ACTION_DOWN) {
+				
+				waitingForClick = false;
+				
+				ITAMENode node = editor.createNodeWithProfileAndConnection("", "", selectedNode, (int) ge.dx, (int) ge.dy);
+				
+				showEditNodeDialog(node);
+			//}
+		}
 	}
 }

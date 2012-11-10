@@ -2,7 +2,7 @@ package cz.vutbr.fit.testmind.editor.items;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorHidingControl.ITAMHidingControlNode;
+import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl.ITAMHidingControlNode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 

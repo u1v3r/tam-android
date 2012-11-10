@@ -10,7 +10,7 @@ import cz.vutbr.fit.testmind.editor.ITAMEditor;
 /**
  *  class for control open other activity
  */
-public class TAMEditorActivityControl extends TAMEditorAbstractControl implements ITAMMenuListener{
+public class TAMEActivityControl extends TAMEAbstractControl implements ITAMMenuListener{
 
     private static final String TAG = "TAMEditorActivityControl";
 
@@ -18,7 +18,7 @@ public class TAMEditorActivityControl extends TAMEditorAbstractControl implement
      * constructor
      * @param editor
      */
-    public TAMEditorActivityControl(ITAMEditor editor)
+    public TAMEActivityControl(ITAMEditor editor)
     {
         super(editor);
         editor.getListOfMenuControls().add(this);

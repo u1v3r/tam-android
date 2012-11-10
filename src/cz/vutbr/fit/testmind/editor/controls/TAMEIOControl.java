@@ -14,11 +14,11 @@ import cz.vutbr.fit.testmind.editor.ITAMEditor;
  * TODO: trieda v ktorej bude implementovany import/export
  *
  */
-public class TAMEditorIOControl extends TAMEditorAbstractControl implements ITAMMenuListener{
+public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListener{
 	
 	private static final String INTENT_MIME_TYPE = "text/xml";
 
-	public TAMEditorIOControl(ITAMEditor editor) {
+	public TAMEIOControl(ITAMEditor editor) {
 		super(editor);
 		editor.getListOfMenuControls().add(this);
 	}

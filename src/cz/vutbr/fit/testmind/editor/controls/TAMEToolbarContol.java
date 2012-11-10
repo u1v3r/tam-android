@@ -7,26 +7,23 @@ import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 
-public class TAMEditorToolbarContol extends TAMEditorAbstractControl implements ITAMTouchListener {
+public class TAMEToolbarContol extends TAMEAbstractControl implements ITAMTouchListener {
 	
 	public interface ITAMToolbarConstrolItem {
 		public void showMenu();
 		public void hideMenu();
 	}
 
-	public TAMEditorToolbarContol(ITAMToolbarConstrolItem editor) {
+	public TAMEToolbarContol(ITAMToolbarConstrolItem editor) {
 		super((ITAMEditor) editor);
 		((ITAMEditor)editor).getListOfTouchControls().add(this);
 	}
 
-	public void onTouchEvent(MotionEvent e) {
-		// do nothing //
-	}
-
-	public void onHitEvent(MotionEvent e, ITAMGItem item) {
+	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
 		
-		if(item != null && item instanceof ITAMGNode) {
+		if(ge.item != null && ge.item instanceof ITAMGNode) {
 			((ITAMToolbarConstrolItem)editor).showMenu();
 		} else {
 			((ITAMToolbarConstrolItem)editor).hideMenu();

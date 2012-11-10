@@ -19,14 +19,16 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorActivityControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorHidingControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorIOControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorOpenSaveControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorToolbarContol;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorToolbarContol.ITAMToolbarConstrolItem;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorZoomControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEActivityControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEIOControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
+import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
@@ -41,7 +43,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
  * Obsahuje zakladne funkcie na pracu s grafom 
  *
  */
-public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstrolItem {
+public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstrolItem, ITAMRootListener {
 	
 	private static final String TAG = "TAMEditor";
 	
@@ -72,13 +74,14 @@ public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstr
 	public void initialize(TAMProfile profile) {
 		this.profile = profile;
 		super.initialize();
-		new TAMEditorZoomControl(this);
-		new TAMEditorNodeControl(this);
-		new TAMEditorOpenSaveControl(this);
-		new TAMEditorIOControl(this);
-		new TAMEditorHidingControl(this);
-		new TAMEditorToolbarContol(this);
-		new TAMEditorActivityControl(this);
+		new TAMEZoomControl(this);
+		new TAMENodeControl(this);
+		new TAMEOpenSaveControl(this);
+		new TAMEIOControl(this);
+		new TAMEHidingControl(this);
+		new TAMEToolbarContol(this);
+		new TAMEActivityControl(this);
+		new TAMERootInitializeControl(this);
 		
 		mode = MenuItems.create_mode;
 		//actualItem = EventObjects.menu_create;
@@ -106,30 +109,19 @@ public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstr
 		return false;
 	}
 	
-	@Override
-	public void onWindowFocusChanged(boolean hasWindowFocus) {
-		// TODO Auto-generated method stub
-		super.onWindowFocusChanged(hasWindowFocus);
+	public boolean createDefaultRootNode(int x, int y) {
 		
-		// ak neexistuje root uzol treba ho vytvorit
-		if(!hasRoot){
-			createDefaultRootNode();
+		if(hasRoot) {
+			return false;
+		} else {
+			TAMPNode pNode = MainActivity.getProfile().createRoot("", "");
+			ITAMENode eNode = pNode.addEReference(this, x, y);
+			eNode.getGui().setSelected(true);
+			
+			this.hasRoot = true;
+			
+			return true;
 		}
-	}
-	
-	/**
-	 * Vytvori root node do stredu kresliacej plochy
-	 */
-	public void createDefaultRootNode(){
-		
-		
-		Point position = new Point(getWidth()/2, getHeight()/2);
-		TAMPNode pNode = MainActivity.getProfile().createRoot("", "");
-		pNode.addEReference(this, position.x, position.y);
-		//editor.createRoot(TAMGRectangleNode.NODE_TYPE_RECTANGLE, position.x, position.y, 
-		//		DEFAULT_ROOT_TITLE, DEFAULT_ROOT_BODY);
-		
-		this.hasRoot = true;
 		
 	}
 
@@ -275,6 +267,5 @@ public class TAMEditor extends TAMGraph implements ITAMEditor, ITAMToolbarConstr
 	public void reset() {
 		super.reset();
 	}
-	// TODO Auto-generated method stub
 	
 }

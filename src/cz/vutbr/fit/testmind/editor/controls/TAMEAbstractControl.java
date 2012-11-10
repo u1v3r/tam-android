@@ -7,7 +7,7 @@ import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 
-public abstract class TAMEditorAbstractControl {
+public abstract class TAMEAbstractControl {
 	
 	protected ITAMEditor editor;
 	protected FragmentActivity activity;
@@ -18,7 +18,7 @@ public abstract class TAMEditorAbstractControl {
 	//public boolean isDialogOpen = false;
 	private boolean enabled;
 		
-	public TAMEditorAbstractControl(ITAMEditor editor) {
+	public TAMEAbstractControl(ITAMEditor editor) {
 		this.editor = editor;
 		this.activity = (FragmentActivity)editor.getContext();
 	}

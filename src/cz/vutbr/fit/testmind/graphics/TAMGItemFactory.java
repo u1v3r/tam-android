@@ -3,17 +3,18 @@ package cz.vutbr.fit.testmind.graphics;
 
 public class TAMGItemFactory {
 	
-	public ITAMGNode createNode(TAMGraph graph, int type, float x, float y, String text) {
+	public ITAMGNode createNode(TAMGraph graph, int type, int x, int y, String text) {
 		
 		ITAMGNode node = null;
 		
-		TAMGZoom zoom = graph.getZoom();
+		//TAMGZoom zoom = graph.getZoom();
 		
-		float dx = zoom.px-zoom.px*zoom.sx;
-		float dy = zoom.py-zoom.py*zoom.sy;
+		//float dx = zoom.px-zoom.px*zoom.sx;
+		//float dy = zoom.py-zoom.py*zoom.sy;
 		
 		if(type == ITAMGNode.NODE_TYPE_RECTANGLE) {
-			node = new TAMGRectangleNode(graph, (int)((x-dx)/zoom.sx), (int)((y-dy)/zoom.sy), text);
+			//node = new TAMGRectangleNode(graph, (int)((x-dx)/zoom.sx), (int)((y-dy)/zoom.sy), text);
+			node = new TAMGRectangleNode(graph, x, y, text);
 		}
 		
 		graph.listOfNodes.add(node);

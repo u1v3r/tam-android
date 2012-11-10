@@ -6,7 +6,7 @@ import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import android.view.MotionEvent;
 
-public class TAMEditorHidingControl extends TAMEditorAbstractControl implements ITAMItemGestureListener {
+public class TAMEHidingControl extends TAMEAbstractControl implements ITAMItemGestureListener {
 	
 	private static final String TAG = "TAMEditorHidingControl";
 	
@@ -15,7 +15,7 @@ public class TAMEditorHidingControl extends TAMEditorAbstractControl implements 
 		public boolean hasVisibleChilds();
 	}
 
-	public TAMEditorHidingControl(ITAMEditor editor) {
+	public TAMEHidingControl(ITAMEditor editor) {
 		super(editor);
 		editor.getListOfItemGestureControls().add(this);
 	}
