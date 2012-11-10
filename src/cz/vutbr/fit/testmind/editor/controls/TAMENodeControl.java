@@ -6,8 +6,10 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.EditNodeActivity;
+import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
@@ -25,8 +27,8 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
  * @author Radovan Dvorsky
  *
  */
-public class TAMENodeControl extends TAMEAbstractControl  implements ITAMMenuListener, ITAMItemGestureListener,
-                                                                               ITAMTouchListener, OnActivityResultListener {	
+public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
+                                                                     ITAMTouchListener, OnActivityResultListener {	
 	
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
@@ -47,11 +49,11 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMMenuLis
 	
 	public TAMENodeControl(ITAMEditor editor) {
 		super(editor);
-		
-		editor.getListOfMenuControls().add(this);			
+				
 		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
+		editor.getListOfButtonControls().add(this);
 	}
 	
 	/**
@@ -216,28 +218,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMMenuLis
 			
 		editor.invalidate();
 	}*/
-	
-	/**
-	 * Listener for menu buttons.
-	 */
-	public boolean onOptionsItemSelected(MenuItem item) {	
-		
-		switch (item.getItemId()) {
-			case MenuItems.add:
-				addChild();
-				break;
-			case MenuItems.edit:
-				showEditNodeDialog();				
-				break;
-			case MenuItems.delete:
-							
-				break;
-			default: 
-				return true;    	
-    	}
-    	
-    	return true;		
-	}
 
 	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
 		
@@ -253,6 +233,17 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMMenuLis
 				
 				showEditNodeDialog(node);
 			//}
+		}
+	}
+
+	public void onButtonSelected(View item) {
+		
+		if(item == EventObjects.btn_add) {
+			addChild();
+		} else if(item == EventObjects.btn_edit) {
+			showEditNodeDialog();
+		} else if(item == EventObjects.btn_delete) {
+			
 		}
 	}
 }

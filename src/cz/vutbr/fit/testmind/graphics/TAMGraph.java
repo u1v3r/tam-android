@@ -50,7 +50,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected List<ITAMItemListener> listOfItemControls;
 	protected List<ITAMBlankAreaGestureListener> listOfBlankAreaGestureControls;
 	protected List<ITAMTouchListener> listOfTouchControls;
-	protected List<OnActivityResultListener> listOfOnActivityResultControls;
 	protected List<ITAMItemGestureListener> listOfItemGestureControls;
 	protected List<ITAMGButton> listOfButtons;
 	//private List<OnGestureListener> listOfGestureControls;
@@ -120,7 +119,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		listOfBlankAreaGestureControls = new ArrayList<ITAMBlankAreaGestureListener>();
 		listOfTouchControls = new ArrayList<ITAMTouchListener>();
 		listOfGestureControls = new ArrayList<GestureDetector>();
-		listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
 		listOfItemGestureControls = new ArrayList<ITAMItemGestureListener>();
 		listOfButtons = new ArrayList<ITAMGButton>();
 		zoom = new TAMGZoom(this);
@@ -242,10 +240,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	
 	public List<GestureDetector> getListOfGestureControls(){
 		return listOfGestureControls;
-	}
-	
-	public List<OnActivityResultListener> getListOfOnActivityResultControls() {
-		return listOfOnActivityResultControls;
 	}
 	
 	/**
@@ -593,7 +587,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 
 	public boolean onSingleTapUp(MotionEvent e) {
-		//System.out.println("G: onSingleTapUp");
+		System.out.println("G: onSingleTapUp");
 		return false;
 	}
 	

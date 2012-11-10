@@ -1,0 +1,132 @@
+package cz.vutbr.fit.testmind.editor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.content.Intent;
+import android.preference.PreferenceManager.OnActivityResultListener;
+import android.util.AttributeSet;
+import android.view.MenuItem;
+import android.view.View;
+
+import cz.vutbr.fit.testmind.MainActivity.MenuItems;
+import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
+import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
+import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
+import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
+
+public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
+	
+	protected List<ITAMENode> listOfENodes;
+	protected List<ITAMEConnection> listOfEConnections;
+	protected TAMProfile profile;
+	protected List<ITAMMenuListener> listOfMenuControls;
+	protected List<ITAMButtonListener> listOfButtonControls;
+	protected List<OnActivityResultListener> listOfOnActivityResultControls;
+	
+	public TAMAbstractEditor(Context context, AttributeSet attrs){		
+		super(context,attrs,0);
+		
+		this.listOfENodes = new ArrayList<ITAMENode>();
+		this.listOfEConnections = new ArrayList<ITAMEConnection>();
+		this.listOfMenuControls = new ArrayList<ITAMMenuListener>();
+		this.listOfButtonControls = new ArrayList<ITAMButtonListener>();
+		this.listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
+	}
+	
+	public void initialize(TAMProfile profile) {
+		this.profile = profile;
+		super.initialize();
+		
+		initializeControls();
+		
+		this.profile.getListOfEditors().add(this);
+	}
+	
+	protected abstract void initializeControls();
+	
+	public boolean containsNode(int id) {
+		for(ITAMENode node : listOfENodes) {
+			if(id == node.getProfile().getId()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean containsConnection(int id) {
+		for(ITAMEConnection connection : listOfEConnections) {
+			if(id == connection.getProfile().getId()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public List<ITAMENode> getListOfENodes() {
+		return listOfENodes;
+	}
+
+	public List<ITAMEConnection> getListOfEConnections() {
+		return listOfEConnections;
+	}
+	
+	public List<ITAMMenuListener> getListOfMenuControls() {
+		return listOfMenuControls;
+	}
+	
+	public List<ITAMButtonListener> getListOfButtonControls() {
+		return listOfButtonControls;
+	}
+	
+	public List<OnActivityResultListener> getListOfOnActivityResultControls() {
+		return listOfOnActivityResultControls;
+	}
+	
+	public TAMProfile getProfile() {
+		return profile;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		boolean selected = false;
+		
+		int id = item.getItemId();
+		
+		switch (id) {
+			case MenuItems.create_mode:
+			case MenuItems.view_mode:
+				modeChanged(id);
+				break;
+			default:
+				for(ITAMMenuListener control : listOfMenuControls) {
+					selected = control.onOptionsItemSelected(item);
+				}
+				break;
+		}
+		
+		return selected;
+
+	}
+
+	protected abstract void modeChanged(int id);
+	
+	public void onButtonSelected(View item) {
+		
+		for(ITAMButtonListener control : listOfButtonControls) {
+			control.onButtonSelected(item);
+		}
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		for (OnActivityResultListener control : getListOfOnActivityResultControls()) {
+			control.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+
+}

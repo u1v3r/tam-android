@@ -12,7 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import android.widget.ZoomControls;
-import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public class MainActivity extends FragmentActivity {
@@ -21,10 +21,7 @@ public class MainActivity extends FragmentActivity {
 	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam menu
 	 * 
 	 */
-	public final static class MenuItems{
-		public static final int add = R.id.menu_add;
-		public static final int edit = R.id.menu_edit;
-		public static final int delete = R.id.menu_delete;
+	public final static class MenuItems {
 		public static final int open = R.id.menu_open;
 		public static final int save = R.id.menu_save;		
 		public static final int settings = R.id.menu_settings;
@@ -32,14 +29,14 @@ public class MainActivity extends FragmentActivity {
 		public static final int exportFile = R.id.menu_export;
 		public static final int create_mode = R.id.menu_create_mode;
 		public static final int view_mode = R.id.menu_view_mode;
-		public static final int testing = R.id.menu_testing;
+		public static final int testing = R.id.menu_test_structure;
 	}
 	
 	/**
 	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam toolbaru
 	 * 
 	 */
-	public final static class ButtonItems{
+	public final static class ButtonItems {
 		public static final int add = R.id.button_add;
 		public static final int delete = R.id.button_delete;
 		public static final int edit = R.id.button_edit;
@@ -50,9 +47,9 @@ public class MainActivity extends FragmentActivity {
 		public static final int zoom_out = R.id.button_zoom_out;
 	}
 	
-	public static class EventObjects{
+	public static class EventObjects {
 		public static ZoomControls zoomControls;
-		public static TAMEditor editor;
+		public static TAMEditorMain editor;
 		
 		public static View btn_add;
 		public static View btn_delete;
@@ -84,7 +81,7 @@ public class MainActivity extends FragmentActivity {
     	
     	setContentView(R.layout.activity_main);
     	
-    	EventObjects.editor = (TAMEditor) findViewById(R.id.acitity_main_tam_editor);
+    	EventObjects.editor = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
     	
     	EventObjects.btn_add = findViewById(R.id.button_add);
 		EventObjects.btn_delete = findViewById(R.id.button_delete);

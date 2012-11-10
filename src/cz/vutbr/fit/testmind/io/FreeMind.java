@@ -8,7 +8,7 @@ import java.io.InputStream;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import android.util.Log;
 import android.util.Xml;
@@ -18,7 +18,7 @@ import android.util.Xml;
  */
 public class FreeMind
 {
-	TAMEditor editor = null;
+	TAMEditorMain editor = null;
     private IXMLNode rootNode = null;
     private String source = "/data/testMind/test.mm";//null;
     
@@ -49,7 +49,7 @@ public class FreeMind
     }
     
     private void createTree() {
-    	editor = new TAMEditor(null);
+    	editor = new TAMEditorMain(null);
   	
     	
     	/* TODO: TREBA OPRAVIT

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
+import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -52,6 +53,10 @@ public interface ITAMEditor {
 	
 	public void reset();
 	
+	public List<ITAMMenuListener> getListOfMenuControls();
+	
+	public List<ITAMButtonListener> getListOfButtonControls();
+	
 	// TAMGraph functions //
 	
 	public ITAMGNode getLastSelectedNode();
@@ -67,8 +72,6 @@ public interface ITAMEditor {
 	public List<ITAMItemListener> getListOfItemControls();
 	
 	public List<ITAMItemGestureListener> getListOfItemGestureControls();
-	
-	public List<ITAMMenuListener> getListOfMenuControls();
 	
 	public List<OnActivityResultListener> getListOfOnActivityResultControls();
 	
