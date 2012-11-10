@@ -72,30 +72,6 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		
 		return newEditorNode;
 	}
-
-	public ITAMENode createNode(TAMPNode profile, int x, int y) {
-		ITAMENode node = new TAMENode(this, profile, x, y);
-		listOfENodes.add(node);
-		return node;
-	}
-
-	public ITAMENode createNode(TAMPNode profile, int x, int y, int type) {
-		ITAMENode node = new TAMENode(this, profile, x, y, type);
-		listOfENodes.add(node);
-		return node;
-	}
-
-	public ITAMEConnection createConnection(TAMPConnection profile) {
-		ITAMEConnection connection = new TAMEConnection(this, profile);
-		listOfEConnections.add(connection);
-		return connection;
-	}
-
-	public ITAMEConnection createConnection(TAMPConnection profile, int type) {
-		ITAMEConnection connection = new TAMEConnection(this, profile, type);
-		listOfEConnections.add(connection);
-		return connection;
-	}
 	
 	public void showMenu() {
 		showMenu(mode);

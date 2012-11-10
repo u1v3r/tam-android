@@ -173,10 +173,10 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	public ITAMGItem addChild(int type, int x, int y, String text) {
 		
 		// create new node from item factory //
-		ITAMGNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
+		ITAMGNode node = graph.getGItemFactory().createNode(graph, type, x, y, text);
 		
 		// create new connection between these nodes from item factory //
-		graph.getItemFactory().createConnection(graph, this, node, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
+		graph.getGItemFactory().createConnection(graph, this, node, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
 		
 		return node;
 	}

@@ -154,7 +154,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * 
 	 * @return itemFactory
 	 */
-	public TAMGItemFactory getItemFactory() {
+	public TAMGItemFactory getGItemFactory() {
 		return factory;
 	}
 

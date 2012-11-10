@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <cz.vutbr.fit.testmind.editor.TAMEditor
+    <cz.vutbr.fit.testmind.editor.TAMEditorMain
         android:id="@+id/acitity_main_tam_editor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

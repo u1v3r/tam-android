@@ -15,7 +15,11 @@ import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
@@ -66,6 +70,30 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		}
 		
 		return false;
+	}
+	
+	public ITAMENode createNode(TAMPNode profile, int x, int y) {
+		ITAMENode node = new TAMENode(this, profile, x, y);
+		listOfENodes.add(node);
+		return node;
+	}
+
+	public ITAMENode createNode(TAMPNode profile, int x, int y, int type) {
+		ITAMENode node = new TAMENode(this, profile, x, y, type);
+		listOfENodes.add(node);
+		return node;
+	}
+
+	public ITAMEConnection createConnection(TAMPConnection profile) {
+		ITAMEConnection connection = new TAMEConnection(this, profile);
+		listOfEConnections.add(connection);
+		return connection;
+	}
+
+	public ITAMEConnection createConnection(TAMPConnection profile, int type) {
+		ITAMEConnection connection = new TAMEConnection(this, profile, type);
+		listOfEConnections.add(connection);
+		return connection;
 	}
 	
 	public List<ITAMENode> getListOfENodes() {

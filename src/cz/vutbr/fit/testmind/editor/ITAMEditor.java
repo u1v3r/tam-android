@@ -14,6 +14,7 @@ import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGItemFactory;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
@@ -58,6 +59,8 @@ public interface ITAMEditor {
 	public List<ITAMButtonListener> getListOfButtonControls();
 	
 	// TAMGraph functions //
+	
+	public TAMGItemFactory getGItemFactory();
 	
 	public ITAMGNode getLastSelectedNode();
 	
