@@ -1,7 +1,6 @@
 package cz.vutbr.fit.testmind.testing;
 
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
 public class TestingParcelable implements Parcelable
 {
     private String title;
-    private CharSequence body;// TREBA OTESTOVAT CI FUNGUJE SPRAVNE so SpannableString
+    private String body;
     private List<TestingParcelable> childs;
     
     public TestingParcelable(TAMPNode node)
@@ -44,16 +43,14 @@ public class TestingParcelable implements Parcelable
     public void writeToParcel(Parcel out, int flags)
     {
         out.writeString(title);
-        out.writeByteArray(body.toString().getBytes());        
+        out.writeString(body);        
         out.writeList(childs);
     }
 
     private void readFromParcel(Parcel in)
-    {   
-    	byte[] bodyByte = null;
-        title = in.readString();
-        in.readByteArray(bodyByte);
-        body = new String(bodyByte,Charset.forName("UTF-8"));
+    {       	
+        title = in.readString();        
+        body = in.readString();
         childs = new ArrayList<TestingParcelable>();
         in.readList(childs, TestingParcelable.class.getClassLoader());
     }

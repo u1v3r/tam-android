@@ -1,7 +1,6 @@
 package cz.vutbr.fit.testmind.profile;
 
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,22 +20,10 @@ public class TAMPNode extends TAMPItem implements Serializable{
 		this(title, htmlBody, getNewSequenceNumber());
 	}
 	
-	public TAMPNode(String title, byte[] body) {
-		this(title, body, getNewSequenceNumber());
-	}
-	
 	public TAMPNode(String title, String htmlBody, int id) {		
 		this.id = id;
 		setTitle(title);
 		setBody(htmlBody);
-		listOfChildNodes = new ArrayList<TAMPNode>();
-	}
-	
-	public TAMPNode(String title, byte[] body, int id) {
-		this.id = id;
-		setTitle(title);
-		String bodyImport = new String(body,Charset.forName("UTF-8"));
-		setBody(bodyImport);
 		listOfChildNodes = new ArrayList<TAMPNode>();
 	}
 	

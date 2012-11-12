@@ -6,18 +6,18 @@ import java.util.ArrayList;
 public class TestingNode
 {
     private String title;
-    private CharSequence body;
+    private String body;
     private TestingNode parent;
     private ArrayList<TestingNode> childs;
 
-    public TestingNode(String title, CharSequence body)
+    public TestingNode(String title, String body)
     {
         this.parent = null;
         this.title = title;
         this.body = body;
     }
     
-    public TestingNode(String title, CharSequence body, TestingNode parent)
+    public TestingNode(String title, String body, TestingNode parent)
     {
         this.parent = parent;
         this.title = title;
@@ -29,7 +29,7 @@ public class TestingNode
         return title;
     }
 
-    public CharSequence getBody()
+    public String getBody()
     {
         return body;
     }
@@ -44,7 +44,7 @@ public class TestingNode
         return childs;
     }
     
-    public TestingNode appendChild(String title, CharSequence body)
+    public TestingNode appendChild(String title, String body)
     {
         TestingNode child = new TestingNode(title, body, this);
         childs.add(child);
