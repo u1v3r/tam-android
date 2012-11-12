@@ -18,7 +18,7 @@ public class TestActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState)
     {       
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_testing);
         
         Bundle b = getIntent().getExtras();
         TestingParcelable nodeParcelable = (TestingParcelable)b.getParcelable("cz.vutbr.fit.testmind.testing.TestingParcelable");
@@ -35,7 +35,7 @@ public class TestActivity extends FragmentActivity {
     {
         loadPath();
         
-        TextView title = (TextView) findViewById(R.id.test_textView_title);
+        TextView title = (TextView) findViewById(R.id.testing_textView_title);
         title.setText(node.getTitle());
         
         loadChilds();
@@ -54,7 +54,7 @@ public class TestActivity extends FragmentActivity {
             path_nodes.add(0, temp_node);
         }
 
-        LinearLayout pathView = (LinearLayout) findViewById(R.id.test_linearLayout_path);
+        LinearLayout pathView = (LinearLayout) findViewById(R.id.testing_linearLayout_path);
 
         TextView rootSep = new TextView(this);
         rootSep.setText("/");
@@ -73,7 +73,7 @@ public class TestActivity extends FragmentActivity {
     private void loadBody()
     {
         String body = node.getBody().toString();
-        WebView bodyView = (WebView) findViewById(R.id.test_linearLayout_path);
+        WebView bodyView = (WebView) findViewById(R.id.testing_linearLayout_path);
         // load data
         bodyView.loadDataWithBaseURL(null, body, "text/html", "UTF-8", null);        
     }

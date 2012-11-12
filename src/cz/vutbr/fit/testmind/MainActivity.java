@@ -20,6 +20,7 @@ import cz.vutbr.fit.testmind.editor.TAMEditorTest;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
+import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 public class MainActivity extends FragmentActivity {
 	
@@ -86,7 +87,6 @@ public class MainActivity extends FragmentActivity {
 	private List<TAMPConnection> listOfConnections;
 	
 	private static TAMProfile profile;
-	private static MainActivity mainActivityInstance;	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {    	
@@ -122,8 +122,6 @@ public class MainActivity extends FragmentActivity {
 		// initialize editors //
     	EventObjects.editor_main.initialize(profile);
     	EventObjects.editor_test.initialize(profile);
-    	
-    	mainActivityInstance = this;
     }
 	
 	/**
@@ -207,7 +205,12 @@ public class MainActivity extends FragmentActivity {
 				actualEditor.setVisibility(View.VISIBLE);
 			}
 		} else if(MenuItems.test_content == id){
-			// TODO: open another activity //
+	        Intent i = new Intent(this, TestingActivity.class);
+	        
+	        TestingParcelable nodeParcelable = new TestingParcelable(MainActivity.getProfile().getRoot());
+	        i.putExtra("cz.vutbr.fit.testmind.testing.TestingParcelable", nodeParcelable);
+	        
+	        this.startActivity(i);
 		} else {
 			EventObjects.editor_main.onOptionsItemSelected(item);
 			return super.onOptionsItemSelected(item);
@@ -227,8 +230,4 @@ public class MainActivity extends FragmentActivity {
 	public static TAMProfile getProfile() {
 		return profile;
 	}
-	
-    public static MainActivity getMainActivityInstance() {
-        return mainActivityInstance;
-    }
 }

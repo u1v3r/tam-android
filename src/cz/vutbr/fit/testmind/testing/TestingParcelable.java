@@ -39,7 +39,6 @@ public class TestingParcelable implements Parcelable
         return 0;
     }
 
-    // write your object's data to the passed-in Parcel
     public void writeToParcel(Parcel out, int flags)
     {
         out.writeString(title);
@@ -55,8 +54,8 @@ public class TestingParcelable implements Parcelable
         in.readList(childs, TestingParcelable.class.getClassLoader());
     }
     
-    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-    public static final Parcelable.Creator<TestingParcelable> CREATOR = new Parcelable.Creator<TestingParcelable>() {
+    public static final Parcelable.Creator<TestingParcelable> CREATOR = new Parcelable.Creator<TestingParcelable>()
+    {
         public TestingParcelable createFromParcel(Parcel in)
         {
             return new TestingParcelable(in);
@@ -67,4 +66,16 @@ public class TestingParcelable implements Parcelable
             return new TestingParcelable[size];
         }
     };
+    
+    public TestingNode getTestingNode()
+    {
+        TestingNode result = new TestingNode(title, body);
+        
+        for(TestingParcelable tParcelable: childs)
+        {
+            result.appendChild(tParcelable.getTestingNode());
+        }
+        
+        return result;
+    }
 }

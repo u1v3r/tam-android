@@ -8,7 +8,6 @@ import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
-import cz.vutbr.fit.testmind.editor.controls.TAMEActivityControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
@@ -119,7 +118,6 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		new TAMEIOControl(this);
 		new TAMEHidingControl(this);
 		new TAMEToolbarContol(this);
-		new TAMEActivityControl(this);
 		new TAMERootInitializeControl(this);
 		
 		mode = MenuItems.create_mode;

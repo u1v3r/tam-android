@@ -28,7 +28,7 @@
             android:name="EditNodeActivity" 
             android:theme="@style/AppThemeEmptyActionBar"/>        
         <activity 
-            android:name="TestActivity" 
+            android:name=".TestingActivity" 
             android:label="@string/title_activity_test"/>
     </application>
 
