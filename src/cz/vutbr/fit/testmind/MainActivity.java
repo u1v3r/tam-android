@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind;
 
 import java.io.Serializable;
+import java.util.List;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +19,8 @@ import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.TAMEditorTest;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public class MainActivity extends FragmentActivity {
@@ -77,18 +80,26 @@ public class MainActivity extends FragmentActivity {
 	}
 		
 	private static final String TAG = "MainActivity";
+	private static final String CONNECTION_LIST = "connections";
+	private static final String NODES_LIST = "nodes";
+	
 	private ITAMEditor actualEditor;
+	private List<TAMPNode> listOfNodes;
+	private List<TAMPConnection> listOfConnections;
 	
 	private static TAMProfile profile;
 	private static MainActivity mainActivityInstance;	
 	
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {    	
-    	super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);	
+    	
+    	
     	
     	//if(profile != null) {
     		profile = new TAMProfile();
-    	//}
+    	//}		
+    	  	
     	
     	setContentView(R.layout.activity_main);
     	
@@ -116,12 +127,15 @@ public class MainActivity extends FragmentActivity {
     	EventObjects.editor_test.initialize(profile);
     	
     	mainActivityInstance = this;
+    	
+
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	
-    	//outState.putSerializable("nodes", (Serializable)Html.toHtml(profile.getListOfPNodes().get(0).getBody()));
+    	outState.putSerializable(NODES_LIST, (Serializable)profile.getListOfPNodes());
+    	outState.putSerializable(CONNECTION_LIST, (Serializable)profile.getListOfPConnections());
     	
     	super.onSaveInstanceState(outState);
     }

@@ -461,7 +461,8 @@ public class Serializer
             TAMPConnection connection = connections.get(cur.getInt(indexes.get("connection")));
             ITAMEditor editor = editors.get(cur.getString(indexes.get("editor")));
             int type = cur.getInt(indexes.get("type"));
-            ITAMGConnection gConnection = connection.addEReference(editor, type).getGui();
+            
+            ITAMGConnection gConnection = TAMPConnectionFactory.addEReference(connection, editor, type).getGui();
             
             gConnection.setColorBackground(cur.getInt(indexes.get("background")));
             gConnection.setColorBackgroundHighlight(cur.getInt(indexes.get("highlightColor")));

@@ -67,8 +67,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY) {
 		TAMPNode newProfileNode = profile.createNode(title, body);		
 		ITAMENode newEditorNode = TAMPConnectionFactory.addEReference(newProfileNode, this, posX, posY);
-		TAMPConnection pConnection = profile.createConnection(parent.getProfile(), newProfileNode);
-		pConnection.addEReference(this);		
+		TAMPConnection pConnection = profile.createConnection(parent.getProfile(), newProfileNode);		
+		TAMPConnectionFactory.addEReference(pConnection, this);		
 		newEditorNode.getGui().setBackgroundStyle(parent.getGui().getBackgroundStyle());
 		
 		return newEditorNode;
