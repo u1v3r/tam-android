@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name="EditNodeActivity" android:theme="@style/AppThemeEmptyActionBar"></activity>
-        <activity android:name="TestActivity" android:label="@string/title_activity_test"></activity>
+        <activity android:name=".TestingActivity" android:label="@string/title_activity_test"></activity>
     </application>
 
 </manifest>
