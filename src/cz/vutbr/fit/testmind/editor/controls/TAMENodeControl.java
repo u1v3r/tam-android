@@ -8,11 +8,11 @@ import android.content.Intent;
 import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.text.SpannableString;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.EditNodeActivity;
+import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
@@ -23,16 +23,14 @@ import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 
 /**
  * Stara sa o zakladne operacie s uzlom (pridanie, odstranenie, uprava)
- * 
- * @author Radovan Dvorsky
- *
  */
-public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements ITAMMenuListener, ITAMItemGestureListener,
-                                                                               ITAMTouchListener, OnActivityResultListener,
-                                                                               ITAMItemListener{	
+public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
+                                                                     ITAMTouchListener, OnActivityResultListener,
+                                                                     ITAMItemListener{
 	
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
@@ -47,18 +45,26 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 		GREEN,BLUE,RED,PURPLE;
 	}
 	
+	public interface ITAMNodeControlListener {
+		public ITAMENode createNodeWithProfileAndConnection(String title, SpannableString body, ITAMENode parent, int posX, int posY);
+	}
+	
 	private boolean creatingByGesture = false;
 	private boolean waitingForClick = false;
 	private List<TAMENode> listOfSelectedNodes;
+	private float x,y;
 	
-	public TAMEditorNodeControl(ITAMEditor editor) {
-		super(editor);
-		
-		editor.getListOfMenuControls().add(this);			
+	public TAMENodeControl(ITAMNodeControlListener editor) {
+		super((ITAMEditor) editor);
+		initializeListeners((ITAMEditor) editor);
+	}
+	
+	private void initializeListeners(ITAMEditor editor) {
 		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
-		editor.getListOfItemControls().add(this);
+		editor.getListOfItemControls().add(this);		
+		editor.getListOfButtonControls().add(this);
 		
 		listOfSelectedNodes = new ArrayList<TAMENode>();
 	}
@@ -138,20 +144,6 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 		activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
 		
 	}
-	
-	public void onTouchEvent(MotionEvent e) {
-		
-		if(waitingForClick) {
-			if(e.getAction() == MotionEvent.ACTION_DOWN) {
-				
-				waitingForClick = false;
-				
-				ITAMENode node = editor.createNodeWithProfileAndConnection("", "", selectedNode, (int) (e.getX()), (int) (e.getY()));
-				
-				showEditNodeDialog(node);
-			}
-		}
-	}
 
 	/**
 	 * Some item is pressed for long time. As result of this action is created new child of pressed node.
@@ -168,7 +160,7 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 			
 			// vytvori prazdny uzol
 			TAMENode selectedNode = (TAMENode) node.getHelpObject();			
-			ITAMENode eNode = editor.createNodeWithProfileAndConnection("","",selectedNode,(int)e.getX(),(int)e.getY());
+			ITAMENode eNode = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("",new SpannableString(""),selectedNode,(int) x, (int) y);
 			
 			editor.unselectAll();
 			eNode.getGui().setSelected(true);
@@ -250,37 +242,21 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 			
 		editor.invalidate();
 	}*/
-	
-	/**
-	 * Listener for menu buttons.
-	 */
-	public boolean onOptionsItemSelected(MenuItem item) {	
-		
-		switch (item.getItemId()) {
-			case MenuItems.add:
-				addChild();
-				break;
-			case MenuItems.edit:
-				showEditNodeDialog();				
-				break;
-			case MenuItems.delete:
-							
-				break;
-			default: 
-				return true;    	
-    	}
-    	
-    	return true;		
-	}	
 
-	public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay) {
-		// TODO Auto-generated method stub
+	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
+		x = ge.dx;
+		y = ge.dy;
 		
-	}
-
-	public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy) {
-		// TODO Auto-generated method stub
-		
+		if(waitingForClick) {
+			//if(e.getAction() == MotionEvent.ACTION_DOWN) {
+				
+				waitingForClick = false;
+				
+				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("", new SpannableString(""), selectedNode, (int) ge.dx, (int) ge.dy);
+				
+				showEditNodeDialog(node);
+			//}
+		}
 	}
 
 	public void onItemSelectEvent(ITAMGItem item, boolean selection) {		
@@ -292,11 +268,27 @@ public class TAMEditorNodeControl extends TAMEditorAbstractControl  implements I
 			else {
 				listOfSelectedNodes.remove((TAMENode)item.getHelpObject());
 			}
+		}		
+	}
+
+	public void onButtonSelected(View item) {
+		
+		if(item == EventObjects.btn_add) {
+			addChild();
+		} else if(item == EventObjects.btn_edit) {
+			showEditNodeDialog();
+		} else if(item == EventObjects.btn_delete) {
+			
 		}
+	}
+
+	public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	public void onHitEvent(MotionEvent e, ITAMGItem item) {
-		// do nothing //
+	public void onItemMoveEvent(MotionEvent e, TAMGMotionEvent ge) {
+		// TODO Auto-generated method stub
+		
 	}
 }

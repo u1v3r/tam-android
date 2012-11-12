@@ -2,12 +2,12 @@ package cz.vutbr.fit.testmind.editor.controls;
 
 import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
-public class TAMEditorZoomControl extends TAMEditorAbstractControl implements ITAMButtonListener {
+public class TAMEZoomControl extends TAMEAbstractControl implements ITAMButtonListener {
 
-	public TAMEditorZoomControl(TAMEditor editor) {
+	public TAMEZoomControl(TAMEditorMain editor) {
 		super(editor);
 		editor.getListOfButtonControls().add(this);
 	}

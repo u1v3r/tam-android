@@ -42,6 +42,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	private boolean activeTouchEvent = false;
 	private TAMGZoom zoom;
 	private GestureDetector gestureDetector;
+	private float ax, ay;
 	
 	
 	protected List<GestureDetector> listOfGestureControls;
@@ -49,18 +50,31 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected List<ITAMItemListener> listOfItemControls;
 	protected List<ITAMBlankAreaGestureListener> listOfBlankAreaGestureControls;
 	protected List<ITAMTouchListener> listOfTouchControls;
-	protected List<OnActivityResultListener> listOfOnActivityResultControls;
 	protected List<ITAMItemGestureListener> listOfItemGestureControls;
 	protected List<ITAMGButton> listOfButtons;
 	//private List<OnGestureListener> listOfGestureControls;
+	
+	public final class TAMGMotionEvent {
+		
+		final public ITAMGItem item;
+		final public float dx;
+		final public float dy;
+		
+		public TAMGMotionEvent(ITAMGItem item, float dx, float dy) {
+			this.item = item;
+			this.dx = dx;
+			this.dy = dy;
+		}
+		
+	}
 	
 	public interface ITAMDrawListener {
 		public void onDraw(Canvas canvas);
 	};
 	
 	public interface ITAMItemListener {
-		public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay);	
-		public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy);
+		public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge);	
+		public void onItemMoveEvent(MotionEvent e, TAMGMotionEvent ge);
 		public void onItemSelectEvent(ITAMGItem item, boolean selection);
 	};
 	
@@ -72,13 +86,13 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	
 	public interface ITAMBlankAreaGestureListener {
 		public void onBlankMoveEvent(MotionEvent e, int dx, int dy);
-		public void onBlankLongPressEvent(MotionEvent e);
-		public void onBlankDoubleTapEvent(MotionEvent e);
+		public void onBlankLongPressEvent(MotionEvent e, float dx, float dy);
+		public void onBlankDoubleTapEvent(MotionEvent e, float dx, float dy);
 	}
 	
 	public interface ITAMTouchListener {
-		public void onTouchEvent(MotionEvent e);
-		public void onHitEvent(MotionEvent e, ITAMGItem item);
+		//public void onTouchEvent(MotionEvent e, float dx, float dy);
+		public void onHitEvent(MotionEvent e, TAMGMotionEvent ge);
 	}
 
 	public boolean isLongPressed = false;
@@ -105,7 +119,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		listOfBlankAreaGestureControls = new ArrayList<ITAMBlankAreaGestureListener>();
 		listOfTouchControls = new ArrayList<ITAMTouchListener>();
 		listOfGestureControls = new ArrayList<GestureDetector>();
-		listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
 		listOfItemGestureControls = new ArrayList<ITAMItemGestureListener>();
 		listOfButtons = new ArrayList<ITAMGButton>();
 		zoom = new TAMGZoom(this);
@@ -141,7 +154,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * 
 	 * @return itemFactory
 	 */
-	public TAMGItemFactory getItemFactory() {
+	public TAMGItemFactory getGItemFactory() {
 		return factory;
 	}
 
@@ -227,10 +240,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	
 	public List<GestureDetector> getListOfGestureControls(){
 		return listOfGestureControls;
-	}
-	
-	public List<OnActivityResultListener> getListOfOnActivityResultControls() {
-		return listOfOnActivityResultControls;
 	}
 	
 	/**
@@ -430,6 +439,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 			
 			int x = (int) e.getX();
 			int y = (int) e.getY();
+		
+			TAMGMotionEvent ge;
 
 			if(e.getAction() == MotionEvent.ACTION_DOWN) {
 								
@@ -438,8 +449,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				float dx = zoom.px-zoom.px*zoom.sx;
 				float dy = zoom.py-zoom.py*zoom.sy;
 				
-				float ax = ((x-dx)/zoom.sy);
-				float ay = ((y-dy)/zoom.sy);
+				ax = ((x-dx)/zoom.sy);
+				ay = ((y-dy)/zoom.sy);
 				
 				/*for(ITAMGItem item : listOfConnections) {
 					if(item.hit(ax, ay)) {
@@ -458,13 +469,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						result = item;
 					}
 				}
+				ge = new TAMGMotionEvent(result, ax, ay);
 
 				unselectAllWithout(result);
 				
 				if(result == null) {
 					lastSelectedNode = null;
 				}// else {
-					onItemHitEvent(e, result, ax, ay);
+					onItemHitEvent(e, ge);
 				//}
 
 				actualPoint.x = x;
@@ -485,9 +497,11 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 					if(!listOfSelectedItems.isEmpty()) {
 
 						for(ITAMGItem item : listOfSelectedItems) {
-							onItemMoveEvent(e, item, ddx, ddy);
+							ge = new TAMGMotionEvent(item, ddx, ddy);
+							onItemMoveEvent(e, ge);
 						}
 					} else {
+						ge = new TAMGMotionEvent(null, ddx, ddy);
 						onMoveEvent(e, ddx, ddy);
 					}
 
@@ -507,9 +521,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				}
 			}
 			
-			for(ITAMTouchListener control : listOfTouchControls) {
-				control.onTouchEvent(e);
-			}
+			/*for(ITAMTouchListener control : listOfTouchControls) {
+				control.onTouchEvent(e, ax, ay);
+			}*/
 			
 			for(GestureDetector gDetector : listOfGestureControls){
 				gDetector.onTouchEvent(e);				
@@ -532,7 +546,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		//System.out.println("G: onFling");
 		return false;
 	}
-
+	
 	public void onLongPress(MotionEvent e) {
 		//System.out.println("G: onLongPress");
 		
@@ -541,7 +555,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		if(listOfSelectedItems.isEmpty()) {
 			
 			// could open some settings //
-			onBlankLongPress(e);
+			onBlankLongPress(e, ax, ay);
 			
 		} else {
 			
@@ -573,14 +587,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 
 	public boolean onSingleTapUp(MotionEvent e) {
-		//System.out.println("G: onSingleTapUp");
+		System.out.println("G: onSingleTapUp");
 		return false;
 	}
 	
 	public boolean onDoubleTap(MotionEvent e) {
 		if(lastSelectedNode == null) {
 			for(ITAMBlankAreaGestureListener control : listOfBlankAreaGestureControls) {
-				control.onBlankDoubleTapEvent(e);
+				control.onBlankDoubleTapEvent(e, ax, ay);
 			}
 		} else {
 			for(ITAMItemGestureListener control : listOfItemGestureControls) {
@@ -611,10 +625,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * @param ax
 	 * @param ay
 	 */
-	public void onItemHitEvent(MotionEvent e, ITAMGItem item, float ax, float ay) {
+	public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge) {
+		
+		ITAMGItem item = ge.item;
+		float ax = ge.dx;
+		float ay = ge.dy;
 		
 		for(ITAMTouchListener control : listOfTouchControls) {
-			control.onHitEvent(e, item);
+			control.onHitEvent(e, ge);
 		}
 		
 		if(item != null) {
@@ -630,7 +648,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 			}
 			
 			for(ITAMItemListener control : listOfItemControls) {
-				control.onItemHitEvent(e, item, ax, ay);
+				control.onItemHitEvent(e, ge);
 			}
 		}
 	}
@@ -644,7 +662,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * @param dx
 	 * @param dy
 	 */
-	public void onItemMoveEvent(MotionEvent e, ITAMGItem item, int dx, int dy) {
+	public void onItemMoveEvent(MotionEvent e, TAMGMotionEvent ge) {
+		ITAMGItem item = ge.item;
+		int dx = (int) ge.dx;
+		int dy = (int) ge.dy;
 		if(item instanceof ITAMGNode) {
 			item.move(dx,dy);
 		} else if(item instanceof ITAMGConnection) {
@@ -652,7 +673,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		}
 		
 		for(ITAMItemListener control : listOfItemControls) {
-			control.onItemMoveEvent(e, item, dx, dy);
+			control.onItemMoveEvent(e, ge);
 		}
 	}
 	
@@ -697,9 +718,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * 
 	 * @param e
 	 */
-	private void onBlankLongPress(MotionEvent e) {
+	private void onBlankLongPress(MotionEvent e, float dx, float dy) {
 		for(ITAMBlankAreaGestureListener control : listOfBlankAreaGestureControls) {
-			control.onBlankLongPressEvent(e);
+			control.onBlankLongPressEvent(e, dx, dy);
 		}
 	}
 	
@@ -848,6 +869,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				}
 			}
 		}
+	}
+
+	public void reset() {
+		listOfNodes.clear();
+		listOfConnections.clear();
+		listOfSelectedItems.clear();
+		listOfDrawableItems.clear();
+		lastSelectedNode = null;
 	}
 
 	/*public void organizeButtons() {

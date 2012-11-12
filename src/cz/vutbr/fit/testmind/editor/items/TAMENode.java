@@ -1,9 +1,10 @@
 package cz.vutbr.fit.testmind.editor.items;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.TAMEditor;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorHidingControl.ITAMHidingControlNode;
+import cz.vutbr.fit.testmind.editor.TAMEditorMain;
+import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl.ITAMHidingControlNode;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public class TAMENode implements ITAMENode, ITAMHidingControlNode {
@@ -13,20 +14,20 @@ public class TAMENode implements ITAMENode, ITAMHidingControlNode {
 	private ITAMEditor editor;
 	private ITAMGNode gui;
 	private TAMPNode profile;
-	private boolean hasVisibleChilds;
+	//private boolean hasVisibleChilds;
 	
 	private static int defaultType = ITAMGNode.NODE_TYPE_RECTANGLE;
 	
-	public TAMENode(TAMEditor editor, TAMPNode profile, int x, int y) {
+	public TAMENode(ITAMEditor editor, TAMPNode profile, int x, int y) {
 		this(editor, profile, x, y, defaultType);
 	}
 	
-	public TAMENode(TAMEditor editor, TAMPNode profile, int x, int y, int type) {
+	public TAMENode(ITAMEditor editor, TAMPNode profile, int x, int y, int type) {
 		this.editor = editor;
 		this.profile = profile;
-		this.gui = editor.getItemFactory().createNode(editor, type, x, y, profile.getTitle());
+		this.gui = editor.getGItemFactory().createNode((TAMGraph) editor, type, x, y, profile.getTitle());
 		this.gui.setHelpObject(this);
-		this.hasVisibleChilds = true;
+		//this.hasVisibleChilds = true;
 	}
 
 	public ITAMEditor getEditor() {

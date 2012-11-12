@@ -27,8 +27,9 @@ import com.commonsware.cwac.richedit.Effect;
 import com.commonsware.cwac.richedit.RichEditText;
 import com.commonsware.cwac.richedit.RichEditText.OnSelectionChangedListener;
 
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
+
 
 public class EditNodeActivity extends FragmentActivity implements AnimationListener, 
 	OnSelectionChangedListener,TextWatcher {
@@ -86,13 +87,11 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		radioButtonGreen = (RadioButton)findViewById(R.id.edit_node_radio1);
 		radioButtonPurple = (RadioButton)findViewById(R.id.edit_node_radio4);		
 		
-			
-		
 		/* prijme intent z main acitivity */
 		Intent intent = getIntent();
-		String titleString = intent.getStringExtra(TAMEditorNodeControl.NODE_TITLE);		
-		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMEditorNodeControl.NODE_COLOR);	
-		CharSequence bodyText = intent.getCharSequenceExtra(TAMEditorNodeControl.NODE_BODY);
+		String titleString = intent.getStringExtra(TAMENodeControl.NODE_TITLE);		
+		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMENodeControl.NODE_COLOR);	
+		CharSequence bodyText = intent.getCharSequenceExtra(TAMENodeControl.NODE_BODY);
 		
 		/* nastavenie titulku */
 		title.setText(titleString);		
@@ -188,10 +187,10 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	Editable bodyText = richTextEditor.getEditableText();
     	    	   	
     	Intent intent = new Intent();    	
-    	intent.putExtra(TAMEditorNodeControl.NODE_TITLE, titleText);
-    	intent.putExtra(TAMEditorNodeControl.NODE_BODY, bodyText);
-    	intent.putExtra(TAMEditorNodeControl.NODE_COLOR,color);
-    	setResult(TAMEditorNodeControl.EDIT_NODE_RESULT_CODE, intent);
+    	intent.putExtra(TAMENodeControl.NODE_TITLE, titleText);
+    	intent.putExtra(TAMENodeControl.NODE_BODY, bodyText);
+    	intent.putExtra(TAMENodeControl.NODE_COLOR,color);
+    	setResult(TAMENodeControl.EDIT_NODE_RESULT_CODE, intent);
     	finish();
     	
 	}

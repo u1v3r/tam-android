@@ -15,11 +15,11 @@ import cz.vutbr.fit.testmind.io.Serializer;
  * TODO: trieda v ktorej bude implementovy open/save suboru
  *
  */
-public class TAMEditorOpenSaveControl extends TAMEditorAbstractControl implements ITAMMenuListener{
+public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenuListener{
 
 	private static final String TAG = "TAMEditorOpenSaveControl";
 
-	public TAMEditorOpenSaveControl(ITAMEditor editor) {
+	public TAMEOpenSaveControl(ITAMEditor editor) {
 		super(editor);
 		editor.getListOfMenuControls().add(this);
 	}

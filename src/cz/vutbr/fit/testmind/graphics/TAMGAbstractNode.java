@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl.BackgroundStyle;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -54,7 +54,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		super(shape);
 		
 		this.graph = graph;
-		this.text = text;
 		this.listOfChildConnections = new ArrayList<ITAMGConnection>();
 		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
@@ -74,8 +73,9 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.offsetY = offsetY;
 		
 		position = new Point(x, y);
+		setText(text);
 		
-		actualizeSize();
+		//actualizeSize();
 	}
 	
 	public abstract boolean hit(float x, float y);
@@ -118,7 +118,11 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	}
 
 	public void setText(String text) {
-		this.text = text;
+	    if(text == null) {
+	        this.text = "";
+	    } else {
+	        this.text = text;
+	    }
 		actualizeSize();
 	}
 
@@ -169,10 +173,10 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	public ITAMGItem addChild(int type, int x, int y, String text) {
 		
 		// create new node from item factory //
-		ITAMGNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
+		ITAMGNode node = graph.getGItemFactory().createNode(graph, type, x, y, text);
 		
 		// create new connection between these nodes from item factory //
-		graph.getItemFactory().createConnection(graph, this, node, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
+		graph.getGItemFactory().createConnection(graph, this, node, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
 		
 		return node;
 	}
@@ -203,7 +207,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
         this.colorStroke = backgroundStroke;
     }
     
-    public void setBackgroundStyle(TAMEditorNodeControl.BackgroundStyle style){
+    public void setBackgroundStyle(TAMENodeControl.BackgroundStyle style){
     	
     	Resources res = graph.getResources();
     	if(BackgroundStyle.BLUE == style){
@@ -225,7 +229,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
     	}
     }
     
-    public TAMEditorNodeControl.BackgroundStyle getBackgroundStyle(){
+    public TAMENodeControl.BackgroundStyle getBackgroundStyle(){
     	return backgroundStyle;
     }
 

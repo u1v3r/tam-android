@@ -2,7 +2,7 @@ package cz.vutbr.fit.testmind.graphics;
 
 import java.util.List;
 
-import cz.vutbr.fit.testmind.editor.controls.TAMEditorNodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
 
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -23,9 +23,9 @@ public interface ITAMGNode extends ITAMGItem {
 	
 	public ITAMGItem addChild(int type, int x, int y, String text);
 	
-	public void setBackgroundStyle(TAMEditorNodeControl.BackgroundStyle background);
+	public void setBackgroundStyle(TAMENodeControl.BackgroundStyle background);
 	
-	public TAMEditorNodeControl.BackgroundStyle getBackgroundStyle();
+	public TAMENodeControl.BackgroundStyle getBackgroundStyle();
 	
 	public Rect getBounds();
 	
