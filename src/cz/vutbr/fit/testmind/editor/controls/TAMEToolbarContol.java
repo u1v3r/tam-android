@@ -30,4 +30,9 @@ public class TAMEToolbarContol extends TAMEAbstractControl implements ITAMTouchL
 		}
 	}
 
+	public void onTouchEvent(MotionEvent e, float dx, float dy) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

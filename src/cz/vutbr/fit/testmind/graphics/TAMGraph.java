@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,6 +12,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
+import android.util.FloatMath;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -23,8 +26,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	
 	private static final String TAG = "TAMGraph";
 
-	//private static final float ZOOM_STEP = 0.125f;
-	protected static final float DEFAULT_ZOOM = 0.5f;
+	private static final float ZOOM_IN_STEP = 0.900f;
+	private static final float ZOOM_OUT_STEP = 1.100f;
+	protected static final float DEFAULT_ZOOM = 0.45f;
 
 	private static final float MIN_ZOOM = 0.03125f;
 	private static final float MAX_ZOOM = 2;
@@ -91,7 +95,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	public interface ITAMTouchListener {
-		//public void onTouchEvent(MotionEvent e, float dx, float dy);
+		public void onTouchEvent(MotionEvent e, float dx, float dy);
 		public void onHitEvent(MotionEvent e, TAMGMotionEvent ge);
 	}
 
@@ -341,9 +345,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		} else {
 			int size = listOfSelectedItems.size();
 			int a = 0;
-			System.out.println(size);
+			Log.d(TAG, size + "");
 			for(int i = 0; i < size; i++) {
-				System.out.println(i);
+				Log.d(TAG, i + "");
 				ITAMGItem item = listOfSelectedItems.get(a);
 				if(item != actual) {
 					item.setSelected(false);
@@ -431,7 +435,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent e) {
+	public boolean onTouchEvent(MotionEvent e) {		
+		
+		int touchState = TAMEZoomControl.IDLE;
 		
 		synchronized (drawingThread.getSurfaceHolder()) {
 						
@@ -441,7 +447,108 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 			int y = (int) e.getY();
 		
 			TAMGMotionEvent ge;
+			
+			switch(e.getAction() & MotionEvent.ACTION_MASK){
+				case MotionEvent.ACTION_DOWN:
+					
+					touchState = TAMEZoomControl.TOUCH;
+					
+					//Log.d(TAG, "ACTION_DOWN");
+					ITAMGItem result = null;
+					
+					float dx = zoom.px-zoom.px*zoom.sx;
+					float dy = zoom.py-zoom.py*zoom.sy;
+					
+					ax = ((x-dx)/zoom.sy);
+					ay = ((y-dy)/zoom.sy);
+					
+					/*for(ITAMGItem item : listOfConnections) {
+						if(item.hit(ax, ay)) {
+							result = item;
+						}
+					}
 
+					for(ITAMGItem item : listOfNodes) {
+						if(item.hit(ax, ay)) {
+							result = item;
+						}
+					}*/
+					
+					for(ITAMGItem item : listOfDrawableItems) {
+						if(item.hit(ax, ay)) {
+							result = item;
+						}
+					}
+					ge = new TAMGMotionEvent(result, ax, ay);
+
+					unselectAllWithout(result);
+					
+					if(result == null) {
+						lastSelectedNode = null;
+					}// else {
+						onItemHitEvent(e, ge);
+					//}
+
+					actualPoint.x = x;
+					actualPoint.y = y;
+					
+					isLongPressed = false;
+					
+					break;
+				case MotionEvent.ACTION_POINTER_DOWN:
+					//A non-primary pointer has gone down.
+					//Log.d(TAG, "ACTION_POINTER_DOWN");
+					touchState = TAMEZoomControl.PINCH;	
+		
+					break;
+				case MotionEvent.ACTION_MOVE:
+					//A change has happened during a press gesture (between ACTION_DOWN and ACTION_UP).
+					//Log.d(TAG, "ACTION_MOVE");
+										
+					Log.d(TAG, "moving");
+					
+					int dxInt = x - actualPoint.x;
+					int dyInt = y - actualPoint.y;
+
+					if(dxInt > 0 || dyInt > 0 || dxInt < 0 || dyInt < 0) {
+						
+						int ddx = (int) (dxInt/zoom.sx);
+						int ddy = (int) (dyInt/zoom.sy);
+						
+						if(!listOfSelectedItems.isEmpty()) {
+
+							for(ITAMGItem item : listOfSelectedItems) {
+								ge = new TAMGMotionEvent(item, ddx, ddy);
+								onItemMoveEvent(e, ge);
+							}
+						} else {
+							ge = new TAMGMotionEvent(null, ddx, ddy);
+							onMoveEvent(e, ddx, ddy);
+						}
+
+						actualPoint.x = x;
+						actualPoint.y = y;
+					}
+		
+					break;
+				case MotionEvent.ACTION_UP:
+					
+					touchState = TAMEZoomControl.IDLE;
+					
+					if(isLongPressed) {
+						if(!listOfSelectedItems.isEmpty()) {
+							ITAMGItem item = listOfSelectedItems.get(listOfSelectedItems.size()-1);
+							if(item instanceof ITAMGNode) {
+								onItemLongReleaseEvent(e, (ITAMGNode) item);
+							}
+						}
+					}
+					break;
+				case MotionEvent.ACTION_POINTER_UP:				
+					touchState = TAMEZoomControl.TOUCH;
+					break;
+			}		
+			/*
 			if(e.getAction() == MotionEvent.ACTION_DOWN) {
 								
 				ITAMGItem result = null;
@@ -463,7 +570,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						result = item;
 					}
 				}*/
-				
+				/*
 				for(ITAMGItem item : listOfDrawableItems) {
 					if(item.hit(ax, ay)) {
 						result = item;
@@ -520,10 +627,12 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 					}
 				}
 			}
+			*/
 			
-			/*for(ITAMTouchListener control : listOfTouchControls) {
+			/* ja ten event fakt potrebujem :D itemTouch mi nestaci */
+			for(ITAMTouchListener control : listOfTouchControls) {
 				control.onTouchEvent(e, ax, ay);
-			}*/
+			}
 			
 			for(GestureDetector gDetector : listOfGestureControls){
 				gDetector.onTouchEvent(e);				
@@ -587,7 +696,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 
 	public boolean onSingleTapUp(MotionEvent e) {
-		System.out.println("G: onSingleTapUp");
+		Log.d(TAG, "onSingleTapUp");
 		return false;
 	}
 	
@@ -733,7 +842,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 */
 	private void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
-		System.out.println("long select");
+		Log.d(TAG, "long select");
 		
 		for(ITAMItemGestureListener control : listOfItemGestureControls) {
 			control.onItemLongSelectEvent(e, node);
@@ -779,11 +888,11 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	public void onZoomIn() {
-		zoom(zoom.sx*2, zoom.sy*2, getWidth()*0.5f, getHeight()*0.5f);
+		zoom(zoom.sx*ZOOM_IN_STEP, zoom.sy*ZOOM_IN_STEP, getWidth()*0.5f, getHeight()*0.5f);
 	}
 
 	public void onZoomOut() {		
-		zoom(zoom.sx*0.5f, zoom.sy*0.5f, getWidth()*0.5f, getHeight()*0.5f);
+		zoom(zoom.sx*ZOOM_OUT_STEP, zoom.sy*ZOOM_OUT_STEP, getWidth()*0.5f, getHeight()*0.5f);
 	}
 	
 	public TAMGZoom getZoom() {

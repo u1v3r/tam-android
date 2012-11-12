@@ -22,4 +22,9 @@ public class TAMERootInitializeControl extends TAMEAbstractControl implements IT
 		}
 	}
 
+	public void onTouchEvent(MotionEvent e, float dx, float dy) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
