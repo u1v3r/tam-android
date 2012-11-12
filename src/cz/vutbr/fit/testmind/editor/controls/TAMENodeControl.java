@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
-import android.text.SpannableString;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -46,7 +45,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	}
 	
 	public interface ITAMNodeControlListener {
-		public ITAMENode createNodeWithProfileAndConnection(String title, SpannableString body, ITAMENode parent, int posX, int posY);
+		public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY);
 	}
 	
 	private boolean creatingByGesture = false;
@@ -160,7 +159,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			
 			// vytvori prazdny uzol
 			TAMENode selectedNode = (TAMENode) node.getHelpObject();			
-			ITAMENode eNode = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("",new SpannableString(""),selectedNode,(int) x, (int) y);
+			ITAMENode eNode = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("","",selectedNode,(int) x, (int) y);
 			
 			editor.unselectAll();
 			eNode.getGui().setSelected(true);
@@ -199,7 +198,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		if(resultCode == EDIT_NODE_RESULT_CODE){
 
 			String nodeTitle = data.getStringExtra(NODE_TITLE);
-			SpannableString nodeBody = (SpannableString)data.getCharSequenceExtra(NODE_BODY);
+			String nodeBody = data.getStringExtra(NODE_BODY);
 			BackgroundStyle nodeColor = (BackgroundStyle)data.getSerializableExtra(NODE_COLOR);
 			
 			// musi byt vybrany prave jeden uzol
@@ -252,7 +251,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				
 				waitingForClick = false;
 				
-				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("", new SpannableString(""), selectedNode, (int) ge.dx, (int) ge.dy);
+				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("", "", selectedNode, (int) ge.dx, (int) ge.dy);
 				
 				showEditNodeDialog(node);
 			//}

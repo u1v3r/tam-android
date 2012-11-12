@@ -1,43 +1,41 @@
 package cz.vutbr.fit.testmind.profile;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.text.SpannableString;
-
-import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.ITAMENode;
-
-public class TAMPNode extends TAMPItem {
+public class TAMPNode extends TAMPItem implements Serializable{
+	
+	private static final long serialVersionUID = 8313169869686450190L;
 	
 	private int id;
 	private String title;
-	private SpannableString body;
+	private String body;
 	protected List<TAMPNode> listOfChildNodes;
 	protected TAMPNode parent;
 	
 	private static int counter = 0;
 	
-	public TAMPNode(String title, SpannableString body) {
-		this(title, body, getNewSequenceNumber());
+	public TAMPNode(String title, String htmlBody) {
+		this(title, htmlBody, getNewSequenceNumber());
 	}
 	
 	public TAMPNode(String title, byte[] body) {
 		this(title, body, getNewSequenceNumber());
 	}
 	
-	public TAMPNode(String title, SpannableString body, int id) {
+	public TAMPNode(String title, String htmlBody, int id) {		
 		this.id = id;
 		setTitle(title);
-		setBody(body);
+		setBody(htmlBody);
 		listOfChildNodes = new ArrayList<TAMPNode>();
 	}
 	
 	public TAMPNode(String title, byte[] body, int id) {
 		this.id = id;
 		setTitle(title);
-		SpannableString bodyImport = new SpannableString(new String(body,Charset.forName("UTF-8")));
+		String bodyImport = new String(body,Charset.forName("UTF-8"));
 		setBody(bodyImport);
 		listOfChildNodes = new ArrayList<TAMPNode>();
 	}
@@ -50,16 +48,12 @@ public class TAMPNode extends TAMPItem {
 		this.title = title;
 	}
 	
-	public SpannableString getBody() {
+	public String getBody() {
 		return body;
 	}
-	
-	private void setBody(String body) {		
-		this.body = new SpannableString(body);
-	}
-	
-	public void setBody(SpannableString body){
-		this.body = body;
+		
+	public void setBody(String htmlBody){
+		this.body = htmlBody;
 	}
 	
 	public int getId() {
@@ -103,7 +97,7 @@ public class TAMPNode extends TAMPItem {
 		listOfChildNodes.clear();
 		parent = null;
 	}
-
+/*	
 	public ITAMENode addEReference(ITAMEditor editor, int x, int y) {
 		if(!editorReferences.containsKey(editor)) {
 			ITAMENode eNode = editor.createNode(this, x, y);
@@ -123,7 +117,7 @@ public class TAMPNode extends TAMPItem {
 			return null;
 		}
 	}
-
+*/
 	@Override
 	public String toString() {
 		return "TAMPNode [id=" + id + ", title=" + title + ", body=" + body

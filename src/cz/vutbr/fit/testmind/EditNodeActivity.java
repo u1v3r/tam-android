@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -91,7 +92,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		Intent intent = getIntent();
 		String titleString = intent.getStringExtra(TAMENodeControl.NODE_TITLE);		
 		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMENodeControl.NODE_COLOR);	
-		CharSequence bodyText = intent.getCharSequenceExtra(TAMENodeControl.NODE_BODY);
+		String bodyText = intent.getStringExtra(TAMENodeControl.NODE_BODY);
 		
 		/* nastavenie titulku */
 		title.setText(titleString);		
@@ -111,7 +112,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 				
 		/* natavenie textu pre editor */
 	    richTextEditor = (RichEditText)findViewById(R.id.edit_node_text_node_text);
-	    richTextEditor.setText(new SpannableString(bodyText), BufferType.SPANNABLE);
+	    richTextEditor.setText(new SpannableString(Html.fromHtml(bodyText)), BufferType.SPANNABLE);
 	    richTextEditor.setOnSelectionChangedListener(this);
 	    richTextEditor.addTextChangedListener(this);
 	    
@@ -184,8 +185,8 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     private void saveValues() {
     	
     	String titleText = title.getText().toString();
-    	Editable bodyText = richTextEditor.getEditableText();
-    	    	   	
+    	String bodyText = Html.toHtml(richTextEditor.getEditableText());
+    	
     	Intent intent = new Intent();    	
     	intent.putExtra(TAMENodeControl.NODE_TITLE, titleText);
     	intent.putExtra(TAMENodeControl.NODE_BODY, bodyText);

@@ -7,14 +7,12 @@ import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.SpannableString;
-import android.text.TextUtils;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public class TestingParcelable implements Parcelable
 {
     private String title;
-    private SpannableString body;// TREBA OTESTOVAT CI FUNGUJE SPRAVNE so SpannableString
+    private CharSequence body;// TREBA OTESTOVAT CI FUNGUJE SPRAVNE so SpannableString
     private List<TestingParcelable> childs;
     
     public TestingParcelable(TAMPNode node)
@@ -55,7 +53,7 @@ public class TestingParcelable implements Parcelable
     	byte[] bodyByte = null;
         title = in.readString();
         in.readByteArray(bodyByte);
-        body = new SpannableString(new String(bodyByte,Charset.forName("UTF-8")));
+        body = new String(bodyByte,Charset.forName("UTF-8"));
         childs = new ArrayList<TestingParcelable>();
         in.readList(childs, TestingParcelable.class.getClassLoader());
     }

@@ -1,9 +1,12 @@
 package cz.vutbr.fit.testmind;
 
+import java.io.Serializable;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -113,6 +116,14 @@ public class MainActivity extends FragmentActivity {
     	EventObjects.editor_test.initialize(profile);
     	
     	mainActivityInstance = this;
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	
+    	//outState.putSerializable("nodes", (Serializable)Html.toHtml(profile.getListOfPNodes().get(0).getBody()));
+    	
+    	super.onSaveInstanceState(outState);
     }
         
     @Override
