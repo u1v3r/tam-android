@@ -14,9 +14,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
+import android.text.SpannableString;
 import android.util.SparseArray;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +64,7 @@ public class Serializer
     static private final String CREATE_TABLE_NODES = "CREATE TABLE \"nodes\" (" +
             "\"id\" int PRIMARY KEY NOT NULL," +
             "\"title\" TEXT NOT NULL," +
-            "\"body\" TEXT)";
+            "\"body\" BLOB)";
     static private final String CREATE_TABLE_CONNECTIONS = "CREATE TABLE \"connections\" (" +
             "\"id\" int PRIMARY KEY NOT NULL," +
             "\"parent\" int NOT NULL," +
@@ -241,7 +243,7 @@ public class Serializer
         ContentValues values = new ContentValues();
         values.put("id", node.getId());
         values.put("title", node.getTitle());
-        values.put("body", node.getBody().toString());
+        values.put("body", node.getBody().toString().getBytes());
         
         db.insert("nodes", null, values);
     }
@@ -325,10 +327,11 @@ public class Serializer
 
         profile.reset(cur.getInt(indexes.get("nodeCounter")), cur.getInt(indexes.get("connectionCounter")));
         String title = cur.getString(indexes.get("title"));
-        String body = cur.getString(indexes.get("body"));
+        byte[] body = cur.getBlob(indexes.get("body"));
         int id = cur.getInt(indexes.get("id"));
         
         SparseArray<TAMPNode> nodes = new SparseArray<TAMPNode>();
+        
         nodes.put(id, profile.importRoot(title, body, id));
         
         return nodes;
@@ -382,8 +385,9 @@ public class Serializer
         {
             int id = cur.getInt(indexes.get("id"));
             String title = cur.getString(indexes.get("title"));
-            String body = cur.getString(indexes.get("body"));
+            byte[] body = cur.getBlob(indexes.get("body"));
             
+           
             nodes.append(id, profile.importNode(title, body, id));
         }
     }

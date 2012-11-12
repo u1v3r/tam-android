@@ -3,6 +3,8 @@ package cz.vutbr.fit.testmind.profile;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.SpannableString;
+
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
 public class TAMProfile {
@@ -53,7 +55,7 @@ public class TAMProfile {
 		return null;
 	}
 	
-	public TAMPNode createRoot(String title, String body) {
+	public TAMPNode createRoot(String title, SpannableString body) {
 		if(root != null) {
 			throw new TAMItemException("Root already exists");
 		} else {
@@ -62,7 +64,7 @@ public class TAMProfile {
 		}
 	}
 	
-	public TAMPNode importRoot(String title, String body, int id) {
+	public TAMPNode importRoot(String title, byte[] body, int id) {
 		if(root != null) {
 			throw new TAMItemException("Root already exists");
 		} else {
@@ -71,13 +73,13 @@ public class TAMProfile {
 		}
 	}
 	
-	public TAMPNode createNode(String title, String body) {
+	public TAMPNode createNode(String title, SpannableString body) {
 		TAMPNode node = new TAMPNode(title, body);
 		listOfPNodes.add(node);
 		return node;
 	}
 	
-	public TAMPNode importNode(String title, String body, int id) {
+	public TAMPNode importNode(String title, byte[] body, int id) {
 		for(TAMPNode node : listOfPNodes) {
 			if(node.getId() == id) {
 				throw new TAMItemException("Node with id " + id + " already exists");

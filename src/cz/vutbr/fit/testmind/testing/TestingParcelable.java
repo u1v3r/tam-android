@@ -1,18 +1,20 @@
 package cz.vutbr.fit.testmind.testing;
 
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.testmind.profile.TAMPNode;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public class TestingParcelable implements Parcelable
 {
     private String title;
-    private String body;
+    private SpannableString body;// TREBA OTESTOVAT CI FUNGUJE SPRAVNE so SpannableString
     private List<TestingParcelable> childs;
     
     public TestingParcelable(TAMPNode node)
@@ -44,14 +46,16 @@ public class TestingParcelable implements Parcelable
     public void writeToParcel(Parcel out, int flags)
     {
         out.writeString(title);
-        out.writeString(body);
+        out.writeByteArray(body.toString().getBytes());        
         out.writeList(childs);
     }
 
     private void readFromParcel(Parcel in)
     {   
+    	byte[] bodyByte = null;
         title = in.readString();
-        body = in.readString();
+        in.readByteArray(bodyByte);
+        body = new SpannableString(new String(bodyByte,Charset.forName("UTF-8")));
         childs = new ArrayList<TestingParcelable>();
         in.readList(childs, TestingParcelable.class.getClassLoader());
     }

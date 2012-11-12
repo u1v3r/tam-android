@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.profile;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +19,26 @@ public class TAMPNode extends TAMPItem {
 	
 	private static int counter = 0;
 	
-	public TAMPNode(String title, String body) {
+	public TAMPNode(String title, SpannableString body) {
 		this(title, body, getNewSequenceNumber());
 	}
 	
-	public TAMPNode(String title, String body, int id) {
+	public TAMPNode(String title, byte[] body) {
+		this(title, body, getNewSequenceNumber());
+	}
+	
+	public TAMPNode(String title, SpannableString body, int id) {
 		this.id = id;
 		setTitle(title);
 		setBody(body);
+		listOfChildNodes = new ArrayList<TAMPNode>();
+	}
+	
+	public TAMPNode(String title, byte[] body, int id) {
+		this.id = id;
+		setTitle(title);
+		SpannableString bodyImport = new SpannableString(new String(body,Charset.forName("UTF-8")));
+		setBody(bodyImport);
 		listOfChildNodes = new ArrayList<TAMPNode>();
 	}
 	

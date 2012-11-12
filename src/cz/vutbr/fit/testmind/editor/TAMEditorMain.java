@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,8 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
  * Obsahuje zakladne funkcie na pracu s grafom 
  *
  */
-public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, ITAMRootControlListener, ITAMNodeControlListener {
+public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, 
+	ITAMRootControlListener, ITAMNodeControlListener {
 	
 	private static final String TAG = "TAMEditor";
 	
@@ -51,7 +53,7 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		if(hasRoot) {
 			return false;
 		} else {
-			TAMPNode pNode = MainActivity.getProfile().createRoot("", "");
+			TAMPNode pNode = MainActivity.getProfile().createRoot("", new SpannableString(""));
 			ITAMENode eNode = pNode.addEReference(this, x, y);
 			eNode.getGui().setSelected(true);
 			
@@ -66,7 +68,7 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		return mode;
 	}
 
-	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY) {
+	public ITAMENode createNodeWithProfileAndConnection(String title, SpannableString body, ITAMENode parent, int posX, int posY) {
 		TAMPNode newProfileNode = profile.createNode(title, body);
 		ITAMENode newEditorNode = newProfileNode.addEReference(this, posX, posY);
 		TAMPConnection pConnection = profile.createConnection(parent.getProfile(), newProfileNode);
