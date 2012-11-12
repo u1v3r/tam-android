@@ -4,17 +4,15 @@ import java.io.Serializable;
 import java.util.List;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
@@ -93,8 +91,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {    	
     	super.onCreate(savedInstanceState);	
-    	
-    	
+    	   	
     	
     	//if(profile != null) {
     		profile = new TAMProfile();
@@ -127,9 +124,50 @@ public class MainActivity extends FragmentActivity {
     	EventObjects.editor_test.initialize(profile);
     	
     	mainActivityInstance = this;
-    	
-
     }
+	
+	/**
+	 * Po otoceni zariadenia nevymaze obsah
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {		
+		
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		Log.d(TAG,"velkost  pred: " + profile.getListOfPNodes().size());
+		
+		listOfNodes = (List<TAMPNode>) savedInstanceState.getSerializable(NODES_LIST);
+    	listOfConnections = (List<TAMPConnection>) savedInstanceState.getSerializable(CONNECTION_LIST);
+    	
+    	
+    	Log.d(TAG, "saved instance initialization:" + listOfNodes.size());
+    	
+    	if(listOfNodes.size() < 1) return;
+    	
+    	TAMPNode rootNode = listOfNodes.get(0);
+    	      
+    	/*
+    	profile.importRoot(rootNode.getTitle(), rootNode.getBody(), rootNode.getId());
+    	
+    	for (int i = 1; i < listOfNodes.size(); i++) {
+    		TAMPNode node = listOfNodes.get(0);
+			profile.importNode(node.getTitle(), node.getBody(), node.getId());
+			
+		}        	
+    	
+    	for (TAMPConnection conn : listOfConnections) {
+			profile.importConnection(conn.getParent(), conn.getChild(), conn.getId());
+		}
+    	*/
+    	EventObjects.editor_main.invalidate();
+		
+	}
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
