@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -50,7 +51,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	
 	private boolean creatingByGesture = false;
 	private boolean waitingForClick = false;
-	private List<TAMENode> listOfSelectedNodes;
+	
 	private float x,y;
 	
 	public TAMENodeControl(ITAMNodeControlListener editor) {
@@ -64,8 +65,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfItemControls().add(this);		
 		editor.getListOfButtonControls().add(this);
-		
-		listOfSelectedNodes = new ArrayList<TAMENode>();
 	}
 	
 	/**
@@ -194,6 +193,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 * This method is called as result of edit node dialog.
 	 */
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		//Log.d(TAG,getListOfSelectedNodes().toString() + "");
 		
 		if(resultCode == EDIT_NODE_RESULT_CODE){
 
@@ -201,21 +202,20 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			String nodeBody = data.getStringExtra(NODE_BODY);
 			BackgroundStyle nodeColor = (BackgroundStyle)data.getSerializableExtra(NODE_COLOR);
 			
-			// musi byt vybrany prave jeden uzol
-			if(listOfSelectedNodes.size() != 1) return true; 
-			
-			TAMENode selectedNodeFromList = listOfSelectedNodes.get(0);
+			// musi byt vybrany jeden uzol
+			if(selectedNode == null) return true; 
+					
 			
 			if(nodeTitle != null){				
-				selectedNodeFromList.getGui().setText(nodeTitle);
-				selectedNodeFromList.getProfile().setTitle(nodeTitle);				
+				selectedNode.getGui().setText(nodeTitle);
+				selectedNode.getProfile().setTitle(nodeTitle);				
 			}
 			
 			if(nodeBody != null){								
-				selectedNodeFromList.getProfile().setBody(nodeBody);				
+				selectedNode.getProfile().setBody(nodeBody);				
 			}
 						
-			selectedNodeFromList.getGui().setBackgroundStyle(nodeColor);
+			selectedNode.getGui().setBackgroundStyle(nodeColor);
 				
 			editor.invalidate();
 		}
@@ -258,16 +258,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		}
 	}
 
-	public void onItemSelectEvent(ITAMGItem item, boolean selection) {		
-			
-		synchronized (listOfSelectedNodes) {			
-			if(selection){
-				listOfSelectedNodes.add((TAMENode)item.getHelpObject());
-			}
-			else {
-				listOfSelectedNodes.remove((TAMENode)item.getHelpObject());
-			}
-		}		
+	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
+		if(selection){
+			selectedNode = (TAMENode)item.getHelpObject();
+		}
 	}
 
 	public void onButtonSelected(View item) {

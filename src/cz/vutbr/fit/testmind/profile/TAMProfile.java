@@ -3,9 +3,13 @@ package cz.vutbr.fit.testmind.profile;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
 public class TAMProfile {
+	
+	private static final String TAG = "TAMProfile";
 	
 	protected List<TAMPNode> listOfPNodes;
 	protected List<TAMPConnection> listOfPConnections;
@@ -78,6 +82,7 @@ public class TAMProfile {
 	}
 	
 	public TAMPNode importNode(String title, String body, int id) {
+				
 		for(TAMPNode node : listOfPNodes) {
 			if(node.getId() == id) {
 				throw new TAMItemException("Node with id " + id + " already exists");
