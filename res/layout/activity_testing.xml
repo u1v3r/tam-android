@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp">
+    android:background="@color/testing_background_activity" >
 
     <LinearLayout
-        android:id="@+id/testing_linearLayout_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:orientation="horizontal"
-        android:background="@color/testing_background_path">
+        android:orientation="vertical"
+        android:scrollbars="vertical" >
+    
+        <cz.vutbr.fit.testmind.layout.FlowLayout
+            android:id="@+id/testing_flowLayout_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/testing_background_path"/>
+       
+        <TextView
+            android:id="@+id/testing_textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+        <WebView
+            android:id="@+id/testing_webView_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+        <cz.vutbr.fit.testmind.layout.FlowLayout
+                    android:id="@+id/testing_flowLayout_childs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        
     </LinearLayout>
-   
-    <TextView
-        android:id="@+id/testing_textView_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-    
-    <WebView
-        android:id="@+id/testing_webView_body"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    
-    <LinearLayout
-        android:id="@+id/testing_linearLayout_childs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:orientation="horizontal">
-    </LinearLayout>
-    
-</LinearLayout>
+</ScrollView>
