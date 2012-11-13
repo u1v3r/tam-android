@@ -1,6 +1,6 @@
 package cz.vutbr.fit.testmind.editor.items;
 
-import cz.vutbr.fit.testmind.editor.TAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 
 public class TAMEItemFactory {
 	

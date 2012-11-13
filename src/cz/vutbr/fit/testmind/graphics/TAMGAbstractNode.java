@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -18,7 +21,9 @@ import android.graphics.drawable.shapes.Shape;
  */
 public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNode {
 	
-	private static final float STROKE_WIDTH = 5f;
+	private static final float [] STROKE_WIDTH = { 5f , 15f };
+
+	private static final String TAG = "TAMGAbstractNode";
 	
 	private TAMGraph graph;
 	private String text;
@@ -27,35 +32,37 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	private Object object;
 	
 	private int type;
+	private int state = NODE_STATE_DEFAULT;
 	
 	private Point position;
 	private int offsetX;
 	private int offsetY;
 	
-	private int background;
-	private int foreground;
-	private int highlightColor;
-	private int highlightColorStroke;
-	private int backgroundStroke;
+	private int colorBackground;
+	private int colorBackgroundHighlight;
+	private int colorText;
+	private int colorStroke;
+	private int colorStrokeHighlight;
 	
 	private boolean isHighlited;
 	private boolean isEnabled;
-	private boolean isSelected;	
+	private boolean isSelected;
+
+	private BackgroundStyle backgroundStyle;	
 	
 	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
 		
 		this.graph = graph;
-		this.text = text;
 		this.listOfChildConnections = new ArrayList<ITAMGConnection>();
 		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
 		this.type = type;
-		this.background = graph.getResources().getColor(R.color.node_background);
-		this.backgroundStroke = graph.getResources().getColor(R.color.node_background_stroke);
-		this.foreground = graph.getResources().getColor(R.color.node_text);
-		this.highlightColor = graph.getResources().getColor(R.color.node_highlight_background);
-		this.highlightColorStroke = graph.getResources().getColor(R.color.node_highlight_background_stroke);
+		this.colorBackground = graph.getResources().getColor(R.color.node_background_1);		
+		this.colorStroke = graph.getResources().getColor(R.color.node_background_stroke_1);
+		this.colorText = graph.getResources().getColor(R.color.node_text);
+		this.colorBackgroundHighlight = graph.getResources().getColor(R.color.node_highlight_background);
+		this.colorStrokeHighlight = graph.getResources().getColor(R.color.node_highlight_background_stroke);
 		
 		this.isHighlited = false;
 		this.isEnabled = true;
@@ -66,8 +73,9 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.offsetY = offsetY;
 		
 		position = new Point(x, y);
+		setText(text);
 		
-		actualizeSize();
+		//actualizeSize();
 	}
 	
 	public abstract boolean hit(float x, float y);
@@ -80,6 +88,16 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 	public Point getPosition() {
 		return position;
+	}
+	
+	public int getNodeState() {
+		return state;
+	}
+	
+	public void setNodeState(int state) {
+		if(state == NODE_STATE_DEFAULT || state == NODE_STATE_COLLAPSE) {
+			this.state = state;
+		}
 	}
 	
 	protected void setPosition(int x, int y) {
@@ -100,32 +118,52 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	}
 
 	public void setText(String text) {
-		this.text = text;
+	    if(text == null) {
+	        this.text = "";
+	    } else {
+	        this.text = text;
+	    }
 		actualizeSize();
 	}
 
-	public int getBackground() {
-		return background;
+	public int getColorBackground() {
+		return colorBackground;
 	}
 	
-	public void setBackground(int background) {
-		this.background = background;
+	public void setColorBackground(int color) {
+		this.colorBackground = color;
 	}
 	
-	public int getForeground() {
-		return foreground;
+	public int getColorBackgroundHighlight() {
+		return colorBackgroundHighlight;
+	}
+	
+	public void setColorBackgroundHighlight(int color) {
+		this.colorBackgroundHighlight = color;
+	}
+	
+	public int getColorText() {
+		return colorText;
 	}
 
-	public void setForeground(int foreground) {
-		this.foreground = foreground;
+	public void setColorText(int color) {
+		this.colorText = color;
 	}
-	
-	public int getHighlightColor() {
-		return highlightColor;
+
+	public int getColorStrokeHighlight() {
+		return colorStrokeHighlight;
 	}
-	
-	public void setHighlightColor(int highlightColor) {
-		this.highlightColor = highlightColor;
+
+	public void setColorStrokeHighlight(int color) {
+		this.colorStrokeHighlight = color;
+	}
+
+	public int getColorStroke() {
+		return colorStroke;
+	}
+
+	public void setColorStroke(int strokeColor) {
+		this.colorStroke = strokeColor;
 	}
 
 	public ITAMGItem addChild(int x, int y, String text) {
@@ -135,10 +173,10 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	public ITAMGItem addChild(int type, int x, int y, String text) {
 		
 		// create new node from item factory //
-		ITAMGNode node = graph.getItemFactory().createNode(graph, type, x, y, text);
+		ITAMGNode node = graph.getGItemFactory().createNode(graph, type, x, y, text);
 		
 		// create new connection between these nodes from item factory //
-		graph.getItemFactory().createConnection(graph, this, node, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
+		graph.getGItemFactory().createConnection(graph, this, node, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
 		
 		return node;
 	}
@@ -161,12 +199,38 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	
 	public int getBackgroundStroke()
     {
-        return backgroundStroke;
+        return colorStroke;
     }
 
     public void setBackgroundStroke(int backgroundStroke)
     {
-        this.backgroundStroke = backgroundStroke;
+        this.colorStroke = backgroundStroke;
+    }
+    
+    public void setBackgroundStyle(TAMENodeControl.BackgroundStyle style){
+    	
+    	Resources res = graph.getResources();
+    	if(BackgroundStyle.BLUE == style){
+    		backgroundStyle = style;
+    		setColorBackground(res.getColor(R.color.node_background_1));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_1));
+    	}else if(BackgroundStyle.GREEN == style){
+    		backgroundStyle = style;
+    		setColorBackground(res.getColor(R.color.node_background_2));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_2));
+    	}else if(BackgroundStyle.RED == style){
+    		backgroundStyle = style;
+    		setColorBackground(res.getColor(R.color.node_background_3));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_3));
+    	}else if(BackgroundStyle.PURPLE == style){
+    		backgroundStyle = style;
+    		setColorBackground(res.getColor(R.color.node_background_4));
+    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_4));
+    	}
+    }
+    
+    public TAMENodeControl.BackgroundStyle getBackgroundStyle(){
+    	return backgroundStyle;
     }
 
     public void setSelected(boolean enable) {
@@ -194,37 +258,36 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 		if(isEnabled != enable) {
 			
-			for(ITAMGConnection parentConnection : listOfParentConnections) {
-				ITAMGNode parentNode = parentConnection.getParentNode();
-				if(parentNode.isEnabled() != enable) {
-					if(enable) {
-						graph.listOfDrawableItems.add(parentConnection);
-					} else {
-						graph.listOfDrawableItems.remove(parentConnection);
-					}
-					parentConnection.setEnabled(enable);
-				}
-			}
-			
-			for(ITAMGConnection childConnection : listOfChildConnections) {
-				ITAMGNode childNode = childConnection.getChildNode();
-				if(childNode.isEnabled() != enable) {
-					if(enable) {
-						graph.listOfDrawableItems.add(childConnection);
-					} else {
-						graph.listOfDrawableItems.remove(childConnection);
-					}
-					childConnection.setEnabled(enable);
-				}
-			}
-			
+			this.isEnabled = enable;
 			if(enable) {
 				graph.listOfDrawableItems.add(this);
 			} else {
 				graph.listOfDrawableItems.remove(this);
 			}
 			
-			this.isEnabled = enable;
+			for(ITAMGConnection parentConnection : listOfParentConnections) {
+				//ITAMGNode parentNode = parentConnection.getParentNode();
+				//if(parentNode.isEnabled() != enable) {
+				//	if(enable) {
+				//		graph.listOfDrawableItems.add(parentConnection);
+				//	} else {
+				//		graph.listOfDrawableItems.remove(parentConnection);
+				//	}
+					parentConnection.setEnabled(enable);
+				//}
+			}
+			
+			for(ITAMGConnection childConnection : listOfChildConnections) {
+				//ITAMGNode childNode = childConnection.getChildNode();
+				//if(childNode.isEnabled() != enable) {
+				//	if(enable) {
+				//		graph.listOfDrawableItems.add(childConnection);
+				//	} else {
+				//		graph.listOfDrawableItems.remove(childConnection);
+				//	}
+					childConnection.setEnabled(enable);
+				//}
+			}
 		}
 	}
 	
@@ -246,27 +309,27 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		paint.setStyle(Paint.Style.FILL);
 		
 		if(isHighlited) {
-			paint.setColor(highlightColor);
+			paint.setColor(colorBackgroundHighlight);
 		} else {
-			paint.setColor(background);
+			paint.setColor(colorBackground);
 		}
 					
 		super.onDraw(shape, canvas, paint);
 		
-		paint.setStrokeWidth(STROKE_WIDTH);
+		paint.setStrokeWidth(STROKE_WIDTH[state]);
 		paint.setStyle(Paint.Style.STROKE);
 		
 		if(isHighlited) {
-			paint.setColor(highlightColorStroke);
+			paint.setColor(colorStrokeHighlight);
 		} else {
-			paint.setColor(backgroundStroke);
+			paint.setColor(colorStroke);
 		}
 		
 		super.onDraw(shape, canvas, paint);
 		
 		paint.setStyle(Paint.Style.FILL);
 		
-		paint.setColor(foreground);
+		paint.setColor(colorText);
 		canvas.drawText(text, offsetX, offsetY, paint);
 		
 	}

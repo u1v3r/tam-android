@@ -3,6 +3,8 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.R;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,9 +13,12 @@ import android.graphics.Point;
 public class TAMGDefaultConnection implements ITAMGConnection {
 	
 	private static final int type = CONNECTION_TYPE_DEFAULT;
-	private static final int HIGHLIGHT_COLOR = 0x7f040004;
-	private int background;
-	private int highlightColor;
+	private static final int HIGHLIGHT_COLOR = R.color.node_highlight_background;
+	private int colorBackground;
+	private int colorBackgroundHighlight;
+	private int colorText;
+	private int colorStrokeHighlight;
+	private int colorStroke;
 	private ITAMGNode parent;
 	private ITAMGNode child;
 	private TAMGraph graph;
@@ -35,8 +40,9 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		this.graph = graph;
 		this.parent = parent;
 		this.child = child;
-		this.background = Color.RED;
-		this.highlightColor = graph.getResources().getColor(HIGHLIGHT_COLOR);
+		this.colorBackground = Color.RED;
+		this.colorBackgroundHighlight = graph.getResources().getColor(HIGHLIGHT_COLOR);
+		this.colorStrokeHighlight = graph.getResources().getColor(R.color.node_highlight_background_stroke);
 		
 		this.isHighlighted = false;
 		this.isEnabled = true;
@@ -66,9 +72,9 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 
 		paint.setAntiAlias(true);
 		if(isHighlighted) {
-			paint.setColor(highlightColor);
+			paint.setColor(colorBackgroundHighlight);
 		} else {
-			paint.setColor(background);
+			paint.setColor(colorBackground);
 		}
 		
 		paint.setStrokeWidth(6);
@@ -89,6 +95,11 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 			paint.setColor(Color.BLACK);
 			
 			for(Point point : listOfMiddlePoints) {
+				if(point == selectedPoint) {
+					paint.setColor(Color.RED);
+				} else {
+					paint.setColor(colorStrokeHighlight);
+				}
 				canvas.drawRect(point.x-10, point.y-10, point.x+10, point.y+10, paint);
 			}
 		}
@@ -159,21 +170,45 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		}
 		return false;
 	}
-
-	public void setBackground(int background) {
-		this.background = background;
+	
+	public int getColorBackground() {
+		return colorBackground;
+	}
+	
+	public void setColorBackground(int color) {
+		this.colorBackground = color;
+	}
+	
+	public int getColorBackgroundHighlight() {
+		return colorBackgroundHighlight;
+	}
+	
+	public void setColorBackgroundHighlight(int color) {
+		this.colorBackgroundHighlight = color;
+	}
+	
+	public int getColorText() {
+		return colorText;
 	}
 
-	public int getBackground() {
-		return background;
+	public void setColorText(int color) {
+		this.colorText = color;
 	}
 
-	public void setHighlightColor(int highlightColor) {
-		this.highlightColor = highlightColor;
+	public int getColorStrokeHighlight() {
+		return colorStrokeHighlight;
 	}
 
-	public int getHighlightColor() {
-		return highlightColor;
+	public void setColorStrokeHighlight(int color) {
+		this.colorStrokeHighlight = color;
+	}
+
+	public int getColorStroke() {
+		return colorStroke;
+	}
+
+	public void setColorStroke(int strokeColor) {
+		this.colorStroke = strokeColor;
 	}
 	
 	public void setHighlighted(boolean enable) {
@@ -210,17 +245,28 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		
 		if(isEnabled != enable) {
 			
-			if(enable) {
+			if(enable && parent.isEnabled() && child.isEnabled()) {
 				graph.listOfDrawableItems.add(this);
-			} else {
+				
+				// move nodes above connection //
+				//if(parent.isEnabled()) {
+					graph.listOfDrawableItems.remove(parent);
+					graph.listOfDrawableItems.add(parent);
+				//}
+				//if(child.isEnabled()) {
+					graph.listOfDrawableItems.remove(child);
+					graph.listOfDrawableItems.add(child);
+				//}
+				isEnabled = true;
+			} else /*if(!enable && (!parent.isEnabled() || !child.isEnabled()))*/ {
 				graph.listOfDrawableItems.remove(this);
+				isEnabled = false;
 			}
 			
-			parent.setEnabled(enable);
-			child.setEnabled(enable);
+			//parent.setEnabled(enable);
+			//child.setEnabled(enable);
+			//isEnabled = enable;
 		}
-		
-		isEnabled = enable;
 	}
 
 	public boolean isEnabled() {
@@ -245,16 +291,6 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		}
 	}
 
-	public void setForeground(int foreground) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public int getForeground() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	public Point getSelectedPoint() {
 		return selectedPoint;
 	}
@@ -267,28 +303,29 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 			return false;
 		}
 	}
-
-	public void setSelectedPoint(float x, float y) {
+	
+	public void modifySelectedPoint() {
 		
-		if(laysNearPoint((int) x, (int) y, from)) {
-			selectedPoint = from;
-		} else if(laysNearPoint((int) x, (int) y, to)) {
-			selectedPoint = to;
+		if(listOfMiddlePoints.contains(selectedPoint)) {
+			listOfMiddlePoints.remove(selectedPoint);
 		} else {
 			int newX;
 			int newY;
+			float width = Math.abs(from.x-to.x);
+			float height = Math.abs(from.y-to.y);
 			
-			if(from.x > to.x-OFFSET && from.x < to.x+OFFSET) {
-				newY = (int) y;
-				float t = getLineParameter(y, from.y, to.y);
+			if(width/height < 0.2f) {
+				System.out.println("same Y");
+				newY = (int) selectedPoint.y;
+				float t = getLineParameter(selectedPoint.y, from.y, to.y);
 				newX = (int) (from.x+t*(to.x-from.x));
-			} else if(from.y > to.y-OFFSET && from.y < to.y+OFFSET) {
-				newX = (int) x;
-				float t = getLineParameter(x, from.x, to.x);
+			} else if(height/width < 0.2f) {
+				newX = (int) selectedPoint.x;
+				float t = getLineParameter(selectedPoint.x, from.x, to.x);
 				newY = (int) (from.y+t*(to.y-from.y));
 			} else {
-				float left = getLineParameter(x, from.x, to.x);
-				float right = getLineParameter(y, from.y, to.y);
+				float left = getLineParameter(selectedPoint.x, from.x, to.x);
+				float right = getLineParameter(selectedPoint.y, from.y, to.y);
 				
 				//float left1 = left-(left*0.2f);
 				//float left2 = left+(left*0.2f);
@@ -324,6 +361,20 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		}
 	}
 
+	public boolean selectPoint(float x, float y) {
+		
+		if(laysNearPoint((int) x, (int) y, from)) {
+			selectedPoint = from;
+		} else if(laysNearPoint((int) x, (int) y, to)) {
+			selectedPoint = to;
+		} else {
+			selectedPoint = new Point((int)x, (int)y);
+			return false;
+		}
+		
+		return true;
+	}
+
 	public void setHelpObject(Object object) {
 		this.object = object;
 	}
@@ -338,6 +389,16 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		this.child = null;
 		this.selectedPoint = null;
 		this.listOfMiddlePoints.clear();
+	}
+
+	public String getText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setText(String text) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,9 +1,13 @@
 package cz.vutbr.fit.testmind.profile;
 
+import java.io.Serializable;
+
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 
-public class TAMPConnection extends TAMPItem {
+public class TAMPConnection extends TAMPItem implements Serializable {
+	
+	private static final long serialVersionUID = 7589667439972717917L;
 	
 	private int id;
 	private TAMPNode parent;
@@ -19,6 +23,10 @@ public class TAMPConnection extends TAMPItem {
 		this.id = id;
 		this.parent = parent;
 		this.child = child;
+		if(parent != null) {
+			parent.listOfChildNodes.add(child);
+		}
+		child.parent = parent;
 	}
 	
 	public int getId() {
@@ -54,30 +62,4 @@ public class TAMPConnection extends TAMPItem {
 		parent = null;
 		child = null;
 	}
-	
-	public boolean connectsSomething(ITAMEditor editor) {
-		
-		return (parent.getEReference(editor) != null && child.getEReference(editor) != null);
-	}
-	
-	public ITAMEConnection addEReference(ITAMEditor editor) {
-		if(connectsSomething(editor) && !editorReferences.containsKey(editor)) {
-			ITAMEConnection eConnection = editor.createConnection(this);
-			editorReferences.put(editor, eConnection);
-			return eConnection;
-		} else {
-			return null;
-		}
-	}
-	
-	public ITAMEConnection addEReference(ITAMEditor editor, int type) {
-		if(connectsSomething(editor) && !editorReferences.containsKey(editor)) {
-			ITAMEConnection eConnection = editor.createConnection(this, type);
-			editorReferences.put(editor, eConnection);
-			return eConnection;
-		} else {
-			return null;
-		}
-	}
-
 }

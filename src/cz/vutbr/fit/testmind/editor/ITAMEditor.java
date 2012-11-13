@@ -3,21 +3,34 @@ package cz.vutbr.fit.testmind.editor;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
+import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGItemFactory;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public interface ITAMEditor {
+	
+	public TAMProfile getProfile();
+	
+	public void setVisibility(int gone);
+	
+	public int getMode();
 	
 	public ITAMENode createNode(TAMPNode profile, int x, int y);
 
@@ -37,7 +50,17 @@ public interface ITAMEditor {
 	
 	public boolean onOptionsItemSelected(MenuItem item);
 	
+	public void onActivityResult(int requestCode, int resultCode, Intent data);
+	
+	public void reset();
+	
+	public List<ITAMMenuListener> getListOfMenuControls();
+	
+	public List<ITAMButtonListener> getListOfButtonControls();
+	
 	// TAMGraph functions //
+	
+	public TAMGItemFactory getGItemFactory();
 	
 	public ITAMGNode getLastSelectedNode();
 	
@@ -51,7 +74,11 @@ public interface ITAMEditor {
 
 	public List<ITAMItemListener> getListOfItemControls();
 	
-	public List<ITAMMenuListener> getListOfMenuControls();
+	public List<ITAMItemGestureListener> getListOfItemGestureControls();
+	
+	public List<OnActivityResultListener> getListOfOnActivityResultControls();
+	
+	public List<ITAMGItem> getListOfSelectedItems();
 	
 	// Surface View functions //
 
@@ -64,4 +91,9 @@ public interface ITAMEditor {
 	public void invalidate();
 	
 	public TAMGZoom getZoom();
+	
+	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
+	
+	public void unselectAll();
+	
 }

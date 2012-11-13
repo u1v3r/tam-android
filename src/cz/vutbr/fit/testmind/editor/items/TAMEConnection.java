@@ -1,9 +1,9 @@
 package cz.vutbr.fit.testmind.editor.items;
 
-import cz.vutbr.fit.testmind.editor.TAMEditor;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 
 public class TAMEConnection implements ITAMEConnection {
@@ -13,14 +13,14 @@ public class TAMEConnection implements ITAMEConnection {
 	private TAMPConnection profile;
 	private static int defaultType = ITAMGConnection.CONNECTION_TYPE_DEFAULT;
 	
-	public TAMEConnection(TAMEditor editor, TAMPConnection profile) {
+	public TAMEConnection(ITAMEditor editor, TAMPConnection profile) {
 		this(editor, profile, defaultType);
 	}
 	
-	public TAMEConnection(TAMEditor editor, TAMPConnection profile, int type) {
+	public TAMEConnection(ITAMEditor editor, TAMPConnection profile, int type) {
 		this.editor = editor;
 		this.profile = profile;
-		this.gui = editor.getItemFactory().createConnection(editor,
+		this.gui = editor.getGItemFactory().createConnection((TAMGraph)editor,
 				(ITAMGNode) (((ITAMEItem) (profile.getParent().getEReference(editor))).getGui()),
 				(ITAMGNode) (((ITAMEItem) (profile.getChild().getEReference(editor))).getGui()), type);
 		this.gui.setHelpObject(this);
@@ -47,6 +47,7 @@ public class TAMEConnection implements ITAMEConnection {
 	}
 
 	public void dispose() {
+		editor.getListOfEConnections().remove(this);
 		gui.dispose();
 		gui = null;
 		editor = null;

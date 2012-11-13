@@ -1,28 +1,30 @@
 package cz.vutbr.fit.testmind.profile;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.ITAMENode;
-
-public class TAMPNode extends TAMPItem {
+public class TAMPNode extends TAMPItem implements Serializable{
+	
+	private static final long serialVersionUID = 8313169869686450190L;
 	
 	private int id;
 	private String title;
 	private String body;
-	private List<TAMPNode> listOfChildNodes;
-	private TAMPNode parent;
+	protected List<TAMPNode> listOfChildNodes;
+	protected TAMPNode parent;
 	
 	private static int counter = 0;
 	
-	public TAMPNode(String title, String body) {
-		this(title, body, getNewSequenceNumber());
+	public TAMPNode(String title, String htmlBody) {
+		this(title, htmlBody, getNewSequenceNumber());
 	}
 	
-	public TAMPNode(String title, String body, int id) {
+	public TAMPNode(String title, String htmlBody, int id) {		
 		this.id = id;
 		setTitle(title);
-		setBody(body);
+		setBody(htmlBody);
+		listOfChildNodes = new ArrayList<TAMPNode>();
 	}
 	
 	public String getTitle() {
@@ -36,9 +38,9 @@ public class TAMPNode extends TAMPItem {
 	public String getBody() {
 		return body;
 	}
-	
-	public void setBody(String body) {
-		this.body = body;
+		
+	public void setBody(String htmlBody){
+		this.body = htmlBody;
 	}
 	
 	public int getId() {
@@ -75,10 +77,14 @@ public class TAMPNode extends TAMPItem {
 	public void dispose() {
 		super.dispose();
 		
+		if(parent != null) {
+			parent.listOfChildNodes.remove(this);
+		}
+		
 		listOfChildNodes.clear();
 		parent = null;
 	}
-
+/*	
 	public ITAMENode addEReference(ITAMEditor editor, int x, int y) {
 		if(!editorReferences.containsKey(editor)) {
 			ITAMENode eNode = editor.createNode(this, x, y);
@@ -98,7 +104,7 @@ public class TAMPNode extends TAMPItem {
 			return null;
 		}
 	}
-
+*/
 	@Override
 	public String toString() {
 		return "TAMPNode [id=" + id + ", title=" + title + ", body=" + body

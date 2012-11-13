@@ -8,7 +8,9 @@ public interface ITAMGConnection extends ITAMGItem {
 	
 	public ITAMGNode getChildNode();
 	
-	public void setSelectedPoint(float x, float y);
+	public boolean selectPoint(float x, float y);
+	
+	public void modifySelectedPoint();
 	
 	public void moveSelectedPoint(int dx, int dy);
 }

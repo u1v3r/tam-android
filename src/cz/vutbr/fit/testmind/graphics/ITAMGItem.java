@@ -9,17 +9,29 @@ public interface ITAMGItem {
 	
 	public boolean hit(float x, float y);
 	
-	public void setBackground(int background);
+	public void setColorBackground(int color);
+		
+	public int getColorBackground();
 	
-	public int getBackground();
+	public void setColorText(int color);
 	
-	public void setForeground(int foreground);
+	public int getColorText();
 	
-	public int getForeground();
+	public void setColorBackgroundHighlight(int color);
 	
-	public void setHighlightColor(int highlightColor);
+	public int getColorBackgroundHighlight();
 	
-	public int getHighlightColor();
+	public int getColorStroke();
+
+	public void setColorStroke(int color);
+	
+	public int getColorStrokeHighlight();
+
+	public void setColorStrokeHighlight(int color);
+	
+	public String getText();
+	
+	public void setText(String text);
 
 	public void move(int dx, int dy);
 	

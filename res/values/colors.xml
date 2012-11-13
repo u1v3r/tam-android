@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="drawing_surface">#EEEEEE</color>
-    <color name="node_background">#50C0E9</color>
-    <color name="node_background_stroke">#0099CC</color>
-    <color name="node_highlight_background">#FFC641</color>
-    <color name="node_highlight_background_stroke">#FF9909</color>
-    <color name="node_text">#FFFFFF</color>    
+<resources>   
+    <color name="node_background_1">#33B5E5</color>
+    <color name="node_background_stroke_1">#0099CC</color>
+    
+    <color name="node_background_2">#99CC00</color>
+    <color name="node_background_stroke_2">#669900</color>
+    
+    <color name="node_background_3">#FF4444</color>
+    <color name="node_background_stroke_3">#CC0000</color>
+    
+    <color name="node_background_4">#AA66CC</color>
+    <color name="node_background_stroke_4">#9933CC</color>
+    
+    <color name="node_highlight_background">#FFBB33</color>
+    <color name="node_highlight_background_stroke">#FF8800</color>
+    
+    <color name="node_text">#FFFFFF</color>
+    
+    <color name="drawing_surface">#EEEEEE</color>  
+    
+    <color name="white">#FFFFFF</color>
+    <color name="toolbar_background">#222222</color>
+
+    <color name="testing_background_path">#616370</color>
+    <color name="testing_foreground_path">#FFFFFF</color>
 </resources>
