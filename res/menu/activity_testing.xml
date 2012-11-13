@@ -3,5 +3,5 @@
     <item android:id="@+id/explore" android:title="@string/menu_explore" android:checkable="true"></item>
     <item android:id="@+id/test" android:title="@string/menu_test" android:checkable="true" android:checked="true"></item>
     
-
+    <item android:id="@+id/testingActionControl" android:title="@string/testing_control_show_answer" android:showAsAction="always|withText"></item>
 </menu>
