@@ -7,18 +7,15 @@ import cz.vutbr.fit.testmind.layout.FlowLayout;
 import cz.vutbr.fit.testmind.testing.TestingNode;
 import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
-import android.R.layout;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 /**
@@ -39,6 +36,8 @@ public class TestingActivity extends FragmentActivity {
     private int currentIndex;
     
     private MenuItem controlAction;
+    private MenuItem menuExplore;
+    private MenuItem menuTest;
     private FlowLayout pathView;
     private FlowLayout childsView;
     private WebView bodyView;
@@ -72,6 +71,8 @@ public class TestingActivity extends FragmentActivity {
         getMenuInflater().inflate(R.menu.activity_testing, menu);
         
         controlAction = menu.findItem(R.id.testingActionControl).setVisible(true);
+        menuExplore = menu.findItem(R.id.explore);
+        menuTest = menu.findItem(R.id.test);
         
         return true;
     }
@@ -93,7 +94,23 @@ public class TestingActivity extends FragmentActivity {
                 showAnswer();
             }
         }
-
+        else if(menuExplore.getItemId() == id && mode == ActivityMode.TEST)
+        {
+            mode = ActivityMode.EXPLORE;
+            menuExplore.setChecked(true);
+            menuTest.setChecked(false);
+            controlAction.setVisible(false);
+            setNode(node);
+        }
+        else if(menuTest.getItemId() == id && mode == ActivityMode.EXPLORE)
+        {
+            mode = ActivityMode.TEST;
+            menuExplore.setChecked(false);
+            menuTest.setChecked(true);
+            controlAction.setVisible(true);
+            startTesting();
+        }
+        
         return true;
     }
     
@@ -199,10 +216,14 @@ public class TestingActivity extends FragmentActivity {
      */
     private void loadBody()
     {
+        bodyView.loadData("", "text/html; charset=UTF-8", null);
         if(mode == ActivityMode.TEST)
         {
-            bodyView.loadData("", "text/html; charset=UTF-8", null);
             bodyView.setVisibility(View.GONE);
+        }
+        else if(mode == ActivityMode.EXPLORE)
+        {
+            bodyView.setVisibility(View.VISIBLE);
         }
         
         // load data
@@ -219,6 +240,10 @@ public class TestingActivity extends FragmentActivity {
         if(mode == ActivityMode.TEST)
         {
             childsView.setVisibility(View.GONE);
+        }
+        else if(mode == ActivityMode.EXPLORE)
+        {
+            childsView.setVisibility(View.VISIBLE);
         }
 
         // append childs
