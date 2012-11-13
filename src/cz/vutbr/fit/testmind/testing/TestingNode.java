@@ -2,18 +2,17 @@ package cz.vutbr.fit.testmind.testing;
 
 import java.util.ArrayList;
 
+
 public class TestingNode
 {
     private String title;
     private String body;
     private TestingNode parent;
-    private ArrayList<TestingNode> childs;
+    private ArrayList<TestingNode> childs = new ArrayList<TestingNode>();
 
     public TestingNode(String title, String body)
     {
-        this.parent = null;
-        this.title = title;
-        this.body = body;
+        this(title, body, null);
     }
     
     public TestingNode(String title, String body, TestingNode parent)
@@ -38,15 +37,20 @@ public class TestingNode
         return parent;
     }
 
+    public void setParent(TestingNode parent)
+    {
+        this.parent = parent;
+    }
+
     public ArrayList<TestingNode> getChilds()
     {
         return childs;
     }
     
-    public TestingNode appendChild(String title, String body)
+    public TestingNode appendChild(TestingNode node)
     {
-        TestingNode child = new TestingNode(title, body, this);
-        childs.add(child);
-        return child;
+        node.setParent(this);
+        childs.add(node);
+        return node;
     }
 }

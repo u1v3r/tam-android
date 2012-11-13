@@ -1,25 +1,26 @@
 package cz.vutbr.fit.testmind.io;
 
-import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
-import cz.vutbr.fit.testmind.editor.items.ITAMEItem;
-import cz.vutbr.fit.testmind.editor.items.ITAMENode;
-import cz.vutbr.fit.testmind.graphics.ITAMGNode;
-import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
-import cz.vutbr.fit.testmind.graphics.TAMGZoom;
-import cz.vutbr.fit.testmind.profile.TAMPConnection;
-import cz.vutbr.fit.testmind.profile.TAMPNode;
-import cz.vutbr.fit.testmind.profile.TAMProfile;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.util.SparseArray;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
+import cz.vutbr.fit.testmind.editor.items.ITAMEItem;
+import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
+import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGZoom;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
  * class for serializing 
@@ -329,6 +330,7 @@ public class Serializer
         int id = cur.getInt(indexes.get("id"));
         
         SparseArray<TAMPNode> nodes = new SparseArray<TAMPNode>();
+        
         nodes.put(id, profile.importRoot(title, body, id));
         
         return nodes;
@@ -384,6 +386,7 @@ public class Serializer
             String title = cur.getString(indexes.get("title"));
             String body = cur.getString(indexes.get("body"));
             
+           
             nodes.append(id, profile.importNode(title, body, id));
         }
     }
@@ -432,7 +435,7 @@ public class Serializer
             int type = cur.getInt(indexes.get("type"));
             int x = cur.getInt(indexes.get("x"));
             int y = cur.getInt(indexes.get("y"));
-            ITAMGNode gNode = node.addEReference(editor, x, y, type).getGui();
+            ITAMGNode gNode = TAMPConnectionFactory.addEReference(node, editor, x, y).getGui();
             
             gNode.setColorBackground(cur.getInt(indexes.get("background")));
             gNode.setBackgroundStroke(cur.getInt(indexes.get("backgroundStroke")));
@@ -458,7 +461,8 @@ public class Serializer
             TAMPConnection connection = connections.get(cur.getInt(indexes.get("connection")));
             ITAMEditor editor = editors.get(cur.getString(indexes.get("editor")));
             int type = cur.getInt(indexes.get("type"));
-            ITAMGConnection gConnection = connection.addEReference(editor, type).getGui();
+            
+            ITAMGConnection gConnection = TAMPConnectionFactory.addEReference(connection, editor, type).getGui();
             
             gConnection.setColorBackground(cur.getInt(indexes.get("background")));
             gConnection.setColorBackgroundHighlight(cur.getInt(indexes.get("highlightColor")));

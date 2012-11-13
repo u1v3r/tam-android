@@ -1,7 +1,10 @@
 package cz.vutbr.fit.testmind;
 
+import java.io.Serializable;
+import java.util.List;
+
 import android.content.Intent;
-import android.net.Uri;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -10,12 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.TAMEditorTest;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
+import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 public class MainActivity extends FragmentActivity {
 	
@@ -74,18 +79,24 @@ public class MainActivity extends FragmentActivity {
 	}
 		
 	private static final String TAG = "MainActivity";
+	private static final String CONNECTION_LIST = "connections";
+	private static final String NODES_LIST = "nodes";
+	
 	private ITAMEditor actualEditor;
+	private List<TAMPNode> listOfNodes;
+	private List<TAMPConnection> listOfConnections;
 	
 	private static TAMProfile profile;
-	private static MainActivity mainActivityInstance;	
 	
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {    	
-    	super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);	
+    	   	
     	
     	//if(profile != null) {
     		profile = new TAMProfile();
-    	//}
+    	//}		
+    	  	
     	
     	setContentView(R.layout.activity_main);
     	
@@ -111,8 +122,58 @@ public class MainActivity extends FragmentActivity {
 		// initialize editors //
     	EventObjects.editor_main.initialize(profile);
     	EventObjects.editor_test.initialize(profile);
+    }
+	
+	/**
+	 * Po otoceni zariadenia nevymaze obsah
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {		
+		
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		Log.d(TAG,"velkost  pred: " + profile.getListOfPNodes().size());
+		
+		listOfNodes = (List<TAMPNode>) savedInstanceState.getSerializable(NODES_LIST);
+    	listOfConnections = (List<TAMPConnection>) savedInstanceState.getSerializable(CONNECTION_LIST);
     	
-    	mainActivityInstance = this;
+    	
+    	Log.d(TAG, "saved instance initialization:" + listOfNodes.size());
+    	
+    	if(listOfNodes.size() < 1) return;
+    	
+    	TAMPNode rootNode = listOfNodes.get(0);
+    	      
+    	/*
+    	profile.importRoot(rootNode.getTitle(), rootNode.getBody(), rootNode.getId());
+    	
+    	for (int i = 1; i < listOfNodes.size(); i++) {
+    		TAMPNode node = listOfNodes.get(0);
+			profile.importNode(node.getTitle(), node.getBody(), node.getId());
+			
+		}        	
+    	
+    	for (TAMPConnection conn : listOfConnections) {
+			profile.importConnection(conn.getParent(), conn.getChild(), conn.getId());
+		}
+    	*/
+    	EventObjects.editor_main.invalidate();
+		
+	}
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	
+    	outState.putSerializable(NODES_LIST, (Serializable)profile.getListOfPNodes());
+    	outState.putSerializable(CONNECTION_LIST, (Serializable)profile.getListOfPConnections());
+    	
+    	super.onSaveInstanceState(outState);
     }
         
     @Override
@@ -144,7 +205,12 @@ public class MainActivity extends FragmentActivity {
 				actualEditor.setVisibility(View.VISIBLE);
 			}
 		} else if(MenuItems.test_content == id){
-			// TODO: open another activity //
+	        Intent i = new Intent(this, TestingActivity.class);
+	        
+	        TestingParcelable nodeParcelable = new TestingParcelable(MainActivity.getProfile().getRoot());
+	        i.putExtra("cz.vutbr.fit.testmind.testing.TestingParcelable", nodeParcelable);
+	        
+	        this.startActivity(i);
 		} else {
 			EventObjects.editor_main.onOptionsItemSelected(item);
 			return super.onOptionsItemSelected(item);
@@ -164,8 +230,4 @@ public class MainActivity extends FragmentActivity {
 	public static TAMProfile getProfile() {
 		return profile;
 	}
-	
-    public static MainActivity getMainActivityInstance() {
-        return mainActivityInstance;
-    }
 }

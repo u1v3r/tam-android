@@ -1,7 +1,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="android:Theme.Holo" />
-    <style name="button_style" parent="android:style/Widget.Holo.Light.Button.Borderless.Small"></style>
+    <style name="button_style" 
+        parent="android:style/Widget.Holo.Light.Button.Borderless.Small">
+    </style>
 	  
     
     <style name="AppThemeEmptyActionBar" parent="android:Theme.Holo.Light" >
