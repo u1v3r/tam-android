@@ -2,35 +2,33 @@ package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
-import cz.vutbr.fit.testmind.editor.controls.TAMEActivityControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.ITAMNodeControlListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
-import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.ITAMNodeControlListener;
-import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
-import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
-import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
-import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
-import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
  * Obsahuje zakladne funkcie na pracu s grafom 
  *
  */
-public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, ITAMRootControlListener, ITAMNodeControlListener {
+public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, 
+	ITAMRootControlListener, ITAMNodeControlListener {
 	
 	private static final String TAG = "TAMEditor";
 	
@@ -51,8 +49,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		if(hasRoot) {
 			return false;
 		} else {
-			TAMPNode pNode = MainActivity.getProfile().createRoot("", "");
-			ITAMENode eNode = pNode.addEReference(this, x, y);
+			TAMPNode pNode = MainActivity.getProfile().createRoot("", "");			
+			ITAMENode eNode = TAMPConnectionFactory.addEReference(pNode, this, x, y);
 			eNode.getGui().setSelected(true);
 			
 			this.hasRoot = true;
@@ -67,10 +65,10 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	}
 
 	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY) {
-		TAMPNode newProfileNode = profile.createNode(title, body);
-		ITAMENode newEditorNode = newProfileNode.addEReference(this, posX, posY);
-		TAMPConnection pConnection = profile.createConnection(parent.getProfile(), newProfileNode);
-		pConnection.addEReference(this);		
+		TAMPNode newProfileNode = profile.createNode(title, body);		
+		ITAMENode newEditorNode = TAMPConnectionFactory.addEReference(newProfileNode, this, posX, posY);
+		TAMPConnection pConnection = profile.createConnection(parent.getProfile(), newProfileNode);		
+		TAMPConnectionFactory.addEReference(pConnection, this);		
 		newEditorNode.getGui().setBackgroundStyle(parent.getGui().getBackgroundStyle());
 		
 		return newEditorNode;
@@ -120,7 +118,6 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		new TAMEIOControl(this);
 		new TAMEHidingControl(this);
 		new TAMEToolbarContol(this);
-		new TAMEActivityControl(this);
 		new TAMERootInitializeControl(this);
 		
 		mode = MenuItems.create_mode;

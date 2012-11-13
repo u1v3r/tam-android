@@ -1,0 +1,10 @@
+  * graphics library
+    - long press --
+    - edges points --
+      - color --
+      - add/remove (long press) --
+      - offset area due to zoom
+    - node type a and style
+    - repaint
+  * menu
+  * color styles!

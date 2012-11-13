@@ -1,5 +1,8 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
@@ -14,19 +17,19 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 
 /**
  * Stara sa o zakladne operacie s uzlom (pridanie, odstranenie, uprava)
- * 
- * @author Radovan Dvorsky
- *
  */
 public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
-                                                                     ITAMTouchListener, OnActivityResultListener {	
+                                                                     ITAMTouchListener, OnActivityResultListener,
+                                                                     ITAMItemListener{
 	
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
@@ -47,6 +50,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	
 	private boolean creatingByGesture = false;
 	private boolean waitingForClick = false;
+	private List<TAMENode> listOfSelectedNodes;
 	private float x,y;
 	
 	public TAMENodeControl(ITAMNodeControlListener editor) {
@@ -58,7 +62,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
+		editor.getListOfItemControls().add(this);		
 		editor.getListOfButtonControls().add(this);
+		
+		listOfSelectedNodes = new ArrayList<TAMENode>();
 	}
 	
 	/**
@@ -194,10 +201,21 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			String nodeBody = data.getStringExtra(NODE_BODY);
 			BackgroundStyle nodeColor = (BackgroundStyle)data.getSerializableExtra(NODE_COLOR);
 			
-			selectedNode.getGui().setText(nodeTitle);
-			selectedNode.getProfile().setTitle(nodeTitle);
-			selectedNode.getProfile().setBody(nodeBody);				
-			selectedNode.getGui().setBackgroundStyle(nodeColor);
+			// musi byt vybrany prave jeden uzol
+			if(listOfSelectedNodes.size() != 1) return true; 
+			
+			TAMENode selectedNodeFromList = listOfSelectedNodes.get(0);
+			
+			if(nodeTitle != null){				
+				selectedNodeFromList.getGui().setText(nodeTitle);
+				selectedNodeFromList.getProfile().setTitle(nodeTitle);				
+			}
+			
+			if(nodeBody != null){								
+				selectedNodeFromList.getProfile().setBody(nodeBody);				
+			}
+						
+			selectedNodeFromList.getGui().setBackgroundStyle(nodeColor);
 				
 			editor.invalidate();
 		}
@@ -225,7 +243,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	}*/
 
 	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
-		
 		x = ge.dx;
 		y = ge.dy;
 		
@@ -241,6 +258,18 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		}
 	}
 
+	public void onItemSelectEvent(ITAMGItem item, boolean selection) {		
+			
+		synchronized (listOfSelectedNodes) {			
+			if(selection){
+				listOfSelectedNodes.add((TAMENode)item.getHelpObject());
+			}
+			else {
+				listOfSelectedNodes.remove((TAMENode)item.getHelpObject());
+			}
+		}		
+	}
+
 	public void onButtonSelected(View item) {
 		
 		if(item == EventObjects.btn_add) {
@@ -250,5 +279,15 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		} else if(item == EventObjects.btn_delete) {
 			
 		}
+	}
+
+	public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onItemMoveEvent(MotionEvent e, TAMGMotionEvent ge) {
+		// TODO Auto-generated method stub
+		
 	}
 }

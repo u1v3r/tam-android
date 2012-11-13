@@ -6,3 +6,4 @@ gen/cz/vutbr/fit/testmind/R.java
 *.swp
 class_diagram*
 *~
+gen/com/commonsware/cwac/richedit/R.java
