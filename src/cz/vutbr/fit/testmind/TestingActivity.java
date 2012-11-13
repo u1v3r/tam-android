@@ -199,15 +199,14 @@ public class TestingActivity extends FragmentActivity {
      */
     private void loadBody()
     {
-        bodyView.clearView();
         if(mode == ActivityMode.TEST)
         {
-            bodyView.setVisibility(View.INVISIBLE);
+            bodyView.loadData("", "text/html; charset=UTF-8", null);
+            bodyView.setVisibility(View.GONE);
         }
         
-        String body = node.getBody();
         // load data
-        bodyView.loadDataWithBaseURL(null, String.format(HTML, body), "text/html", "UTF-8", null);
+        bodyView.loadData(String.format(HTML, node.getBody()), "text/html; charset=UTF-8", null);
     }
     
     /**
@@ -219,7 +218,7 @@ public class TestingActivity extends FragmentActivity {
         
         if(mode == ActivityMode.TEST)
         {
-            childsView.setVisibility(View.INVISIBLE);
+            childsView.setVisibility(View.GONE);
         }
 
         // append childs
