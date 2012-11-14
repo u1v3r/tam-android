@@ -1,7 +1,10 @@
 package cz.vutbr.fit.testmind.profile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.os.Environment;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
@@ -11,6 +14,8 @@ public class TAMProfile {
 	protected List<TAMPConnection> listOfPConnections;
 	protected List<ITAMEditor> listOfEditors;
 	protected TAMPNode root;
+	
+	public static final File TESTMIND_DIRECTORY = createCardPath();
 	
 	public TAMProfile() {
 		listOfPNodes = new ArrayList<TAMPNode>();
@@ -215,5 +220,18 @@ public class TAMProfile {
 		public TAMItemException(String s) {
 			super(s);
 		}
+	}
+	
+	private static File createCardPath()
+	{
+        File cardDirectory = new File(Environment.getExternalStorageDirectory().getPath()+"/TestMind");
+        if(!cardDirectory.exists())
+        {
+            if(!cardDirectory.mkdir())
+            {
+                cardDirectory = null;
+            }
+        }
+        return cardDirectory;
 	}
 }
