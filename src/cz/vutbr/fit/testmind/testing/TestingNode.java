@@ -2,7 +2,11 @@ package cz.vutbr.fit.testmind.testing;
 
 import java.util.ArrayList;
 
-
+/**
+ * class for nodes in testing
+ * @author jules
+ *
+ */
 public class TestingNode
 {
     private String title;
@@ -52,5 +56,26 @@ public class TestingNode
         node.setParent(this);
         childs.add(node);
         return node;
+    }
+    
+    /**
+     * return nodes which have childs or body is not empty
+     * @return
+     */
+    public ArrayList<TestingNode> getListTestingNodes()
+    {
+        ArrayList<TestingNode> result = new ArrayList<TestingNode>();
+        
+        if(childs.size() > 0 || !body.isEmpty())
+        {
+            result.add(this);
+        }
+        
+        for(TestingNode child: childs)
+        {
+            result.addAll(child.getListTestingNodes());
+        }
+        
+        return result;
     }
 }
