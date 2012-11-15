@@ -1,16 +1,24 @@
 package cz.vutbr.fit.testmind.profile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.os.Environment;
+import android.util.Log;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
 public class TAMProfile {
 	
+	private static final String TAG = "TAMProfile";
+	
 	protected List<TAMPNode> listOfPNodes;
 	protected List<TAMPConnection> listOfPConnections;
 	protected List<ITAMEditor> listOfEditors;
 	protected TAMPNode root;
+	
+	public static final File TESTMIND_DIRECTORY = createCardPath();
 	
 	public TAMProfile() {
 		listOfPNodes = new ArrayList<TAMPNode>();
@@ -78,6 +86,7 @@ public class TAMProfile {
 	}
 	
 	public TAMPNode importNode(String title, String body, int id) {
+				
 		for(TAMPNode node : listOfPNodes) {
 			if(node.getId() == id) {
 				throw new TAMItemException("Node with id " + id + " already exists");
@@ -215,5 +224,18 @@ public class TAMProfile {
 		public TAMItemException(String s) {
 			super(s);
 		}
+	}
+	
+	private static File createCardPath()
+	{
+        File cardDirectory = new File(Environment.getExternalStorageDirectory().getPath()+"/TestMind");
+        if(!cardDirectory.exists())
+        {
+            if(!cardDirectory.mkdir())
+            {
+                cardDirectory = null;
+            }
+        }
+        return cardDirectory;
 	}
 }

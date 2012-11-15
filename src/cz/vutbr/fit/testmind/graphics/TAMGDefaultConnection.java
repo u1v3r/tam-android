@@ -29,7 +29,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 	private boolean isSelected;
 	
 	private List<Point> listOfMiddlePoints;
-	private Point selectedPoint;
+    private Point selectedPoint;
 	
 	private Point from;
 	private Point to;
@@ -68,6 +68,17 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		return graph;
 	}
 
+    public List<Point> getListOfMiddlePoints()
+    {
+        return listOfMiddlePoints;
+    }
+
+    public void setListOfMiddlePoints(List<Point> listOfMiddlePoints)
+    {
+        this.listOfMiddlePoints = listOfMiddlePoints;
+    }
+
+	
 	public void draw(Canvas canvas, Paint paint) {
 
 		paint.setAntiAlias(true);

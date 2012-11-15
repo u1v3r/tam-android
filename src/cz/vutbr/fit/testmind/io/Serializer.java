@@ -1,16 +1,20 @@
 package cz.vutbr.fit.testmind.io;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import android.R.integer;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.util.SparseArray;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMEItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -48,11 +52,13 @@ public class Serializer
             "\"y\" int NOT NULL," +
             "\"background\" int," +
             "\"backgroundStroke\" int," +
+            "\"backgroundStyle\" TEXT," +
             "\"foreground\" int," +
             "\"highlightColor\" int," +
             "FOREIGN KEY(node) REFERENCES node(id)," +
             "FOREIGN KEY(editor) REFERENCES editor(id))";
     static private final String CREATE_TABLE_CONNECTION_REFERENCES = "CREATE TABLE \"connection_references\" (" +
+            "\"id\" INTEGER PRIMARY KEY," +
             "\"connection\" int NOT NULL," +
             "\"editor\" TEXT NOT NULL," +
             "\"type\" int NOT NULL," +
@@ -60,6 +66,12 @@ public class Serializer
             "\"highlightColor\" int," +
             "FOREIGN KEY(connection) REFERENCES connection(id)," +
             "FOREIGN KEY(editor) REFERENCES editor(id))";
+    static private final String CREATE_TABLE_CONNECTION_MIDDLEPOINTS = "CREATE TABLE \"connection_middlepoints\" (" +
+            "\"connection_reference\" int NOT NULL," +
+            "\"x\" int NOT NULL," +
+            "\"y\" int NOT NULL," +
+            "\"order_points\" int NOT NULL," +
+            "FOREIGN KEY(connection_reference) REFERENCES connection_references(id))";
     static private final String CREATE_TABLE_NODES = "CREATE TABLE \"nodes\" (" +
             "\"id\" int PRIMARY KEY NOT NULL," +
             "\"title\" TEXT NOT NULL," +
@@ -80,9 +92,10 @@ public class Serializer
     static private final String[] COLUMNS_NODES = {"id", "title", "body"};
     static private final String[] COLUMNS_CONNECTIONS = {"id", "parent", "child"};
     static private final String[] COLUMNS_NODE_REFERENCES = {"node", "editor", "type", "x", "y",
-                                                   "background", "backgroundStroke", "foreground", "highlightColor"};
-    static private final String[] COLUMNS_CONNECTION_REFERENCES = {"connection", "editor", "type",
+                                                   "background", "backgroundStroke", "backgroundStyle", "foreground", "highlightColor"};
+    static private final String[] COLUMNS_CONNECTION_REFERENCES = {"id", "connection", "editor", "type",
                                                                    "background", "highlightColor"};
+    static private final String[] COLUMNS_CONNECTION_MIDDLEPOINTS = {"connection_reference", "x", "y", "order_points"};
 
     
     private File fileDB;
@@ -175,7 +188,6 @@ public class Serializer
         // remove old database
         if(fileDB.exists())
         {
-            // TODO check journal
             fileDB.delete();
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(fileDB, null);
@@ -185,6 +197,7 @@ public class Serializer
         db.execSQL(CREATE_TABLE_CONNECTIONS);
         db.execSQL(CREATE_TABLE_NODE_REFERENCES);
         db.execSQL(CREATE_TABLE_CONNECTION_REFERENCES);
+        db.execSQL(CREATE_TABLE_CONNECTION_MIDDLEPOINTS);
         
         return db;
     }
@@ -265,8 +278,9 @@ public class Serializer
         values.put("x", position.x);
         values.put("y", position.y);
         values.put("background", gui.getColorBackground());
-        values.put("foreground", gui.getColorText());
         values.put("backgroundStroke", gui.getBackgroundStroke());
+        values.put("backgroundStyle", gui.getBackgroundStyle().toString());
+        values.put("foreground", gui.getColorText());
         values.put("highlightColor", gui.getColorBackgroundHighlight());
         
         db.insert("node_references", null, values);
@@ -308,7 +322,31 @@ public class Serializer
         values.put("background", gui.getColorBackground());
         values.put("highlightColor", gui.getColorBackgroundHighlight());
         
-        db.insert("connection_references", null, values);        
+        long id = db.insert("connection_references", null, values);
+        
+        insertConnectionMiddlepoints(db,gui.getListOfMiddlePoints(), id);
+    }
+    
+    /**
+     * insert middlepoints of connection to database
+     * @param db
+     * @param connection
+     * @param connection_id
+     */
+    private void insertConnectionMiddlepoints(SQLiteDatabase db, List<Point> points, long connectionId)
+    {
+        int size = points.size();
+        
+        for(int i=0; i < size; i++)
+        {
+            ContentValues values = new ContentValues();
+            values.put("connection_reference", connectionId);
+            values.put("x", points.get(i).x);
+            values.put("y", points.get(i).y);
+            values.put("order_points", i);
+            
+            db.insert("connection_middlepoints", null, values);   
+        }
     }
     
     /**
@@ -435,10 +473,11 @@ public class Serializer
             int type = cur.getInt(indexes.get("type"));
             int x = cur.getInt(indexes.get("x"));
             int y = cur.getInt(indexes.get("y"));
-            ITAMGNode gNode = TAMPConnectionFactory.addEReference(node, editor, x, y).getGui();
+            ITAMGNode gNode = TAMPConnectionFactory.addEReference(node, editor, x, y, type).getGui();
             
             gNode.setColorBackground(cur.getInt(indexes.get("background")));
             gNode.setBackgroundStroke(cur.getInt(indexes.get("backgroundStroke")));
+            gNode.setBackgroundStyle(BackgroundStyle.valueOf(cur.getString(indexes.get("backgroundStyle"))));
             gNode.setColorText(cur.getInt(indexes.get("foreground")));
             gNode.setColorBackgroundHighlight(cur.getInt(indexes.get("highlightColor")));
         }           
@@ -466,7 +505,27 @@ public class Serializer
             
             gConnection.setColorBackground(cur.getInt(indexes.get("background")));
             gConnection.setColorBackgroundHighlight(cur.getInt(indexes.get("highlightColor")));
+            
+            gConnection.setListOfMiddlePoints(getMiddlepoints(db, cur.getInt(indexes.get("id"))));
         }           
+    }
+    
+    private List<Point> getMiddlepoints(SQLiteDatabase db, int connectionId)
+    {
+        List<Point> result = new ArrayList<Point>();
+        
+        Cursor cur = db.query("connection_middlepoints", COLUMNS_CONNECTION_MIDDLEPOINTS, "connection_reference = ?",
+                              new String[] {Integer.toString(connectionId)}, null, null, "order_points");
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_CONNECTION_MIDDLEPOINTS);
+        
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            int x = cur.getInt(indexes.get("x"));
+            int y = cur.getInt(indexes.get("y"));
+            result.add(new Point(x, y));
+        }
+        
+        return result;
     }
     
     // static private methods =================================================

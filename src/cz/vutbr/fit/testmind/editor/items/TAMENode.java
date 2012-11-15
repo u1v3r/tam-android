@@ -112,5 +112,9 @@ public class TAMENode implements ITAMENode, ITAMHidingControlNode {
 		editor = null;
 		profile = null;
 	}
-
+	
+	@Override
+	public String toString() {
+		return getGui().getText();
+	}
 }

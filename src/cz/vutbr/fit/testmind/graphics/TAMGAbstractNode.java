@@ -63,6 +63,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.colorText = graph.getResources().getColor(R.color.node_text);
 		this.colorBackgroundHighlight = graph.getResources().getColor(R.color.node_highlight_background);
 		this.colorStrokeHighlight = graph.getResources().getColor(R.color.node_highlight_background_stroke);
+		this.backgroundStyle = BackgroundStyle.BLUE;
 		
 		this.isHighlited = false;
 		this.isEnabled = true;
