@@ -129,6 +129,8 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		switch (id) {
 			case MenuItems.create_mode:
 			case MenuItems.view_mode:
+			case MenuItems.show_result:
+			case MenuItems.next_question:
 				modeChanged(item);
 				break;
 			default:
@@ -157,12 +159,11 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		}
 	}
 	
-	@Override
-	public void setVisibility(int visibility) {
+	public void setEditorVisibility(int visibility) {
 		super.setVisibility(visibility);
-		actualizeModeMenu(visibility);
+		actualizeMenus(visibility);
 	}
 
-	protected abstract void actualizeModeMenu(int visibility);
+	protected abstract void actualizeMenus(int visibility);
 
 }

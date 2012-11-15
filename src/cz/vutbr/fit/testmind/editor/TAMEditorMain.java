@@ -34,6 +34,7 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	
 	private int mode;
 	private boolean hasRoot = false;
+	private boolean hasVisibleMenu = false;
 			
 	public TAMEditorMain(Context context) {
 		this(context, null);
@@ -52,6 +53,7 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 			TAMPNode pNode = MainActivity.getProfile().createRoot("", "");			
 			ITAMENode eNode = TAMPConnectionFactory.addEReference(pNode, this, x, y);
 			eNode.getGui().setSelected(true);
+			showToolbar();
 			
 			this.hasRoot = true;
 			
@@ -74,11 +76,13 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		return newEditorNode;
 	}
 	
-	public void showMenu() {
-		showMenu(mode);
+	public void showToolbar() {
+		showToolbar(mode);
 	}
 	
-	public void showMenu(int mode) {
+	private void showToolbar(int mode) {
+		
+		hasVisibleMenu = true;
 		
 		if(mode == MenuItems.create_mode) {
 			EventObjects.btn_add.setVisibility(VISIBLE);
@@ -94,7 +98,10 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		EventObjects.btn_zoom_out.setVisibility(GONE);
 	}
 	
-	public void hideMenu() {
+	public void hideToolbar() {
+		
+		hasVisibleMenu = false;
+		
 		if(mode == MenuItems.create_mode) {
 			//EventObjects.btn_add.startAnimation(EventObjects.animAlpha);
 			EventObjects.btn_add.setVisibility(GONE);
@@ -127,8 +134,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	@Override
 	protected void modeChanged(MenuItem item) {
 		int id = item.getItemId();
-		hideMenu();
-		showMenu(id);
+		hideToolbar();
+		showToolbar(id);
 		//Toast.makeText(editor.getContext(), item.getTitle().toString() + " " + getEditor().getResources().getText(R.string.mode_active), Toast.LENGTH_SHORT).show();
 		if(item == EventObjects.menu_create) {
 			EventObjects.menu.findItem(MenuItems.create_mode).setEnabled(false);
@@ -141,7 +148,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	}
 
 	@Override
-	protected void actualizeModeMenu(int visibility) {
+	protected void actualizeMenus(int visibility) {
+		// menu //
 		if(visibility == View.VISIBLE) {
 			EventObjects.menu_create.setVisible(true);
 			EventObjects.menu_view.setVisible(true);
@@ -149,6 +157,21 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 			EventObjects.menu_create.setVisible(false);
 			EventObjects.menu_view.setVisible(false);
 		}
+		
+		// toolbar //
+		if(hasVisibleMenu) {
+			if(visibility == View.VISIBLE) {
+				showToolbar();
+			} else {
+				hideToolbar();
+				hasVisibleMenu = true;
+			}
+		}
+	}
+	
+	@Override
+	public void setVisibility(int visibility) {
+		super.setVisibility(visibility);
 	}
 	
 }

@@ -126,6 +126,19 @@
                 android:contentDescription="@string/btn_view"
                 android:src="@drawable/ic_action_delete"
                 android:visibility="gone" />
+        
+        	<!-- TEST -->
+
+            <ImageButton
+                android:id="@+id/button_connect"
+                style="@style/button_style"
+                android:contentDescription="@string/btn_connect"                
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonPressed"
+                android:src="@drawable/ic_action_add"
+                android:visibility="gone" />
+            
         </LinearLayout>
 
     </FrameLayout>

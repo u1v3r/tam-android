@@ -39,6 +39,8 @@ public class MainActivity extends FragmentActivity {
 		public static final int test_structure = R.id.menu_test_structure;
 		public static final int edit_structure = R.id.menu_edit_structure;
 		public static final int test_content = R.id.menu_test_content;
+		public static final int show_result = R.id.menu_show_result;
+		public static final int next_question = R.id.menu_next_question;
 	}
 	
 	/**
@@ -54,6 +56,7 @@ public class MainActivity extends FragmentActivity {
 		public static final int view = R.id.button_view;
 		public static final int zoom_in = R.id.button_zoom_in;
 		public static final int zoom_out = R.id.button_zoom_out;
+		public static final int connect = R.id.button_connect;
 	}
 	
 	public static class EventObjects {
@@ -69,11 +72,14 @@ public class MainActivity extends FragmentActivity {
 		public static View btn_view;
 		public static View btn_zoom_in;
 		public static View btn_zoom_out;
+		public static View btn_connect;
 		
 		public static Menu menu;
 		
 		public static MenuItem menu_create;
 		public static MenuItem menu_view;
+		public static MenuItem menu_show;
+		public static MenuItem menu_next;
 		
 		public static Animation animAlpha;
 	}
@@ -113,6 +119,7 @@ public class MainActivity extends FragmentActivity {
 		EventObjects.btn_view = findViewById(R.id.button_view);
 		EventObjects.btn_zoom_in = findViewById(R.id.button_zoom_in);
 		EventObjects.btn_zoom_out = findViewById(R.id.button_zoom_out);
+		EventObjects.btn_connect = findViewById(R.id.button_connect);
 		
 		//EventObjects.menu_create = (MenuItem) findViewById(R.id.menu_create_mode);
 		//EventObjects.menu_view = (MenuItem) findViewById(R.id.menu_view_mode);
@@ -183,6 +190,8 @@ public class MainActivity extends FragmentActivity {
     	EventObjects.menu = menu;
     	EventObjects.menu_create = menu.findItem(MenuItems.create_mode).setVisible(true);
 		EventObjects.menu_view = menu.findItem(MenuItems.view_mode).setVisible(true);
+		EventObjects.menu_show = menu.findItem(MenuItems.show_result).setVisible(false);
+		EventObjects.menu_next = menu.findItem(MenuItems.next_question).setVisible(false);
 		
     	return true;
     }
@@ -194,15 +203,15 @@ public class MainActivity extends FragmentActivity {
     	
     	if(MenuItems.edit_structure == id){
 			if(actualEditor != EventObjects.editor_main) {
-				actualEditor.setVisibility(View.GONE);
+				actualEditor.setEditorVisibility(View.GONE);
 				actualEditor = EventObjects.editor_main;
-				actualEditor.setVisibility(View.VISIBLE);
+				actualEditor.setEditorVisibility(View.VISIBLE);
 			}
 		} else if(MenuItems.test_structure == id){
 			if(actualEditor != EventObjects.editor_test) {
-				actualEditor.setVisibility(View.GONE);
+				actualEditor.setEditorVisibility(View.GONE);
 				actualEditor = EventObjects.editor_test;
-				actualEditor.setVisibility(View.VISIBLE);
+				actualEditor.setEditorVisibility(View.VISIBLE);
 			}
 		} else if(MenuItems.test_content == id){
 	        Intent i = new Intent(this, TestingActivity.class);
@@ -212,19 +221,19 @@ public class MainActivity extends FragmentActivity {
 	        
 	        this.startActivity(i);
 		} else {
-			EventObjects.editor_main.onOptionsItemSelected(item);
+			actualEditor.onOptionsItemSelected(item);
 			return super.onOptionsItemSelected(item);
 		}
     	return true;
     }
     
     public void buttonPressed(View view) {
-    	EventObjects.editor_main.onButtonSelected(view);
+    	actualEditor.onButtonSelected(view);
     }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		EventObjects.editor_main.onActivityResult(requestCode, resultCode, data);		
+		actualEditor.onActivityResult(requestCode, resultCode, data);		
 	}
 
 	public static TAMProfile getProfile() {

@@ -12,8 +12,8 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 public class TAMEToolbarContol extends TAMEAbstractControl implements ITAMTouchListener {
 	
 	public interface ITAMToolbarConstrolItem {
-		public void showMenu();
-		public void hideMenu();
+		public void showToolbar();
+		public void hideToolbar();
 	}
 
 	public TAMEToolbarContol(ITAMToolbarConstrolItem editor) {
@@ -24,9 +24,9 @@ public class TAMEToolbarContol extends TAMEAbstractControl implements ITAMTouchL
 	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
 		
 		if(ge.item != null && ge.item instanceof ITAMGNode) {
-			((ITAMToolbarConstrolItem)editor).showMenu();
+			((ITAMToolbarConstrolItem)editor).showToolbar();
 		} else {
-			((ITAMToolbarConstrolItem)editor).hideMenu();
+			((ITAMToolbarConstrolItem)editor).hideToolbar();
 		}
 	}
 

@@ -8,6 +8,8 @@
     <string name="delete">Delete</string>
     <string name="view">View</string>
     <string name="file">File</string>
+    <string name="show">Show</string>
+    <string name="next">Next</string>
     <string name="node_add_dialog">Add Node</string>
     <string name="node_add_dialog_title">Title</string>
     <string name="cancel">Cancel</string>
@@ -35,6 +37,7 @@
     <string name="btn_view">V</string>
     <string name="btn_zoom_in">+</string>
     <string name="btn_zoom_out">-</string>
+    <string name="btn_connect">Connect</string>
     <string name="menu_open">Open</string>
     <string name="menu_save">Save</string>
     <string name="menu_import">Import</string>
