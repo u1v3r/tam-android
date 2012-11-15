@@ -6,7 +6,7 @@ public class TAMGZoom {
 	
 	public TAMGZoom(TAMGraph graph) {
 		// default zoom na stred
-		this(graph.DEFAULT_ZOOM, graph.DEFAULT_ZOOM, graph.getWidth()/2, graph.getHeight()/2);
+		this(TAMGraph.DEFAULT_ZOOM, TAMGraph.DEFAULT_ZOOM, graph.getWidth()/2, graph.getHeight()/2);
 	}
 	
 	public TAMGZoom(float sx, float sy, float px, float py) {

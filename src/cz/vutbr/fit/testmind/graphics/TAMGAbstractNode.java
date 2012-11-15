@@ -329,7 +329,7 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 		paint.setStyle(Paint.Style.FILL);
 		
-		paint.setColor(colorText);
+		paint.setColor(colorText);		
 		canvas.drawText(text, offsetX, offsetY, paint);
 		
 	}

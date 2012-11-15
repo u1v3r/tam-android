@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.graphics;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
@@ -28,10 +29,22 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 	private static final float ZOOM_IN_STEP = 0.900f;
 	private static final float ZOOM_OUT_STEP = 1.100f;
-	protected static final float DEFAULT_ZOOM = 0.45f;
+	/**
+	 * Udava rychlost zoomu pri geste, rozumne hodnoty su v radoch tisicov.
+	 * <br><br>
+	 * Cim vacsie cislo tym pomalejsi zoom.
+	 */
+	private static final float ZOOM_SPEED = 4500;
+	protected static final float DEFAULT_ZOOM = 1f;
 
-	private static final float MIN_ZOOM = 0.03125f;
-	private static final float MAX_ZOOM = 2;
+	private static final float MIN_ZOOM = 0.09f;
+	private static final float MAX_ZOOM = 1.2f;
+
+	private static final int TOUCH = 0;
+	private static final int PINCH = 1;
+	private static final int IDLE = 2;
+
+	
 	
 	protected DrawingThread drawingThread;
 	protected Paint paint = new Paint();
@@ -48,6 +61,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	private GestureDetector gestureDetector;
 	private float ax, ay;
 	
+	private int touchState = IDLE;
+	private float distStart = 1, distCurrent = 1;
+	private boolean moveActionAllowed = false;// urcuje ci je dovolena ACTION_MOVE
 	
 	protected List<GestureDetector> listOfGestureControls;
 	protected List<ITAMDrawListener> listOfDrawControls;
@@ -95,11 +111,13 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	public interface ITAMTouchListener {
-		public void onTouchEvent(MotionEvent e, float dx, float dy);
+		//public void onTouchEvent(MotionEvent e, float dx, float dy);
 		public void onHitEvent(MotionEvent e, TAMGMotionEvent ge);
 	}
 
 	public boolean isLongPressed = false;
+
+	
        
 	public TAMGraph(Context context) {
 		this(context,null);
@@ -418,7 +436,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		super.onDraw(canvas);
 		
 		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
-		
+		//canvas.scale(zoom.sx, zoom.sy);
 		for(ITAMGItem item : listOfDrawableItems) {
 			item.draw(canvas, paint);
 		}
@@ -437,23 +455,24 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {		
 		
-		int touchState = TAMEZoomControl.IDLE;
+		float distx, disty, distCurrentPrev;
+		int x = (int) e.getX();
+		int y = (int) e.getY();		
+		TAMGMotionEvent ge;
+		activeTouchEvent = true;	
 		
-		synchronized (drawingThread.getSurfaceHolder()) {
-						
-			activeTouchEvent = true;
+		synchronized (drawingThread.getSurfaceHolder()) {					
 			
-			int x = (int) e.getX();
-			int y = (int) e.getY();
-		
-			TAMGMotionEvent ge;
+			//Log.d(TAG, "posX:" + e.getX() + ",posY:" + e.getY());
 			
 			switch(e.getAction() & MotionEvent.ACTION_MASK){
 				case MotionEvent.ACTION_DOWN:
+					//A pressed gesture has started, the motion contains the initial starting location.					
+					Log.d(TAG, "ACTION_DOWN");
 					
-					touchState = TAMEZoomControl.TOUCH;
-					
-					//Log.d(TAG, "ACTION_DOWN");
+					touchState = TOUCH;
+					moveActionAllowed  = true;// ak je len dotyk jedneho prstu, tak sa moze presuvat
+									
 					ITAMGItem result = null;
 					
 					float dx = zoom.px-zoom.px*zoom.sx;
@@ -473,7 +492,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 							result = item;
 						}
 					}*/
-					
+										
 					for(ITAMGItem item : listOfDrawableItems) {
 						if(item.hit(ax, ay)) {
 							result = item;
@@ -497,43 +516,96 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 					break;
 				case MotionEvent.ACTION_POINTER_DOWN:
 					//A non-primary pointer has gone down.
-					//Log.d(TAG, "ACTION_POINTER_DOWN");
-					touchState = TAMEZoomControl.PINCH;	
+					Log.d(TAG, "ACTION_POINTER_DOWN");
+					touchState = PINCH;				
+					moveActionAllowed = false;// v pripade ak sa dotkne aj druhy prst, tak sa nesmie povolit hybanie
+					
+					//Vypocet zaciatocnej vzdialenosti dotykov
+					distx = e.getX(0) - e.getX(1);
+					disty = e.getY(0) - e.getY(1);
+					distStart = FloatMath.sqrt(distx * distx + disty * disty);
 		
 					break;
 				case MotionEvent.ACTION_MOVE:
 					//A change has happened during a press gesture (between ACTION_DOWN and ACTION_UP).
-					//Log.d(TAG, "ACTION_MOVE");
-										
-					Log.d(TAG, "moving");
+					Log.d(TAG, "ACTION_MOVE");
 					
-					int dxInt = x - actualPoint.x;
-					int dyInt = y - actualPoint.y;
-
-					if(dxInt > 0 || dyInt > 0 || dxInt < 0 || dyInt < 0) {
+					// ak je aktivne gestoo pinch zoom
+					if(touchState == PINCH){
+						Log.d(TAG, "zoooming");
+						//Log.d(TAG, "posX1:" + e.getX(0) + ",posX2:" + e.getX(1));
+						moveActionAllowed = false;
 						
-						int ddx = (int) (dxInt/zoom.sx);
-						int ddy = (int) (dyInt/zoom.sy);
+						//vzdialenost dvoch dotykovych bodov v ramci os x a y 
+						distx = e.getX(0) - e.getX(1);
+						disty = e.getY(0) - e.getY(1);
 						
-						if(!listOfSelectedItems.isEmpty()) {
-
-							for(ITAMGItem item : listOfSelectedItems) {
-								ge = new TAMGMotionEvent(item, ddx, ddy);
-								onItemMoveEvent(e, ge);
+						// predchadzajuca hodnota						
+						distCurrentPrev = distCurrent;
+						
+						// aktualna vzdialenost dotykov
+						distCurrent = FloatMath.sqrt(distx * distx + disty * disty);
+						Log.d(TAG, "cur:" + distCurrent + ",prev:"+distCurrentPrev);																
+						
+						float pivotX = (e.getX(0) + e.getX(1))/2f; //pivot X je v strede dotyku
+						float pivotY = (e.getY(0) + e.getY(1))/2f; //pivot Y je v strede dotyku
+						
+						// udava rychlost skalovania						
+						float scale = (distCurrent + ZOOM_SPEED)/(distStart + ZOOM_SPEED);
+						
+						// pri zmene pohybu v jednom geste je kvoli plynulosti treba reinicializovat
+						// startovaciu poziciu
+						if(scale > 1){// pribizenie							
+							if(distCurrentPrev > distCurrent){// ak pri priblizovani zmeni gesto na oddalovanie								
+								distStart = distCurrent;
+								distCurrentPrev = distStart;
 							}
-						} else {
-							ge = new TAMGMotionEvent(null, ddx, ddy);
-							onMoveEvent(e, ddx, ddy);
+							
+						}else {// oddialenie
+							if(distCurrentPrev < distCurrent){// ak pri oddalovani zmeni gesto na priblizovanie								
+								distStart = distCurrent;
+								distCurrentPrev = distStart;
+							}
 						}
+						
+						Log.d(TAG, "scale:" + scale + ", distCurrent:" + distCurrent + ", distStart:" + distStart);
+						//Log.d(TAG, "pivodX: " + pivotX + ", pivotY: " + pivotY);
+						
+						zoom(zoom.sx*scale, zoom.sy*scale, pivotX, pivotY);
+						
+						
+					}else if(touchState == TOUCH && moveActionAllowed){// normalny presun
+						Log.d(TAG, "move");
+						int dxInt = x - actualPoint.x;
+						int dyInt = y - actualPoint.y;
 
-						actualPoint.x = x;
-						actualPoint.y = y;
+						if(dxInt > 0 || dyInt > 0 || dxInt < 0 || dyInt < 0) {
+							
+							int ddx = (int) (dxInt/zoom.sx);
+							int ddy = (int) (dyInt/zoom.sy);
+							
+							if(!listOfSelectedItems.isEmpty()) {
+
+								for(ITAMGItem item : listOfSelectedItems) {
+									ge = new TAMGMotionEvent(item, ddx, ddy);
+									onItemMoveEvent(e, ge);
+								}
+							} else {
+								ge = new TAMGMotionEvent(null, ddx, ddy);
+								onMoveEvent(e, ddx, ddy);
+							}
+
+							actualPoint.x = x;
+							actualPoint.y = y;
+						}
 					}
 		
 					break;
 				case MotionEvent.ACTION_UP:
-					
-					touchState = TAMEZoomControl.IDLE;
+					//Dokoncenie press gesta prveho dotyku
+					Log.d(TAG, "ACTION_UP");					
+					touchState = IDLE;
+					moveActionAllowed = true;//pri uvolneni sa moze hybat
 					
 					if(isLongPressed) {
 						if(!listOfSelectedItems.isEmpty()) {
@@ -544,102 +616,20 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						}
 					}
 					break;
-				case MotionEvent.ACTION_POINTER_UP:				
-					touchState = TAMEZoomControl.TOUCH;
+				case MotionEvent.ACTION_POINTER_UP:
+					//Dokoncenie press druheho dotyku
+					Log.d(TAG, "ACTION_POINTER_UP");
+					touchState = TOUCH;
+					moveActionAllowed = false;
 					break;
-			}		
-			/*
-			if(e.getAction() == MotionEvent.ACTION_DOWN) {
-								
-				ITAMGItem result = null;
-				
-				float dx = zoom.px-zoom.px*zoom.sx;
-				float dy = zoom.py-zoom.py*zoom.sy;
-				
-				ax = ((x-dx)/zoom.sy);
-				ay = ((y-dy)/zoom.sy);
-				
-				/*for(ITAMGItem item : listOfConnections) {
-					if(item.hit(ax, ay)) {
-						result = item;
-					}
-				}
-
-				for(ITAMGItem item : listOfNodes) {
-					if(item.hit(ax, ay)) {
-						result = item;
-					}
-				}*/
-				/*
-				for(ITAMGItem item : listOfDrawableItems) {
-					if(item.hit(ax, ay)) {
-						result = item;
-					}
-				}
-				ge = new TAMGMotionEvent(result, ax, ay);
-
-				unselectAllWithout(result);
-				
-				if(result == null) {
-					lastSelectedNode = null;
-				}// else {
-					onItemHitEvent(e, ge);
-				//}
-
-				actualPoint.x = x;
-				actualPoint.y = y;
-				
-				isLongPressed = false;
-				
-			} else if (e.getAction() == MotionEvent.ACTION_MOVE) {
-
-				int dx = x - actualPoint.x;
-				int dy = y - actualPoint.y;
-
-				if(dx > 0 || dy > 0 || dx < 0 || dy < 0) {
-					
-					int ddx = (int) (dx/zoom.sx);
-					int ddy = (int) (dy/zoom.sy);
-					
-					if(!listOfSelectedItems.isEmpty()) {
-
-						for(ITAMGItem item : listOfSelectedItems) {
-							ge = new TAMGMotionEvent(item, ddx, ddy);
-							onItemMoveEvent(e, ge);
-						}
-					} else {
-						ge = new TAMGMotionEvent(null, ddx, ddy);
-						onMoveEvent(e, ddx, ddy);
-					}
-
-					actualPoint.x = x;
-					actualPoint.y = y;
-				}
-				
-			} else if(e.getAction() == MotionEvent.ACTION_UP){
-				
-				if(isLongPressed) {
-					if(!listOfSelectedItems.isEmpty()) {
-						ITAMGItem item = listOfSelectedItems.get(listOfSelectedItems.size()-1);
-						if(item instanceof ITAMGNode) {
-							onItemLongReleaseEvent(e, (ITAMGNode) item);
-						}
-					}
-				}
-			}
-			*/
-			
-			/* ja ten event fakt potrebujem :D itemTouch mi nestaci */
-			for(ITAMTouchListener control : listOfTouchControls) {
-				control.onTouchEvent(e, ax, ay);
-			}
+			}	
 			
 			for(GestureDetector gDetector : listOfGestureControls){
 				gDetector.onTouchEvent(e);				
 			}
-			
+
 			gestureDetector.onTouchEvent(e);
-			
+
 			invalidate();
 			
 			return super.onTouchEvent(e);
@@ -884,6 +874,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		zoom.py = pivotY;
 		zoom.sx = scaleX;
 		zoom.sy = scaleY;
+		
 		invalidate();	
 	}
 	
