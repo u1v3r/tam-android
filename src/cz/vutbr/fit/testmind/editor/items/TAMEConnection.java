@@ -48,7 +48,7 @@ public class TAMEConnection implements ITAMEConnection {
 
 	public void dispose() {
 		editor.getListOfEConnections().remove(this);
-		gui.dispose();
+		editor.getGItemFactory().deleteConnection(gui);
 		gui = null;
 		editor = null;
 		profile = null;

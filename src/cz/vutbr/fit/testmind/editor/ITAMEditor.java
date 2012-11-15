@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
+import android.view.View;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
@@ -28,7 +29,7 @@ public interface ITAMEditor {
 	
 	public TAMProfile getProfile();
 	
-	public void setVisibility(int gone);
+	public void setEditorVisibility(int visibility);
 	
 	public int getMode();
 	
@@ -49,6 +50,8 @@ public interface ITAMEditor {
 	public List<ITAMEConnection> getListOfEConnections();
 	
 	public boolean onOptionsItemSelected(MenuItem item);
+	
+	public void onButtonSelected(View view);
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
 	

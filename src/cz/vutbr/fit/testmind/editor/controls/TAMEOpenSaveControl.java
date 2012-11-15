@@ -9,6 +9,7 @@ import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.io.Serializer;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
  * 
@@ -39,17 +40,14 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 
 	public void saveFile()
 	{
-	    Log.d(TAG, "Saving");
-        File cardDirectory = Environment.getExternalStorageDirectory();
-        Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
+	    
+        Serializer serializer = new Serializer(TAMProfile.TESTMIND_DIRECTORY.getPath()+"/TestMind.db");
         serializer.serialize(MainActivity.getProfile());		
 	}
 
 	public void openFile()
 	{
-	    Log.d(TAG, "Loading");
-        File cardDirectory = Environment.getExternalStorageDirectory();
-        Serializer serializer = new Serializer(cardDirectory.getPath()+"/TestMind.db");
+        Serializer serializer = new Serializer(TAMProfile.TESTMIND_DIRECTORY.getPath()+"/TestMind.db");
         serializer.deserialize(MainActivity.getProfile());    
 	}
 

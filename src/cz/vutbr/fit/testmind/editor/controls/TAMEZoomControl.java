@@ -2,14 +2,12 @@ package cz.vutbr.fit.testmind.editor.controls;
 
 import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.editor.TAMEditorMain;
+import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 
 public class TAMEZoomControl extends TAMEAbstractControl implements ITAMButtonListener {
 
-	private static final String TAG = "TAMEZoomControl";
-	
-	public TAMEZoomControl(TAMEditorMain editor) {
+	public TAMEZoomControl(ITAMEditor editor) {
 		super(editor);
 		editor.getListOfButtonControls().add(this);
 	}
@@ -21,10 +19,12 @@ public class TAMEZoomControl extends TAMEAbstractControl implements ITAMButtonLi
 
 	public void onButtonSelected(View item) {
 		
-		if(item == EventObjects.btn_zoom_in) {
-			((TAMGraph)editor).onZoomIn();
-		} else if(item == EventObjects.btn_zoom_out) {
-			((TAMGraph)editor).onZoomOut();
+		if(((View) getEditor()).getVisibility() == View.VISIBLE) {
+			if(item == EventObjects.btn_zoom_in) {
+				((TAMGraph)editor).onZoomIn();
+			} else if(item == EventObjects.btn_zoom_out) {
+				((TAMGraph)editor).onZoomOut();
+			}
 		}
 	}	
 
