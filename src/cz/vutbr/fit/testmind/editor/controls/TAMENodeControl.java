@@ -30,7 +30,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
  */
 public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
                                                                      ITAMTouchListener, OnActivityResultListener,
-                                                                     ITAMItemListener{
+                                                                     ITAMItemListener {
 	
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
