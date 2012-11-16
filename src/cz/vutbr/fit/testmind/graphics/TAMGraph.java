@@ -1,17 +1,12 @@
 package cz.vutbr.fit.testmind.graphics;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
-
-import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
-import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.util.Log;
@@ -21,7 +16,6 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ZoomControls;
 
 public class TAMGraph extends SurfaceView implements OnGestureListener, OnDoubleTapListener {
 	
@@ -35,7 +29,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * Cim vacsie cislo tym pomalejsi zoom.
 	 */
 	private static final float ZOOM_SPEED = 4500;
-	protected static final float DEFAULT_ZOOM = 1f;
+	protected static final float DEFAULT_ZOOM = 0.4f;
 
 	private static final float MIN_ZOOM = 0.09f;
 	private static final float MAX_ZOOM = 1.2f;
