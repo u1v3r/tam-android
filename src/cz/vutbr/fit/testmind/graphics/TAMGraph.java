@@ -123,7 +123,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		listOfGestureControls = new ArrayList<GestureDetector>();
 		listOfItemGestureControls = new ArrayList<ITAMItemGestureListener>();
 		listOfButtons = new ArrayList<ITAMGButton>();
-		zoom = new TAMGZoom(this);
 		
 		actualPoint = new PointF();	
 		translationPoint = new PointF();
@@ -151,6 +150,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	
 	protected void initialize() {
 		gestureDetector = new GestureDetector(this.getContext(), this);
+		zoom = new TAMGZoom(this);
+		System.out.println(getWidth() + " " + getHeight());
 	}
 
 	/**
@@ -416,10 +417,13 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		//System.out.println("scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
+		System.out.println("scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
+		System.out.println(getWidth() + " " + getHeight());
 		
-		canvas.translate(translationPoint.x, translationPoint.y);
+		
+		//canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
+		canvas.translate(translationPoint.x, translationPoint.y);
 		
 		for(ITAMGItem item : listOfDrawableItems) {
 			item.draw(canvas, paint);
@@ -455,8 +459,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				float dx = zoom.px-zoom.px*zoom.sx;
 				float dy = zoom.py-zoom.py*zoom.sy;
 				
-				ax = ((x-translationPoint.x-dx)/zoom.sy);
-				ay = ((y-translationPoint.y-dy)/zoom.sy);
+				ax = ((x-dx)/zoom.sy)-translationPoint.x;
+				ay = ((y-dy)/zoom.sy)-translationPoint.y;
 				
 				/*for(ITAMGItem item : listOfConnections) {
 					if(item.hit(ax, ay)) {
@@ -497,10 +501,12 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 				if(dx > 1 || dy > 1 || dx < -1 || dy < -1) {
 					
+					int ddx = (int) (dx/zoom.sx);
+					int ddy = (int) (dy/zoom.sy);
+					
 					if(!listOfSelectedItems.isEmpty()) {
 						
-						int ddx = (int) (dx/zoom.sx);
-						int ddy = (int) (dy/zoom.sy);
+						
 
 						for(ITAMGItem item : listOfSelectedItems) {
 							ge = new TAMGMotionEvent(item, ddx, ddy);
@@ -508,7 +514,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						}
 					} else {
 						//ge = new TAMGMotionEvent(null, dx, dy);
-						onMoveEvent(e, dx, dy);
+						onMoveEvent(e, ddx, ddy);
 					}
 
 					actualPoint.x = x;
@@ -791,23 +797,40 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	public void translate(float dx, float dy) {
 		translationPoint.x = dx;
 		translationPoint.y = dy;
+		
+		// actualize pivot //
+		//zoom.px = -dx;
+		//zoom.py = -dy;
+		
 		invalidate();
 	}
 	
 	public void move(float dx, float dy) {
 		translationPoint.x = translationPoint.x+dx;
 		translationPoint.y = translationPoint.y+dy;
+		
+		// actualize pivot //
+		//zoom.px -= dx;
+		//zoom.py -= dy;
 	}
 	
 	public void onZoomIn() {
 		//System.out.println(getWidth()*0.5f + " " + getHeight()*0.5f);
-		zoom(zoom.sx*2, zoom.sy*2, getWidth()*0.5f, getHeight()*0.5f);
+		
+		float sx = zoom.sx*2;
+		float sy = zoom.sy*2;
+		
+		//float px = zoom.px+(getWidth()/2)*sx;
+		//float py = zoom.py+(getHeight()/2)*sx;
+		//System.out.println("zoomIn");
+		
+		zoom(sx, sy, getWidth()/2, getHeight()/2);
 		invalidate();
 	}
 
 	public void onZoomOut() {
 		//System.out.println(getWidth()*0.5f + " " + getHeight()*0.5f);
-		zoom(zoom.sx*0.5f, zoom.sy*0.5f, getWidth()*0.5f, getHeight()*0.5f);
+		zoom(zoom.sx*0.5f, zoom.sy*0.5f, getWidth()/2, getHeight()/2);
 		invalidate();
 	}
 	
