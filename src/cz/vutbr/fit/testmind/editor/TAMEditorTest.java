@@ -8,6 +8,7 @@ import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
@@ -21,6 +22,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	private boolean hasVisibleMenu = false;
 	private Random random;
 	private int size;
+	public final int OFFSET = 100;
 	
 	public TAMEditorTest(Context context) {
 		this(context, null);
@@ -111,7 +113,11 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	
 	public void generateNextQuestion() {
 		
-		TAMPNode node = findNewBaseNode();
+		generateNextQuestion(findNewBaseNode(), 1);
+		
+	}
+	
+	public void generateNextQuestion(TAMPNode node, int depth) {
 		
 		disposeAllItems();
 		
@@ -172,13 +178,43 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	
 	private void deployNodes(TAMPNode node) {
 		
-		int width = (int) ((getWidth()/getZoom().sx));
-		int height = (int) ((getHeight()/getZoom().sy));
+		/*int offsetX = ((int)(50/getZoom().sx));
+		int offsetY = ((int)(100/getZoom().sy));
 		
-		TAMPConnectionFactory.addEReference(node, this, random.nextInt(width), random.nextInt(height));
+		int width = (int) ((getWidth()/getZoom().sx)) - offsetX;
+		int height = (int) ((getHeight()/getZoom().sy)) - offsetY;
+		
+		int px, py;
+		
+		if(getZoom().sx >= 1) {
+			px = (int) ((getZoom().px)-(offsetX/2));
+		} else {
+			px = (int) (-(getZoom().px)-(offsetX/2));
+		}
+		if(getZoom().sx >= 1) {
+			py = (int) ((getZoom().py)-(offsetY/2));
+		} else {
+			py = (int) (-(getZoom().py)-(offsetY/2));
+		}*/
+		
+		TAMGZoom zoom = getZoom();
+		zoom(getZoom().sx, getZoom().sy, 0f, 0f);
+		
+		int offsetX = ((int)(OFFSET/getZoom().sx));
+		int offsetY = ((int)(OFFSET/getZoom().sy));
+		int halfOffsetX = offsetX/2;
+		int halfOffsetY = offsetX/2;
+		
+		int width = (int) ((getWidth()/getZoom().sx)) - offsetX;
+		int height = (int) ((getHeight()/getZoom().sy)) - offsetY;
+		
+		
+		//System.out.println(width + " " + height + " " + offsetX + " " + offsetY);
+		
+		TAMPConnectionFactory.addEReference(node, this, (random.nextInt(width)+halfOffsetX), (random.nextInt(height)+halfOffsetY));
 		
 		for(TAMPNode child : node.getListOfChildNodes()) {
-			TAMPConnectionFactory.addEReference(child, this, random.nextInt(width), random.nextInt(height));
+			TAMPConnectionFactory.addEReference(child, this, (random.nextInt(width)+halfOffsetX), (random.nextInt(height)+halfOffsetY));
 		}
 		
 	}
