@@ -1,14 +1,21 @@
 package cz.vutbr.fit.testmind;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
+import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.layout.FlowLayout;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.testing.TestingNode;
 import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,16 +31,36 @@ import android.widget.TextView;
  *
  */
 public class TestingActivity extends FragmentActivity {
-    static final private String HTML = "<html><head></head><body>%s</body></html>";
-    static final private float PATH_TEXT_SIZE = 20;
-    static final private float CHILD_TEXT_SIZE = 16;
+    /**
+     * class for serialization of state
+     */
+    public static class TestingActivityData implements Serializable
+    {
+        private static final long serialVersionUID = 1L;
+        public TestingNode node;
+        public ActivityMode mode;
+        public TestingPhase testingPhase;
+        public ArrayList<TestingNode> testingNodes;
+        public int currentIndex;
+
+        public TestingActivityData(ActivityMode mode, TestingPhase testingPhase)
+        {
+            this.mode = mode;
+            this.testingPhase = testingPhase;
+        }
+    }
+
+    private static final String HTML = "<html><head></head><body>%s</body></html>";
+    private static final float PATH_TEXT_SIZE = 20;
+    private static final float CHILD_TEXT_SIZE = 16;
+    private static final String DATA_STATE = "data";
     
     private enum ActivityMode {TEST, EXPLORE};
+    private enum TestingPhase {QUESTION, ANSWER, END};
 
-    private TestingNode node;
-    private ActivityMode mode = ActivityMode.TEST;
-    private ArrayList<TestingNode> testingNodes;
-    private int currentIndex;
+    private TestingActivityData data = new TestingActivityData(ActivityMode.TEST, TestingPhase.QUESTION);
+    private HashMap<Button, TestingNode> buttonsNodes = new HashMap<Button, TestingNode>();
+    private HashMap<TextView, TestingNode> textViewsNodes = new HashMap<TextView, TestingNode>();
     
     private MenuItem controlAction;
     private MenuItem menuExplore;
@@ -60,7 +87,7 @@ public class TestingActivity extends FragmentActivity {
         bodyView = (WebView) findViewById(R.id.testing_webView_body);        
         
         TestingNode root = nodeParcelable.getTestingNode();
-        testingNodes = root.getListTestingNodes();
+        data.testingNodes = root.getListTestingNodes();
         
         startTesting();
     }
@@ -85,34 +112,78 @@ public class TestingActivity extends FragmentActivity {
         
         if(controlAction.getItemId() == id)
         {
-            if(controlAction.getTitle() == getString(R.string.testing_control_next_question))
+            if(data.testingPhase == TestingPhase.ANSWER)
             {
                 setNextNode();
             }
-            else if(controlAction.getTitle() == getString(R.string.testing_control_show_answer))
+            else if(data.testingPhase == TestingPhase.QUESTION)
             {
                 showAnswer();
             }
+            else if(data.testingPhase == TestingPhase.END)
+            {
+                startTesting();
+                setTestingPhase(TestingPhase.QUESTION);
+            }
         }
-        else if(menuExplore.getItemId() == id && mode == ActivityMode.TEST)
+        else if(menuExplore.getItemId() == id && data.mode == ActivityMode.TEST)
         {
-            mode = ActivityMode.EXPLORE;
-            menuExplore.setChecked(true);
-            menuTest.setChecked(false);
-            controlAction.setVisible(false);
-            setNode(node);
+            setActivityMode(ActivityMode.EXPLORE);
         }
-        else if(menuTest.getItemId() == id && mode == ActivityMode.EXPLORE)
+        else if(menuTest.getItemId() == id && data.mode == ActivityMode.EXPLORE)
         {
-            mode = ActivityMode.TEST;
-            menuExplore.setChecked(false);
-            menuTest.setChecked(true);
-            controlAction.setVisible(true);
-            startTesting();
+            setActivityMode(ActivityMode.TEST);
         }
         
         return true;
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        
+        outState.putSerializable(DATA_STATE, (Serializable)data);
+        
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {   
+        super.onRestoreInstanceState(savedInstanceState);
+        
+        data = (TestingActivityData) savedInstanceState.getSerializable(DATA_STATE);
+        setActivityMode(data.mode);
+    }
+    
+    /**
+     * handler for buttons
+     */
+    View.OnClickListener exploreHandler = new View.OnClickListener()
+    {
+        public void onClick(View v)
+        {
+            if(data.mode == ActivityMode.EXPLORE)
+            {
+                TestingNode nextNode = null;
+                if(Button.class.isInstance(v))
+                {
+                    Button item = (Button) v;
+                    nextNode = buttonsNodes.get(item);
+                }
+                else if(TextView.class.isInstance(v))
+                {
+                    TextView item = (TextView) v;
+                    nextNode = textViewsNodes.get(item);
+                }
+                
+                if(nextNode != null)
+                {
+                    setNode(nextNode);
+                }
+            }
+        }
+    };
     
     // private methods =========================================
     
@@ -121,11 +192,11 @@ public class TestingActivity extends FragmentActivity {
      */
     private void startTesting()
     {
-        Collections.shuffle(testingNodes);
-        currentIndex = 0;
-        if(testingNodes.size() > 0)
+        Collections.shuffle(data.testingNodes);
+        data.currentIndex = 0;
+        if(data.testingNodes.size() > 0)
         {
-            setNode(testingNodes.get(currentIndex));
+            setNode(data.testingNodes.get(data.currentIndex));
         }
         else
         {
@@ -140,7 +211,7 @@ public class TestingActivity extends FragmentActivity {
      */
     private void setNode(TestingNode node)
     {
-        this.node = node;
+        this.data.node = node;
         loadNode();
     }
     
@@ -149,15 +220,11 @@ public class TestingActivity extends FragmentActivity {
      */
     private void setNextNode()
     {
-        if(currentIndex+1 < testingNodes.size())
+        if(data.currentIndex+1 < data.testingNodes.size())
         {
-            controlAction.setTitle(R.string.testing_control_show_answer);
-            currentIndex++;
-            setNode(testingNodes.get(currentIndex));
-        }
-        else
-        {
-            Toast.makeText(this, R.string.testing_last_node, Toast.LENGTH_LONG).show();
+            setTestingPhase(TestingPhase.QUESTION);
+            data.currentIndex++;
+            setNode(data.testingNodes.get(data.currentIndex));
         }
     }
     
@@ -169,7 +236,7 @@ public class TestingActivity extends FragmentActivity {
         loadPath();
         
         TextView title = (TextView) findViewById(R.id.testing_textView_title);
-        title.setText(node.getTitle());
+        title.setText(data.node.getTitle());
         
         loadBody();
         loadChilds();
@@ -181,11 +248,12 @@ public class TestingActivity extends FragmentActivity {
     private void loadPath()
     {
         pathView.removeAllViews();
+        textViewsNodes.clear();
 
         // generate parents
         ArrayList<TestingNode> path_nodes = new ArrayList<TestingNode>();
         
-        TestingNode temp_node = node;
+        TestingNode temp_node = data.node;
         
         while(temp_node.getParent() != null)
         {
@@ -201,13 +269,15 @@ public class TestingActivity extends FragmentActivity {
         rootSep.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PATH_TEXT_SIZE);
         rootSep.setTextColor(foreground_color);
         pathView.addView(rootSep);
-        for(TestingNode parent_node: path_nodes)
+        for(TestingNode parentNode: path_nodes)
         {
             TextView text = new TextView(this);
-            text.setText(String.format(" %s /", parent_node.getTitle()));
+            text.setText(String.format(" %s /", parentNode.getTitle()));
             text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, PATH_TEXT_SIZE);
             text.setTextColor(foreground_color);
             pathView.addView(text);
+            textViewsNodes.put(text, parentNode);
+            text.setOnClickListener(exploreHandler);
         }      
     }
     
@@ -217,17 +287,17 @@ public class TestingActivity extends FragmentActivity {
     private void loadBody()
     {
         bodyView.loadData("", "text/html; charset=UTF-8", null);
-        if(mode == ActivityMode.TEST)
+        if(data.mode == ActivityMode.TEST)
         {
             bodyView.setVisibility(View.GONE);
         }
-        else if(mode == ActivityMode.EXPLORE)
+        else if(data.mode == ActivityMode.EXPLORE)
         {
             bodyView.setVisibility(View.VISIBLE);
         }
         
         // load data
-        bodyView.loadData(String.format(HTML, node.getBody()), "text/html; charset=UTF-8", null);
+        bodyView.loadData(String.format(HTML, data.node.getBody()), "text/html; charset=UTF-8", null);
     }
     
     /**
@@ -236,24 +306,27 @@ public class TestingActivity extends FragmentActivity {
     private void loadChilds()
     {
         childsView.removeAllViews();
+        buttonsNodes.clear();
         
-        if(mode == ActivityMode.TEST)
+        if(data.mode == ActivityMode.TEST)
         {
             childsView.setVisibility(View.GONE);
         }
-        else if(mode == ActivityMode.EXPLORE)
+        else if(data.mode == ActivityMode.EXPLORE)
         {
             childsView.setVisibility(View.VISIBLE);
         }
 
         // append childs
-        for(TestingNode childNode: node.getChilds())
+        for(TestingNode childNode: data.node.getChilds())
         {
             Button childButton = new Button(this);
-            childButton.setTextSize(CHILD_TEXT_SIZE);
+            childButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, CHILD_TEXT_SIZE);
             childButton.setText(childNode.getTitle());
             
             childsView.addView(childButton);
+            buttonsNodes.put(childButton, childNode);
+            childButton.setOnClickListener(exploreHandler);
         }        
     }
     
@@ -264,6 +337,67 @@ public class TestingActivity extends FragmentActivity {
     {
         bodyView.setVisibility(View.VISIBLE);
         childsView.setVisibility(View.VISIBLE);
-        controlAction.setTitle(R.string.testing_control_next_question);
+        
+        if(data.testingNodes.size() == data.currentIndex+1)
+        {
+            Toast.makeText(this, R.string.testing_last_node, Toast.LENGTH_LONG).show();
+            setTestingPhase(TestingPhase.END);
+        }
+        else
+        {
+            setTestingPhase(TestingPhase.ANSWER);
+        }
+    }
+    
+    /**
+     * set cuurent testing phase
+     * @param phase
+     */
+    private void setTestingPhase(TestingPhase phase)
+    {
+        data.testingPhase = phase;
+        
+        // title of action
+        if(phase == TestingPhase.QUESTION)
+        {
+            controlAction.setTitle(R.string.testing_control_show_answer);
+        }
+        else if(phase == TestingPhase.ANSWER)
+        {
+            controlAction.setTitle(R.string.testing_control_next_question);
+        }
+        else if(phase == TestingPhase.END)
+        {
+            controlAction.setTitle(R.string.testing_control_again);
+        }
+    }
+
+    /**
+     * set mode of activity
+     * @param mode
+     */
+    private void setActivityMode(ActivityMode mode)
+    {
+        data.mode = mode;
+
+        if(mode == ActivityMode.EXPLORE)
+        {
+            menuExplore.setChecked(true);
+            menuTest.setChecked(false);
+            controlAction.setVisible(false);
+            setNode(data.node);
+        }
+        else if(mode == ActivityMode.TEST)
+        {
+            menuExplore.setChecked(false);
+            menuTest.setChecked(true);
+            controlAction.setVisible(true);
+            setTestingPhase(data.testingPhase);
+            setNode(data.testingNodes.get(data.currentIndex));
+            if(data.testingPhase == TestingPhase.ANSWER)
+            {
+                showAnswer();
+            }
+        }
     }
 }

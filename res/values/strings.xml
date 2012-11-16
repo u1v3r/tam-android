@@ -50,6 +50,7 @@
     <string name="menu_explore">Explore</string>
     <string name="testing_control_show_answer">Show answer</string>
     <string name="testing_control_next_question">Next question</string>
+    <string name="testing_control_again">Testing again</string>
     <string name="testing_error_any_nodes">There are not nodes for testing!</string>
     <string name="testing_last_node">It is last node!</string>
 </resources>
