@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.testing;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,8 +8,9 @@ import java.util.ArrayList;
  * @author jules
  *
  */
-public class TestingNode
+public class TestingNode implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private String title;
     private String body;
     private TestingNode parent;
