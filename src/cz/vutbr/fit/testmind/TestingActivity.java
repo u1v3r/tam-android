@@ -287,11 +287,9 @@ public class TestingActivity extends FragmentActivity {
     private void loadBody()
     {
         bodyView.loadData("", "text/html; charset=UTF-8", null);
-        if(data.mode == ActivityMode.TEST)
-        {
-            bodyView.setVisibility(View.GONE);
-        }
-        else if(data.mode == ActivityMode.EXPLORE)
+        bodyView.setVisibility(View.GONE);
+
+        if(data.mode == ActivityMode.EXPLORE)
         {
             bodyView.setVisibility(View.VISIBLE);
         }
