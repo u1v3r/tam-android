@@ -116,7 +116,7 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		EventObjects.btn_zoom_in.setVisibility(VISIBLE);
 		EventObjects.btn_zoom_out.setVisibility(VISIBLE);
 	}
-
+	
 	@Override
 	protected void initializeControls() {
 		new TAMEZoomControl(this);

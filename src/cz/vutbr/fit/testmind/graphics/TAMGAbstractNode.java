@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
 
@@ -21,8 +22,18 @@ import android.graphics.drawable.shapes.Shape;
  */
 public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNode {
 	
-	private static final float [] STROKE_WIDTH = { 5f , 15f };
-
+	/**
+	 * Velkost border {normal,collapse}
+	 */
+	public static final float [] STROKE_WIDTH = { 6.4f , 11f };
+	
+	/**
+	 * Zakladna velkost fontu.
+	 * <br><br>
+	 * Child triedy si musia fonty samy skalovat v zavilosti od tejto velkosti.
+	 */
+	protected static final float FONT_DEFAULT_SIZE = 50f;
+	
 	private static final String TAG = "TAMGAbstractNode";
 	
 	private TAMGraph graph;
@@ -48,7 +59,9 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	private boolean isEnabled;
 	private boolean isSelected;
 
-	private BackgroundStyle backgroundStyle;	
+	private BackgroundStyle backgroundStyle;
+
+	private Paint textPaint;	
 	
 	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
@@ -76,6 +89,8 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		position = new Point(x, y);
 		setText(text);
 		
+		textPaint = new Paint();
+		textPaint.setTextSize(FONT_DEFAULT_SIZE);
 		//actualizeSize();
 	}
 	
@@ -330,8 +345,10 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 		paint.setStyle(Paint.Style.FILL);
 		
-		paint.setColor(colorText);
-		canvas.drawText(text, offsetX, offsetY, paint);
+		textPaint.setColor(colorText);
+		textPaint.setTextSize(FONT_DEFAULT_SIZE);
+		textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+		canvas.drawText(text, offsetX, offsetY, textPaint);
 		
 	}
 	

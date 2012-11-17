@@ -96,7 +96,7 @@ public interface ITAMEditor {
 	public TAMGZoom getZoom();
 	
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
-	
+		
 	public void unselectAll();
 	
 }

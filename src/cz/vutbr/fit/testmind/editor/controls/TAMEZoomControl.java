@@ -26,5 +26,6 @@ public class TAMEZoomControl extends TAMEAbstractControl implements ITAMButtonLi
 				((TAMGraph)editor).onZoomOut();
 			}
 		}
-	}
+	}	
+
 }

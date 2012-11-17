@@ -16,9 +16,11 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	private static final String TAG = "TAMRectangleNode";
 	private static final int type = NODE_TYPE_RECTANGLE;
 	
-	public static final int TEXT_SIZE = 64;	
-	public static final int OFFSET_X = 50;
-	public static final int OFFSET_Y = 80;
+	//public static final int TEXT_SIZE = 64;	
+	public static final int OFFSET_X = 30;
+	public static final int OFFSET_Y = 60;
+	private static final int NODE_WIDTH = 28;
+	private static final int NODE_HEIGHT = 48;
 		
 	public TAMGRectangleNode(TAMGraph graph, int x, int y, String text) {
 		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
@@ -79,13 +81,13 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	}
 	
 	public void actualizeSize() {
-		this.getPaint().setTextSize(TEXT_SIZE);
+		this.getPaint().setTextSize(FONT_DEFAULT_SIZE);
 		int width = (int) this.getPaint().measureText(getText())/2;
 		
 		Point p = this.getPosition();
 		
 		// real size of node //
-		this.setBounds(p.x-width-50, p.y-64, p.x+width+50, p.y+64);
+		this.setBounds(p.x-width-NODE_WIDTH, p.y-NODE_HEIGHT, p.x+width+NODE_WIDTH, p.y+NODE_HEIGHT);
 	}
 
 }

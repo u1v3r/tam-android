@@ -284,4 +284,9 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void onTouchEvent(MotionEvent e, float dx, float dy) {
+		// TODO Auto-generated method stub
+		
+	}
 }
