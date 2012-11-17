@@ -16,8 +16,9 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
-public class TAMGraph extends SurfaceView implements OnGestureListener, OnDoubleTapListener {
+public class TAMGraph extends SurfaceView implements OnGestureListener, OnDoubleTapListener, OnGlobalLayoutListener {
 	
 	private static final String TAG = "TAMGraph";
 
@@ -29,7 +30,13 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * Cim vacsie cislo tym pomalejsi zoom.
 	 */
 	private static final float ZOOM_SPEED = 4500;
-	protected static final float DEFAULT_ZOOM = 0.4f;
+	
+	/**
+	 * Urci pociatocny zoom plochy
+	 * <br><br>
+	 * <i>* Pouziva sa v <code>onGlobalLayout()</code> na nastavenie pociatocnej velkosti uzlu</i>
+	 */
+	public static final float DEFAULT_ZOOM = 0.58f;
 
 	private static final float MIN_ZOOM = 0.09f;
 	private static final float MAX_ZOOM = 1.2f;
@@ -159,12 +166,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		factory.createButton(this, ITAMGButton.BUTTON_TYPE_MENU);
 		
 		invalidate();
+		
+		getViewTreeObserver().addOnGlobalLayoutListener(this);
 	}
 	
 	protected void initialize() {
 		gestureDetector = new GestureDetector(this.getContext(), this);
 		zoom = new TAMGZoom(this);
-		System.out.println(getWidth() + " " + getHeight());
+		Log.d(TAG,getWidth() + " " + getHeight());
 	}
 
 	/**
@@ -430,8 +439,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		System.out.println("scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
-		System.out.println(getWidth() + " " + getHeight());
+		Log.d(TAG,"scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
+		Log.d(TAG,getWidth() + " " + getHeight());
 		
 		
 		//canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
@@ -1023,6 +1032,19 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		lastSelectedNode = null;
 	}
 
+	public void onGlobalLayout() {
+		Log.d(TAG, getWidth() + "");
+		zoom.sx = zoom.sx*TAMGraph.DEFAULT_ZOOM;
+		zoom.sy = zoom.sy*TAMGraph.DEFAULT_ZOOM;
+		zoom(
+				zoom.sx,
+				zoom.sy,    				
+				getWidth()/2, 
+				getHeight()/2);
+		
+		getViewTreeObserver().removeGlobalOnLayoutListener(this);
+	}
+	
 	/*public void organizeButtons() {
 		System.out.println(getWidth() + " " + getHeight());
 		int x = getWidth()-TAMGMenuButton.WIDTH-10;
