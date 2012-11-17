@@ -455,16 +455,16 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		
 		synchronized (drawingThread.getSurfaceHolder()) {
 						
-			activeTouchEvent = true;
-			
 			float distx, disty, distCurrentPrev;
 			float x = e.getX();
 			float y = e.getY();
 		
 			TAMGMotionEvent ge;
 			activeTouchEvent = true;
-
-			if(e.getAction() == MotionEvent.ACTION_DOWN) {
+			
+			switch(e.getAction() & MotionEvent.ACTION_MASK){
+			
+			case MotionEvent.ACTION_DOWN:
 				
 				Log.d(TAG, "ACTION_DOWN");
 				
@@ -510,8 +510,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				actualPoint.y = y;
 				
 				isLongPressed = false;
+				break;
 				
-			} else if(e.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
+			case MotionEvent.ACTION_POINTER_DOWN:
 				
 				Log.d(TAG, "ACTION_POINTER_DOWN");
 				touchState = PINCH;				
@@ -521,8 +522,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				distx = e.getX(0) - e.getX(1);
 				disty = e.getY(0) - e.getY(1);
 				distStart = FloatMath.sqrt(distx * distx + disty * disty);
+				break;
 				
-			} else if (e.getAction() == MotionEvent.ACTION_MOVE) {
+			case MotionEvent.ACTION_MOVE:
 				
 				Log.d(TAG, "ACTION_MOVE");
 				
@@ -568,15 +570,16 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 					//Log.d(TAG, "pivodX: " + pivotX + ", pivotY: " + pivotY);
 					
 					zoom(zoom.sx*scale, zoom.sy*scale, pivotX, pivotY);
-				} else if(touchState == TOUCH && moveActionAllowed) {
 					
-					float dx = x - actualPoint.x;
-					float dy = y - actualPoint.y;
+				} else if(touchState == TOUCH && moveActionAllowed) {
+					Log.d(TAG, "mooving");
+					float dx1 = x - actualPoint.x;
+					float dy1 = y - actualPoint.y;
 
-					if(dx > 1 || dy > 1 || dx < -1 || dy < -1) {
+					if(dx1 > 1 || dy1 > 1 || dx1 < -1 || dy1 < -1) {
 						
-						int ddx = (int) (dx/zoom.sx);
-						int ddy = (int) (dy/zoom.sy);
+						int ddx = (int) (dx1/zoom.sx);
+						int ddy = (int) (dy1/zoom.sy);
 						
 						if(!listOfSelectedItems.isEmpty()) {
 
@@ -594,7 +597,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 					}
 				}
 				
-			} else if(e.getAction() == MotionEvent.ACTION_UP){
+				break;
+			case MotionEvent.ACTION_UP:
 				
 				//Dokoncenie press gesta prveho dotyku
 				Log.d(TAG, "ACTION_UP");					
@@ -609,11 +613,13 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						}
 					}
 				}
-			} else if(e.getAction() == MotionEvent.ACTION_POINTER_UP) {
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
 				//Dokoncenie press druheho dotyku
 				Log.d(TAG, "ACTION_POINTER_UP");
 				touchState = TOUCH;
 				moveActionAllowed = false;
+				break;
 			}
 			
 			/*for(ITAMTouchListener control : listOfTouchControls) {
