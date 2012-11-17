@@ -36,10 +36,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * <br><br>
 	 * <i>* Pouziva sa v <code>onGlobalLayout()</code> na nastavenie pociatocnej velkosti uzlu</i>
 	 */
-	public static final float DEFAULT_ZOOM = 0.58f;
+	public static final float DEFAULT_ZOOM = 0.5f;
 
 	private static final float MIN_ZOOM = 0.09f;
-	private static final float MAX_ZOOM = 1.2f;
+	private static final float MAX_ZOOM = 2.0f;
 
 	private static final int TOUCH = 0;
 	private static final int PINCH = 1;
@@ -1033,7 +1033,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 
 	public void onGlobalLayout() {
-		Log.d(TAG, getWidth() + "");
+		
 		zoom.sx = zoom.sx*TAMGraph.DEFAULT_ZOOM;
 		zoom.sy = zoom.sy*TAMGraph.DEFAULT_ZOOM;
 		zoom(
