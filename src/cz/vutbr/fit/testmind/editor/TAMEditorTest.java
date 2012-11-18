@@ -34,7 +34,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	}
 
 	@Override
-	protected void initializeControls() {
+	protected void initializeControls(MainActivity mainActivity) {
 		new TAMEZoomControl(this);
 		new TAMEToolbarContol(this);
 		

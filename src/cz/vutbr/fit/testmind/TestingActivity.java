@@ -30,7 +30,8 @@ import android.widget.TextView;
  * @author jules
  *
  */
-public class TestingActivity extends FragmentActivity {
+public class TestingActivity extends FragmentActivity
+{
     /**
      * class for serialization of state
      */

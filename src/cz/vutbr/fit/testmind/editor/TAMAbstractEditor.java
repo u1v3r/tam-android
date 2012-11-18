@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 
+import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
@@ -41,16 +42,16 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		this.listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
 	}
 	
-	public void initialize(TAMProfile profile) {
+	public void initialize(TAMProfile profile, MainActivity mainActivity) {
 		this.profile = profile;
 		super.initialize();
 		
-		initializeControls();
+		initializeControls(mainActivity);
 		
 		this.profile.getListOfEditors().add(this);
 	}
 	
-	protected abstract void initializeControls();
+	protected abstract void initializeControls(MainActivity mainActivity);
 	
 	public boolean containsNode(int id) {
 		for(ITAMENode node : listOfENodes) {
