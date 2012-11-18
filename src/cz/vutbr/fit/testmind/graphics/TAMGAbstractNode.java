@@ -60,8 +60,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	private boolean isSelected;
 
 	private BackgroundStyle backgroundStyle;
-
-	private Paint textPaint;	
 	
 	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
@@ -89,8 +87,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		position = new Point(x, y);
 		setText(text);
 		
-		textPaint = new Paint();
-		textPaint.setTextSize(FONT_DEFAULT_SIZE);
 		//actualizeSize();
 	}
 	
@@ -345,11 +341,8 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		
 		paint.setStyle(Paint.Style.FILL);
 		
-		textPaint.setColor(colorText);
-		textPaint.setTextSize(FONT_DEFAULT_SIZE);
-		textPaint.setTypeface(Typeface.DEFAULT_BOLD);
-		canvas.drawText(text, offsetX, offsetY, textPaint);
-		
+		paint.setColor(colorText);
+		canvas.drawText(text, offsetX, offsetY, paint);		
 	}
 	
 	public void draw(Canvas canvas, Paint paint) {

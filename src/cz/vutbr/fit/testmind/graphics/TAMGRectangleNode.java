@@ -2,6 +2,7 @@ package cz.vutbr.fit.testmind.graphics;
 
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.shapes.RectShape;
 import android.util.Log;
 
@@ -81,7 +82,10 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	}
 	
 	public void actualizeSize() {
-		this.getPaint().setTextSize(FONT_DEFAULT_SIZE);
+		
+		this.getPaint().setTextSize(FONT_DEFAULT_SIZE);		
+		this.getPaint().setTypeface(Typeface.DEFAULT_BOLD);
+		
 		int width = (int) this.getPaint().measureText(getText())/2;
 		
 		Point p = this.getPosition();
