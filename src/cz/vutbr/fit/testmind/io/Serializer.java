@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.R.integer;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,6 +32,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
  */
 public class Serializer
 {
+    static private final String INIT_PRAGMA = "PRAGMA journal_mode=DELETE";
     static private final String CREATE_TABLE_PROFILE = "CREATE TABLE \"profile\" (" +
             "\"root\" id NOT NULL," +
             "\"nodeCounter\" int NOT NULL," +
@@ -191,6 +191,7 @@ public class Serializer
             fileDB.delete();
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(fileDB, null);
+        db.rawQuery(INIT_PRAGMA, null);
         db.execSQL(CREATE_TABLE_PROFILE);
         db.execSQL(CREATE_TABLE_EDITORS);
         db.execSQL(CREATE_TABLE_NODES);
