@@ -127,8 +127,8 @@ public class MainActivity extends FragmentActivity {
 		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
     	
 		// initialize editors //
-    	EventObjects.editor_main.initialize(profile, this);
-    	EventObjects.editor_test.initialize(profile, this);
+    	EventObjects.editor_main.initialize(profile);
+    	EventObjects.editor_test.initialize(profile);
     }
 	
 	/**

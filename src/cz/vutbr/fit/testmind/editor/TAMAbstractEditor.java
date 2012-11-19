@@ -42,16 +42,16 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		this.listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
 	}
 	
-	public void initialize(TAMProfile profile, MainActivity mainActivity) {
+	public void initialize(TAMProfile profile) {
 		this.profile = profile;
 		super.initialize();
 		
-		initializeControls(mainActivity);
+		initializeControls();
 		
 		this.profile.getListOfEditors().add(this);
 	}
 	
-	protected abstract void initializeControls(MainActivity mainActivity);
+	protected abstract void initializeControls();
 	
 	public boolean containsNode(int id) {
 		for(ITAMENode node : listOfENodes) {

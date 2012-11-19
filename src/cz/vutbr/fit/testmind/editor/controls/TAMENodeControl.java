@@ -139,7 +139,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		intent.putExtra(NODE_BODY, selectedNode.getProfile().getBody());				
 		intent.putExtra(NODE_COLOR, genrateColorId(selectedNode.getGui().getColorBackground()));						
 		
-		activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
+		activity.startActivityForResult(intent, REQUEST_CODES.EDIT_NODE);
 		
 	}
 
@@ -196,7 +196,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 
 		//Log.d(TAG,getListOfSelectedNodes().toString() + "");
 		
-		if(resultCode == EDIT_NODE_RESULT_CODE){
+		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == EDIT_NODE_RESULT_CODE){
 
 			String nodeTitle = data.getStringExtra(NODE_TITLE);
 			String nodeBody = data.getStringExtra(NODE_BODY);

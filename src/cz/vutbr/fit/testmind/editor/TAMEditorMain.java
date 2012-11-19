@@ -118,10 +118,10 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	}
 	
 	@Override
-	protected void initializeControls(MainActivity mainActivity) {
+	protected void initializeControls() {
 		new TAMEZoomControl(this);
 		new TAMENodeControl(this);
-		new TAMEOpenSaveControl(this, mainActivity);
+		new TAMEOpenSaveControl(this);
 		new TAMEIOControl(this);
 		new TAMEHidingControl(this);
 		new TAMEToolbarContol(this);
