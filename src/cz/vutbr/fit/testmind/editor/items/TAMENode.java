@@ -106,11 +106,11 @@ public class TAMENode implements ITAMENode, ITAMHidingControlNode {
 	}
 
 	public void dispose() {
-		editor.getListOfENodes().remove(this);
+		editor.getListOfENodes().remove(this);		
 		editor.getGItemFactory().deleteNode(gui, false);
 		gui = null;
 		editor = null;
-		profile = null;
+		profile = null;		
 	}
 	
 	@Override

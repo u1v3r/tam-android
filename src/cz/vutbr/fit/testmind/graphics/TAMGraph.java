@@ -439,9 +439,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		Log.d(TAG,"scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
-		Log.d(TAG,getWidth() + " " + getHeight());
-		
+		//Log.d(TAG,"scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
+	
 		
 		//canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
@@ -555,7 +554,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 					// aktualna vzdialenost dotykov
 					distCurrent = FloatMath.sqrt(distx * distx + disty * disty);
-					Log.d(TAG, "cur:" + distCurrent + ",prev:"+distCurrentPrev);																
+					//Log.d(TAG, "cur:" + distCurrent + ",prev:"+distCurrentPrev);																
 
 					float pivotX = (e.getX(0) + e.getX(1))/2f; //pivot X je v strede dotyku
 					float pivotY = (e.getY(0) + e.getY(1))/2f; //pivot Y je v strede dotyku
@@ -578,7 +577,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						}
 					}
 
-					Log.d(TAG, "scale:" + scale + ", distCurrent:" + distCurrent + ", distStart:" + distStart);
+					//Log.d(TAG, "scale:" + scale + ", distCurrent:" + distCurrent + ", distStart:" + distStart);
 					//Log.d(TAG, "pivodX: " + pivotX + ", pivotY: " + pivotY);
 
 					zoom(zoom.sx*scale, zoom.sy*scale, pivotX, pivotY);

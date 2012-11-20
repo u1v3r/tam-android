@@ -1,8 +1,5 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
@@ -98,7 +95,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	/**
 	 * Cez dialog vytvori child pre vybrany parrent uzol
 	 */
-	public void addChild() {
+	private void addChild() {
 		
 		if(editor.getLastSelectedNode() == null) {
 			Toast.makeText(editor.getContext(), R.string.parent_node_not_selected, Toast.LENGTH_LONG).show();
@@ -112,7 +109,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	/**
 	 * Shows edit node dialog for actual selected node.
 	 */
-	public void showEditNodeDialog() {
+	private void showEditNodeDialog() {
 		ITAMGNode gNode = editor.getLastSelectedNode();
 		
 		if(gNode != null) {
@@ -127,7 +124,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 * 
 	 * @param selectedNode
 	 */
-	public void showEditNodeDialog(ITAMENode selectedNode) {
+	private void showEditNodeDialog(ITAMENode selectedNode) {
 		
 		if(selectedNode == null) return;
 		
@@ -271,8 +268,17 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		} else if(item == EventObjects.btn_edit) {
 			showEditNodeDialog();
 		} else if(item == EventObjects.btn_delete) {
-			
+			deleteNode();
 		}
+	}
+
+	private void deleteNode() {	
+		
+		if(selectedNode == null) return;
+		
+		/**
+		 * TODO: implementovat mazanie uzlu
+		 */
 	}
 
 	public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge) {
