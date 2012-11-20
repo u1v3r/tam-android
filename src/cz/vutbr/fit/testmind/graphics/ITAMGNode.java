@@ -23,10 +23,6 @@ public interface ITAMGNode extends ITAMGItem {
 	
 	public ITAMGItem addChild(int type, int x, int y, String text);
 	
-	public void setBackgroundStyle(TAMENodeControl.BackgroundStyle background);
-	
-	public TAMENodeControl.BackgroundStyle getBackgroundStyle();
-	
 	public Rect getBounds();
 	
 	public Point getPosition();

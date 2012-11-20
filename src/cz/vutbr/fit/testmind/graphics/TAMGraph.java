@@ -91,11 +91,11 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	public interface ITAMPreDrawListener {
-		public void onPreDraw(Canvas canvas);
+		public void onPreDraw(Canvas canvas, Paint paint);
 	};
 	
 	public interface ITAMPostDrawListener {
-		public void onPostDraw(Canvas canvas);
+		public void onPostDraw(Canvas canvas, Paint paint);
 	};
 	
 	public interface ITAMItemListener {
@@ -450,6 +450,34 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		}
 	}
 	
+	public ITAMGItem isItemHit(float ax, float ay) {
+		
+		ITAMGItem result = null;
+		
+		for(ITAMGItem item : listOfDrawableItems) {
+			if(item.hit(ax, ay)) {
+				result = item;
+			}
+		}
+		
+		return result;
+	}
+	
+	public ITAMGNode isNodeHit(float ax, float ay) {
+		
+		ITAMGNode result = null;
+		
+		for(ITAMGItem item : listOfDrawableItems) {
+			if(item instanceof ITAMGNode) {
+				if(item.hit(ax, ay)) {
+					result = (ITAMGNode) item;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
@@ -463,7 +491,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		canvas.translate(translationPoint.x, translationPoint.y);
 		
 		for(ITAMPreDrawListener control : listOfPreDrawControls) {
-			control.onPreDraw(canvas);
+			control.onPreDraw(canvas, paint);
 		}
 		
 		for(ITAMGItem item : listOfDrawableItems) {
@@ -477,7 +505,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		}*/
 		
 		for(ITAMPostDrawListener control : listOfPostDrawControls) {
-			control.onPostDraw(canvas);
+			control.onPostDraw(canvas, paint);
 		}
 	}
 	
@@ -502,8 +530,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				touchState = TOUCH;
 				moveActionAllowed  = true;// ak je len dotyk jedneho prstu, tak sa moze presuvat
 
-				ITAMGItem result = null;
-
 				float dx = zoom.px-zoom.px*zoom.sx;
 				float dy = zoom.py-zoom.py*zoom.sy;
 
@@ -522,11 +548,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 					}
 				}*/
 
-				for(ITAMGItem item : listOfDrawableItems) {
-					if(item.hit(ax, ay)) {
-						result = item;
-					}
-				}
+				ITAMGItem result = isItemHit(ax, ay);
 				ge = new TAMGMotionEvent(result, ax, ay);
 
 				unselectAllWithout(result);

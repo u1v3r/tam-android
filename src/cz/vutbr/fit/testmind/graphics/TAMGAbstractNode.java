@@ -5,7 +5,6 @@ import java.util.List;
 
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -58,8 +57,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 	private boolean isHighlited;
 	private boolean isEnabled;
 	private boolean isSelected;
-
-	private BackgroundStyle backgroundStyle;
 	
 	public TAMGAbstractNode(TAMGraph graph, int x, int y, int offsetX, int offsetY, String text, Shape shape, int type) {
 		super(shape);
@@ -69,12 +66,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
 		this.listOfParentConnections = new ArrayList<ITAMGConnection>();
 
 		this.type = type;
-		this.colorBackground = graph.getResources().getColor(R.color.node_background_1);		
-		this.colorStroke = graph.getResources().getColor(R.color.node_background_stroke_1);
-		this.colorText = graph.getResources().getColor(R.color.node_text);
-		this.colorBackgroundHighlight = graph.getResources().getColor(R.color.node_highlight_background);
-		this.colorStrokeHighlight = graph.getResources().getColor(R.color.node_highlight_background_stroke);
-		this.backgroundStyle = BackgroundStyle.BLUE;
 		
 		this.isHighlited = false;
 		this.isEnabled = true;
@@ -217,32 +208,6 @@ public abstract class TAMGAbstractNode extends ShapeDrawable implements ITAMGNod
     public void setBackgroundStroke(int backgroundStroke)
     {
         this.colorStroke = backgroundStroke;
-    }
-    
-    public void setBackgroundStyle(TAMENodeControl.BackgroundStyle style){
-    	
-    	Resources res = graph.getResources();
-    	if(BackgroundStyle.BLUE == style){
-    		backgroundStyle = style;
-    		setColorBackground(res.getColor(R.color.node_background_1));
-    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_1));
-    	}else if(BackgroundStyle.GREEN == style){
-    		backgroundStyle = style;
-    		setColorBackground(res.getColor(R.color.node_background_2));
-    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_2));
-    	}else if(BackgroundStyle.RED == style){
-    		backgroundStyle = style;
-    		setColorBackground(res.getColor(R.color.node_background_3));
-    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_3));
-    	}else if(BackgroundStyle.PURPLE == style){
-    		backgroundStyle = style;
-    		setColorBackground(res.getColor(R.color.node_background_4));
-    		setBackgroundStroke(res.getColor(R.color.node_background_stroke_4));
-    	}
-    }
-    
-    public TAMENodeControl.BackgroundStyle getBackgroundStyle(){
-    	return backgroundStyle;
     }
 
     public void setSelected(boolean enable) {

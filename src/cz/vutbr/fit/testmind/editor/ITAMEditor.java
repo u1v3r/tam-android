@@ -5,8 +5,8 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.PointF;
 import android.preference.PreferenceManager.OnActivityResultListener;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
 import android.view.View;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
@@ -98,5 +98,9 @@ public interface ITAMEditor {
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
 		
 	public void unselectAll();
+
+	public PointF getTranslation();
+	
+	public void translate(float tx, float ty);
 	
 }
