@@ -180,7 +180,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected void initialize() {
 		gestureDetector = new GestureDetector(this.getContext(), this);
 		zoom = new TAMGZoom(this);
-		Log.d(TAG,getWidth() + " " + getHeight());
+		//Log.d(TAG,getWidth() + " " + getHeight());
 	}
 
 	public boolean isMoveItemsOrGraphEnabled() {
@@ -243,14 +243,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * 
 	 * @return
 	 */
-	public List<ITAMPostDrawListener> getListOfDrawControls() {
-		return listOfPostDrawControls;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
 	public List<ITAMItemListener> getListOfItemControls() {
 		return listOfItemControls;
 	}
@@ -278,6 +270,23 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	public List<ITAMTouchListener> getListOfTouchControls() {
 		return listOfTouchControls;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMPreDrawListener> getListOfPreDrawControls() {
+		return listOfPreDrawControls;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<ITAMPostDrawListener> getListOfPostDrawControls() {
+		return listOfPostDrawControls;
+	}
+
 	
 	/*public List<GestureDetector> getListOfGestureControls(){
 		return listOfGestureControls;
@@ -382,9 +391,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		} else {
 			int size = listOfSelectedItems.size();
 			int a = 0;
-			Log.d(TAG, size + "");
+			//Log.d(TAG, size + "");
 			for(int i = 0; i < size; i++) {
-				Log.d(TAG, i + "");
+				//Log.d(TAG, i + "");
 				ITAMGItem item = listOfSelectedItems.get(a);
 				if(item != actual) {
 					item.setSelected(false);
@@ -482,13 +491,15 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		Log.d(TAG,"scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
-		Log.d(TAG,getWidth() + " " + getHeight());
+		//Log.d(TAG,"scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
+		//Log.d(TAG,getWidth() + " " + getHeight());
 		
 		
 		//canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		canvas.translate(translationPoint.x, translationPoint.y);
+		
+		paint.setAntiAlias(true);
 		
 		for(ITAMPreDrawListener control : listOfPreDrawControls) {
 			control.onPreDraw(canvas, paint);
@@ -525,7 +536,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 			case MotionEvent.ACTION_DOWN:
 
-				Log.d(TAG, "ACTION_DOWN");
+				//Log.d(TAG, "ACTION_DOWN");
 
 				touchState = TOUCH;
 				moveActionAllowed  = true;// ak je len dotyk jedneho prstu, tak sa moze presuvat
@@ -567,7 +578,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 			case MotionEvent.ACTION_POINTER_DOWN:
 
-				Log.d(TAG, "ACTION_POINTER_DOWN");
+				//Log.d(TAG, "ACTION_POINTER_DOWN");
 				touchState = PINCH;				
 				moveActionAllowed = false;// v pripade ak sa dotkne aj druhy prst, tak sa nesmie povolit hybanie
 
@@ -579,11 +590,11 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 			case MotionEvent.ACTION_MOVE:
 
-				Log.d(TAG, "ACTION_MOVE");
+				//Log.d(TAG, "ACTION_MOVE");
 
 				// ak je aktivne gestoo pinch zoom
 				if(touchState == PINCH){
-					Log.d(TAG, "zoooming");
+					//Log.d(TAG, "zoooming");
 					//Log.d(TAG, "posX1:" + e.getX(0) + ",posX2:" + e.getX(1));
 					moveActionAllowed = false;
 
@@ -596,7 +607,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 					// aktualna vzdialenost dotykov
 					distCurrent = FloatMath.sqrt(distx * distx + disty * disty);
-					Log.d(TAG, "cur:" + distCurrent + ",prev:"+distCurrentPrev);																
+					//Log.d(TAG, "cur:" + distCurrent + ",prev:"+distCurrentPrev);																
 
 					float pivotX = (e.getX(0) + e.getX(1))/2f; //pivot X je v strede dotyku
 					float pivotY = (e.getY(0) + e.getY(1))/2f; //pivot Y je v strede dotyku
@@ -619,20 +630,20 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						}
 					}
 
-					Log.d(TAG, "scale:" + scale + ", distCurrent:" + distCurrent + ", distStart:" + distStart);
+					//Log.d(TAG, "scale:" + scale + ", distCurrent:" + distCurrent + ", distStart:" + distStart);
 					//Log.d(TAG, "pivodX: " + pivotX + ", pivotY: " + pivotY);
 
 					zoom(zoom.sx*scale, zoom.sy*scale, pivotX, pivotY);
 
 				} else if(touchState == TOUCH && moveActionAllowed) {
-					Log.d(TAG, "mooving");
+					//Log.d(TAG, "mooving");
 					float dx1 = x - actualPoint.x;
 					float dy1 = y - actualPoint.y;
 
 					if(dx1 > 1 || dy1 > 1 || dx1 < -1 || dy1 < -1) {
 
-						int ddx = (int) (dx1/zoom.sx);
-						int ddy = (int) (dy1/zoom.sy);
+						float ddx = (int) (dx1/zoom.sx);
+						float ddy = (int) (dy1/zoom.sy);
 
 						if(!listOfSelectedItems.isEmpty()) {
 
@@ -654,7 +665,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 			case MotionEvent.ACTION_UP:
 
 				//Dokoncenie press gesta prveho dotyku
-				Log.d(TAG, "ACTION_UP");					
+				//Log.d(TAG, "ACTION_UP");					
 				touchState = IDLE;
 				moveActionAllowed = true;//pri uvolneni sa moze hybat
 
@@ -664,12 +675,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 						if(item instanceof ITAMGNode) {
 							onItemLongReleaseEvent(e, (ITAMGNode) item);
 						}
+					} else {
+						onItemLongReleaseEvent(e, null);
 					}
 				}
 				break;
 			case MotionEvent.ACTION_POINTER_UP:
 				//Dokoncenie press druheho dotyku
-				Log.d(TAG, "ACTION_POINTER_UP");
+				//Log.d(TAG, "ACTION_POINTER_UP");
 				touchState = TOUCH;
 				moveActionAllowed = false;
 				break;
@@ -741,7 +754,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 
 	public boolean onSingleTapUp(MotionEvent e) {
-		Log.d(TAG, "onSingleTapUp");
+		//Log.d(TAG, "onSingleTapUp");
 		return false;
 	}
 	
@@ -895,7 +908,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 */
 	private void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
-		Log.d(TAG, "long select");
+		//Log.d(TAG, "long select");
 		
 		for(ITAMItemGestureListener control : listOfItemGestureControls) {
 			control.onItemLongSelectEvent(e, node);

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
+import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
@@ -38,6 +39,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	protected void initializeControls() {
 		new TAMEZoomControl(this);
 		new TAMEToolbarContol(this);
+		new TAMEConnectionControl(this);
 		
 		random = new Random();
 	}

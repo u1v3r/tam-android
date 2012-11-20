@@ -7,23 +7,34 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMBlankAreaGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPreDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 
-public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMItemGestureListener, ITAMPreDrawListener, ITAMItemListener {
+public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMItemGestureListener, ITAMPreDrawListener, ITAMBlankAreaGestureListener, ITAMTouchListener {
 	
 	private boolean active = false;
-	private Point from;
+	private ITAMGNode fromNode;
+	private ITAMGNode toNode;
 	private PointF to;
 
 	public TAMEConnectionControl(ITAMEditor editor) {
 		super(editor);
 		editor.getListOfItemGestureControls().add(this);
+		//editor.getListOfItemControls().add(this);
+		editor.getListOfMoveGestureControls().add(this);
+		editor.getListOfPreDrawControls().add(this);
+		editor.getListOfTouchControls().add(this);
 		to = new PointF();
 	}
 
@@ -31,11 +42,12 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 		
 		if(node != null) {
 			
-			from = node.getPosition();
-			to.x = from.x;
-			to.y = from.y;
+			fromNode = node;
 			
 			((TAMGraph) getEditor()).setMoveItemsOrGraphEnabled(false);
+			
+			node.setSelected(false);
+			((ITAMENode) fromNode.getHelpObject()).setBackgroundStyle(ITAMENode.RED);
 			
 			active = true;
 		}
@@ -43,10 +55,28 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 
 	public void onItemLongReleaseEvent(MotionEvent e, ITAMGNode node) {
 		
+		System.out.println("release");
+		
 		if(active) {
 			((TAMGraph) getEditor()).setMoveItemsOrGraphEnabled(true);
 			
-			active = true;
+			active = false;
+			
+			if(toNode != null) {
+				
+				TAMPConnection connection = editor.getProfile().getConnection(((TAMENode) fromNode.getHelpObject()).getProfile(), ((TAMENode) toNode.getHelpObject()).getProfile());
+				
+				if(connection != null && !connection.hasReference(editor)) {
+					TAMPConnectionFactory.addEReference(connection, editor);
+				}
+				
+				
+				((ITAMENode) toNode.getHelpObject()).setBackgroundStyle(ITAMENode.BLUE);
+			}
+			
+			toNode = null;
+			
+			((ITAMENode) fromNode.getHelpObject()).setBackgroundStyle(ITAMENode.BLUE);
 		}
 	}
 
@@ -56,24 +86,56 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 
 	public void onPreDraw(Canvas canvas, Paint paint) {
 		
+		//System.out.println("draw");
+		
 		if(active) {
+			
+			Point from = fromNode.getPosition();
+			//System.out.println(from.x + " " + from.y + " " + to.x + " " + to.y);
 			paint.setStrokeWidth(6f);
 			paint.setColor(Color.BLACK);
-			canvas.drawLine(from.x, from.y, to.x, to.y, paint);
+			if(toNode == null) {
+				canvas.drawLine(from.x, from.y, to.x, to.y, paint);
+			} else {
+				Point to = toNode.getPosition();
+				canvas.drawLine(from.x, from.y, to.x, to.y, paint);
+			}
 		}
 	}
 
-	public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge) {
-		// do nothing //
+	public void onBlankMoveEvent(MotionEvent e, float dx, float dy) {
+		to.x += dx;
+		to.y += dy;
+		
+		ITAMGNode selected = ((TAMGraph) editor).isNodeHit(to.x, to.y);
+		
+		if(selected != fromNode) {
+			if(toNode != selected) {
+				if(toNode != null) {
+					((ITAMENode) toNode.getHelpObject()).setBackgroundStyle(ITAMENode.BLUE);
+				}
+				if(selected != null) {
+					((ITAMENode) selected.getHelpObject()).setBackgroundStyle(ITAMENode.RED);
+				}
+				
+				toNode = selected;
+			}
+		}
 	}
 
-	public void onItemMoveEvent(MotionEvent e, TAMGMotionEvent ge) {
-		to.x += ge.dx;
-		to.y += ge.dy;
+	public void onBlankLongPressEvent(MotionEvent e, float dx, float dy) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
-		// do nothing //
+	public void onBlankDoubleTapEvent(MotionEvent e, float dx, float dy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
+		to.x = ge.dx;
+		to.y = ge.dy;
 	}
 
 }

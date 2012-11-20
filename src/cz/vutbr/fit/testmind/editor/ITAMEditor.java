@@ -17,9 +17,11 @@ import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGItemFactory;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMBlankAreaGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPostDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPreDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
@@ -73,13 +75,17 @@ public interface ITAMEditor {
 	
 	public List<ITAMTouchListener> getListOfTouchControls();
 
-	public List<ITAMPostDrawListener> getListOfDrawControls();
+	public List<ITAMPreDrawListener> getListOfPreDrawControls();
+
+	public List<ITAMPostDrawListener> getListOfPostDrawControls();
 
 	public List<ITAMItemListener> getListOfItemControls();
 	
 	public List<ITAMItemGestureListener> getListOfItemGestureControls();
 	
 	public List<OnActivityResultListener> getListOfOnActivityResultControls();
+	
+	public List<ITAMBlankAreaGestureListener> getListOfMoveGestureControls();
 	
 	public List<ITAMGItem> getListOfSelectedItems();
 	
