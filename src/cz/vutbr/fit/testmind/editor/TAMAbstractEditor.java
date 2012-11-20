@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 
+import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;

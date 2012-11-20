@@ -26,6 +26,10 @@ public abstract class TAMPItem {
 		editorReferences.clear();
 	}
 	
+	public boolean hasReference(ITAMEditor editor) {
+		return editorReferences.containsKey(editor);
+	}
+	
 	public void removeEReference(ITAMEditor editor) {
 		
 		ITAMEItem item = getEReference(editor);

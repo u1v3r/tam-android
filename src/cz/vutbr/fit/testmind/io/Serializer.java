@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.R.integer;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.SparseArray;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMEItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -33,6 +32,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
  */
 public class Serializer
 {
+    static private final String INIT_PRAGMA = "PRAGMA journal_mode=DELETE";
     static private final String CREATE_TABLE_PROFILE = "CREATE TABLE \"profile\" (" +
             "\"root\" id NOT NULL," +
             "\"nodeCounter\" int NOT NULL," +
@@ -43,7 +43,9 @@ public class Serializer
             "\"sx\" real NOT NULL," +
             "\"sy\" real NOT NULL," +
             "\"px\" real NOT NULL," +
-            "\"py\" real NOT NULL)";
+            "\"py\" real NOT NULL," +
+            "\"tx\" real NOT NULL," +
+            "\"ty\" real NOT NULL)";
     static private final String CREATE_TABLE_NODE_REFERENCES = "CREATE TABLE \"node_references\" (" +
             "\"node\" int NOT NULL," +
             "\"editor\" TEXT NOT NULL," +
@@ -88,7 +90,7 @@ public class Serializer
             "from profile inner join nodes on profile.root = nodes.id";
     
     static private final String[] COLUMNS_PROFILE = {"nodeCounter", "connectionCounter", "id", "title", "body"};    
-    static private final String[] COLUMNS_EDITORS = {"name", "sx", "sy", "px", "py"};
+    static private final String[] COLUMNS_EDITORS = {"name", "sx", "sy", "px", "py", "tx", "ty"};
     static private final String[] COLUMNS_NODES = {"id", "title", "body"};
     static private final String[] COLUMNS_CONNECTIONS = {"id", "parent", "child"};
     static private final String[] COLUMNS_NODE_REFERENCES = {"node", "editor", "type", "x", "y",
@@ -155,6 +157,7 @@ public class Serializer
         } 
         
         db.close();
+        removeJournal();
     }
     
     /**
@@ -191,6 +194,7 @@ public class Serializer
             fileDB.delete();
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(fileDB, null);
+        db.rawQuery(INIT_PRAGMA, null);
         db.execSQL(CREATE_TABLE_PROFILE);
         db.execSQL(CREATE_TABLE_EDITORS);
         db.execSQL(CREATE_TABLE_NODES);
@@ -234,6 +238,7 @@ public class Serializer
     private void insertEditor(SQLiteDatabase db, ITAMEditor editor)
     {
         TAMGZoom zoom = editor.getZoom();
+        PointF translation = editor.getTranslation();
         
         ContentValues values = new ContentValues();
         values.put("name", editor.getClass().getName());
@@ -241,6 +246,9 @@ public class Serializer
         values.put("sy", zoom.sy);
         values.put("px", zoom.px);
         values.put("py", zoom.py);
+        
+        values.put("tx", translation.x);
+        values.put("ty", translation.y);
         
         db.insert("editors", null, values);
     }
@@ -279,7 +287,7 @@ public class Serializer
         values.put("y", position.y);
         values.put("background", gui.getColorBackground());
         values.put("backgroundStroke", gui.getBackgroundStroke());
-        values.put("backgroundStyle", gui.getBackgroundStyle().toString());
+        values.put("backgroundStyle", node.getBackgroundStyle());
         values.put("foreground", gui.getColorText());
         values.put("highlightColor", gui.getColorBackgroundHighlight());
         
@@ -399,7 +407,11 @@ public class Serializer
             float px = cur.getFloat(indexes.get("px"));
             float py = cur.getFloat(indexes.get("py"));
             
-            editor.zoom(sx, sy, px, py);            
+            float tx = cur.getFloat(indexes.get("tx"));
+            float ty = cur.getFloat(indexes.get("ty"));
+            
+            editor.zoom(sx, sy, px, py);          
+            editor.translate(tx, ty);
         }
         
         return editors;
@@ -473,11 +485,11 @@ public class Serializer
             int type = cur.getInt(indexes.get("type"));
             int x = cur.getInt(indexes.get("x"));
             int y = cur.getInt(indexes.get("y"));
-            ITAMGNode gNode = TAMPConnectionFactory.addEReference(node, editor, x, y, type).getGui();
+            ITAMENode eNode = TAMPConnectionFactory.addEReference(node, editor, x, y, type);
             
-            gNode.setColorBackground(cur.getInt(indexes.get("background")));
-            gNode.setBackgroundStroke(cur.getInt(indexes.get("backgroundStroke")));
-            gNode.setBackgroundStyle(BackgroundStyle.valueOf(cur.getString(indexes.get("backgroundStyle"))));
+            ITAMGNode gNode = eNode.getGui();
+            
+            eNode.setBackgroundStyle(cur.getInt(indexes.get("backgroundStyle")));
             gNode.setColorText(cur.getInt(indexes.get("foreground")));
             gNode.setColorBackgroundHighlight(cur.getInt(indexes.get("highlightColor")));
         }           
@@ -528,6 +540,19 @@ public class Serializer
         return result;
     }
     
+    /**
+     * remove journal file
+     */
+    private void removeJournal()
+    {
+        String path = fileDB.getAbsolutePath() + "-journal";
+        File fileJournal = new File(path);
+        if(fileJournal.exists())
+        {
+            fileJournal.delete();
+        }
+    }
+    
     // static private methods =================================================
     
     /**
@@ -567,4 +592,5 @@ public class Serializer
         
         return map;
     }
+    
 }

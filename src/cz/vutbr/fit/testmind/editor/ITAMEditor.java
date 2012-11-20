@@ -5,8 +5,8 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.PointF;
 import android.preference.PreferenceManager.OnActivityResultListener;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.MenuItem;
 import android.view.View;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
@@ -17,9 +17,11 @@ import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGItemFactory;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
-import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMBlankAreaGestureListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPostDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPreDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
@@ -73,13 +75,17 @@ public interface ITAMEditor {
 	
 	public List<ITAMTouchListener> getListOfTouchControls();
 
-	public List<ITAMDrawListener> getListOfDrawControls();
+	public List<ITAMPreDrawListener> getListOfPreDrawControls();
+
+	public List<ITAMPostDrawListener> getListOfPostDrawControls();
 
 	public List<ITAMItemListener> getListOfItemControls();
 	
 	public List<ITAMItemGestureListener> getListOfItemGestureControls();
 	
 	public List<OnActivityResultListener> getListOfOnActivityResultControls();
+	
+	public List<ITAMBlankAreaGestureListener> getListOfMoveGestureControls();
 	
 	public List<ITAMGItem> getListOfSelectedItems();
 	
@@ -89,7 +95,7 @@ public interface ITAMEditor {
 
 	public Resources getResources();
 	
-	public void addOnGestureLisener(OnGestureListener listener, Context context);
+	//public void addOnGestureLisener(OnGestureListener listener, Context context);
 	
 	public void invalidate();
 	
@@ -98,5 +104,9 @@ public interface ITAMEditor {
 	public void zoom(float scaleX, float scaleY, float pivotX, float pivotY);
 		
 	public void unselectAll();
+
+	public PointF getTranslation();
+	
+	public void translate(float tx, float ty);
 	
 }

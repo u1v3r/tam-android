@@ -29,7 +29,7 @@ import com.commonsware.cwac.richedit.RichEditText;
 import com.commonsware.cwac.richedit.RichEditText.OnSelectionChangedListener;
 
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.BackgroundStyle;
+import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 
 
 public class EditNodeActivity extends FragmentActivity implements AnimationListener, 
@@ -51,7 +51,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	private RadioButton radioButtonGreen;
 	private RadioButton radioButtonPurple;
 		
-	private BackgroundStyle color;
+	private int color;
 
 	private LinearLayout formatToolbar;
 
@@ -91,7 +91,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		/* prijme intent z main acitivity */
 		Intent intent = getIntent();
 		String titleString = intent.getStringExtra(TAMENodeControl.NODE_TITLE);		
-		BackgroundStyle backgroundColor = (BackgroundStyle) intent.getSerializableExtra(TAMENodeControl.NODE_COLOR);	
+		int backgroundColor = intent.getIntExtra(TAMENodeControl.NODE_COLOR, 0);	
 		String bodyText = intent.getStringExtra(TAMENodeControl.NODE_BODY);
 		
 		/* nastavenie titulku */
@@ -149,17 +149,22 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		hideBtn = (ImageButton)findViewById(R.id.edit_node_hidebtn);		
 	}
 	
-    private void setRadioButtonColor(BackgroundStyle backgroundColor) {
+    private void setRadioButtonColor(int backgroundColor) {
     	
-    	if(backgroundColor.equals(BackgroundStyle.BLUE)){
-    		radioButtonBlue.setChecked(true);
-    	}else if(backgroundColor.equals(BackgroundStyle.GREEN)){
-    		radioButtonGreen.setChecked(true);
-    	}else if(backgroundColor.equals(BackgroundStyle.RED)){
-    		radioButtonRed.setChecked(true);  
-    	}else if(backgroundColor.equals(BackgroundStyle.PURPLE)){
-    		radioButtonPurple.setChecked(true);
-    	}
+    	switch (backgroundColor) {
+			case ITAMENode.BLUE:
+				radioButtonBlue.setChecked(true);
+				break;
+			case ITAMENode.GREEN:
+				radioButtonGreen.setChecked(true);
+				break;
+			case ITAMENode.RED:
+				radioButtonRed.setChecked(true);
+				break;
+			case ITAMENode.PURPLE:
+				radioButtonPurple.setChecked(true);
+				break;
+		}
 	}
 
 	@Override
@@ -200,20 +205,22 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	
     	boolean checked = ((RadioButton) view).isChecked();
         
-    	switch(view.getId()) {
+    	if(checked) {
+    		switch(view.getId()) {
 	        case RadioButtonItems.BLUE:
-	            if (checked) color = BackgroundStyle.BLUE;              
+	            color = ITAMENode.BLUE;              
 	            break;
 	        case RadioButtonItems.RED:
-	        	if (checked) color = BackgroundStyle.RED;               
+	        	color = ITAMENode.RED;               
 	            break;
 	        case RadioButtonItems.GREEN:
-	        	if (checked) color = BackgroundStyle.GREEN;               
+	        	color = ITAMENode.GREEN;               
 	            break;
 	        case RadioButtonItems.PURPLE:
-	        	if (checked) color = BackgroundStyle.PURPLE;             
+	        	color = ITAMENode.PURPLE;             
 	            break;
-	    }	
+	    }
+    	}
     }
 	
 	public void onBoldBtnClick(View w){

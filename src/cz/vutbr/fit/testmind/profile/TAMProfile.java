@@ -61,6 +61,16 @@ public class TAMProfile {
 		return null;
 	}
 	
+	public TAMPConnection getConnection(TAMPNode one, TAMPNode two) {
+		for(TAMPConnection connection : listOfPConnections) {
+			if(connection.getParent() == one && connection.getChild() == two
+			|| connection.getParent() == two && connection.getChild() == one) {
+				return connection;
+			}
+		}
+		return null;
+	}
+	
 	public TAMPNode createRoot(String title, String body) {
 		if(root != null) {
 			throw new TAMItemException("Root already exists");

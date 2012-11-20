@@ -53,4 +53,7 @@
     <string name="testing_control_again">Testing again</string>
     <string name="testing_error_any_nodes">There are not nodes for testing!</string>
     <string name="testing_last_node">It is last node!</string>
+    <string name="open_save_file">File: </string>
+    <string name="open_save_error_empty_file">Name of file is empty!</string>
+    <string name="open_save_error_any_file">There is not any file for open!</string>
 </resources>

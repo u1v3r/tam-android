@@ -38,10 +38,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	
 	private ITAMENode selectedNode = null;
 	
-	public static enum BackgroundStyle {
-		GREEN,BLUE,RED,PURPLE;
-	}
-	
 	public interface ITAMNodeControlListener {
 		public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY);
 	}
@@ -62,34 +58,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfItemControls().add(this);		
 		editor.getListOfButtonControls().add(this);
-	}
-	
-	/**
-	 * Color generator
-	 * 
-	 * @param background
-	 * @return
-	 */
-	private BackgroundStyle genrateColorId(int background) {
-        
-		BackgroundStyle color = BackgroundStyle.BLUE;
-		
-		int blue = editor.getResources().getColor(R.color.node_background_1);
-		int green = editor.getResources().getColor(R.color.node_background_2);
-		int red = editor.getResources().getColor(R.color.node_background_3);
-		int purple = editor.getResources().getColor(R.color.node_background_4);
-		
-    	if(background == blue){
-    		color = BackgroundStyle.BLUE;
-    	}else if(background == green){
-    		color = BackgroundStyle.GREEN;
-    	}else if(background == red){
-    		color = BackgroundStyle.RED;
-    	}else if(background == purple){
-    		color = BackgroundStyle.PURPLE;
-    	}
-    	
-    	return color;
 	}
 
 	/**
@@ -134,9 +102,9 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				
 		intent.putExtra(NODE_TITLE, selectedNode.getProfile().getTitle());
 		intent.putExtra(NODE_BODY, selectedNode.getProfile().getBody());				
-		intent.putExtra(NODE_COLOR, genrateColorId(selectedNode.getGui().getColorBackground()));						
+		intent.putExtra(NODE_COLOR, selectedNode.getBackgroundStyle());						
 		
-		activity.startActivityForResult(intent, EDIT_NODE_RESULT_CODE);
+		activity.startActivityForResult(intent, REQUEST_CODES.EDIT_NODE);
 		
 	}
 
@@ -193,11 +161,11 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 
 		//Log.d(TAG,getListOfSelectedNodes().toString() + "");
 		
-		if(resultCode == EDIT_NODE_RESULT_CODE){
+		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == EDIT_NODE_RESULT_CODE){
 
 			String nodeTitle = data.getStringExtra(NODE_TITLE);
 			String nodeBody = data.getStringExtra(NODE_BODY);
-			BackgroundStyle nodeColor = (BackgroundStyle)data.getSerializableExtra(NODE_COLOR);
+			int nodeColor = data.getIntExtra(NODE_COLOR, ITAMENode.BLUE);
 			
 			// musi byt vybrany jeden uzol
 			if(selectedNode == null) return true; 
@@ -211,8 +179,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			if(nodeBody != null){								
 				selectedNode.getProfile().setBody(nodeBody);				
 			}
-						
-			selectedNode.getGui().setBackgroundStyle(nodeColor);
+			
+			selectedNode.setBackgroundStyle(nodeColor);
 				
 			editor.invalidate();
 		}

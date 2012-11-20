@@ -1,54 +1,80 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import java.io.File;
-
-import android.os.Environment;
-import android.util.Log;
+import android.app.Activity;
+import android.content.Intent;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.MenuItem;
-import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
+import cz.vutbr.fit.testmind.OpenSaveActivity;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
- * 
- * TODO: trieda v ktorej bude implementovy open/save suboru
+ * open and save mind maps 
+ * @author jules
  *
  */
-public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenuListener{
-
+public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenuListener, OnActivityResultListener
+{
 	private static final String TAG = "TAMEditorOpenSaveControl";
 
-	public TAMEOpenSaveControl(ITAMEditor editor) {
+	private ITAMEditor editor;
+
+	public TAMEOpenSaveControl(ITAMEditor editor)
+	{
 		super(editor);
+		
 		editor.getListOfMenuControls().add(this);
+		editor.getListOfOnActivityResultControls().add(this);
+		
+		this.editor = editor;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		if(MainActivity.MenuItems.open == item.getItemId()){
-			openFile();
+			startActivity(REQUEST_CODES.OPEN);
 		}
 		else if(MainActivity.MenuItems.save == item.getItemId()){
-			saveFile();
+		    startActivity(REQUEST_CODES.SAVE);
 		}
 		
 		return true;
 			
 	}
 
-	public void saveFile()
-	{
-	    
-        Serializer serializer = new Serializer(TAMProfile.TESTMIND_DIRECTORY.getPath()+"/TestMind.db");
-        serializer.serialize(MainActivity.getProfile());		
-	}
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if((requestCode == REQUEST_CODES.OPEN || requestCode == REQUEST_CODES.SAVE)
+           && resultCode == Activity.RESULT_OK)
+        {
+            String file = data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT);
+            
+            Serializer serializer = new Serializer(String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), file));
+            if(requestCode == REQUEST_CODES.OPEN)
+            {
+                serializer.deserialize(MainActivity.getProfile());
+            }
+            else if(requestCode == REQUEST_CODES.SAVE)
+            {
+                serializer.serialize(MainActivity.getProfile());
+            }
+        }
 
-	public void openFile()
-	{
-        Serializer serializer = new Serializer(TAMProfile.TESTMIND_DIRECTORY.getPath()+"/TestMind.db");
-        serializer.deserialize(MainActivity.getProfile());    
-	}
+        return true;
+    }
 
+	/**
+	 * start activity for selecting file
+	 * @param which
+	 */
+	private void startActivity(int which)
+	{
+	    Intent i = new Intent(activity, OpenSaveActivity.class);
+    
+	    i.putExtra(OpenSaveActivity.INTENT_ID_MODE, which);
+    
+	    activity.startActivityForResult(i, which);
+	}
 }

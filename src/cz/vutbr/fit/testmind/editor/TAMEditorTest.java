@@ -4,11 +4,13 @@ import java.util.Random;
 
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
+import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
@@ -37,6 +39,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	protected void initializeControls() {
 		new TAMEZoomControl(this);
 		new TAMEToolbarContol(this);
+		new TAMEConnectionControl(this);
 		
 		random = new Random();
 	}
@@ -198,23 +201,23 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 		}*/
 		
 		TAMGZoom zoom = getZoom();
-		zoom(getZoom().sx, getZoom().sy, 0f, 0f);
+		zoom(TAMGraph.DEFAULT_ZOOM, TAMGraph.DEFAULT_ZOOM, getWidth()/2, getHeight()/2);
+		translate(0, 0);
 		
-		int offsetX = ((int)(OFFSET/getZoom().sx));
-		int offsetY = ((int)(OFFSET/getZoom().sy));
+		int offsetX = ((int)(OFFSET/zoom.sx));
+		int offsetY = ((int)(OFFSET/zoom.sy));
 		int halfOffsetX = offsetX/2;
-		int halfOffsetY = offsetX/2;
+		int halfOffsetY = offsetY/2;
 		
-		int width = (int) ((getWidth()/getZoom().sx)) - offsetX;
-		int height = (int) ((getHeight()/getZoom().sy)) - offsetY;
-		
+		int width = (int) ((getWidth()/zoom.sx)) - offsetX;
+		int height = (int) ((getHeight()/zoom.sy)) - offsetY;
 		
 		//System.out.println(width + " " + height + " " + offsetX + " " + offsetY);
 		
-		TAMPConnectionFactory.addEReference(node, this, (random.nextInt(width)+halfOffsetX), (random.nextInt(height)+halfOffsetY));
+		TAMPConnectionFactory.addEReference(node, this, (random.nextInt(width)+halfOffsetX-getWidth()/2), (random.nextInt(height)+halfOffsetY-getHeight()/2));
 		
 		for(TAMPNode child : node.getListOfChildNodes()) {
-			TAMPConnectionFactory.addEReference(child, this, (random.nextInt(width)+halfOffsetX), (random.nextInt(height)+halfOffsetY));
+			TAMPConnectionFactory.addEReference(child, this, (random.nextInt(width)+halfOffsetX-getWidth()/2), (random.nextInt(height)+halfOffsetY-getHeight()/2));
 		}
 		
 	}

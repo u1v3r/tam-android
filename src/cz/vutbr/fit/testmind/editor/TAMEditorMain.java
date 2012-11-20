@@ -2,7 +2,6 @@ package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
@@ -70,8 +69,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		TAMPNode newProfileNode = profile.createNode(title, body);		
 		ITAMENode newEditorNode = TAMPConnectionFactory.addEReference(newProfileNode, this, posX, posY);
 		TAMPConnection pConnection = profile.createConnection(parent.getProfile(), newProfileNode);		
-		TAMPConnectionFactory.addEReference(pConnection, this);		
-		newEditorNode.getGui().setBackgroundStyle(parent.getGui().getBackgroundStyle());
+		TAMPConnectionFactory.addEReference(pConnection, this);
+		newEditorNode.setBackgroundStyle(parent.getBackgroundStyle());
 		
 		return newEditorNode;
 	}
