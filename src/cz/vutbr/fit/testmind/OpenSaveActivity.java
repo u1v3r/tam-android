@@ -48,6 +48,8 @@ public class OpenSaveActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_save);
         
+        this.getActionBar().setHomeButtonEnabled(true);
+        
         Bundle b = getIntent().getExtras();
         int which = b.getInt(INTENT_ID_MODE);
         
@@ -102,6 +104,10 @@ public class OpenSaveActivity extends FragmentActivity
             }
         }
         else if(menuCancel.getItemId() == id)
+        {
+            cancelActivity();
+        }
+        else if(android.R.id.home == id)
         {
             cancelActivity();
         }

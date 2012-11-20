@@ -79,6 +79,8 @@ public class TestingActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testing);
         
+        this.getActionBar().setHomeButtonEnabled(true);
+        
         Bundle b = getIntent().getExtras();
         TestingParcelable nodeParcelable = (TestingParcelable)b.getParcelable("cz.vutbr.fit.testmind.testing.TestingParcelable");
         
@@ -97,11 +99,13 @@ public class TestingActivity extends FragmentActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.activity_testing, menu);
+
         
-        controlAction = menu.findItem(R.id.testingActionControl).setVisible(true);
+        controlAction = menu.findItem(R.id.testingActionControl);
         menuExplore = menu.findItem(R.id.explore);
         menuTest = menu.findItem(R.id.test);
-        
+
+        setActivityMode(data.mode);
         return true;
     }
 
@@ -126,6 +130,10 @@ public class TestingActivity extends FragmentActivity
                 startTesting();
                 setTestingPhase(TestingPhase.QUESTION);
             }
+        }
+        else if(android.R.id.home == id)
+        {
+            finish();
         }
         else if(menuExplore.getItemId() == id && data.mode == ActivityMode.TEST)
         {
@@ -154,7 +162,10 @@ public class TestingActivity extends FragmentActivity
         super.onRestoreInstanceState(savedInstanceState);
         
         data = (TestingActivityData) savedInstanceState.getSerializable(DATA_STATE);
-        setActivityMode(data.mode);
+        if(menuTest != null)
+        {
+            setActivityMode(data.mode);
+        }
     }
     
     /**
@@ -289,6 +300,7 @@ public class TestingActivity extends FragmentActivity
     {
         bodyView.loadData("", "text/html; charset=UTF-8", null);
         bodyView.setVisibility(View.GONE);
+        bodyView.clearView();
 
         if(data.mode == ActivityMode.EXPLORE)
         {

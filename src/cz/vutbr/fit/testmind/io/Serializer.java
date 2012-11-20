@@ -155,6 +155,7 @@ public class Serializer
         } 
         
         db.close();
+        removeJournal();
     }
     
     /**
@@ -529,6 +530,19 @@ public class Serializer
         return result;
     }
     
+    /**
+     * remove journal file
+     */
+    private void removeJournal()
+    {
+        String path = fileDB.getAbsolutePath() + "-journal";
+        File fileJournal = new File(path);
+        if(fileJournal.exists())
+        {
+            fileJournal.delete();
+        }
+    }
+    
     // static private methods =================================================
     
     /**
@@ -568,4 +582,5 @@ public class Serializer
         
         return map;
     }
+    
 }
