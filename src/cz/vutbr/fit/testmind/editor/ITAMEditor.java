@@ -17,7 +17,7 @@ import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGItemFactory;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
-import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMDrawListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPostDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
@@ -73,7 +73,7 @@ public interface ITAMEditor {
 	
 	public List<ITAMTouchListener> getListOfTouchControls();
 
-	public List<ITAMDrawListener> getListOfDrawControls();
+	public List<ITAMPostDrawListener> getListOfDrawControls();
 
 	public List<ITAMItemListener> getListOfItemControls();
 	
@@ -89,7 +89,7 @@ public interface ITAMEditor {
 
 	public Resources getResources();
 	
-	public void addOnGestureLisener(OnGestureListener listener, Context context);
+	//public void addOnGestureLisener(OnGestureListener listener, Context context);
 	
 	public void invalidate();
 	

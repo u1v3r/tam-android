@@ -51,9 +51,9 @@ public abstract class TAMEAbstractControl {
 		return enabled;
 	}
 	
-	public void setOnGestureListner(OnGestureListener listener){
+	/*public void setOnGestureListner(OnGestureListener listener){
 		editor.addOnGestureLisener(listener,editor.getContext());
-	}
+	}*/
 	
 	/**
 	 * Zobrazí dialog na pridanie uzlu

@@ -64,9 +64,11 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	private int touchState = IDLE;
 	private float distStart = 1, distCurrent = 1;
 	private boolean moveActionAllowed = false;// urcuje ci je dovolena ACTION_MOVE
+	private boolean moveItemsOrGraphEnabled = true; // allow/disable moving of items or graph (when disabled ACTION_MOVE is still enabled)
 	
-	protected List<GestureDetector> listOfGestureControls;
-	protected List<ITAMDrawListener> listOfDrawControls;
+	//protected List<GestureDetector> listOfGestureControls;
+	protected List<ITAMPreDrawListener> listOfPreDrawControls;
+	protected List<ITAMPostDrawListener> listOfPostDrawControls;
 	protected List<ITAMItemListener> listOfItemControls;
 	protected List<ITAMBlankAreaGestureListener> listOfBlankAreaGestureControls;
 	protected List<ITAMTouchListener> listOfTouchControls;
@@ -88,8 +90,12 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		
 	}
 	
-	public interface ITAMDrawListener {
-		public void onDraw(Canvas canvas);
+	public interface ITAMPreDrawListener {
+		public void onPreDraw(Canvas canvas);
+	};
+	
+	public interface ITAMPostDrawListener {
+		public void onPostDraw(Canvas canvas);
 	};
 	
 	public interface ITAMItemListener {
@@ -136,11 +142,12 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		listOfSelectedItems = new ArrayList<ITAMGItem>();
 		listOfDrawableItems = new ArrayList<ITAMGItem>();
 		
-		listOfDrawControls = new ArrayList<ITAMDrawListener>();
+		listOfPreDrawControls = new ArrayList<ITAMPreDrawListener>();
+		listOfPostDrawControls = new ArrayList<ITAMPostDrawListener>();
 		listOfItemControls = new ArrayList<ITAMItemListener>();
 		listOfBlankAreaGestureControls = new ArrayList<ITAMBlankAreaGestureListener>();
 		listOfTouchControls = new ArrayList<ITAMTouchListener>();
-		listOfGestureControls = new ArrayList<GestureDetector>();
+		//listOfGestureControls = new ArrayList<GestureDetector>();
 		listOfItemGestureControls = new ArrayList<ITAMItemGestureListener>();
 		listOfButtons = new ArrayList<ITAMGButton>();
 		
@@ -174,6 +181,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		gestureDetector = new GestureDetector(this.getContext(), this);
 		zoom = new TAMGZoom(this);
 		Log.d(TAG,getWidth() + " " + getHeight());
+	}
+
+	public boolean isMoveItemsOrGraphEnabled() {
+		return moveItemsOrGraphEnabled;
+	}
+
+	public void setMoveItemsOrGraphEnabled(boolean moveItemsOrGraphAllowed) {
+		this.moveItemsOrGraphEnabled = moveItemsOrGraphAllowed;
 	}
 
 	/**
@@ -228,8 +243,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * 
 	 * @return
 	 */
-	public List<ITAMDrawListener> getListOfDrawControls() {
-		return listOfDrawControls;
+	public List<ITAMPostDrawListener> getListOfDrawControls() {
+		return listOfPostDrawControls;
 	}
 
 	/**
@@ -264,9 +279,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		return listOfTouchControls;
 	}
 	
-	public List<GestureDetector> getListOfGestureControls(){
+	/*public List<GestureDetector> getListOfGestureControls(){
 		return listOfGestureControls;
-	}
+	}*/
 	
 	/**
 	 * 
@@ -288,9 +303,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * @param control Trieda implementujuca {@link OnGestureListener}
 	 * @param context 
 	 */
-	public void addOnGestureLisener(OnGestureListener control,Context context){
+	/*public void addOnGestureLisener(OnGestureListener control,Context context){
 		listOfGestureControls.add(new GestureDetector(context,control));
-	}
+	}*/
 	
 	public void moveOnTop(ITAMGItem selectedItem) {
 		
@@ -447,6 +462,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		canvas.translate(translationPoint.x, translationPoint.y);
 		
+		for(ITAMPreDrawListener control : listOfPreDrawControls) {
+			control.onPreDraw(canvas);
+		}
+		
 		for(ITAMGItem item : listOfDrawableItems) {
 			item.draw(canvas, paint);
 		}
@@ -457,8 +476,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 			}
 		}*/
 		
-		for(ITAMDrawListener control : listOfDrawControls) {
-			control.onDraw(canvas);
+		for(ITAMPostDrawListener control : listOfPostDrawControls) {
+			control.onPostDraw(canvas);
 		}
 	}
 	
@@ -638,9 +657,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				control.onTouchEvent(e, ax, ay);
 			}*/
 
-			for(GestureDetector gDetector : listOfGestureControls){
+			/*for(GestureDetector gDetector : listOfGestureControls){
 				gDetector.onTouchEvent(e);				
-			}
+			}*/
 
 			gestureDetector.onTouchEvent(e);
 
@@ -776,17 +795,19 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * @param dy
 	 */
 	public void onItemMoveEvent(MotionEvent e, TAMGMotionEvent ge) {
-		ITAMGItem item = ge.item;
-		int dx = (int) ge.dx;
-		int dy = (int) ge.dy;
-		if(item instanceof ITAMGNode) {
-			item.move(dx,dy);
-		} else if(item instanceof ITAMGConnection) {
-			((ITAMGConnection) item).moveSelectedPoint(dx,dy);
-		}
-		
-		for(ITAMItemListener control : listOfItemControls) {
-			control.onItemMoveEvent(e, ge);
+		if(moveItemsOrGraphEnabled) {
+			ITAMGItem item = ge.item;
+			int dx = (int) ge.dx;
+			int dy = (int) ge.dy;
+			if(item instanceof ITAMGNode) {
+				item.move(dx,dy);
+			} else if(item instanceof ITAMGConnection) {
+				((ITAMGConnection) item).moveSelectedPoint(dx,dy);
+			}
+			
+			for(ITAMItemListener control : listOfItemControls) {
+				control.onItemMoveEvent(e, ge);
+			}
 		}
 	}
 	
@@ -807,7 +828,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		}*/
 		//System.out.println(dx  + " " + dy + " " + zoom.px + " " + zoom.py);
 		//zoom(zoom.sx, zoom.sy, zoom.px+dx, zoom.py+dy);
-		move(dx, dy);
+		if(moveItemsOrGraphEnabled) {
+			move(dx, dy);
+		}
 		//System.out.println(zoom.px + " " + zoom.py);
 		
 		for(ITAMBlankAreaGestureListener control : listOfBlankAreaGestureControls) {
@@ -893,7 +916,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		zoom.sx = scaleX;
 		zoom.sy = scaleY;
 		
-		invalidate();	
+		//invalidate();	
 	}
 	
 	public void translate(float dx, float dy) {
@@ -904,7 +927,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		//zoom.px = -dx;
 		//zoom.py = -dy;
 		
-		invalidate();
+		//invalidate();
 	}
 	
 	public void move(float dx, float dy) {
