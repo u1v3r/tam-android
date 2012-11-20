@@ -1,14 +1,10 @@
 package cz.vutbr.fit.testmind;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 
 import cz.vutbr.fit.testmind.profile.TAMProfile;
-import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEAbstractControl.REQUEST_CODES;
 import cz.vutbr.fit.testmind.opensave.TestmindFilenameFilter;
 import android.app.Activity;
 import android.content.Intent;
@@ -146,7 +142,7 @@ public class OpenSaveActivity extends FragmentActivity
         Arrays.sort(files);
         int count = files.length;
         
-        if(count == 0)
+        if(count == 0 && mode == ActivityMode.OPEN)
         {
             Toast.makeText(this, R.string.open_save_error_any_file, Toast.LENGTH_LONG).show();
             cancelActivity();
