@@ -3,10 +3,13 @@ package cz.vutbr.fit.testmind.editor.controls;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.GestureDetector.OnGestureListener;
+import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.NodeMainTopicDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.io.Serializer;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public abstract class TAMEAbstractControl {
 	

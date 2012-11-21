@@ -34,16 +34,7 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 			startActivity();
 		}
 		else if(MainActivity.MenuItems.save == item.getItemId()){
-		    			
-			if(editor.getListOfENodes().size() == 0) return true;
-			
-			/*
-			 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
-			 */
-			String rootTitle = editor.getListOfENodes().get(0).getProfile().getTitle();
-			Serializer serializer = new Serializer(
-					String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), rootTitle));
-			serializer.serialize(MainActivity.getProfile());			
+		    saveMindMap();		
 		}
 		
 		return true;			
@@ -55,9 +46,10 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
     	
         if(resultCode == Activity.RESULT_OK && requestCode == PICK_FILE_RESULT_CODE)
         {
-            String file = data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT);
+            editor.getProfile().setFileName(data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT));
             
-            Serializer serializer = new Serializer(String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), file));
+            Serializer serializer = new Serializer(
+            		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
             
             serializer.deserialize(MainActivity.getProfile());           
             
@@ -77,5 +69,25 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 	{
 	    Intent i = new Intent(activity, OpenSaveActivity.class);    
 	    activity.startActivityForResult(i, PICK_FILE_RESULT_CODE);	    
+	}
+	
+	/**
+	 * Ulozi mapu pod menom root uzlu
+	 * 
+	 * @return
+	 */
+	private boolean saveMindMap(){
+		
+		if(editor.getListOfENodes().size() == 0) return false;
+		
+		/*
+		 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
+		 */
+		editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
+		Serializer serializer = new Serializer(
+				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
+		serializer.serialize(MainActivity.getProfile());	
+		
+		return true;
 	}
 }
