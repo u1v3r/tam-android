@@ -49,11 +49,11 @@ public class NodeMainTopicDialog extends DialogFragment implements OnEditorActio
 	public NodeMainTopicDialog(TAMEAbstractControl control) {
 		this.control = (OnMainTopicSetDialogListener) control;
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-	
+			
 			View view = inflater.inflate(R.layout.fragment_add_node, container);
 			getDialog().setTitle(R.string.node_main_topic_dialog);
 			

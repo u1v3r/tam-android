@@ -3,6 +3,9 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -75,6 +78,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	protected List<ITAMItemGestureListener> listOfItemGestureControls;
 	protected List<ITAMGButton> listOfButtons;
 	//private List<OnGestureListener> listOfGestureControls;
+	protected List<ITAMGraphDrawingFinishedListener> listOfGraphDrawingFinishedListener;
 	
 	public final class TAMGMotionEvent {
 		
@@ -120,8 +124,21 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		//public void onTouchEvent(MotionEvent e, float dx, float dy);
 		public void onHitEvent(MotionEvent e, TAMGMotionEvent ge);
 	}
+	
+	/**
+	 * Rozhranie, ktore vyvola event ak je {@link TAMGraph} kompletne
+	 * vykresleny
+	 * 
+	 * @author rdy
+	 *
+	 */
+	public interface ITAMGraphDrawingFinishedListener{
+		public void onDrawingFinished();
+	}
 
 	public boolean isLongPressed = false;
+
+	
 
 	
        
@@ -150,6 +167,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		//listOfGestureControls = new ArrayList<GestureDetector>();
 		listOfItemGestureControls = new ArrayList<ITAMItemGestureListener>();
 		listOfButtons = new ArrayList<ITAMGButton>();
+		
+		listOfGraphDrawingFinishedListener = new ArrayList<ITAMGraphDrawingFinishedListener>();
 		
 		actualPoint = new PointF();	
 		translationPoint = new PointF();
@@ -292,6 +311,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		return listOfGestureControls;
 	}*/
 	
+	public List<ITAMGraphDrawingFinishedListener> getListOfGraphDrawingFinishedListener() {
+		return listOfGraphDrawingFinishedListener;
+	}
+
 	/**
 	 * 
 	 * @param type
@@ -1101,6 +1124,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				zoom.sy,    				
 				getWidth()/2, 
 				getHeight()/2);
+		
+		for (ITAMGraphDrawingFinishedListener l : listOfGraphDrawingFinishedListener) {
+			l.onDrawingFinished();
+		}
 		
 		getViewTreeObserver().removeGlobalOnLayoutListener(this);
 	}
