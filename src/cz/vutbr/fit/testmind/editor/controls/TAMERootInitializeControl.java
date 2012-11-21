@@ -1,11 +1,15 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
 import android.support.v4.app.FragmentManager;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.dialogs.NodeMainTopicDialog;
 import cz.vutbr.fit.testmind.dialogs.NodeMainTopicDialog.OnMainTopicSetDialogListener;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMGraphDrawingFinishedListener;
 
-public class TAMERootInitializeControl extends TAMEAbstractControl implements OnMainTopicSetDialogListener {
+public class TAMERootInitializeControl extends TAMEAbstractControl implements OnMainTopicSetDialogListener, 
+	ITAMGraphDrawingFinishedListener {
 		
 	public interface ITAMRootControlListener {
 		public boolean createDefaultRootNode(String title);
@@ -14,7 +18,8 @@ public class TAMERootInitializeControl extends TAMEAbstractControl implements On
 	
 	public TAMERootInitializeControl(ITAMEditor editor) {
 		super(editor);
-		showAddNodeDialog();
+		this.editor.getListOfGraphDrawingFinishedListener().add(this);
+		showAddNodeDialog();		
 	}
 		
 /*
@@ -40,7 +45,7 @@ public class TAMERootInitializeControl extends TAMEAbstractControl implements On
 	 */
 	private void showAddNodeDialog() {			
 		FragmentManager fm = activity.getSupportFragmentManager();		
-		NodeMainTopicDialog dialog = new NodeMainTopicDialog(this);
+		NodeMainTopicDialog dialog = new NodeMainTopicDialog(this);		
 		dialog.show(fm, "fragment_add_node");		
 	}
 	
@@ -48,6 +53,18 @@ public class TAMERootInitializeControl extends TAMEAbstractControl implements On
 	 * Metoda volana pri ulozeni dialogu
 	 */
 	public void onFinishNodeEditDialog(String title) {
-		((ITAMRootControlListener) getEditor()).createDefaultRootNode(title);
+		
+		if( (editor.getListOfENodes().size() == 1) && (editor.getProfile().getRoot() != null) ){
+			editor.getListOfENodes().get(0).getGui().setText(title);
+			editor.getListOfENodes().get(0).getProfile().setTitle(title);
+		}
+		
+		
+	}
+
+	public void onDrawingFinished() {
+		((ITAMRootControlListener) getEditor()).createDefaultRootNode(
+				this.editor.getResources().getString(R.string.node_main_topic_dialog_default_topic));
+		
 	}
 }

@@ -18,6 +18,11 @@ public class TAMProfile {
 	protected List<ITAMEditor> listOfEditors;
 	protected TAMPNode root;
 	
+	/**
+	 * Meno suboru pod ktorym je mapa ulozena v suborovom systeme
+	 */
+	private String fileName; 
+		
 	public static final File TESTMIND_DIRECTORY = createCardPath();
 	
 	public TAMProfile() {
@@ -71,6 +76,28 @@ public class TAMProfile {
 		return null;
 	}
 	
+	/**
+	 * Meno suboru pod ktorym je mapa ulozena
+	 * @return
+	 */
+	public String getFileName() {
+		if(fileName == null){
+			if(root != null){
+				fileName = root.getTitle();
+			}
+		}
+		
+		return fileName;
+	}
+
+	/**
+	 * Nastavi meno suboru pod ktorym je mapa ulozena
+	 * @param fileName String
+	 */
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public TAMPNode createRoot(String title, String body) {
 		if(root != null) {
 			throw new TAMItemException("Root already exists");

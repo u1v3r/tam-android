@@ -18,6 +18,7 @@ import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGItemFactory;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMBlankAreaGestureListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMGraphDrawingFinishedListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPostDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
@@ -88,6 +89,8 @@ public interface ITAMEditor {
 	public List<ITAMBlankAreaGestureListener> getListOfMoveGestureControls();
 	
 	public List<ITAMGItem> getListOfSelectedItems();
+	
+	public List<ITAMGraphDrawingFinishedListener> getListOfGraphDrawingFinishedListener();
 	
 	// Surface View functions //
 

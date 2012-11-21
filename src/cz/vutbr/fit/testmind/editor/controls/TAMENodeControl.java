@@ -58,6 +58,11 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfItemControls().add(this);		
 		editor.getListOfButtonControls().add(this);
+		
+		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
+		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
+			selectedNode = this.editor.getListOfENodes().get(0);
+		}
 	}
 
 	/**
@@ -96,12 +101,12 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 */
 	private void openEditNodeActivity() {		
 		
-		if(editor.getLastSelectedNode() == null){
+		if(selectedNode == null){
 			Toast.makeText(editor.getContext(), R.string.node_not_selected, Toast.LENGTH_LONG).show();
 			return;
 		}
 		
-		openEditNodeActivity((ITAMENode) editor.getLastSelectedNode().getHelpObject());		
+		openEditNodeActivity(selectedNode);		
 	}
 
 	/**

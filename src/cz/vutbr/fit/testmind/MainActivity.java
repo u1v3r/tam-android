@@ -1,8 +1,5 @@
 package cz.vutbr.fit.testmind;
 
-import java.io.Serializable;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,8 +14,7 @@ import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.TAMEditorTest;
-import cz.vutbr.fit.testmind.profile.TAMPConnection;
-import cz.vutbr.fit.testmind.profile.TAMPNode;
+import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
@@ -85,19 +81,17 @@ public class MainActivity extends FragmentActivity {
 	}
 		
 	private static final String TAG = "MainActivity";
-	private static final String CONNECTION_LIST = "connections";
-	private static final String NODES_LIST = "nodes";
+	
+	private static final String LAST_OPENED_FILE = "last";
 	
 	private ITAMEditor actualEditor;
-	private List<TAMPNode> listOfNodes;
-	private List<TAMPConnection> listOfConnections;
 	
 	private static TAMProfile profile;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {    	
     	super.onCreate(savedInstanceState);	
-    	   	
+    	Log.d(TAG, "onCreate");
     	
     	//if(profile != null) {
     		profile = new TAMProfile();
@@ -139,49 +133,38 @@ public class MainActivity extends FragmentActivity {
 		super.onConfigurationChanged(newConfig);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {		
-		
 		super.onRestoreInstanceState(savedInstanceState);
 		
-		Log.d(TAG,"velkost  pred: " + profile.getListOfPNodes().size());
+		Log.d(TAG, "onRestoreInstanceState");
 		
-		listOfNodes = (List<TAMPNode>) savedInstanceState.getSerializable(NODES_LIST);
-    	listOfConnections = (List<TAMPConnection>) savedInstanceState.getSerializable(CONNECTION_LIST);
-    	
-    	
-    	Log.d(TAG, "saved instance initialization:" + listOfNodes.size());
-    	
-    	if(listOfNodes.size() < 1) return;
-    	
-    	TAMPNode rootNode = listOfNodes.get(0);
-    	      
-    	/*
-    	profile.importRoot(rootNode.getTitle(), rootNode.getBody(), rootNode.getId());
-    	
-    	for (int i = 1; i < listOfNodes.size(); i++) {
-    		TAMPNode node = listOfNodes.get(0);
-			profile.importNode(node.getTitle(), node.getBody(), node.getId());
-			
-		}        	
-    	
-    	for (TAMPConnection conn : listOfConnections) {
-			profile.importConnection(conn.getParent(), conn.getChild(), conn.getId());
-		}
-    	*/
-    	EventObjects.editor_main.invalidate();
+		String lastMindMap = savedInstanceState.getString(LAST_OPENED_FILE);
+		
+		Serializer serializer = new Serializer(
+        		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
+        
+        serializer.deserialize(profile);  
 		
 	}
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	
-    	outState.putSerializable(NODES_LIST, (Serializable)profile.getListOfPNodes());
-    	outState.putSerializable(CONNECTION_LIST, (Serializable)profile.getListOfPConnections());
+    	Log.d(TAG, "onSaveInstanceState");
+    	/* nie je vhodne tu serializovat veci, vola sa prilis casto
+    	Serializer serializer = new Serializer(
+				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+		serializer.serialize(profile);
     	
+		Log.d(TAG, "ukladam: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+		*/
+		outState.putString(LAST_OPENED_FILE, profile.getFileName());
+		
+		
     	super.onSaveInstanceState(outState);
     }
+    
         
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -195,6 +178,21 @@ public class MainActivity extends FragmentActivity {
 		
     	return true;
     }
+    
+    
+    @Override
+    protected void onDestroy() {
+    	// vola sa ked ma byt aktivita uplne odstranena z pamate
+    	super.onDestroy();
+    	
+    	/* ak by mapa nebola ulozena, nech sa uzivatelovi nestrati */
+    	Serializer serializer = new Serializer(
+				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+		serializer.serialize(profile);
+    	
+		Log.d(TAG, "onDestroy save: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+    }
+    
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
