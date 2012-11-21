@@ -75,11 +75,12 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 			
 			active = false;
 			
+			greenNodeFrom = ((ITAMENode) fromNode.getHelpObject());
+			
 			if(toNode != null) {
 				
 				TAMPConnection connection = editor.getProfile().getConnection(((TAMENode) fromNode.getHelpObject()).getProfile(), ((TAMENode) toNode.getHelpObject()).getProfile());
 				
-				greenNodeFrom = ((ITAMENode) fromNode.getHelpObject());
 				greenNodeTo = ((ITAMENode) toNode.getHelpObject());
 				greenNodeFrom.setBackgroundStyle(ITAMENode.GREEN);
 				greenNodeTo.setBackgroundStyle(ITAMENode.GREEN);
@@ -152,21 +153,24 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 	}
 
 	public void onBlankMoveEvent(MotionEvent e, float dx, float dy) {
-		to.x += dx;
-		to.y += dy;
 		
-		ITAMGNode selected = ((TAMGraph) editor).isNodeHit(to.x, to.y);
-		
-		if(selected != fromNode) {
-			if(toNode != selected) {
-				if(toNode != null) {
-					((ITAMENode) toNode.getHelpObject()).setBackgroundStyle(ITAMENode.BLUE);
+		if(active) {
+			to.x += dx;
+			to.y += dy;
+			
+			ITAMGNode selected = ((TAMGraph) editor).isNodeHit(to.x, to.y);
+			
+			if(selected != fromNode) {
+				if(toNode != selected) {
+					if(toNode != null) {
+						((ITAMENode) toNode.getHelpObject()).setBackgroundStyle(ITAMENode.BLUE);
+					}
+					if(selected != null) {
+						((ITAMENode) selected.getHelpObject()).setBackgroundStyle(ITAMENode.RED);
+					}
+					
+					toNode = selected;
 				}
-				if(selected != null) {
-					((ITAMENode) selected.getHelpObject()).setBackgroundStyle(ITAMENode.RED);
-				}
-				
-				toNode = selected;
 			}
 		}
 	}
