@@ -46,7 +46,10 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
     	
         if(resultCode == Activity.RESULT_OK && requestCode == PICK_FILE_RESULT_CODE)
         {
-            editor.getProfile().setFileName(data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT));
+        	// ulozenie rozpracovanej mapy, nech uzivatel nestrati zmeny
+            saveMindMap();
+        	
+            editor.getProfile().setFileName(data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT));           
             
             Serializer serializer = new Serializer(
             		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
