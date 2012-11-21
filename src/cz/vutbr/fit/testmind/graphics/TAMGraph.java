@@ -954,6 +954,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		//invalidate();	
 	}
 	
+	public void helpInvalidate() {
+		invalidate();
+	}
+	
 	public void translate(float dx, float dy) {
 		translationPoint.x = dx;
 		translationPoint.y = dy;

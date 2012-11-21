@@ -15,7 +15,7 @@ import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
-import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
+import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
@@ -26,7 +26,7 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
  * Obsahuje zakladne funkcie na pracu s grafom 
  *
  */
-public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, 
+public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarControlItem, 
 	ITAMRootControlListener, ITAMNodeControlListener {
 	
 	private static final String TAG = "TAMEditor";

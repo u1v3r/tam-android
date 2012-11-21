@@ -6,7 +6,7 @@ import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
-import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarConstrolItem;
+import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
@@ -19,7 +19,7 @@ import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 
-public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem  {
+public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarControlItem  {
 	
 	private boolean hasVisibleMenu = false;
 	private Random random;

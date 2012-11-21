@@ -63,6 +63,7 @@ public class TAMGItemFactory {
 		if(graph != null) {
 			graph.getListOfNodes().remove(node);
 			graph.getListOfDrawableItems().remove(node);
+			graph.getListOfSelectedItems().remove(node);
 		}
 	}
 	
@@ -74,6 +75,7 @@ public class TAMGItemFactory {
 			
 			graph.getListOfConnections().remove(connection);
 			graph.getListOfDrawableItems().remove(connection);
+			graph.getListOfSelectedItems().remove(connection);
 		}
 		
 		connection.dispose();

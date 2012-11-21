@@ -1,11 +1,15 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.view.MotionEvent;
+import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
@@ -26,7 +30,14 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 	private boolean active = false;
 	private ITAMGNode fromNode;
 	private ITAMGNode toNode;
+	private ITAMENode greenNodeFrom;
+	private ITAMENode greenNodeTo;
 	private PointF to;
+	private Timer timer;
+	
+	public interface ITAMConnectionControlListener {
+		public void connected(ITAMENode from, ITAMENode to);
+	}
 
 	public TAMEConnectionControl(ITAMEditor editor) {
 		super(editor);
@@ -36,6 +47,8 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 		editor.getListOfPreDrawControls().add(this);
 		editor.getListOfTouchControls().add(this);
 		to = new PointF();
+		timer = new Timer();
+		System.out.println("schedule");
 	}
 
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
@@ -66,17 +79,52 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 				
 				TAMPConnection connection = editor.getProfile().getConnection(((TAMENode) fromNode.getHelpObject()).getProfile(), ((TAMENode) toNode.getHelpObject()).getProfile());
 				
+				greenNodeFrom = ((ITAMENode) fromNode.getHelpObject());
+				greenNodeTo = ((ITAMENode) toNode.getHelpObject());
+				greenNodeFrom.setBackgroundStyle(ITAMENode.GREEN);
+				greenNodeTo.setBackgroundStyle(ITAMENode.GREEN);
+				
 				if(connection != null && !connection.hasReference(editor)) {
 					TAMPConnectionFactory.addEReference(connection, editor);
+					
+					//System.out.println("schedule");
+					TimerTask task = new TimerTask() {
+						
+						@Override
+						public void run() {
+							//System.out.println("run");
+							// it is important to test null reference - graph or some items can be already disposed //
+							if(greenNodeFrom != null) {
+								greenNodeFrom.setBackgroundStyle(ITAMENode.BLUE);
+								System.out.println("change color");
+							}
+							if(greenNodeTo != null) {
+								greenNodeTo.setBackgroundStyle(ITAMENode.BLUE);
+								System.out.println("change color");
+								//((TAMGraph)greenNodeTo.getEditor()).helpInvalidate();
+								//invalidate();
+							}
+							/*if(editor != null) {
+								invalidate();
+							}*/
+						}
+					};
+					timer.schedule(task, 1000);
+				} else {
+					greenNodeFrom.setBackgroundStyle(ITAMENode.BLUE);
+					greenNodeTo.setBackgroundStyle(ITAMENode.BLUE);
 				}
-				
-				
-				((ITAMENode) toNode.getHelpObject()).setBackgroundStyle(ITAMENode.BLUE);
+			} else {
+				greenNodeFrom.setBackgroundStyle(ITAMENode.BLUE);
 			}
 			
 			toNode = null;
-			
-			((ITAMENode) fromNode.getHelpObject()).setBackgroundStyle(ITAMENode.BLUE);
+		}
+	}
+	
+	public static void invalidate() {
+		if(EventObjects.editor_test != null) {
+			EventObjects.editor_test.invalidate();
 		}
 	}
 
