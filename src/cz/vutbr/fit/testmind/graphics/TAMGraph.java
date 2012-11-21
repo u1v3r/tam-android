@@ -492,8 +492,6 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		super.onDraw(canvas);
 		
 		//Log.d(TAG,"scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
-		//Log.d(TAG,getWidth() + " " + getHeight());
-		
 		
 		//canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);

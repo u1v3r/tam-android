@@ -3,6 +3,7 @@ package cz.vutbr.fit.testmind.editor.controls;
 import android.app.Activity;
 import android.content.Intent;
 import android.preference.PreferenceManager.OnActivityResultListener;
+import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.OpenSaveActivity;
@@ -19,62 +20,62 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 {
 	private static final String TAG = "TAMEditorOpenSaveControl";
 
-	private ITAMEditor editor;
-
 	public TAMEOpenSaveControl(ITAMEditor editor)
 	{
 		super(editor);
 		
 		editor.getListOfMenuControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
-		
-		this.editor = editor;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		if(MainActivity.MenuItems.open == item.getItemId()){
-			startActivity(REQUEST_CODES.OPEN);
+			startActivity();
 		}
 		else if(MainActivity.MenuItems.save == item.getItemId()){
-		    startActivity(REQUEST_CODES.SAVE);
+		    			
+			if(editor.getListOfENodes().size() == 0) return true;
+			
+			/*
+			 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
+			 */
+			String rootTitle = editor.getListOfENodes().get(0).getProfile().getTitle();
+			Serializer serializer = new Serializer(
+					String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), rootTitle));
+			serializer.serialize(MainActivity.getProfile());			
 		}
 		
-		return true;
-			
+		return true;			
 	}
 
     public boolean onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if((requestCode == REQUEST_CODES.OPEN || requestCode == REQUEST_CODES.SAVE)
-           && resultCode == Activity.RESULT_OK)
+    	Log.d(TAG,"req:" + requestCode + ", result:" + resultCode);
+    	
+        if(resultCode == Activity.RESULT_OK && requestCode == PICK_FILE_RESULT_CODE)
         {
             String file = data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT);
             
             Serializer serializer = new Serializer(String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), file));
-            if(requestCode == REQUEST_CODES.OPEN)
-            {
-                serializer.deserialize(MainActivity.getProfile());
-            }
-            else if(requestCode == REQUEST_CODES.SAVE)
-            {
-                serializer.serialize(MainActivity.getProfile());
-            }
+            
+            serializer.deserialize(MainActivity.getProfile());           
+            
+            editor.invalidate();
+            
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 	/**
 	 * start activity for selecting file
 	 * @param which
 	 */
-	private void startActivity(int which)
+	private void startActivity()
 	{
-	    Intent i = new Intent(activity, OpenSaveActivity.class);
-    
-	    i.putExtra(OpenSaveActivity.INTENT_ID_MODE, which);
-    
-	    activity.startActivityForResult(i, which);
+	    Intent i = new Intent(activity, OpenSaveActivity.class);    
+	    activity.startActivityForResult(i, PICK_FILE_RESULT_CODE);	    
 	}
 }

@@ -8,21 +8,29 @@
         android:id="@+id/edit_text_node_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="@string/node_add_dialog_title"
+        android:hint="@string/node_main_topic_dialog_title"
         android:imeOptions="actionDone"
         android:inputType="text" >
 
         <requestFocus />
     </EditText>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="?android:attr/dividerVertical" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="bottom"
-        android:showDividers="beginning|middle|end" >
-
+        android:gravity="bottom">
+		   
         <Button
             android:id="@+id/add_dialog_button_cancel"
             style="@style/button_style"
@@ -30,7 +38,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cancel" />
-
+        
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerHorizontal" />
+        
         <Button
             android:id="@+id/add_dialog_button_ok"
             style="@style/button_style"
@@ -38,6 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/ok" />
+
+ 
 
     </LinearLayout>
 
