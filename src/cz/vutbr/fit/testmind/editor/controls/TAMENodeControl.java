@@ -63,49 +63,46 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	/**
 	 * Cez dialog vytvori child pre vybrany parrent uzol
 	 */
-	private void addChild() {
+	private void addChildNode() {
 		
-		if(editor.getLastSelectedNode() == null) {
+		if(selectedNode == null) {
 			Toast.makeText(editor.getContext(), R.string.parent_node_not_selected, Toast.LENGTH_LONG).show();
-		} else {
-			selectedNode = (ITAMENode) editor.getLastSelectedNode().getHelpObject();
+		} else {			
 			Toast.makeText(editor.getContext(), R.string.click, Toast.LENGTH_LONG).show();
+			// caka na dalsie kliknutie na platno v metode onHitEvent()
 			waitingForClick = true;
-		}
-	}
-
-	/**
-	 * Shows edit node dialog for actual selected node.
-	 */
-	private void showEditNodeDialog() {
-		ITAMGNode gNode = editor.getLastSelectedNode();
-		
-		if(gNode != null) {
-			showEditNodeDialog((ITAMENode) (gNode.getHelpObject()));
-		} else {
-			Toast.makeText(editor.getContext(), R.string.node_not_selected, Toast.LENGTH_LONG).show();
 		}
 	}
 	
 	/**
-	 * Shows edit node dialog for selected node.
+	 * Shows edit node dialog for provided node.
 	 * 
 	 * @param selectedNode
 	 */
-	private void showEditNodeDialog(ITAMENode selectedNode) {
+	private void openEditNodeActivity(ITAMENode node) {		
 		
-		if(selectedNode == null) return;
-		
-		this.selectedNode = selectedNode;
+		selectedNode = node;
 		
 		Intent intent = new Intent(editor.getContext(), EditNodeActivity.class);	
-				
-		intent.putExtra(NODE_TITLE, selectedNode.getProfile().getTitle());
-		intent.putExtra(NODE_BODY, selectedNode.getProfile().getBody());				
-		intent.putExtra(NODE_COLOR, selectedNode.getBackgroundStyle());						
-		
+
+		intent.putExtra(NODE_TITLE, node.getProfile().getTitle());
+		intent.putExtra(NODE_BODY, node.getProfile().getBody());				
+		intent.putExtra(NODE_COLOR, node.getBackgroundStyle());						
+
 		activity.startActivityForResult(intent, REQUEST_CODES.EDIT_NODE);
+	}
+
+	/**
+	 * Shows edit node dialog for selected node.
+	 */
+	private void openEditNodeActivity() {		
 		
+		if(editor.getLastSelectedNode() == null){
+			Toast.makeText(editor.getContext(), R.string.node_not_selected, Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		openEditNodeActivity((ITAMENode) editor.getLastSelectedNode().getHelpObject());		
 	}
 
 	/**
@@ -138,7 +135,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				  
 			creatingByGesture = false;
 			
-			showEditNodeDialog((TAMENode)node.getHelpObject());
+			openEditNodeActivity((TAMENode)node.getHelpObject());
 		}
 	}
 	
@@ -150,7 +147,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		int mode = editor.getMode();
 		
 		if(mode == MenuItems.create_mode) {
-			showEditNodeDialog((TAMENode)node.getHelpObject());
+			openEditNodeActivity((TAMENode)node.getHelpObject());
 		}
 	}
 	
@@ -180,8 +177,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				selectedNode.getProfile().setBody(nodeBody);				
 			}
 			
-			selectedNode.setBackgroundStyle(nodeColor);
-				
+			selectedNode.setBackgroundStyle(nodeColor);			
+			
 			editor.invalidate();
 		}
 
@@ -216,9 +213,12 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				
 				waitingForClick = false;
 				
-				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("", "", selectedNode, (int) ge.dx, (int) ge.dy);
+				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection(
+						"", "", selectedNode, (int) ge.dx, (int) ge.dy);
 				
-				showEditNodeDialog(node);
+				editor.unselectAll();
+				node.getGui().setSelected(true);
+				openEditNodeActivity(node);
 			//}
 		}
 	}
@@ -232,9 +232,9 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public void onButtonSelected(View item) {
 		
 		if(item == EventObjects.btn_add) {
-			addChild();
+			addChildNode();
 		} else if(item == EventObjects.btn_edit) {
-			showEditNodeDialog();
+			openEditNodeActivity();
 		} else if(item == EventObjects.btn_delete) {
 			deleteNode();
 		}
