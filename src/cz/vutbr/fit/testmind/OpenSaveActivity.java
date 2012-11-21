@@ -27,18 +27,10 @@ import android.widget.Toast;
  *
  */
 public class OpenSaveActivity extends FragmentActivity
-{
-    private enum ActivityMode {OPEN, SAVE};
-    
+{    
     public static final String INTENT_ID_MODE = "cz.vutbr.fit.testmind.opensave.mode";
     public static final String INTENT_ID_RESULT = "cz.vutbr.fit.testmind.opensave.result";
 
-    private static ActivityMode mode;
-    
-    private MenuItem menuOK;
-    private MenuItem menuCancel;
-    private EditText editTextFile;
-    
     /**
      *  create activity 
      */
@@ -48,26 +40,9 @@ public class OpenSaveActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_save);
         
-        this.getActionBar().setHomeButtonEnabled(true);
-        
-        Bundle b = getIntent().getExtras();
-        int which = b.getInt(INTENT_ID_MODE);
-        
-        editTextFile = (EditText) findViewById(R.id.editText_file_name);;
-        
-        if(which == TAMEOpenSaveControl.REQUEST_CODES.OPEN)
-        {
-            mode = ActivityMode.OPEN;
-            LinearLayout firstLine = (LinearLayout) findViewById(R.id.linearLayout_open_save);
-            firstLine.setVisibility(View.GONE);
-            this.setTitle(R.string.menu_open);
-        }
-        else if(which == TAMEOpenSaveControl.REQUEST_CODES.SAVE)
-        {
-            mode = ActivityMode.SAVE;
-            this.setTitle(R.string.menu_save);
-        }
-        
+        this.getActionBar().setHomeButtonEnabled(true);        
+        this.setTitle(R.string.menu_open);
+                
         loadFiles();
     }
 
@@ -75,47 +50,33 @@ public class OpenSaveActivity extends FragmentActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.activity_open_save, menu);
-
-        menuOK = menu.findItem(R.id.open_save_acitivty_ok);
-        menuCancel = menu.findItem(R.id.open_save_acitivty_cancel);
-        
-        if(mode == ActivityMode.OPEN)
-        {
-            menuOK.setVisible(false);
-        }
-        
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int id = item.getItemId();
-        if(menuOK.getItemId() == id)
-        {
-            String text = editTextFile.getText().toString();
-            if(text.isEmpty())
-            {
-                Toast.makeText(this, R.string.open_save_error_empty_file, Toast.LENGTH_LONG).show();
-            }
-            else
-            {
-                finalizeActivity(text);
-            }
-        }
-        else if(menuCancel.getItemId() == id)
-        {
-            cancelActivity();
-        }
-        else if(android.R.id.home == id)
-        {
-            cancelActivity();
-        }
-             
+    {        
+        
+        switch (item.getItemId()) {
+		case android.R.id.home:
+			cancelActivity();
+			break;
+		case R.id.open_save_acitivty_add:
+			createMindMap();
+			break;
+		case R.id.open_save_acitivty_share:
+			shareMindMap();
+			break;			
+		default:
+			cancelActivity();
+			break;
+		}
+        
+                
         return true;
     }
     
-    /**
+	/**
      * listener for listview
      */
     AdapterView.OnItemClickListener listViewHandler = new AdapterView.OnItemClickListener()
@@ -125,15 +86,7 @@ public class OpenSaveActivity extends FragmentActivity
             TextView item =(TextView)parent.getChildAt(position);
             String itemText = item.getText().toString();
 
-            if(mode == ActivityMode.OPEN)
-            {
-                finalizeActivity(itemText);
-            }
-            else if(mode == ActivityMode.SAVE)
-            {
-                
-                editTextFile.setText(itemText);
-            }
+            finalizeActivity(itemText);
         }
     };
     
@@ -148,10 +101,11 @@ public class OpenSaveActivity extends FragmentActivity
         Arrays.sort(files);
         int count = files.length;
         
-        if(count == 0 && mode == ActivityMode.OPEN)
+        if(count == 0)
         {
             Toast.makeText(this, R.string.open_save_error_any_file, Toast.LENGTH_LONG).show();
-            cancelActivity();
+            //cancelActivity();           
+            
         }
         
         for(int i=0; i < count; i++)
@@ -175,7 +129,7 @@ public class OpenSaveActivity extends FragmentActivity
      */
     private void finalizeActivity(String file)
     {
-        Intent intent = new Intent();       
+        Intent intent = new Intent();        
         intent.putExtra(INTENT_ID_RESULT, file);
         setResult(Activity.RESULT_OK, intent);
         finish();    
@@ -190,4 +144,17 @@ public class OpenSaveActivity extends FragmentActivity
         setResult(Activity.RESULT_CANCELED, intent);
         finish();         
     }
+    
+    private void shareMindMap() {
+		//TODO tu niekedy v buducnosti bude zdielanie
+		
+	}
+
+	private void createMindMap() {
+		/* TODO tu by mala byt logika, ktora po kliknuti najskor ulozi cele aktualne platno,
+		 * nasledne ho vycisti a prepne do MainAcitivty a uzivatel moze vytvarat novu mapu 
+		 */
+    	
+		
+	}
 }
