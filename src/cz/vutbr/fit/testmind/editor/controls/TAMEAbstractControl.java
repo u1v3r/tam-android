@@ -4,7 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.GestureDetector.OnGestureListener;
 import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.dialogs.AddNodeDialog;
+import cz.vutbr.fit.testmind.dialogs.NodeMainTopicDialog;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 
@@ -55,19 +55,4 @@ public abstract class TAMEAbstractControl {
 	/*public void setOnGestureListner(OnGestureListener listener){
 		editor.addOnGestureLisener(listener,editor.getContext());
 	}*/
-	
-	/**
-	 * Zobrazí dialog na pridanie uzlu
-	 * @param parent 
-	 */
-	protected void showAddNodeDialog(TAMENode parent) {
-			
-		//if(isDialogOpen == false){
-			//isDialogOpen = true;
-			FragmentManager fm = activity.getSupportFragmentManager();		
-			AddNodeDialog dialog = new AddNodeDialog(parent, this);
-			dialog.show(fm, "fragment_add_node");
-		//}
-		
-	}
 }

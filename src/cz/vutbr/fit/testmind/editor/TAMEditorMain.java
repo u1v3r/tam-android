@@ -27,7 +27,7 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
  *
  */
 public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarConstrolItem, 
-	ITAMRootControlListener, ITAMNodeControlListener {
+	ITAMNodeControlListener, ITAMRootControlListener {
 	
 	private static final String TAG = "TAMEditor";
 	
@@ -44,12 +44,16 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		// do not type anything there - use initializeControls method instead //
 	}
 	
-	public boolean createDefaultRootNode(int x, int y) {
+	public boolean createDefaultRootNode(String title) {
+		return createDefaultRootNode(title, getWidth()/2, getHeight()/2);
+	}
+	
+	public boolean createDefaultRootNode(String title, int x, int y) {
 		
 		if(hasRoot) {
 			return false;
 		} else {
-			TAMPNode pNode = MainActivity.getProfile().createRoot("", "");			
+			TAMPNode pNode = MainActivity.getProfile().createRoot(title, "");			
 			ITAMENode eNode = TAMPConnectionFactory.addEReference(pNode, this, x, y);
 			eNode.getGui().setSelected(true);
 			showToolbar();

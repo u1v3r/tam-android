@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/node_add_dialog_title" >
+                android:hint="@string/edit_activity_title" >
 
                 <requestFocus />
             </EditText>
@@ -99,7 +99,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="top|left"
-                android:hint="@string/node_add_dialog_body"
+                android:hint="@string/node_main_topic_dialog_body"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="textMultiLine"
                 android:minHeight="1200dp" >

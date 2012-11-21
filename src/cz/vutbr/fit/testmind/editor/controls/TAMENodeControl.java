@@ -48,7 +48,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	private float x,y;
 	
 	public TAMENodeControl(ITAMNodeControlListener editor) {
-		super((ITAMEditor) editor);
+		super((ITAMEditor) editor);		
 		initializeListeners((ITAMEditor) editor);
 	}
 	
@@ -63,8 +63,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	/**
 	 * Cez dialog vytvori child pre vybrany parrent uzol
 	 */
-	private void addChildNode() {
-		
+	private void addChildNode() {		
 		if(selectedNode == null) {
 			Toast.makeText(editor.getContext(), R.string.parent_node_not_selected, Toast.LENGTH_LONG).show();
 		} else {			

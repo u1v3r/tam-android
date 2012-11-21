@@ -1,7 +1,8 @@
 <resources>
 
     <string name="app_name">TestMind</string>
-    <string name="title_activity_main">TestMind</string>
+    <string name="main_activity_title">TestMind</string>
+    <string name="edit_activity_title">Title</string>
     <string name="create">Create</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>
@@ -10,16 +11,17 @@
     <string name="file">File</string>
     <string name="show">Show</string>
     <string name="next">Next</string>
-    <string name="node_add_dialog">Add Node</string>
-    <string name="node_add_dialog_title">Title</string>
+    <string name="node_main_topic_dialog">Set Main Topic</string>
+    <string name="node_main_topic_dialog_title">Text</string>
+    <string name="node_main_topic_dialog_body">Body</string>
+    <string name="node_main_topic_dialog_default_topic">Default topic</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="mode_active">mode is active</string>
     <string name="parent_node_not_selected">Please select a Parent Node</string>
     <string name="node_not_selected">Please select a Node</string>
     <string name="select_file_to_upload">Select a File to Import</string>
-	<string name="install_file_manager">Please install a File Manager</string>
-	<string name="node_add_dialog_body">Body</string>
+	<string name="install_file_manager">Please install a File Manager</string>	
 	<string name="edit_dialog_edit">Edit Node</string>
 	<string name="green">Green</string>
 	<string name="blue">Blue</string>
