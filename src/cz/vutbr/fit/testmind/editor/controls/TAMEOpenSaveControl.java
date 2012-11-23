@@ -2,6 +2,7 @@ package cz.vutbr.fit.testmind.editor.controls;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
 import android.view.MenuItem;
@@ -65,6 +66,27 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
     }
 
 	/**
+	 * Ulozi mapu pod menom root uzlu
+	 */
+	private void saveMindMap() {
+		
+		if(editor.getListOfENodes().size() == 0) return;
+		
+		/*
+		 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
+		 */
+		editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
+			
+		Serializer serializer = new Serializer(
+				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
+		
+		serializer.serialize(MainActivity.getProfile());
+		
+			
+		return;
+	}
+
+	/**
 	 * start activity for selecting file
 	 * @param which
 	 */
@@ -72,25 +94,5 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 	{
 	    Intent i = new Intent(activity, OpenSaveActivity.class);    
 	    activity.startActivityForResult(i, PICK_FILE_RESULT_CODE);	    
-	}
-	
-	/**
-	 * Ulozi mapu pod menom root uzlu
-	 * 
-	 * @return
-	 */
-	private boolean saveMindMap(){
-		
-		if(editor.getListOfENodes().size() == 0) return false;
-		
-		/*
-		 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
-		 */
-		editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
-		Serializer serializer = new Serializer(
-				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
-		serializer.serialize(MainActivity.getProfile());	
-		
-		return true;
 	}
 }

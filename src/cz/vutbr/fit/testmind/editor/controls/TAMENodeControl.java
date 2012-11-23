@@ -1,5 +1,8 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.io.Serializable;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
@@ -21,6 +24,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
+import cz.vutbr.fit.testmind.profile.Tag;
 
 /**
  * Stara sa o zakladne operacie s uzlom (pridanie, odstranenie, uprava)
@@ -35,6 +39,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public static final String NODE_TITLE = "title";
 	public static final String NODE_BODY = "body";
 	public static final String NODE_COLOR = "color";
+	public static final String NODE_TAGS = "tags";
 	
 	private ITAMENode selectedNode = null;
 	
@@ -77,6 +82,20 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			waitingForClick = true;
 		}
 	}
+
+
+	/**
+	 * Shows edit node dialog for selected node.
+	 */
+	private void openEditNodeActivity() {		
+		
+		if(selectedNode == null){
+			Toast.makeText(editor.getContext(), R.string.node_not_selected, Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		openEditNodeActivity(selectedNode);		
+	}
 	
 	/**
 	 * Shows edit node dialog for provided node.
@@ -91,22 +110,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 
 		intent.putExtra(NODE_TITLE, node.getProfile().getTitle());
 		intent.putExtra(NODE_BODY, node.getProfile().getBody());				
-		intent.putExtra(NODE_COLOR, node.getBackgroundStyle());						
+		intent.putExtra(NODE_COLOR, node.getBackgroundStyle());		
+		intent.putExtra(NODE_TAGS, (Serializable)node.getProfile().getListOfTags());
 
 		activity.startActivityForResult(intent, REQUEST_CODES.EDIT_NODE);
-	}
-
-	/**
-	 * Shows edit node dialog for selected node.
-	 */
-	private void openEditNodeActivity() {		
-		
-		if(selectedNode == null){
-			Toast.makeText(editor.getContext(), R.string.node_not_selected, Toast.LENGTH_LONG).show();
-			return;
-		}
-		
-		openEditNodeActivity(selectedNode);		
 	}
 
 	/**
@@ -165,12 +172,13 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == EDIT_NODE_RESULT_CODE){
 
 			String nodeTitle = data.getStringExtra(NODE_TITLE);
-			String nodeBody = data.getStringExtra(NODE_BODY);
+			String nodeBody = data.getStringExtra(NODE_BODY);			
 			int nodeColor = data.getIntExtra(NODE_COLOR, ITAMENode.BLUE);
 			
 			// musi byt vybrany jeden uzol
 			if(selectedNode == null) return true; 
-					
+						
+			selectedNode.getProfile().setListOfTags((List<Tag>) data.getSerializableExtra(NODE_TAGS));
 			
 			if(nodeTitle != null){				
 				selectedNode.getGui().setText(nodeTitle);

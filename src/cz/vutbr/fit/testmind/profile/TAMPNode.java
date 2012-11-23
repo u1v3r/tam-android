@@ -11,6 +11,10 @@ public class TAMPNode extends TAMPItem implements Serializable{
 	private int id;
 	private String title;
 	private String body;
+	
+	/** List musi vzdy obsahovat serializovatlny typ, inak by mohla aplikacia padat */
+	private List<Tag> listOfTags;
+	
 	protected List<TAMPNode> listOfChildNodes;
 	protected TAMPNode parent;
 	
@@ -25,6 +29,7 @@ public class TAMPNode extends TAMPItem implements Serializable{
 		setTitle(title);
 		setBody(htmlBody);
 		listOfChildNodes = new ArrayList<TAMPNode>();
+		listOfTags = new ArrayList<Tag>();
 	}
 	
 	public String getTitle() {
@@ -43,6 +48,14 @@ public class TAMPNode extends TAMPItem implements Serializable{
 		this.body = htmlBody;
 	}
 	
+	public List<Tag> getListOfTags() {
+		return listOfTags;
+	}
+
+	public void setListOfTags(List<Tag> listOfTags) {
+		this.listOfTags = listOfTags;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -110,6 +123,4 @@ public class TAMPNode extends TAMPItem implements Serializable{
 		return "TAMPNode [id=" + id + ", title=" + title + ", body=" + body
 				+ ", parent=" + parent + "]";
 	}
-	
-
 }

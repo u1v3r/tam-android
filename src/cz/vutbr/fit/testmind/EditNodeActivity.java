@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind;
 
+import java.io.Serializable;
 import java.util.List;
 
 import android.content.Intent;
@@ -8,11 +9,13 @@ import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableString;
+import android.text.SpannedString;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
@@ -23,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView.BufferType;
+import android.widget.Toast;
 
 import com.commonsware.cwac.richedit.Effect;
 import com.commonsware.cwac.richedit.RichEditText;
@@ -30,6 +34,7 @@ import com.commonsware.cwac.richedit.RichEditText.OnSelectionChangedListener;
 
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
+import cz.vutbr.fit.testmind.profile.Tag;
 
 
 public class EditNodeActivity extends FragmentActivity implements AnimationListener, 
@@ -44,6 +49,16 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	}
 
 	private static final String TAG = "EditNodeActivity";
+
+	/**
+	 * Udava minimalnu dlzku, ktoru musi mat vybrane slovo aby bolo ulozene ako TAG
+	 */
+	private static final int TAG_MIN_LENGTH = 3;
+
+	/**
+	 * Znak, ktory sa zobrazi pred kazdym tagom
+	 */
+	private static final String TAG_MARKER = "#";
 	
 	private EditText title;
 	private RadioButton radioButtonBlue;
@@ -74,6 +89,8 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	private boolean isBoldBtnActive = false;
 	private boolean isItalicBtnActive = false;
 	private boolean isUnderlineBtnActive = false;
+
+	private List<Tag> listOfTags;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
@@ -92,7 +109,9 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		Intent intent = getIntent();
 		String titleString = intent.getStringExtra(TAMENodeControl.NODE_TITLE);		
 		int backgroundColor = intent.getIntExtra(TAMENodeControl.NODE_COLOR, 0);	
-		String bodyText = intent.getStringExtra(TAMENodeControl.NODE_BODY);
+		String bodyText = intent.getStringExtra(TAMENodeControl.NODE_BODY);		
+		listOfTags = (List<Tag>) intent.getSerializableExtra(TAMENodeControl.NODE_TAGS);
+		
 		
 		/* nastavenie titulku */
 		title.setText(titleString);		
@@ -196,6 +215,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	intent.putExtra(TAMENodeControl.NODE_TITLE, titleText);
     	intent.putExtra(TAMENodeControl.NODE_BODY, bodyText);
     	intent.putExtra(TAMENodeControl.NODE_COLOR,color);
+    	intent.putExtra(TAMENodeControl.NODE_TAGS, (Serializable)listOfTags);
     	setResult(TAMENodeControl.EDIT_NODE_RESULT_CODE, intent);
     	finish();
     	
@@ -274,7 +294,81 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	
 	public void onTagBtnClick(View w){
 		
+		Log.d(TAG, "obsahuje:" + listOfTags.toString());
+		
+		int start = richTextEditor.getSelectionStart();
+		int startTag = start;
+		int end = richTextEditor.getSelectionEnd();
+		boolean hasMarkerPrefix = false;// urcuje si bol vybraty aj tag marker
+		
+		// ake je spravne dlzka
+		if(( end - start) < TAG_MIN_LENGTH ) return;
+		
+		String tagString = (richTextEditor.getText().toString().substring(start, end)).trim();
+		
+		//ako tag moze byt len jedno slovo
+		if(tagString.contains(" ")){
+			Toast.makeText(
+					this, 
+					getResources().getString(R.string.edit_activity_more_words_selected), 
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		if(tagString.startsWith(TAG_MARKER)){
+			hasMarkerPrefix = true;
+			tagString = tagString.substring(TAG_MARKER.length());// z tagu odstran tag marker
+		}else{
+			// ak vyber neobsahuje prefix tak treba posunut start o -1
+			startTag = startTag - 1;
+		}
+		
+		Tag tag = new Tag(tagString, startTag, end);
+		Log.d(TAG, "porovnanie" + tag.toString());
+		
+		// ak uzivatel vybral uz existujuci tak ho odstran, musia sa zhodovat vsetky tri atributy tagu
+		if(listOfTags.contains(tag)){
+			
+			listOfTags.remove(tag);
+			
+			// ak nebol vybrany tag marker ale je to tag, treba rozsirit vyber
+			if(!hasMarkerPrefix) start = startTag;
+			
+			richTextEditor.setSelection(start, end);
+			richTextEditor.applyEffect(RichEditText.BOLD, false);
+			richTextEditor.applyEffect(RichEditText.ITALIC, false);
+			richTextEditor.applyEffect(RichEditText.UNDERLINE, false);
+			
+			replaceTextInRichTextEditor(TAG_MARKER + tagString, tagString);
+			
+			Log.d(TAG, "mazem tag: " + tag.toString());
+		}else{// inak ho pridaj ako tag
+					
+			// kvoli pridanemu tag marker treba posunut poziciu			
+			tag.setStart(start);
+			tag.setEnd(end + 1);
+			listOfTags.add(tag);
+			
+			Log.d(TAG, "pridavam tag:" + tag.toString());
+			
+			// pripoji znak tagu pred vybrane slovo a slovo zvyrazni
+			replaceTextInRichTextEditor(tagString, TAG_MARKER + tagString);
+			
+			richTextEditor.setSelection(start, end+1);
+			richTextEditor.applyEffect(RichEditText.BOLD, true);
+			richTextEditor.applyEffect(RichEditText.ITALIC, true);	
+			
+		}
 	}
+	
+	private void replaceTextInRichTextEditor(String target, String replacement){
+				
+		String htmlText = Html.toHtml(richTextEditor.getEditableText());			
+		String replacedHtmlText = htmlText.replace(target, replacement);
+		
+		richTextEditor.setText(new SpannableString(Html.fromHtml(replacedHtmlText)),BufferType.SPANNABLE);		
+	}
+	
 	public void onHideBtnClick(View w){
 		
 		if(isToolbarVisible){
@@ -333,7 +427,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 				
 		isSelectionBold = false;
 		isSelectionItalic = false;
-		isSelectionUnderline = false;
+		isSelectionUnderline = false;		
 		
 		for (Effect<?> effect : effects) {
 			
@@ -355,17 +449,17 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		}
 		
 		
-		Log.d(TAG,"bold " + isSelectionBold + ",italic " 
-				+ isSelectionItalic + ", under " + isSelectionUnderline);
+		//Log.d(TAG,"bold " + isSelectionBold + ",italic " 
+			//	+ isSelectionItalic + ", under " + isSelectionUnderline);
 		
 	}
 
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {		
-		
 	}
 
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		
 		/*
 		if(isBoldBtnActive){
 			Log.d(TAG, "start " + start + ",before " + before + ", count " + count + ",chars " + s);
@@ -387,7 +481,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		*/
 	}
 
-	public void afterTextChanged(Editable s) {	
+	public void afterTextChanged(Editable s) {
 		
 	}
 }
