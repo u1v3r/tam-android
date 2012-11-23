@@ -2,6 +2,7 @@ package cz.vutbr.fit.testmind.editor.controls;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.content.Intent;

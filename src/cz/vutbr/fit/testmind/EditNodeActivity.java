@@ -1,7 +1,10 @@
 package cz.vutbr.fit.testmind;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +12,12 @@ import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableString;
-import android.text.SpannedString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
@@ -58,7 +60,9 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	/**
 	 * Znak, ktory sa zobrazi pred kazdym tagom
 	 */
-	private static final String TAG_MARKER = "#";
+	private static final String TAG_MARKER = "#";	
+	private static final String TAG_TYPEFACE = "serif";
+	private static final int TAG_FOREGROUND_COLOR = android.R.color.holo_purple;
 	
 	private EditText title;
 	private RadioButton radioButtonBlue;
@@ -90,7 +94,15 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	private boolean isItalicBtnActive = false;
 	private boolean isUnderlineBtnActive = false;
 
+	/**
+	 * Obsahuje vsetky taky prijate cez Intent
+	 */
 	private List<Tag> listOfTags;
+	
+	/**
+	 * Obsahuje len lokalne vytvorene tagy
+	 */
+	private List<Tag> listOfLocalTags;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
@@ -111,7 +123,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		int backgroundColor = intent.getIntExtra(TAMENodeControl.NODE_COLOR, 0);	
 		String bodyText = intent.getStringExtra(TAMENodeControl.NODE_BODY);		
 		listOfTags = (List<Tag>) intent.getSerializableExtra(TAMENodeControl.NODE_TAGS);
-		
+		listOfLocalTags = new ArrayList<Tag>();
 		
 		/* nastavenie titulku */
 		title.setText(titleString);		
@@ -210,12 +222,38 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	
     	String titleText = title.getText().toString();
     	String bodyText = Html.toHtml(richTextEditor.getEditableText());
+    	Set<Tag> setOfTags = new HashSet<Tag>();
+    	
+    	int indexOfStart = 0;
+    	
+    	setOfTags.addAll(listOfLocalTags);
+    	setOfTags.addAll(listOfTags);
+    	listOfTags.clear();
+    	listOfLocalTags.clear();
+    	
+    	// spoj vsetky tagy (lokalne pridane + existujuce)
+    	
+    	
+    	for (Tag localTag : setOfTags) {
+			bodyText = bodyText.replace(TAG_MARKER + localTag.getTag(), "<tag>" + TAG_MARKER + localTag.getTag() + "</tag>");
+			indexOfStart = bodyText.indexOf(TAG_MARKER + localTag.getTag());
+			localTag.setStart(indexOfStart);
+			localTag.setEnd(indexOfStart + localTag.getTag().length());
+			listOfTags.add(localTag);
+			Log.d(TAG,localTag.toString());
+		}
+    	
+    	Log.d(TAG, bodyText);
+    	
     	
     	Intent intent = new Intent();    	
     	intent.putExtra(TAMENodeControl.NODE_TITLE, titleText);
     	intent.putExtra(TAMENodeControl.NODE_BODY, bodyText);
     	intent.putExtra(TAMENodeControl.NODE_COLOR,color);
-    	intent.putExtra(TAMENodeControl.NODE_TAGS, (Serializable)listOfTags);
+    	    	
+    	Log.d(TAG, "vsetky:" + listOfTags.toString());
+    	
+    	intent.putExtra(TAMENodeControl.NODE_TAGS, (Serializable)(listOfTags));
     	setResult(TAMENodeControl.EDIT_NODE_RESULT_CODE, intent);
     	finish();
     	
@@ -297,9 +335,9 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		Log.d(TAG, "obsahuje:" + listOfTags.toString());
 		
 		int start = richTextEditor.getSelectionStart();
-		int startTag = start;
+		//int startTag = start;
 		int end = richTextEditor.getSelectionEnd();
-		boolean hasMarkerPrefix = false;// urcuje si bol vybraty aj tag marker
+		//boolean hasMarkerPrefix = false;// urcuje si bol vybraty aj tag marker
 		
 		// ake je spravne dlzka
 		if(( end - start) < TAG_MIN_LENGTH ) return;
@@ -315,6 +353,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 			return;
 		}
 		
+		/*
 		if(tagString.startsWith(TAG_MARKER)){
 			hasMarkerPrefix = true;
 			tagString = tagString.substring(TAG_MARKER.length());// z tagu odstran tag marker
@@ -322,53 +361,93 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 			// ak vyber neobsahuje prefix tak treba posunut start o -1
 			startTag = startTag - 1;
 		}
+		*/
 		
-		Tag tag = new Tag(tagString, startTag, end);
-		Log.d(TAG, "porovnanie" + tag.toString());
+		String textInside = richTextEditor.getText().toString().substring(start, start+(TAG_MARKER.length()));
 		
-		// ak uzivatel vybral uz existujuci tak ho odstran, musia sa zhodovat vsetky tri atributy tagu
-		if(listOfTags.contains(tag)){
+		if(textInside.equals(TAG_MARKER)){
+			tagString = tagString.substring(TAG_MARKER.length());// z tagu odstran tag marker
+		}
+		
+		Tag tag = new Tag(tagString);		
 			
-			listOfTags.remove(tag);
+		boolean containsListOfTags = listOfTags.contains(tag);
+		boolean containsListOfLocalTags = listOfLocalTags.contains(tag);
+				
+		// ak uzivatel vybral uz existujuci tak ho odstran
+		if(containsListOfTags || containsListOfLocalTags){
 			
+			String textBefore = richTextEditor.getText().toString().substring(start-(TAG_MARKER.length()), start);
+			
+			
+			// ak je vybrany text ktory uz je ulozeny ako tag a nie je pred nim alebo v nom TAG_MARKER
+			if(!textBefore.equals(TAG_MARKER) && !textInside.equals(TAG_MARKER)){
+				Toast.makeText(this, getResources().getString(R.string.edit_activity_tag_exists), Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			
+			// ak je zmena len lokalna odstran z lokalnych inak zo vsetkych			
+			if(containsListOfTags){				
+				listOfTags.remove(tag);
+			}else{
+				listOfLocalTags.remove(tag);						
+			}
+			
+						
 			// ak nebol vybrany tag marker ale je to tag, treba rozsirit vyber
-			if(!hasMarkerPrefix) start = startTag;
+			//if(!hasMarkerPrefix) start = startTag;
 			
 			richTextEditor.setSelection(start, end);
 			richTextEditor.applyEffect(RichEditText.BOLD, false);
 			richTextEditor.applyEffect(RichEditText.ITALIC, false);
 			richTextEditor.applyEffect(RichEditText.UNDERLINE, false);
+			richTextEditor.applyEffect(RichEditText.TYPEFACE, "default");
 			
-			replaceTextInRichTextEditor(TAG_MARKER + tagString, tagString);
+			// odstrani font color z textu a taktiez <tag>
+			ForegroundColorSpan[] span = 
+					richTextEditor.getEditableText().getSpans(start, end, ForegroundColorSpan.class);
+			
+			if(span.length > 0){
+				richTextEditor.getEditableText().replace(
+						richTextEditor.getText().getSpanStart(span[0]), 
+						richTextEditor.getText().getSpanEnd(span[0]), 
+						tagString);
+				richTextEditor.getText().removeSpan(span[0]);
+			}
+						
+			//richTextEditor.getEditableText().setSpan(new ForegroundColorSpan(Color.BLACK), start, end, 0);
+			//replaceTextInRichTextEditor(TAG_MARKER + tagString, tagString);
 			
 			Log.d(TAG, "mazem tag: " + tag.toString());
 		}else{// inak ho pridaj ako tag
 					
 			// kvoli pridanemu tag marker treba posunut poziciu			
-			tag.setStart(start);
-			tag.setEnd(end + 1);
-			listOfTags.add(tag);
+			//tag.setStart(start);
+			//tag.setEnd(end + 1);
+			//tag.setEnd(end);
+			listOfLocalTags.add(tag);
 			
 			Log.d(TAG, "pridavam tag:" + tag.toString());
 			
 			// pripoji znak tagu pred vybrane slovo a slovo zvyrazni
-			replaceTextInRichTextEditor(tagString, TAG_MARKER + tagString);
+			//replaceTextInRichTextEditor(tagString, TAG_MARKER + tagString);
 			
-			richTextEditor.setSelection(start, end+1);
+			//richTextEditor.setSelection(start, end+1);
+			
+			richTextEditor.setSelection(start, end);
 			richTextEditor.applyEffect(RichEditText.BOLD, true);
-			richTextEditor.applyEffect(RichEditText.ITALIC, true);	
+			richTextEditor.applyEffect(RichEditText.ITALIC, true);
+			//richTextEditor.applyEffect(RichEditText.UNDERLINE, true);
+			richTextEditor.applyEffect(RichEditText.TYPEFACE, TAG_TYPEFACE);
 			
+			richTextEditor.getEditableText().replace(start, end, TAG_MARKER + tagString);
+			
+			richTextEditor.getEditableText().setSpan(
+					new ForegroundColorSpan(getResources().getColor(TAG_FOREGROUND_COLOR)), start, end+(TAG_MARKER.length()), 0);
 		}
 	}
-	
-	private void replaceTextInRichTextEditor(String target, String replacement){
-				
-		String htmlText = Html.toHtml(richTextEditor.getEditableText());			
-		String replacedHtmlText = htmlText.replace(target, replacement);
-		
-		richTextEditor.setText(new SpannableString(Html.fromHtml(replacedHtmlText)),BufferType.SPANNABLE);		
-	}
-	
+
 	public void onHideBtnClick(View w){
 		
 		if(isToolbarVisible){

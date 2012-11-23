@@ -9,7 +9,11 @@ public class Tag implements Serializable{
 	private String tag;		
 	private int start;
 	private int end;
-			
+		
+	public Tag(String tag) {
+		this(tag, 0, 0);
+	}
+	
 	public Tag(String tag, int start, int end) {
 		this.tag = tag;
 		this.start = start;
@@ -34,7 +38,10 @@ public class Tag implements Serializable{
 	public void setEnd(int end) {
 		this.end = end;
 	}
-
+	
+	/**
+	 * Porovnava len na zaklade mena
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if(this == o) return true;
@@ -45,10 +52,15 @@ public class Tag implements Serializable{
 		
 		Tag tagEqual = (Tag)o;
 		
-		if(this.tag.equals(tagEqual.tag) && this.start == tagEqual.start && this.end == tagEqual.end){
+		if(this.tag.equals(tagEqual.tag)){
 			return true;
 		}
 		
+		/*
+		if(this.tag.equals(tagEqual.tag) && this.start == tagEqual.start && this.end == tagEqual.end){
+			return true;
+		}
+		*/
 		return false;
 	}
 
