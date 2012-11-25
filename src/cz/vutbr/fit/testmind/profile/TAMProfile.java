@@ -84,6 +84,8 @@ public class TAMProfile {
 		if(fileName == null){
 			if(root != null){
 				fileName = root.getTitle();
+				
+				fileName = checkFileName(fileName);
 			}
 		}
 		
@@ -95,6 +97,7 @@ public class TAMProfile {
 	 * @param fileName String
 	 */
 	public void setFileName(String fileName) {
+	    fileName = checkFileName(fileName);
 		this.fileName = fileName;
 	}
 
@@ -274,5 +277,12 @@ public class TAMProfile {
             }
         }
         return cardDirectory;
+	}
+	
+	private static String checkFileName(String fileName)
+	{
+	    fileName = fileName.replace("/", "_");
+	    
+	    return fileName;
 	}
 }
