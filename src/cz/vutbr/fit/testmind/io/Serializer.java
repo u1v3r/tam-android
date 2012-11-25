@@ -24,6 +24,7 @@ import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
+import cz.vutbr.fit.testmind.profile.Tag;
 
 /**
  * class for serializing 
@@ -84,7 +85,13 @@ public class Serializer
             "\"child\" int NOT NULL," +
             "FOREIGN KEY(parent) REFERENCES node(id)," +
             "FOREIGN KEY(child) REFERENCES node(id))";
-
+    static private final String CREATE_TABLE_TAGS = "CREATE TABLE \"tags\" (" +
+            "\"node\" int NOT NULL," +
+            "\"name\" TEXT NOT NULL," +
+            "\"start\" int NOT NULL," +
+            "\"end\" int NOT NULL," +
+            "FOREIGN KEY(node) REFERENCES node(id))";
+    
     static private final String SELECT_PROFILE = "SELECT profile.nodeCounter, profile.connectionCounter, " +
             "nodes.id, nodes.title, nodes.body " +
             "from profile inner join nodes on profile.root = nodes.id";
@@ -98,6 +105,7 @@ public class Serializer
     static private final String[] COLUMNS_CONNECTION_REFERENCES = {"id", "connection", "editor", "type",
                                                                    "background", "highlightColor"};
     static private final String[] COLUMNS_CONNECTION_MIDDLEPOINTS = {"connection_reference", "x", "y", "order_points"};
+    static private final String[] COLUMNS_TAGS = {"node", "name", "start", "end"};
 
     
     private File fileDB;
@@ -176,6 +184,7 @@ public class Serializer
 
         loadNodeReferences(db, editors, nodes);
         loadConnectionReferences(db, editors, connections);
+        loadTags(db, nodes);
         
         db.close();
     }
@@ -202,6 +211,7 @@ public class Serializer
         db.execSQL(CREATE_TABLE_NODE_REFERENCES);
         db.execSQL(CREATE_TABLE_CONNECTION_REFERENCES);
         db.execSQL(CREATE_TABLE_CONNECTION_MIDDLEPOINTS);
+        db.execSQL(CREATE_TABLE_TAGS);
         
         return db;
     }
@@ -245,8 +255,7 @@ public class Serializer
         values.put("sx", zoom.sx);
         values.put("sy", zoom.sy);
         values.put("px", zoom.px);
-        values.put("py", zoom.py);
-        
+        values.put("py", zoom.py);        
         values.put("tx", translation.x);
         values.put("ty", translation.y);
         
@@ -266,6 +275,18 @@ public class Serializer
         values.put("body", node.getBody());
         
         db.insert("nodes", null, values);
+        
+        // insert all tags
+        for(Tag tag: node.getListOfTags())
+        {
+            ContentValues valuesTag = new ContentValues();
+            valuesTag.put("node", node.getId());
+            valuesTag.put("name", tag.getTag());
+            valuesTag.put("start", tag.getStart());            
+            valuesTag.put("end", tag.getEnd());
+            
+            db.insert("tags", null, valuesTag);
+        }
     }
     
     /**
@@ -405,8 +426,7 @@ public class Serializer
             float sx = cur.getFloat(indexes.get("sx"));
             float sy = cur.getFloat(indexes.get("sy"));
             float px = cur.getFloat(indexes.get("px"));
-            float py = cur.getFloat(indexes.get("py"));
-            
+            float py = cur.getFloat(indexes.get("py"));            
             float tx = cur.getFloat(indexes.get("tx"));
             float ty = cur.getFloat(indexes.get("ty"));
             
@@ -436,7 +456,6 @@ public class Serializer
             String title = cur.getString(indexes.get("title"));
             String body = cur.getString(indexes.get("body"));
             
-           
             nodes.append(id, profile.importNode(title, body, id));
         }
     }
@@ -521,7 +540,13 @@ public class Serializer
             gConnection.setListOfMiddlePoints(getMiddlepoints(db, cur.getInt(indexes.get("id"))));
         }           
     }
-    
+        
+    /**
+     * load middlepoints by connection
+     * @param db
+     * @param connectionId
+     * @return
+     */
     private List<Point> getMiddlepoints(SQLiteDatabase db, int connectionId)
     {
         List<Point> result = new ArrayList<Point>();
@@ -541,6 +566,36 @@ public class Serializer
     }
     
     /**
+     * load tags from database
+     * @param db
+     * @param nodes
+     */
+    private void loadTags(SQLiteDatabase db, SparseArray<TAMPNode> nodes)
+    {
+        Cursor cur = db.query("tags", COLUMNS_TAGS, null, null, null, null, null);  
+        HashMap<String, Integer> indexes = getIndexesCursor(cur, COLUMNS_TAGS);
+        
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext())
+        {
+            int nodeId = cur.getInt(indexes.get("node"));;
+            String name = cur.getString(indexes.get("name"));
+            Tag tag = new Tag(name);
+            
+            tag.setStart(cur.getInt(indexes.get("start")));
+            tag.setEnd(cur.getInt(indexes.get("end")));
+            
+            TAMPNode node = nodes.get(nodeId);
+            List<Tag> listOfTags = node.getListOfTags();
+            if(listOfTags == null)
+            {
+                listOfTags = new ArrayList<Tag>();
+                node.setListOfTags(listOfTags);
+            }
+            listOfTags.add(tag);
+        }
+    }
+    
+    /**
      * remove journal file
      */
     private void removeJournal()
@@ -554,26 +609,6 @@ public class Serializer
     }
     
     // static private methods =================================================
-    
-    /**
-     * convert boolean value to int
-     * @param value
-     * @return
-     */
-    static private int booleanToInt(Boolean value)
-    {
-        return value ? 1 : 0;
-    }
-
-    /**
-     * convert int to boolean
-     * @param value
-     * @return
-     */
-    static private boolean intToboolean(int value)
-    {
-        return value != 0;
-    }
     
     /**
      * crate hashMap column name -> index of column
