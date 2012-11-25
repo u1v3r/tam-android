@@ -61,4 +61,5 @@
     <string name="open_save_file">File: </string>
     <string name="open_save_error_empty_file">Name of file is empty!</string>
     <string name="open_save_error_any_file">There is not any file for open!</string>
+    <string name="context_menu_delete">Delete</string>
 </resources>

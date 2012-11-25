@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind;
 
+import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 
@@ -10,10 +11,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -52,6 +57,14 @@ public class OpenSaveActivity extends FragmentActivity
         getMenuInflater().inflate(R.menu.activity_open_save, menu);
         return true;
     }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.open_save_context_menu, menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -75,11 +88,26 @@ public class OpenSaveActivity extends FragmentActivity
                 
         return true;
     }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId())
+        {
+            case R.id.delete:
+                TextView textItem =(TextView)info.targetView;
+                deleteMap(textItem.getText().toString());
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
     
 	/**
-     * listener for listview
+     * click listener for listview
      */
-    AdapterView.OnItemClickListener listViewHandler = new AdapterView.OnItemClickListener()
+    AdapterView.OnItemClickListener listViewClickHandler = new AdapterView.OnItemClickListener()
     {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
@@ -119,8 +147,10 @@ public class OpenSaveActivity extends FragmentActivity
                                                                 files);
 
         ListView listView = (ListView) findViewById(R.id.listView_files);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(listViewHandler);
+        listView.setAdapter(adapter);        
+        listView.setOnItemClickListener(listViewClickHandler);
+        
+        this.registerForContextMenu(listView);
     }
     
     /**
@@ -156,5 +186,18 @@ public class OpenSaveActivity extends FragmentActivity
 		 */
     	
 		
+	}
+	
+	/**
+	 * delete file with mind map
+	 * @param name
+	 */
+	private void deleteMap(String name)
+	{
+	    String path = String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), name);
+	    File file = new File(path);
+	    file.delete();
+	    
+	    loadFiles();
 	}
 }
