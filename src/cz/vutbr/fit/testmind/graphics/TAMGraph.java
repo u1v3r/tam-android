@@ -1026,6 +1026,14 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	public PointF getTranslation() {
 		return translationPoint;
 	}
+	
+	public int getDefaultNodeHeight() {
+		return TAMGRectangleNode.NODE_HEIGHT*2;
+	}
+	
+	public int getDefaultNodeWidth(String text) {
+		return (int) paint.measureText(text) + TAMGRectangleNode.NODE_WIDTH*2;
+	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
 		

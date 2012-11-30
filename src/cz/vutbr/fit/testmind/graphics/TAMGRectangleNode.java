@@ -20,8 +20,8 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	//public static final int TEXT_SIZE = 64;	
 	public static final int OFFSET_X = 30;
 	public static final int OFFSET_Y = 60;
-	private static final int NODE_WIDTH = 28;
-	private static final int NODE_HEIGHT = 48;
+	protected static final int NODE_WIDTH = 28;
+	protected static final int NODE_HEIGHT = 48;
 		
 	public TAMGRectangleNode(TAMGraph graph, int x, int y, String text) {
 		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
