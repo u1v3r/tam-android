@@ -167,13 +167,15 @@ public class FreeMind3 {
 		if (parent == null) {
 			this.editor.getProfile().reset();
 			parent = this.editor.getProfile().createRoot(node.getName(), node.getContent());
+			TAMPConnectionFactory.addEReference(parent, this.editor, x, y, 1);
 		} else {
 			TAMPNode child = this.editor.getProfile().createNode(node.getName(), node.getContent());
 			connection = this.editor.getProfile().createConnection(parent, child);
+			TAMPConnectionFactory.addEReference(child, this.editor, x, y, 1);
 			TAMPConnectionFactory.addEReference(connection, editor, 1);
 			parent = child;
 		}
-		TAMPConnectionFactory.addEReference(parent, this.editor, x, y, 1);
+
 //		ITAMEConnection connection = new TAMEConnection();
 //		TAMPConnectionFactory.addEReference(connection, editor, 1);
 				
