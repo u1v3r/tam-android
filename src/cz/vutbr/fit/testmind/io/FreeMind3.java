@@ -13,6 +13,7 @@ import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.items.TAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
@@ -51,7 +52,7 @@ public class FreeMind3 {
 	// Speciálnì pro testovací úèely
 	public FreeMind3(ITAMEditor editor, boolean bTest) {
 		this.editor = editor;
-		this.source = "/data/testMind/test.mm";
+		this.source = "/mnt/sdcard/TestMind/test.mm";
 	}
 	
 	public void runImport() throws XmlPullParserException, IOException {
@@ -167,12 +168,12 @@ public class FreeMind3 {
 		if (parent == null) {
 			this.editor.getProfile().reset();
 			parent = this.editor.getProfile().createRoot(node.getName(), node.getContent());
-			TAMPConnectionFactory.addEReference(parent, this.editor, x, y, 1);
+			TAMPConnectionFactory.addEReference(parent, this.editor, x, y, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
 		} else {
 			TAMPNode child = this.editor.getProfile().createNode(node.getName(), node.getContent());
 			connection = this.editor.getProfile().createConnection(parent, child);
-			TAMPConnectionFactory.addEReference(child, this.editor, x, y, 1);
-			TAMPConnectionFactory.addEReference(connection, editor, 1);
+			TAMPConnectionFactory.addEReference(child, this.editor, x, y, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
+			TAMPConnectionFactory.addEReference(connection, editor, ITAMGConnection.CONNECTION_TYPE_DEFAULT);
 			parent = child;
 		}
 
