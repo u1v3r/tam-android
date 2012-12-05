@@ -1,6 +1,8 @@
 package cz.vutbr.fit.testmind.io;
 
 import java.util.ArrayList;
+
+import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import android.util.Log;
 
 /**
@@ -9,31 +11,34 @@ import android.util.Log;
 public class XMLNode implements IXMLNode
 {
     private IXMLNode parent;
-    private ArrayList<IXMLNode> childs;
+    private ArrayList<IXMLNode> childs = new ArrayList<IXMLNode>();
     
     private long ID;
     private String name;
     private String content;
     private double width;
     private double height;
+    private double MBBwidth;
+    private double MBBheight;
     private boolean active;
     private long created;
     private long modified;
     private int position = 0;
+    
     static final double MAX_WIDTH = 100;
     static final double MAX_HEIGHT = 100;
     static final int POS_LEFT = 1;
     static final int POS_RIGHT = 2;
+    static final int LENGTH_NAME = 10;
 
     
     public XMLNode(long ID, long created, long modified, String position, String text) {
-		super();
 		this.ID = ID;
 		this.created = created;
 		this.modified = modified;
 		this.content = text;
-		if (text.length() > 10) {
-			this.name = text.substring(10);
+		if (text.length() > LENGTH_NAME) {
+			this.name = text.substring(LENGTH_NAME);
 		} else {
 			this.name = text;
 		}
@@ -64,14 +69,21 @@ public class XMLNode implements IXMLNode
 		this.childs = childs;
 	}
 	
-	public void addChild(IXMLNode child) {
+	public IXMLNode addChild(IXMLNode child) {
 		String report = "ok";
-		Log.d("add child", "fuck was complete");
 		if (child == null) report = "null";
 		Log.d("result is", report);
 		Log.d("!" + this.name, child.getName());
-			
-	
+		childs.add(child);
+		/*
+		try {
+			childs.add(child);
+		} catch (Exception e) {
+			//Log.d("exception", e.getMessage());
+		}
+		*/
+		Log.d("add child", "fuck was complete");
+		return this;
 	}
 	
 	public void removeChild(IXMLNode child) {
@@ -149,5 +161,20 @@ public class XMLNode implements IXMLNode
 	public void setPosition(int position) {
 		this.position = position;
 	}
-    
+
+	public double getMBBWidth() {
+		return MBBwidth;
+	}
+
+	public void setMBBWidth(double MBBwidth) {
+		this.MBBwidth = MBBwidth;
+	}
+
+	public double getMBBHeight() {
+		return MBBheight;
+	}
+
+	public void setMBBHeight(double MBBheight) {
+		this.MBBheight = MBBheight;
+	}
 }

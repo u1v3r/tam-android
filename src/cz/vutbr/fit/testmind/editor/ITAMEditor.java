@@ -112,4 +112,8 @@ public interface ITAMEditor {
 	
 	public void translate(float tx, float ty);
 	
+	public int getDefaultNodeHeight();
+	
+	public int getDefaultNodeWidth(String text);
+	
 }

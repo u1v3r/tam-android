@@ -20,6 +20,7 @@ public class FreeMind
 {
 	TAMEditorMain editor = null;
     private IXMLNode rootNode = null;
+    // file address
     private String source = "/data/testMind/test.mm";//null;
     
     static final String MAP = "map";

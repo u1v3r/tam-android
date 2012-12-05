@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public interface IXMLNode
 {
 
-	void addChild(IXMLNode child);
+	IXMLNode addChild(IXMLNode child);
 	void removeChild(IXMLNode child);
 	void setChilds(ArrayList<IXMLNode> childs);
 
@@ -21,7 +21,11 @@ public interface IXMLNode
 	long getCreated();
 	long getModified();
 	int getPosition();
-
+	double getWidth();
+	double getHeight();
+	double getMBBWidth();
+	double getMBBHeight();
+	
 	void setID(long ID);
 	void setName(String name);
 	void setContent(String content);
@@ -29,4 +33,8 @@ public interface IXMLNode
 	void setCreated(long created);
 	void setModified(long modified);
 	void setPosition(int position);
+	void setWidth(double width);
+	void setHeight(double height);
+	void setMBBWidth(double MBBwidth);
+	void setMBBHeight(double MBBheight);
 }
