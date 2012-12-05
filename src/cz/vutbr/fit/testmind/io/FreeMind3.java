@@ -43,18 +43,31 @@ public class FreeMind3 {
 		this.source = editor.getProfile().getFileName();
 	}
 	
-	// Speciálnì pro jiný zdroj, než je v profilu
+	/** Special for others sources
+	 *  
+	 * @param editor
+	 * @param source
+	 */
 	public FreeMind3(ITAMEditor editor, String source) {
 		this.editor = editor;
 		this.source = source;
 	}
 	
-	// Speciálnì pro testovací úèely
+	/** Special for test
+	 * 
+	 * @param editor
+	 * @param bTest
+	 */
 	public FreeMind3(ITAMEditor editor, boolean bTest) {
 		this.editor = editor;
 		this.source = "/mnt/sdcard/TestMind/test.mm";
 	}
 	
+	/** Sequence of part of import
+	 * 
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	public void runImport() throws XmlPullParserException, IOException {
 		this.importXML();
 		this.calculateDimensions(rootNode);
@@ -62,7 +75,11 @@ public class FreeMind3 {
 		this.editor.invalidate();
 	}
 	
-
+	/** Load XML file to tree
+	 * 
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void importXML() throws XmlPullParserException, IOException {
 		File file = new File(source);
 		InputStream in = new FileInputStream(file);
@@ -73,13 +90,20 @@ public class FreeMind3 {
             parser.setInput(in, null);
             parser.nextTag();
             Log.d("importXML", "getRoot");
-            rootNode = getRoot(parser);
+            rootNode = createRoot(parser);
         } finally {
             in.close();
         }
 	}
 
-	private IXMLNode getRoot(XmlPullParser parser) throws XmlPullParserException, IOException {
+	/** Create root of tree
+	 * 
+	 * @param parser
+	 * @return
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
+	private IXMLNode createRoot(XmlPullParser parser) throws XmlPullParserException, IOException {
 		IXMLNode rootNode = null;
 		
 	    parser.require(XmlPullParser.START_TAG, null, E_MAP);
@@ -93,15 +117,22 @@ public class FreeMind3 {
 	    return rootNode;
 	}
 	
+	/** Read node of XML
+	 * 
+	 * @param parser
+	 * @return
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	private IXMLNode readNode(XmlPullParser parser) throws IOException, XmlPullParserException {
-		Log.d("readNode", "START");
+		//Log.d("readNode", "START");
 		IXMLNode node = null;
 	    parser.require(XmlPullParser.START_TAG, null, E_NODE);
 	    String tag = parser.getName();
-	    Log.d("TAG", tag);
+	    //Log.d("TAG", tag);
 	    if (tag.equals(E_NODE)) {
 	    	String text = parser.getAttributeValue(null, A_TEXT);
-	    	Log.d("TAG..", text);
+	    	//Log.d("TAG..", text);
 	    	node = new XMLNode(
     			Long.parseLong(parser.getAttributeValue(null, A_ID).substring(3)),
     			Long.parseLong(parser.getAttributeValue(null, A_CREATED)),
@@ -115,18 +146,23 @@ public class FreeMind3 {
 			
 			//rootNode.addChild(node);
 			
-			Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
+			//Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
 		    while (parser.nextTag() != XmlPullParser.END_TAG) {
-		    	Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
-		    	Log.d("DEEP", String.valueOf(parser.getDepth()));
-		    	Log.d("Next TAG", "nalezen");
+		    	//Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
+		    	//Log.d("DEEP", String.valueOf(parser.getDepth()));
+		    	//Log.d("Next TAG", "nalezen");
 		    	node.addChild(readNode(parser));
 		    }
 	    }
-	    Log.d("readNode", "END");
+	    //Log.d("readNode", "END");
 	    return node;
 	}
-	
+
+	/** Calculate dimensions of tree nodes
+	 * 
+	 * @param node
+	 * @return
+	 */
 	private double calculateDimensions(IXMLNode node) {
 		ArrayList<IXMLNode> childs = node.getChilds();
 		double heightSum = 0;
@@ -163,6 +199,13 @@ public class FreeMind3 {
 	}
 */	
 
+	/** Create TAM tree
+	 * 
+	 * @param node
+	 * @param parent
+	 * @param x coord-x
+	 * @param y coord-y
+	 */
 	private void createTAMTree(IXMLNode node, TAMPNode parent, int x, int y) {
 		TAMPConnection connection = null;
 		if (parent == null) {

@@ -15,6 +15,8 @@ import android.util.Xml;
 
 /**
  * main mind map class
+ * 
+ * deprecated
  */
 public class FreeMind2
 {

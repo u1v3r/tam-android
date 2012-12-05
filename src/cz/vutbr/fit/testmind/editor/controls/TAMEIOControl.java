@@ -6,6 +6,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,19 +17,32 @@ import cz.vutbr.fit.testmind.io.ImportFile;
 
 /**
  * 
- * TODO: trieda v ktorej bude implementovany import/export
+ * Class for import / export
  *
  */
-public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListener{
+public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListener,OnActivityResultListener{
 	
+	/**
+	 * constants of states
+	 */
 	private static final String INTENT_MIME_TYPE = "text/xml";
 	public static final int RESULT_OK = -1;
 
+	/** Constructor for reference to editor
+	 * 
+	 * @param editor
+	 */
 	public TAMEIOControl(ITAMEditor editor) {
 		super(editor);
 		editor.getListOfMenuControls().add(this);
+		editor.getListOfOnActivityResultControls().add(this);
 	}
 
+	
+	/** Listener of menu - import/export
+	 * 
+	 * @param item
+	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		/*		
@@ -63,12 +77,20 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 			
 	}
 
+	/** Export File - behavior
+	 * TODO
+	 * 
+	 */
 	public void exportFile() {
 		// TODO Auto-generated method stub
 	}
 
+	/** Import File - behavior
+	 * 
+	 */
 	private void importFile() {
 		// <Doèasný kod>
+		/*
 		try {
 			Log.d("debug", "control->import Start");
 			ImportFile importFile = new ImportFile(editor, ImportFile.FREE_MIND);
@@ -81,10 +103,9 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		// </Doèasný kod>
 		
-		// TODO: nefunkèní pøedávání callbacku, activEditor = null
-		/*
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT); 
         intent.setType(INTENT_MIME_TYPE); 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -92,29 +113,33 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
         try {
             activity.startActivityForResult(            		
                     Intent.createChooser(intent,
-                    					 editor.getResources().getString(R.string.select_file_to_upload)
-                    					), PICK_FILE_RESULT_CODE);
+                    					 editor.getResources().getString(R.string.select_file_to_import)
+                    					), IMPORT_FILE);
             // editor.getProfile().setFileName(intent.getDataString());
         } catch (ActivityNotFoundException e) {
             
-        	// vyzve uzivatela na instalaciu file managera
+        	// answer: need install file manager
             Toast.makeText(editor.getContext(), 
             		editor.getResources().getString(R.string.install_file_manager), 
                     Toast.LENGTH_SHORT).show();
             editor.getProfile().setFileName(null);
         }
-        */
 	}
-	
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    	Log.d("debug", "control->onActivity START");
-        if (resultCode == RESULT_OK) {
-        	editor.getProfile().setFileName(intent.getDataString());
+
+	/** Listener of menu - import/export
+	 * 
+	 * @param item
+	 */
+	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Log.d("debug", "control->onActivity START");
+    	if (requestCode == IMPORT_FILE && resultCode == RESULT_OK) {
+        	editor.getProfile().setFileName(data.getDataString());
     		try {
-    			Log.d("debug", "control->import Start");
+    			//Log.d("debug", "control->import Start");
     			ImportFile importFile = new ImportFile(editor, ImportFile.FREE_MIND);
-    			Log.d("debug", "control->import End");
+    			//Log.d("debug", "control->import End");
     			//freeMind.getMindMap();
+    			return true;
     		} catch (XmlPullParserException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
@@ -123,7 +148,10 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
     			e.printStackTrace();
     		}
         }
-        Log.d("debug", "control->onActivity END");
-    }
+        //Log.d("debug", "control->onActivity END");
+        return false;
+	}
+	
+   
 
 }

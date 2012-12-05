@@ -30,6 +30,8 @@ public abstract class TAMEAbstractControl {
 	
 	public static final int PICK_FILE_RESULT_CODE = 0;
 	public static final int EDIT_NODE_RESULT_CODE = 1;
+	public static final int IMPORT_FILE = 2;
+	public static final int EXPORT_FILE = 3;
 	
 	//public boolean isDialogOpen = false;
 	private boolean enabled;
