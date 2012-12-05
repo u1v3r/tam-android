@@ -81,6 +81,7 @@ public class FreeMind3 {
 	 * @throws IOException
 	 */
 	private void importXML() throws XmlPullParserException, IOException {
+		Log.d("FreeMind3", source);
 		File file = new File(source);
 		InputStream in = new FileInputStream(file);
         
@@ -89,7 +90,7 @@ public class FreeMind3 {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            Log.d("importXML", "getRoot");
+            //Log.d("importXML", "getRoot");
             rootNode = createRoot(parser);
         } finally {
             in.close();

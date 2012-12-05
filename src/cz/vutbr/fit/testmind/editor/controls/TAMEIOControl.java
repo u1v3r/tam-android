@@ -133,10 +133,11 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 		//Log.d("debug", "control->onActivity START");
     	if (requestCode == IMPORT_FILE && resultCode == RESULT_OK) {
-        	editor.getProfile().setFileName(data.getDataString());
+    		//Log.d("TAMEIOControl", data.getData().getEncodedPath());
+    		//editor.getProfile().setFileName(data.getData().getEncodedPath());
     		try {
     			//Log.d("debug", "control->import Start");
-    			ImportFile importFile = new ImportFile(editor, ImportFile.FREE_MIND);
+    			ImportFile importFile = new ImportFile(editor, data.getData().getEncodedPath(), ImportFile.FREE_MIND);
     			//Log.d("debug", "control->import End");
     			//freeMind.getMindMap();
     			return true;

@@ -8,6 +8,7 @@ import cz.vutbr.fit.testmind.editor.ITAMEditor;
 
 public class ImportFile {
 	private ITAMEditor editor;
+	private String source = "";
 	private int type = 0;
 	
 	/** 
@@ -18,14 +19,16 @@ public class ImportFile {
 	/** main construct for run type of import
 	 * 
 	 * @param editor editor with profile and file address
+	 * @param source path + fileName
 	 * @param type type of file
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public ImportFile(ITAMEditor editor, int type) throws XmlPullParserException, IOException {
+	public ImportFile(ITAMEditor editor, String source, int type) throws XmlPullParserException, IOException {
 		this.editor = editor;
+		this.source = source;
 		this.type = type;
-		run(type);
+		run(source, type);
 	}
 	
 	/** Run specify import of file type
@@ -34,10 +37,10 @@ public class ImportFile {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void run(int type) throws XmlPullParserException, IOException {
+	private void run(String source, int type) throws XmlPullParserException, IOException {
 		switch (type) {
 		case FREE_MIND:
-			FreeMind3 freeMind = new FreeMind3(editor, true);
+			FreeMind3 freeMind = new FreeMind3(editor, source);
 			freeMind.runImport();
 			break;
 
