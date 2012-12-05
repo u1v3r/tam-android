@@ -42,13 +42,13 @@ public class FreeMind3 {
 		this.source = editor.getProfile().getFileName();
 	}
 	
-	// Speciálnì pro jiný zdroj, než je v profilu
+	// Speciï¿½lnï¿½ pro jinï¿½ zdroj, neï¿½ je v profilu
 	public FreeMind3(ITAMEditor editor, String source) {
 		this.editor = editor;
 		this.source = source;
 	}
 	
-	// Speciálnì pro testovací úèely
+	// Speciï¿½lnï¿½ pro testovacï¿½ ï¿½ï¿½ely
 	public FreeMind3(ITAMEditor editor, boolean bTest) {
 		this.editor = editor;
 		this.source = "/data/testMind/test.mm";
