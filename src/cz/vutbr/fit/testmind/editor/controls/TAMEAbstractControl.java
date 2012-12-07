@@ -26,6 +26,7 @@ public abstract class TAMEAbstractControl {
 	    public static final int EDIT_NODE = 0;
 	    public static final int OPEN = 1;
 	    public static final int SAVE = 2;
+	    public static final int NEW_MAP = 3;
 	}
 	
 	public static final int PICK_FILE_RESULT_CODE = 0;

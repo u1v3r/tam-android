@@ -5,11 +5,15 @@ import java.io.FilenameFilter;
 import java.util.Arrays;
 
 import cz.vutbr.fit.testmind.profile.TAMProfile;
+import cz.vutbr.fit.testmind.editor.controls.TAMEAbstractControl.REQUEST_CODES;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.opensave.TestmindFilenameFilter;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.sax.RootElement;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -179,9 +183,18 @@ public class OpenSaveActivity extends FragmentActivity
 
 	private void createMindMap() {
 		// zmaze profil a vytovri znovu aplikacie		
-    	MainActivity.getProfile().reset();
-		Intent mainActivity = new Intent(this,MainActivity.class);
-		startActivity(mainActivity);		
+		SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.clear();		
+		editor.commit();
+		TAMERootInitializeControl.initControl = true;
+		
+		setResult(REQUEST_CODES.NEW_MAP);
+		MainActivity.getProfile().reset();
+		//Intent mainActivity = new Intent(this,MainActivity.class);
+		finish();
+		//startActivity(mainActivity);
+		
 	}
 	
 	/**

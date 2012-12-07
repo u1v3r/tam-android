@@ -261,5 +261,5 @@ public class MainActivity extends FragmentActivity {
 
 	public static TAMProfile getProfile() {
 		return profile;
-	}
+	}	
 }

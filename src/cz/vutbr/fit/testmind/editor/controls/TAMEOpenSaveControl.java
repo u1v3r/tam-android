@@ -20,7 +20,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
 public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenuListener, OnActivityResultListener
 {
 	private static final String TAG = "TAMEditorOpenSaveControl";
-
+	
 	public TAMEOpenSaveControl(ITAMEditor editor)
 	{
 		super(editor);
@@ -60,6 +60,15 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
             editor.invalidate();
             
             return true;
+        }
+        
+        if(resultCode == REQUEST_CODES.NEW_MAP && requestCode == PICK_FILE_RESULT_CODE){
+        	// aktivitu so starou mapout treba ukoncit, inak zostane na zasobniku
+        	activity.finish();
+        	// spusti znovu main activity, ktora sa reinicializuje
+        	Intent mainActivity = new Intent(activity,MainActivity.class);
+        	activity.startActivity(mainActivity);
+        	return true;
         }
 
         return false;
