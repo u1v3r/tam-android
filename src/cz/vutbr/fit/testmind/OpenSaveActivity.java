@@ -178,7 +178,7 @@ public class OpenSaveActivity extends FragmentActivity
 	}
 
 	private void createMindMap() {
-		// zmaze profil a vytovri znovu aplikacie
+		// zmaze profil a vytovri znovu aplikacie		
     	MainActivity.getProfile().reset();
 		Intent mainActivity = new Intent(this,MainActivity.class);
 		startActivity(mainActivity);		

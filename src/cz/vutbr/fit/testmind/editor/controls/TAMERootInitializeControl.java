@@ -10,7 +10,14 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMGraphDrawingFinishedListener;
 
 public class TAMERootInitializeControl extends TAMEAbstractControl implements OnMainTopicSetDialogListener, 
 	ITAMGraphDrawingFinishedListener {
-		
+	
+	/**
+	 * Taky mensi docasny hack. Premenna urcuje ci sa ma control incializovat.
+	 * Na false sa nastavuje v MainActivity ak sa otvara posledna mapa. 
+	 * Obchadza Exception "Root alredy exists".
+	 */
+	public static boolean initControl = true; 
+	
 	public interface ITAMRootControlListener {
 		public boolean createDefaultRootNode(String title);
 		public boolean createDefaultRootNode(String title, int x, int y);
@@ -18,8 +25,12 @@ public class TAMERootInitializeControl extends TAMEAbstractControl implements On
 	
 	public TAMERootInitializeControl(ITAMEditor editor) {
 		super(editor);
-		this.editor.getListOfGraphDrawingFinishedListener().add(this);
-		showAddNodeDialog();		
+
+		// default inicializuje
+		if(initControl){
+			this.editor.getListOfGraphDrawingFinishedListener().add(this);
+			showAddNodeDialog();
+		}
 	}
 		
 /*

@@ -133,6 +133,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		mode = MenuItems.create_mode;
 		//actualItem = EventObjects.menu_create;
 	}
+	
+	
 
 	@Override
 	protected void modeChanged(MenuItem item) {

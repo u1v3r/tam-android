@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -14,11 +15,14 @@ import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.TAMEditorTest;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 public class MainActivity extends FragmentActivity {
+	
+	public static final String PREFS_NAME = "TestMindPrefs";
 	
 	/**
 	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam menu
@@ -83,7 +87,7 @@ public class MainActivity extends FragmentActivity {
 	private static final String TAG = "MainActivity";
 	
 	private static final String LAST_OPENED_FILE = "last";
-	
+
 	private ITAMEditor actualEditor;
 	
 	private static TAMProfile profile;
@@ -93,11 +97,17 @@ public class MainActivity extends FragmentActivity {
     	super.onCreate(savedInstanceState);	
     	Log.d(TAG, "onCreate");
     	
-    	//if(profile != null) {
-    		profile = new TAMProfile();
-    	//}		
-    	  	
+    	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    	String lastMindMap = settings.getString(LAST_OPENED_FILE, "");
     	
+    	// docasny hack, vid dokumentacia TAMERootInitializeControl.initControl
+    	if(!lastMindMap.isEmpty()) TAMERootInitializeControl.initControl = false;
+    	
+    	//if(profile != null) {
+			profile = new TAMProfile();
+		//}
+    	
+		
     	setContentView(R.layout.activity_main);
     	
     	EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
@@ -122,7 +132,16 @@ public class MainActivity extends FragmentActivity {
     	
 		// initialize editors //
     	EventObjects.editor_main.initialize(profile);
-    	EventObjects.editor_test.initialize(profile);
+    	EventObjects.editor_test.initialize(profile);   	  	
+    	    	
+    	if(!lastMindMap.isEmpty()){
+    		    		
+    		Serializer serializer = new Serializer(
+            		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
+            
+            serializer.deserialize(profile);
+            
+    	} 	
     }
 	
 	/**
@@ -190,6 +209,12 @@ public class MainActivity extends FragmentActivity {
 				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
 		serializer.serialize(profile);
     	
+		/* ulozi nastavenia, tak aby ich bolo mozne obnovit aj po uplnom zruseni aplikacie */
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString(LAST_OPENED_FILE, profile.getFileName());
+		editor.commit();
+		
 		Log.d(TAG, "onDestroy save: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
     }
     
