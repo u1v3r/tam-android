@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.editor.items;
 
 import android.content.res.Resources;
+import android.util.Log;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
@@ -12,7 +13,7 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
 
 public class TAMENode implements ITAMENode, ITAMHidingControlNode {
 	
-	private static final String TAG = "TAMEditorNode";
+	private static final String TAG = "TAMENode";
 	
 	private ITAMEditor editor;
 	private ITAMGNode gui;
@@ -115,6 +116,7 @@ public class TAMENode implements ITAMENode, ITAMHidingControlNode {
 	}
 
 	public void dispose() {
+		Log.d(TAG, "dispose");
 		editor.getListOfENodes().remove(this);		
 		editor.getGItemFactory().deleteNode(gui, false);
 		gui = null;

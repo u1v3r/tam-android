@@ -243,7 +243,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 			Log.d(TAG,localTag.toString());
 		}
     	
-    	Log.d(TAG, bodyText);
+    	//Log.d(TAG, bodyText);
     	
     	
     	Intent intent = new Intent();    	
@@ -251,7 +251,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	intent.putExtra(TAMENodeControl.NODE_BODY, bodyText);
     	intent.putExtra(TAMENodeControl.NODE_COLOR,color);
     	    	
-    	Log.d(TAG, "vsetky:" + listOfTags.toString());
+    	//Log.d(TAG, "vsetky:" + listOfTags.toString());
     	
     	intent.putExtra(TAMENodeControl.NODE_TAGS, (Serializable)(listOfTags));
     	setResult(TAMENodeControl.EDIT_NODE_RESULT_CODE, intent);
@@ -332,7 +332,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	
 	public void onTagBtnClick(View w){
 		
-		Log.d(TAG, "obsahuje:" + listOfTags.toString());
+		//Log.d(TAG, "obsahuje:" + listOfTags.toString());
 		
 		int start = richTextEditor.getSelectionStart();
 		//int startTag = start;

@@ -76,10 +76,7 @@ public class OpenSaveActivity extends FragmentActivity
 			break;
 		case R.id.open_save_acitivty_add:
 			createMindMap();
-			break;
-		case R.id.open_save_acitivty_share:
-			shareMindMap();
-			break;			
+			break;				
 		default:
 			cancelActivity();
 			break;
@@ -181,11 +178,10 @@ public class OpenSaveActivity extends FragmentActivity
 	}
 
 	private void createMindMap() {
-		/* TODO tu by mala byt logika, ktora po kliknuti najskor ulozi cele aktualne platno,
-		 * nasledne ho vycisti a prepne do MainAcitivty a uzivatel moze vytvarat novu mapu 
-		 */
-    	
-		
+		// zmaze profil a vytovri znovu aplikacie
+    	MainActivity.getProfile().reset();
+		Intent mainActivity = new Intent(this,MainActivity.class);
+		startActivity(mainActivity);		
 	}
 	
 	/**

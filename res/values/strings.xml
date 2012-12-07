@@ -43,7 +43,7 @@
     <string name="btn_zoom_in">+</string>
     <string name="btn_zoom_out">-</string>
     <string name="btn_connect">Connect</string>
-    <string name="menu_open">Open</string>
+    <string name="menu_open">Manage maps</string>
     <string name="menu_save">Save</string>
     <string name="menu_import">Import</string>
     <string name="menu_export">Export</string>
@@ -63,4 +63,5 @@
     <string name="open_save_error_any_file">There is not any file for open!</string>
     <string name="context_menu_delete">Delete</string>
     <string name="select_file_to_import">Select a File to import</string>
+    <string name="create_new">New</string>
 </resources>

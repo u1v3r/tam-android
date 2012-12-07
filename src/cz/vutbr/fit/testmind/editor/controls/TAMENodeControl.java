@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,12 +20,14 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
+import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.Tag;
 
 /**
@@ -257,9 +260,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		
 		if(selectedNode == null) return;
 		
-		/**
-		 * TODO: implementovat mazanie uzlu
-		 */
+		
+		
 	}
 
 	public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge) {
