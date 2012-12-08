@@ -94,6 +94,13 @@ public class TAMPNode extends TAMPItem implements Serializable{
 			parent.listOfChildNodes.remove(this);
 		}
 		
+		
+		parent = null;
+	}
+	
+	public void disposeWithoutParent(){
+		super.dispose();
+		
 		listOfChildNodes.clear();
 		parent = null;
 	}

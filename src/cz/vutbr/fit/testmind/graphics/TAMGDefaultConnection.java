@@ -9,11 +9,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.Log;
 
 public class TAMGDefaultConnection implements ITAMGConnection {
 	
 	private static final int type = CONNECTION_TYPE_DEFAULT;
 	private static final int HIGHLIGHT_COLOR = R.color.node_highlight_background;
+	private static final String TAG = "TAMGDefaultConnection";
+	
 	private int colorBackground;
 	private int colorBackgroundHighlight;
 	private int colorText;
@@ -80,7 +83,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 
 	
 	public void draw(Canvas canvas, Paint paint) {
-
+			
 		paint.setAntiAlias(true);
 		if(isHighlighted) {
 			paint.setColor(colorBackgroundHighlight);
@@ -90,6 +93,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		
 		paint.setStrokeWidth(6);
 		int a = 0;
+		
 		Point from = parent.getPosition();
 		for(Point to : listOfMiddlePoints) {
 			
@@ -253,6 +257,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 	}
 	
 	public void setEnabled(boolean enable) {
+		
 		
 		if(isEnabled != enable) {
 			

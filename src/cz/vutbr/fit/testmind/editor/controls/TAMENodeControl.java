@@ -2,7 +2,9 @@ package cz.vutbr.fit.testmind.editor.controls;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import android.content.Context;
@@ -27,6 +29,8 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
+import cz.vutbr.fit.testmind.profile.TAMPConnection;
+import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.Tag;
 
@@ -55,6 +59,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	private boolean waitingForClick = false;
 	
 	private float x,y;
+	
+	private HashSet<Integer> removedConnections = new HashSet<Integer>();
 	
 	public TAMENodeControl(ITAMNodeControlListener editor) {
 		super((ITAMEditor) editor);		
@@ -173,6 +179,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 
 		//Log.d(TAG,getListOfSelectedNodes().toString() + "");
 		
+		Log.d(TAG,"req:" + requestCode + ", result:" + resultCode);
+		
 		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == EDIT_NODE_RESULT_CODE){
 
 			String nodeTitle = data.getStringExtra(NODE_TITLE);
@@ -252,17 +260,77 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		} else if(item == EventObjects.btn_edit) {
 			openEditNodeActivity();
 		} else if(item == EventObjects.btn_delete) {
-			deleteNode();
+			deleteSelectedNodeSubTree();
 		}
 	}
 
-	private void deleteNode() {	
+	private void deleteSelectedNodeSubTree() {	
 		
 		if(selectedNode == null) return;
 		
+		//Log.d(TAG, "pred:" + editor.getProfile().getListOfPNodes());
+		//Log.d(TAG, "pred:" + editor.getProfile().getListOfPConnections());
+		//Log.d(TAG, "pred velkost:" + editor.getProfile().getListOfPConnections().size());
 		
+		editor.unselectAll();	
+		deleteTraverse(selectedNode.getProfile());			
+				
+		//Log.d(TAG, "po:" + editor.getProfile().getListOfPNodes());
+		//Log.d(TAG, "po velkost:" + editor.getProfile().getListOfPConnections().size());
+		//Log.d(TAG, "po:" + editor.getProfile().getListOfPConnections());
 		
+		editor.invalidate();
 	}
+
+	/**
+	 * Traverse subtree and delete nodes
+	 * @param root
+	 */
+	private void deleteTraverse(TAMPNode root) {		
+		
+		// odstrani listy
+		if (root.getListOfChildNodes().isEmpty() && root.getId() != 1){			
+			//Log.d(TAG, "delete node: " + root.getTitle());			
+			removeConnection(root);
+			editor.getProfile().deleteNodeTest(root);			
+			return;
+		}
+		
+		// treba riesit cez ListIterator inak vyhadzuje ConcurrentModificationException
+		ListIterator<TAMPNode> iterator = root.getListOfChildNodes().listIterator();
+		while (iterator.hasNext()) {			
+			TAMPNode pNode = iterator.next();
+			deleteTraverse(pNode);
+		}		
+		
+		if(root.getId() != 1){//root mapy sa nikdy nesmie odstranit
+			//Log.d(TAG, "delete node: " + root.getTitle());
+			removeConnection(root);
+			editor.getProfile().deleteNodeTest(root);			
+		}
+	}
+	
+	private void removeConnection(TAMPNode node){
+
+		// TODO: ked bude cas, tak by bolo dobre to skusit spravit aj nejak rozumnejsie
+		ListIterator<TAMPConnection> iterator = editor.getProfile().getListOfPConnections().listIterator();		
+		while(iterator.hasNext()){
+			TAMPConnection conn = iterator.next();
+			if(conn.getChild().equals(node)){
+				removedConnections.add(conn.getId());			
+			}
+		}		
+		
+		deleteConnections();
+	}
+	
+	private void deleteConnections() {
+		for (int id : removedConnections) {
+			//Log.d(TAG, "mazem conn: " + id);	
+			editor.getProfile().deleteConnection(id);
+		}	
+	}
+
 
 	public void onItemHitEvent(MotionEvent e, TAMGMotionEvent ge) {
 		// TODO Auto-generated method stub

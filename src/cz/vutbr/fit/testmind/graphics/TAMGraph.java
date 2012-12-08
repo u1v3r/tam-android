@@ -525,8 +525,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		for(ITAMPreDrawListener control : listOfPreDrawControls) {
 			control.onPreDraw(canvas, paint);
 		}
-		
-		for(ITAMGItem item : listOfDrawableItems) {
+				
+		for(ITAMGItem item : listOfDrawableItems) {			
 			item.draw(canvas, paint);
 		}
 		
@@ -584,7 +584,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				ge = new TAMGMotionEvent(result, ax, ay);
 
 				unselectAllWithout(result);
-
+ 
 				if(result == null) {
 					lastSelectedNode = null;
 				}// else {

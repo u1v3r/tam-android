@@ -194,6 +194,15 @@ public class TAMProfile {
 		}
 	}
 	
+	
+	public void deleteNodeTest(TAMPNode node) {
+		
+		if(listOfPNodes.contains(node)) {
+			node.disposeWithoutParent();
+			listOfPNodes.remove(node);
+		}
+	}
+	
 	public void deleteNode(int nodeID) {
 		
 		TAMPNode node = getNode(nodeID);
