@@ -1128,6 +1128,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 	public void onGlobalLayout() {
 		
+		// ak sa inicializuje nova mapa, tak vykonaj default zoom, inak nic nezoomuj
 		if(TAMERootInitializeControl.initControl){		
 			zoom.sx = zoom.sx*TAMGraph.DEFAULT_ZOOM;
 			zoom.sy = zoom.sy*TAMGraph.DEFAULT_ZOOM;

@@ -207,9 +207,19 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			selectedNode.setBackgroundStyle(nodeColor);			
 			
 			editor.invalidate();
+			
+			return true;
+		}
+		
+		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == activity.RESULT_CANCELED){
+			editor.unselectAll();
+			deleteTraverse(selectedNode.getProfile());
+			editor.invalidate();
+			
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 	
 	/**

@@ -211,6 +211,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	if(item.getItemId() == R.id.edit_node_acitivty_ok){
     		saveValues();
     	}else if(item.getItemId() == R.id.edit_node_acitivty_cancel){
+    		setResult(RESULT_CANCELED);
     		finish();
     	}
     	    	
