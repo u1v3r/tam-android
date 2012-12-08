@@ -86,7 +86,7 @@ public class MainActivity extends FragmentActivity {
 		
 	private static final String TAG = "MainActivity";
 	
-	private static final String LAST_OPENED_FILE = "last";
+	public static final String LAST_OPENED_FILE = "last";
 
 	private ITAMEditor actualEditor;
 	

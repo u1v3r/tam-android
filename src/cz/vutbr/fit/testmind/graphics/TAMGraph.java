@@ -3,10 +3,13 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -1125,13 +1128,15 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 	public void onGlobalLayout() {
 		
-		zoom.sx = zoom.sx*TAMGraph.DEFAULT_ZOOM;
-		zoom.sy = zoom.sy*TAMGraph.DEFAULT_ZOOM;
-		zoom(
-				zoom.sx,
-				zoom.sy,    				
-				getWidth()/2, 
-				getHeight()/2);
+		if(TAMERootInitializeControl.initControl){		
+			zoom.sx = zoom.sx*TAMGraph.DEFAULT_ZOOM;
+			zoom.sy = zoom.sy*TAMGraph.DEFAULT_ZOOM;
+			zoom(
+					zoom.sx,
+					zoom.sy,    				
+					getWidth()/2, 
+					getHeight()/2);
+		}
 		
 		for (ITAMGraphDrawingFinishedListener l : listOfGraphDrawingFinishedListener) {
 			l.onDrawingFinished();
