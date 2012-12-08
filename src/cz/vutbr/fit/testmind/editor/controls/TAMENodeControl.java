@@ -23,6 +23,7 @@ import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
@@ -249,7 +250,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			//if(e.getAction() == MotionEvent.ACTION_DOWN) {
 				
 				waitingForClick = false;
-				
+								
 				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection(
 						"", "", selectedNode, (int) ge.dx, (int) ge.dy);
 				
@@ -281,7 +282,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		
 		if(selectedNode == null) return;
 		
-		showDeleteAlertDialogAndDelete();		
+		showDeleteAlertDialogAndDelete();
+		
 		
 	}
 
@@ -298,6 +300,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				deleteTraverse(selectedNode.getProfile());
 				editor.invalidate();
 				dialog.dismiss();
+				((ITAMToolbarControlItem)editor).hideToolbar();
 			}
 		});
 		
