@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
@@ -264,22 +267,38 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		}
 	}
 
-	private void deleteSelectedNodeSubTree() {	
+	private void deleteSelectedNodeSubTree() {
 		
 		if(selectedNode == null) return;
 		
-		//Log.d(TAG, "pred:" + editor.getProfile().getListOfPNodes());
-		//Log.d(TAG, "pred:" + editor.getProfile().getListOfPConnections());
-		//Log.d(TAG, "pred velkost:" + editor.getProfile().getListOfPConnections().size());
+		showDeleteAlertDialogAndDelete();		
 		
-		editor.unselectAll();	
-		deleteTraverse(selectedNode.getProfile());			
-				
-		//Log.d(TAG, "po:" + editor.getProfile().getListOfPNodes());
-		//Log.d(TAG, "po velkost:" + editor.getProfile().getListOfPConnections().size());
-		//Log.d(TAG, "po:" + editor.getProfile().getListOfPConnections());
+	}
+
+	private void showDeleteAlertDialogAndDelete() {
 		
-		editor.invalidate();
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setMessage(R.string.main_activity_delete_alert_dialog_content)
+			   .setTitle(R.string.main_activity_delete_alert_dialog_title);
+		
+		builder.setPositiveButton(R.string.ok, new OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				editor.unselectAll();	
+				deleteTraverse(selectedNode.getProfile());
+				editor.invalidate();
+				dialog.dismiss();
+			}
+		});
+		
+		builder.setNegativeButton(R.string.cancel, new OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		
+		builder.create().show();
 	}
 
 	/**

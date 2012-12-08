@@ -2,6 +2,8 @@
 
     <string name="app_name">TestMind</string>
     <string name="main_activity_title">TestMind</string>
+    <string name="main_activity_delete_alert_dialog_title">Remove node</string>
+    <string name="main_activity_delete_alert_dialog_content">Are you sure you want to delete node and all of the nodes it contains?</string>
     <string name="edit_activity_title">Title</string>
     <string name="edit_activity_tag_exists">Tag already exists</string>
     <string name="edit_activity_more_words_selected">Please select only one word</string>
@@ -64,4 +66,5 @@
     <string name="context_menu_delete">Delete</string>
     <string name="select_file_to_import">Select a File to import</string>
     <string name="create_new">New</string>
+    
 </resources>
