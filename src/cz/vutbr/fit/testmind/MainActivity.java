@@ -33,7 +33,7 @@ public class MainActivity extends FragmentActivity {
 	public final static class MenuItems {
 		public static final int open = R.id.menu_open;
 		public static final int save = R.id.menu_save;		
-		public static final int settings = R.id.menu_settings;
+		//public static final int settings = R.id.menu_settings;
 		public static final int importFile = R.id.menu_import;
 		public static final int shareFile = R.id.menu_share;
 		public static final int create_mode = R.id.menu_create_mode;

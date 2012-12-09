@@ -122,7 +122,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		selectedNode = node;
 		
 		Intent intent = new Intent(editor.getContext(), EditNodeActivity.class);	
-
+		node.getProfile().setTitle(node.getProfile().getTitle().trim());
+		
 		intent.putExtra(NODE_TITLE, node.getProfile().getTitle());
 		intent.putExtra(NODE_BODY, node.getProfile().getBody());				
 		intent.putExtra(NODE_COLOR, node.getBackgroundStyle());		
@@ -146,7 +147,12 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			
 			// vytvori prazdny uzol
 			TAMENode selectedNode = (TAMENode) node.getHelpObject();			
-			ITAMENode eNode = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection("","",selectedNode,(int) x, (int) y);
+			ITAMENode eNode = 
+					((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection(
+							"             ",
+							"",
+							selectedNode,
+							(int) x, (int) y);
 			
 			editor.unselectAll();
 			eNode.getGui().setSelected(true);

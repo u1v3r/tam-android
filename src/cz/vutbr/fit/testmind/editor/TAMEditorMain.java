@@ -96,10 +96,12 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 			EventObjects.btn_delete.setVisibility(VISIBLE);
 			EventObjects.btn_edit.setVisibility(VISIBLE);
 		} else if(mode == MenuItems.view_mode) {
+			/* tlacidla nefunguju, tak sa zatial nebudu zobrazovat
 			MainActivity.rightToolbar.setVisibility(VISIBLE);
 			EventObjects.btn_hide_all.setVisibility(VISIBLE);
 			EventObjects.btn_hide_one.setVisibility(VISIBLE);
 			EventObjects.btn_view.setVisibility(VISIBLE);
+			*/
 		}
 		
 		MainActivity.leftToolbar.setVisibility(GONE);
