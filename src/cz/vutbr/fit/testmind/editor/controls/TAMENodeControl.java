@@ -157,11 +157,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 * When created node is released, dialog with name selection is opened.
 	 */
 	public void onItemLongReleaseEvent(MotionEvent e, ITAMGNode node) {
-		if(creatingByGesture) {
-				  
-			creatingByGesture = false;
+		if(creatingByGesture) {		
 			
 			openEditNodeActivity((TAMENode)node.getHelpObject());
+			
 		}
 	}
 	
@@ -210,17 +209,27 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			
 			editor.invalidate();
 			
+			// pre istotu vzdy false
+			creatingByGesture = false;
+			
 			return true;
 		}
 		
-		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == Activity.RESULT_CANCELED){
+		Log.d(TAG,"gesture: " + creatingByGesture);
+		
+		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == Activity.RESULT_CANCELED && creatingByGesture){
 			editor.unselectAll();
 			deleteTraverse(selectedNode.getProfile());
 			editor.invalidate();
 			
+			// pre istotu vzdy false
+			creatingByGesture = false;
+			
 			return true;
 		}
+		
 
+		
 		return false;
 	}
 	
