@@ -69,5 +69,6 @@
     <string name="create_new">New</string>
     <string name="send_to">Share Map</string>
     <string name="testing_activity_child_nodes">Child nodes</string>
+    <string name="cannot_open_file">Can not open file %s.</string>
     
 </resources>

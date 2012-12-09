@@ -8,12 +8,16 @@ import java.util.Map;
 import java.util.Set;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.Log;
 import android.util.SparseArray;
+import android.widget.Toast;
+import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMEItem;
@@ -176,7 +180,19 @@ public class Serializer
      */
     public void deserialize(TAMProfile profile)
     {
-        SQLiteDatabase db = openDB();
+        SQLiteDatabase db;
+        
+        try
+        {
+            db = openDB();
+        }
+        catch (SQLiteCantOpenDatabaseException e)
+        {
+            Context context = profile.getListOfEditors().get(0).getContext();
+            String path = String.format(context.getString(R.string.cannot_open_file), fileDB.getAbsolutePath());
+            Toast.makeText(context, path, Toast.LENGTH_LONG).show();
+            return;
+        }        
         
         SparseArray<TAMPNode> nodes = loadProfile(db, profile);
         HashMap<String, ITAMEditor> editors = loadEditors(db, profile);
@@ -224,7 +240,7 @@ public class Serializer
      */
     private SQLiteDatabase openDB()
     {    	
-        return SQLiteDatabase.openDatabase(fileDB.getPath(), null, SQLiteDatabase.OPEN_READONLY);
+        return SQLiteDatabase.openDatabase(fileDB.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
     }
 
     /**
