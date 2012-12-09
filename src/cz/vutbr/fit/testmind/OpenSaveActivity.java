@@ -9,6 +9,7 @@ import cz.vutbr.fit.testmind.editor.controls.TAMEAbstractControl.REQUEST_CODES;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.opensave.TestmindFilenameFilter;
+import cz.vutbr.fit.testmind.other.Helper;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -92,13 +93,17 @@ public class OpenSaveActivity extends FragmentActivity
 
     @Override
     public boolean onContextItemSelected(MenuItem item)
-    {
+    {    	
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId())
         {
-            case R.id.delete:
+            case R.id.open_save_activity_context_delete:
                 TextView textItem =(TextView)info.targetView;
                 deleteMap(textItem.getText().toString());
+                return true;
+            case R.id.open_save_activity_context_share:
+            	String fileName = ((TextView)info.targetView).getText().toString();
+                shareMindMap(fileName);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -176,9 +181,12 @@ public class OpenSaveActivity extends FragmentActivity
         finish();         
     }
     
-    private void shareMindMap() {
-		//TODO tu niekedy v buducnosti bude zdielanie
+    private void shareMindMap(String fileName) {  	
+    	
+    	
+    	Intent shareIntent = Helper.createShareMapChooserIntent(fileName);		
 		
+    	startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
 
 	private void createMindMap() {
@@ -203,7 +211,9 @@ public class OpenSaveActivity extends FragmentActivity
 	 */
 	private void deleteMap(String name)
 	{
-	    String path = String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), name);
+	    String path = String.format("%s/%s.%s", 
+	    		TAMProfile.TESTMIND_DIRECTORY.getPath(), 
+	    		name,TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION);
 	    File file = new File(path);
 	    file.delete();
 	    

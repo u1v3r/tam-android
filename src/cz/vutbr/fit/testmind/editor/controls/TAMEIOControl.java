@@ -19,6 +19,7 @@ import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.io.ImportFile;
 import cz.vutbr.fit.testmind.io.Serializer;
+import cz.vutbr.fit.testmind.other.Helper;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
@@ -92,16 +93,7 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 		if(editor.getProfile().getFileName() == null) return;
 		if(editor.getProfile().getFileName() == "") return;
 		
-		String pathToFile = 
-				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName());
-		
-		
-		Uri uriToFile = Uri.fromFile(new File(pathToFile));
-		
-		Intent shareIntent = new Intent();
-		shareIntent.setAction(Intent.ACTION_SEND);
-		shareIntent.putExtra(Intent.EXTRA_STREAM, uriToFile);
-		shareIntent.setType("application/*");
+		Intent shareIntent = Helper.createShareMapChooserIntent(editor.getProfile().getFileName());		
 		activity.startActivity(Intent.createChooser(shareIntent, activity.getResources().getText(R.string.send_to)));
 	}
 

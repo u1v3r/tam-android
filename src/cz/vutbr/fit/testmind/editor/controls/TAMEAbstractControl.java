@@ -1,5 +1,9 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.io.File;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.GestureDetector.OnGestureListener;
