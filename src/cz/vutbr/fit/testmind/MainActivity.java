@@ -15,6 +15,7 @@ import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.TAMEditorTest;
+import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
@@ -33,7 +34,7 @@ public class MainActivity extends FragmentActivity {
 		public static final int save = R.id.menu_save;		
 		public static final int settings = R.id.menu_settings;
 		public static final int importFile = R.id.menu_import;
-		public static final int exportFile = R.id.menu_export;
+		public static final int shareFile = R.id.menu_share;
 		public static final int create_mode = R.id.menu_create_mode;
 		public static final int view_mode = R.id.menu_view_mode;
 		public static final int test_structure = R.id.menu_test_structure;
@@ -137,7 +138,7 @@ public class MainActivity extends FragmentActivity {
     	if(!lastMindMap.isEmpty()){
     		    		
     		Serializer serializer = new Serializer(
-            		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
+            		String.format("%s/%s." + TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
             
             serializer.deserialize(profile);
             
@@ -161,7 +162,7 @@ public class MainActivity extends FragmentActivity {
 		String lastMindMap = savedInstanceState.getString(LAST_OPENED_FILE);
 		
 		Serializer serializer = new Serializer(
-        		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
+        		String.format("%s/%s." + TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
         
         serializer.deserialize(profile);  
 		
@@ -206,7 +207,7 @@ public class MainActivity extends FragmentActivity {
     	
     	/* ak by mapa nebola ulozena, nech sa uzivatelovi nestrati */
     	Serializer serializer = new Serializer(
-				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+				String.format("%s/%s." + TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
 		serializer.serialize(profile);
     	
 		/* ulozi nastavenia, tak aby ich bolo mozne obnovit aj po uplnom zruseni aplikacie */

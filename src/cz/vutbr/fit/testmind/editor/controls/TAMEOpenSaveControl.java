@@ -19,6 +19,9 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
  */
 public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenuListener, OnActivityResultListener
 {
+	
+	public static final String TESTMIND_FILE_EXTENSION = "db";
+	
 	private static final String TAG = "TAMEditorOpenSaveControl";
 	
 	public TAMEOpenSaveControl(ITAMEditor editor)
@@ -53,7 +56,7 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
             editor.getProfile().setFileName(data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT));           
             
             Serializer serializer = new Serializer(
-            		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
+            		String.format("%s/%s." + TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
             
             serializer.deserialize(MainActivity.getProfile());           
             
@@ -87,7 +90,7 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 		editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
 			
 		Serializer serializer = new Serializer(
-				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
+				String.format("%s/%s." + TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
 		
 		serializer.serialize(MainActivity.getProfile());
 		

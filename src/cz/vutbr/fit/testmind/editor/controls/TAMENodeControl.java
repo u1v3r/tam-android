@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -212,7 +213,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			return true;
 		}
 		
-		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == activity.RESULT_CANCELED){
+		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == Activity.RESULT_CANCELED){
 			editor.unselectAll();
 			deleteTraverse(selectedNode.getProfile());
 			editor.invalidate();

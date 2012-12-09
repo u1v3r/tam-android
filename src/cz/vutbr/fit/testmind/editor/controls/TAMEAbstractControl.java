@@ -23,16 +23,16 @@ public abstract class TAMEAbstractControl {
 	 */
 	public static final class REQUEST_CODES
 	{
-	    public static final int EDIT_NODE = 0;
-	    public static final int OPEN = 1;
-	    public static final int SAVE = 2;
-	    public static final int NEW_MAP = 3;
+	    public static final int EDIT_NODE = 100;
+	    public static final int OPEN = 101;
+	    public static final int SAVE = 102;
+	    public static final int NEW_MAP = 103;
 	}
 	
-	public static final int PICK_FILE_RESULT_CODE = 0;
-	public static final int EDIT_NODE_RESULT_CODE = 1;
-	public static final int IMPORT_FILE = 2;
-	public static final int EXPORT_FILE = 3;
+	public static final int PICK_FILE_RESULT_CODE = 200;
+	public static final int EDIT_NODE_RESULT_CODE = 201;
+	public static final int IMPORT_FILE = 202;
+	public static final int EXPORT_FILE = 203;
 	
 	//public boolean isDialogOpen = false;
 	private boolean enabled;
