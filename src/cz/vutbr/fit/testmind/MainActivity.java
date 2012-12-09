@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
@@ -60,6 +61,10 @@ public class MainActivity extends FragmentActivity {
 		public static final int connect = R.id.button_connect;
 	}
 	
+	public static FrameLayout leftToolbar;
+	public static FrameLayout rightToolbar;
+	
+	
 	public static class EventObjects {
 		public static ZoomControls zoomControls;
 		public static TAMEditorMain editor_main;
@@ -106,10 +111,13 @@ public class MainActivity extends FragmentActivity {
     	
     	//if(profile != null) {
 			profile = new TAMProfile();
-		//}
-    	
+		//}	
+		
 		
     	setContentView(R.layout.activity_main);
+    	
+    	leftToolbar = (FrameLayout) findViewById(R.id.activity_main_left_toolbar);
+		rightToolbar = (FrameLayout) findViewById(R.id.activity_main_right_toolbar);
     	
     	EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
     	EventObjects.editor_test = (TAMEditorTest) findViewById(R.id.acitity_test_tam_editor);
