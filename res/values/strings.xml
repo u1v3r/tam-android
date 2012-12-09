@@ -67,5 +67,6 @@
     <string name="select_file_to_import">Select a File to import</string>
     <string name="create_new">New</string>
     <string name="send_to">Share Map</string>
+    <string name="testing_activity_child_nodes">Child nodes</string>
     
 </resources>

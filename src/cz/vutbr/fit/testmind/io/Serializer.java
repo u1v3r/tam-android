@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.Log;
 import android.util.SparseArray;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
@@ -106,6 +107,7 @@ public class Serializer
                                                                    "background", "highlightColor"};
     static private final String[] COLUMNS_CONNECTION_MIDDLEPOINTS = {"connection_reference", "x", "y", "order_points"};
     static private final String[] COLUMNS_TAGS = {"node", "name", "start", "end"};
+	private static final String TAG = "Serializer";
 
     
     private File fileDB;
@@ -221,7 +223,7 @@ public class Serializer
      * @return
      */
     private SQLiteDatabase openDB()
-    {
+    {    	
         return SQLiteDatabase.openDatabase(fileDB.getPath(), null, SQLiteDatabase.OPEN_READONLY);
     }
 

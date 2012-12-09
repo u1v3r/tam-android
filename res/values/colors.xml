@@ -23,6 +23,6 @@
     <color name="toolbar_background">#222222</color>
 
     <color name="testing_background_activity">#FFFFFF</color>
-    <color name="testing_background_path">#616370</color>
+    <color name="testing_background_path">#33B5E5</color>
     <color name="testing_foreground_path">#FFFFFF</color>
 </resources>

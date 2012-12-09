@@ -20,6 +20,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -332,9 +333,11 @@ public class TestingActivity extends FragmentActivity
         for(TestingNode childNode: data.node.getChilds())
         {
             Button childButton = new Button(this);
-            childButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, CHILD_TEXT_SIZE);
-            childButton.setText(childNode.getTitle());
             
+            childButton.setBackgroundColor(getResources().getColor(R.color.node_background_1));
+            childButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, CHILD_TEXT_SIZE);
+            childButton.setTextColor(getResources().getColor(R.color.white));
+            childButton.setText(childNode.getTitle());
             childsView.addView(childButton);
             buttonsNodes.put(childButton, childNode);
             childButton.setOnClickListener(exploreHandler);

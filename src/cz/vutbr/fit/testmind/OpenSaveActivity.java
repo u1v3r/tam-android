@@ -51,7 +51,7 @@ public class OpenSaveActivity extends FragmentActivity
         setContentView(R.layout.activity_open_save);
         
         this.getActionBar().setHomeButtonEnabled(true);        
-        this.setTitle(R.string.menu_open);
+        this.setTitle(R.string.app_name);
                 
         loadFiles();
     }
