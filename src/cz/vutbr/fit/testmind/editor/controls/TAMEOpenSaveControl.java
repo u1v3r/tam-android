@@ -78,27 +78,6 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
     }
 
 	/**
-	 * Ulozi mapu pod menom root uzlu
-	 */
-	private void saveMindMap() {
-		
-		if(editor.getListOfENodes().size() == 0) return;
-		
-		/*
-		 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
-		 */
-		editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
-			
-		Serializer serializer = new Serializer(
-				String.format("%s/%s." + TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName()));
-		
-		serializer.serialize(MainActivity.getProfile());
-		
-			
-		return;
-	}
-
-	/**
 	 * start activity for selecting file
 	 * @param which
 	 */

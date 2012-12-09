@@ -89,9 +89,11 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 	 * 
 	 */
 	public void shareFile() {
-		
+			
 		if(editor.getProfile().getFileName() == null) return;
 		if(editor.getProfile().getFileName() == "") return;
+		
+		saveMindMap();
 		
 		Intent shareIntent = Helper.createShareMapChooserIntent(editor.getProfile().getFileName());		
 		activity.startActivity(Intent.createChooser(shareIntent, activity.getResources().getText(R.string.send_to)));
