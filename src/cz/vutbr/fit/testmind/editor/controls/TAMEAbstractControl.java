@@ -67,21 +67,25 @@ public abstract class TAMEAbstractControl {
 	 */
 	protected void saveMindMap() {
 		
-		if(editor.getListOfENodes().size() == 0) return;
-		
-		/*
-		 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
-		 */
-		editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
+		/*new Thread(new Runnable() {
 			
-		Serializer serializer = new Serializer(
-				String.format("%s/%s.%s", 
-						TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName(),
-						TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
-		
-		serializer.serialize(MainActivity.getProfile());
-		
-			
+			public void run() {*/
+				if(editor.getListOfENodes().size() == 0) return;
+				
+				/*
+				 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
+				 */
+				editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
+					
+				Serializer serializer = new Serializer(
+						String.format("%s/%s.%s", 
+								TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName(),
+								TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
+				
+				serializer.serialize(MainActivity.getProfile());
+			/*}
+		}).start();	
+			*/
 		return;
 	}
 	

@@ -8,6 +8,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
 import cz.vutbr.fit.testmind.editor.controls.TAMEAbstractControl.REQUEST_CODES;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
+import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.opensave.TestmindFilenameFilter;
 import cz.vutbr.fit.testmind.other.Helper;
 import android.app.Activity;
@@ -190,6 +191,14 @@ public class OpenSaveActivity extends FragmentActivity
 	}
 
 	private void createMindMap() {
+		
+		Serializer serializer = new Serializer(
+				String.format("%s/%s.%s",
+						TAMProfile.TESTMIND_DIRECTORY.getPath(), 
+						MainActivity.getProfile().getFileName(),
+						TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
+		serializer.serialize(MainActivity.getProfile());
+		
 		// zmaze profil a vytovri znovu aplikacie		
 		SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();

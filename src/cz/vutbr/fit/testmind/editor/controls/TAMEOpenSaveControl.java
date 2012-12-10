@@ -49,10 +49,10 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
     	Log.d(TAG,"req:" + requestCode + ", result:" + resultCode);
     	
         if(resultCode == Activity.RESULT_OK && requestCode == PICK_FILE_RESULT_CODE)
-        {
-        	// ulozenie rozpracovanej mapy, nech uzivatel nestrati zmeny
-            saveMindMap();
-        	
+        {        	
+        	// ulozenie rozpracovanej mapy, nech uzivatel nestrati zmeny        
+    		saveMindMap();	
+    		
             editor.getProfile().setFileName(data.getStringExtra(OpenSaveActivity.INTENT_ID_RESULT));           
             
             Serializer serializer = new Serializer(
@@ -65,7 +65,7 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
             return true;
         }
         
-        if(resultCode == REQUEST_CODES.NEW_MAP && requestCode == PICK_FILE_RESULT_CODE){
+        if(resultCode == REQUEST_CODES.NEW_MAP && requestCode == PICK_FILE_RESULT_CODE){        	
         	// aktivitu so starou mapout treba ukoncit, inak zostane na zasobniku
         	activity.finish();
         	// spusti znovu main activity, ktora sa reinicializuje
@@ -82,7 +82,7 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 	 * @param which
 	 */
 	private void startActivity()
-	{
+	{		
 	    Intent i = new Intent(activity, OpenSaveActivity.class);    
 	    activity.startActivityForResult(i, PICK_FILE_RESULT_CODE);	    
 	}

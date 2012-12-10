@@ -215,7 +215,10 @@ public class MainActivity extends FragmentActivity {
     	
     	/* ak by mapa nebola ulozena, nech sa uzivatelovi nestrati */
     	Serializer serializer = new Serializer(
-				String.format("%s/%s." + TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+				String.format("%s/%s.%s",
+						TAMProfile.TESTMIND_DIRECTORY.getPath(), 
+						profile.getFileName(),
+						TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
 		serializer.serialize(profile);
     	
 		/* ulozi nastavenia, tak aby ich bolo mozne obnovit aj po uplnom zruseni aplikacie */
@@ -224,7 +227,10 @@ public class MainActivity extends FragmentActivity {
 		editor.putString(LAST_OPENED_FILE, profile.getFileName());
 		editor.commit();
 		
-		Log.d(TAG, "onDestroy save: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+		Log.d(TAG, "onDestroy save: " + String.format(
+				"%s/%s.%s", TAMProfile.TESTMIND_DIRECTORY.getPath(), 
+				profile.getFileName(),
+				TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
     }
     
     
