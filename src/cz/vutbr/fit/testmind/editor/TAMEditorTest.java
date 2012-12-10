@@ -49,7 +49,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 		if(item == EventObjects.menu_show) {
 			// TODO
 		} else if(item == EventObjects.menu_next) {
-			System.out.println("next");
+			//System.out.println("next");
 			generateNextQuestion();
 			EventObjects.menu_show.setEnabled(true);
 		}

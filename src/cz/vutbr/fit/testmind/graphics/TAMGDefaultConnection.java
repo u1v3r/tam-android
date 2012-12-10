@@ -297,7 +297,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 	}
 	
 	public void moveSelectedPoint(int dx, int dy) {
-		System.out.println(selectedPoint);
+		//System.out.println(selectedPoint);
 		moveOnePoint(selectedPoint, dx, dy);
 	}
 
@@ -331,7 +331,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 			float height = Math.abs(from.y-to.y);
 			
 			if(width/height < 0.2f) {
-				System.out.println("same Y");
+				//System.out.println("same Y");
 				newY = (int) selectedPoint.y;
 				float t = getLineParameter(selectedPoint.y, from.y, to.y);
 				newX = (int) (from.x+t*(to.x-from.x));

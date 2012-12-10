@@ -187,9 +187,9 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 */
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		//Log.d(TAG,getListOfSelectedNodes().toString() + "");
+		////Log.d(TAG,getListOfSelectedNodes().toString() + "");
 		
-		Log.d(TAG,"req:" + requestCode + ", result:" + resultCode);
+		////Log.d(TAG,"req:" + requestCode + ", result:" + resultCode);
 		
 		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == EDIT_NODE_RESULT_CODE){
 
@@ -221,7 +221,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			return true;
 		}
 		
-		Log.d(TAG,"gesture: " + creatingByGesture);
+		////Log.d(TAG,"gesture: " + creatingByGesture);
 		
 		if(requestCode == REQUEST_CODES.EDIT_NODE && resultCode == Activity.RESULT_CANCELED && creatingByGesture){
 			editor.unselectAll();
@@ -338,7 +338,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		
 		// odstrani listy
 		if (root.getListOfChildNodes().isEmpty() && root.getId() != 1){			
-			//Log.d(TAG, "delete node: " + root.getTitle());			
+			////Log.d(TAG, "delete node: " + root.getTitle());			
 			removeConnection(root);
 			editor.getProfile().deleteNodeTest(root);			
 			return;
@@ -352,7 +352,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		}		
 		
 		if(root.getId() != 1){//root mapy sa nikdy nesmie odstranit
-			//Log.d(TAG, "delete node: " + root.getTitle());
+			////Log.d(TAG, "delete node: " + root.getTitle());
 			removeConnection(root);
 			editor.getProfile().deleteNodeTest(root);			
 		}
@@ -374,7 +374,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	
 	private void deleteConnections() {
 		for (int id : removedConnections) {
-			//Log.d(TAG, "mazem conn: " + id);	
+			////Log.d(TAG, "mazem conn: " + id);	
 			editor.getProfile().deleteConnection(id);
 		}	
 	}

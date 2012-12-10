@@ -101,7 +101,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {    	
     	super.onCreate(savedInstanceState);	
-    	Log.d(TAG, "onCreate");
+    	//Log.d(TAG, "onCreate");
     	
     	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
     	String lastMindMap = settings.getString(LAST_OPENED_FILE, "");
@@ -165,7 +165,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {		
 		super.onRestoreInstanceState(savedInstanceState);
 		
-		Log.d(TAG, "onRestoreInstanceState");
+		//Log.d(TAG, "onRestoreInstanceState");
 		
 		String lastMindMap = savedInstanceState.getString(LAST_OPENED_FILE);
 		
@@ -179,13 +179,13 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	
-    	Log.d(TAG, "onSaveInstanceState");
+    	//Log.d(TAG, "onSaveInstanceState");
     	/* nie je vhodne tu serializovat veci, vola sa prilis casto
     	Serializer serializer = new Serializer(
 				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
 		serializer.serialize(profile);
     	
-		Log.d(TAG, "ukladam: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+		//Log.d(TAG, "ukladam: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
 		*/
 		outState.putString(LAST_OPENED_FILE, profile.getFileName());
 		
@@ -227,10 +227,10 @@ public class MainActivity extends FragmentActivity {
 		editor.putString(LAST_OPENED_FILE, profile.getFileName());
 		editor.commit();
 		
-		Log.d(TAG, "onDestroy save: " + String.format(
-				"%s/%s.%s", TAMProfile.TESTMIND_DIRECTORY.getPath(), 
-				profile.getFileName(),
-				TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
+		//Log.d(TAG, "onDestroy save: " + String.format(
+		//		"%s/%s.%s", TAMProfile.TESTMIND_DIRECTORY.getPath(), 
+		//		profile.getFileName(),
+		//		TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
     }
     
     

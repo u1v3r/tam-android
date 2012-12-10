@@ -69,7 +69,7 @@ public class FreeMind
     		
     		
 
-    		Log.d("root", child.getName());
+    		//Log.d("root", child.getName());
     	}
     }
     
@@ -83,7 +83,7 @@ public class FreeMind
     		*/
     		
 
-    		Log.d("node", child.getName());
+    		//Log.d("node", child.getName());
     	}
     }
     

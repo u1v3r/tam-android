@@ -46,7 +46,7 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 
     public boolean onActivityResult(int requestCode, int resultCode, Intent data)
     {
-    	Log.d(TAG,"req:" + requestCode + ", result:" + resultCode);
+    	//Log.d(TAG,"req:" + requestCode + ", result:" + resultCode);
     	
         if(resultCode == Activity.RESULT_OK && requestCode == PICK_FILE_RESULT_CODE)
         {        	

@@ -81,7 +81,7 @@ public class FreeMind3 {
 	 * @throws IOException
 	 */
 	private void importXML() throws XmlPullParserException, IOException {
-		Log.d("FreeMind3", source);
+		//Log.d("FreeMind3", source);
 		File file = new File(source);
 		InputStream in = new FileInputStream(file);
         
@@ -90,7 +90,7 @@ public class FreeMind3 {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            //Log.d("importXML", "getRoot");
+            ////Log.d("importXML", "getRoot");
             rootNode = createRoot(parser);
         } finally {
             in.close();
@@ -112,7 +112,7 @@ public class FreeMind3 {
 	    parser.nextTag();
 	    String name = parser.getName();
 		if (name.equals(E_NODE)) {
-			Log.d("importXML", "readNode");
+			//Log.d("importXML", "readNode");
 			rootNode = readNode(parser);
         }
 	    return rootNode;
@@ -126,14 +126,14 @@ public class FreeMind3 {
 	 * @throws XmlPullParserException
 	 */
 	private IXMLNode readNode(XmlPullParser parser) throws IOException, XmlPullParserException {
-		//Log.d("readNode", "START");
+		////Log.d("readNode", "START");
 		IXMLNode node = null;
 	    parser.require(XmlPullParser.START_TAG, null, E_NODE);
 	    String tag = parser.getName();
-	    //Log.d("TAG", tag);
+	    ////Log.d("TAG", tag);
 	    if (tag.equals(E_NODE)) {
 	    	String text = parser.getAttributeValue(null, A_TEXT);
-	    	//Log.d("TAG..", text);
+	    	////Log.d("TAG..", text);
 	    	node = new XMLNode(
     			Long.parseLong(parser.getAttributeValue(null, A_ID).substring(3)),
     			Long.parseLong(parser.getAttributeValue(null, A_CREATED)),
@@ -147,15 +147,15 @@ public class FreeMind3 {
 			
 			//rootNode.addChild(node);
 			
-			//Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
+			////Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
 		    while (parser.nextTag() != XmlPullParser.END_TAG) {
-		    	//Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
-		    	//Log.d("DEEP", String.valueOf(parser.getDepth()));
-		    	//Log.d("Next TAG", "nalezen");
+		    	////Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
+		    	////Log.d("DEEP", String.valueOf(parser.getDepth()));
+		    	////Log.d("Next TAG", "nalezen");
 		    	node.addChild(readNode(parser));
 		    }
 	    }
-	    //Log.d("readNode", "END");
+	    ////Log.d("readNode", "END");
 	    return node;
 	}
 
