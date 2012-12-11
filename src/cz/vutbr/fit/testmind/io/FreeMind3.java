@@ -32,6 +32,7 @@ public class FreeMind3 {
 	static final String E_MAP = "map";
 	static final String E_NODE = "node";
 	static final String E_HTML = "richcontent";
+	static final String E_FONT = "font";
 	static final String A_ID = "ID";
 	static final String A_CREATED = "CREATED";
 	static final String A_MODIFIED = "MODIFIED";
@@ -151,6 +152,8 @@ public class FreeMind3 {
 		    		text = readHTML(parser);
 		    		bHTML = true;
 		    		//Log.d("HTML", text);
+	    	    } else {
+	    	    	// exception
 	    	    }
 	    	}
 	    	node = new XMLNode(
@@ -169,13 +172,28 @@ public class FreeMind3 {
 			
 			////Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
 			while (parser.nextTag() != XmlPullParser.END_TAG) {
-		    	////Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
-		    	////Log.d("DEEP", String.valueOf(parser.getDepth()));
-		    	////Log.d("Next TAG", "nalezen");
+				if (parser.getEventType() == parser.START_TAG && parser.getName().equals(E_FONT)) {
+					parser.nextTag();
+					//Log.d("FONT-desc", parser.getPositionDescription());
+					parser.nextTag();
+					//Log.d("FONT-desc", parser.getPositionDescription());
+					/*
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	parser.nextToken();
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	parser.nextToken();
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	parser.nextToken();
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	*/
+	    	    }
+		    	//Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
+		    	//Log.d("DEEP", String.valueOf(parser.getDepth()));
+		    	//Log.d("Next TAG", "nalezen");
 		    	node.addChild(readNode(parser));
 		    }
 	    }
-	    ////Log.d("readNode", "END");
+	    Log.d("readNode", "END");
 	    return node;
 	}
 
