@@ -23,6 +23,8 @@ public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenu
 	public static final String TESTMIND_FILE_EXTENSION = "tm";
 	
 	private static final String TAG = "TAMEditorOpenSaveControl";
+
+	public static final String FREEMIND_FILE_EXTENSION = "mm";
 	
 	public TAMEOpenSaveControl(ITAMEditor editor)
 	{

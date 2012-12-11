@@ -155,8 +155,13 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 						
 			if(extension.equals(TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION)){
 				return importTestMind(encodedPath);
-			}else{    			
+			}else if(extension.equals(TAMEOpenSaveControl.FREEMIND_FILE_EXTENSION)){    			
 				return importFreeMind(encodedPath);	    			
+			}else{
+				Toast.makeText(
+						editor.getContext(),
+						editor.getContext().getText(R.string.unsupported_format),
+						Toast.LENGTH_LONG).show();
 			}
 
 		}
