@@ -40,6 +40,7 @@ public class ImportFile {
 	private void run(String source, int type) throws XmlPullParserException, IOException {
 		switch (type) {
 		case FREE_MIND:
+			//FreeMind3 freeMind = new FreeMind3(editor, true);
 			FreeMind3 freeMind = new FreeMind3(editor, source);
 			freeMind.runImport();
 			break;

@@ -133,7 +133,8 @@ public class FreeMind
     			Long.parseLong(parser.getAttributeValue(null, "CREATED")),
     			Long.parseLong(parser.getAttributeValue(null, "MODIFIED")),
     			parser.getAttributeValue(null, "POSITION"),
-    			parser.getAttributeValue(null, "TEXT")
+    			parser.getAttributeValue(null, "TEXT"),
+    			false
 	    	);
 	    }
 	    while (parser.nextTag() != XmlPullParser.END_TAG) {

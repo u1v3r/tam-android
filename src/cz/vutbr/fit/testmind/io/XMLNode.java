@@ -3,6 +3,7 @@ package cz.vutbr.fit.testmind.io;
 import java.util.ArrayList;
 
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
+import android.text.Html;
 import android.util.Log;
 
 /**
@@ -42,16 +43,20 @@ public class XMLNode implements IXMLNode
      * @param modified
      * @param position
      * @param text
+     * @param html
      */
-    public XMLNode(long ID, long created, long modified, String position, String text) {
+    public XMLNode(long ID, long created, long modified, String position, String text, boolean bHTML) {
 		this.ID = ID;
 		this.created = created;
 		this.modified = modified;
 		this.content = text;
-		if (text.length() > LENGTH_NAME) {
-			this.name = text.substring(LENGTH_NAME);
+		if (text == null) {
+			return;
+		}
+		if (bHTML) {
+			this.name = cutName(Html.fromHtml(text).toString());
 		} else {
-			this.name = text;
+			this.name = cutName(text);
 		}
 		if (position != null) {
 			if (position.equals("left")) {
@@ -61,6 +66,19 @@ public class XMLNode implements IXMLNode
 			}
 		}
 	}
+    
+    /**
+     * Cut text to max leght of name
+     * @param text
+     * @return
+     */
+    private String cutName(String text) {
+		if (text.length() > LENGTH_NAME) {
+			return text.substring(0, LENGTH_NAME);
+		} else {
+			return text;
+		}   	
+    }
 
 	/** Set parent of node 
 	 * 
@@ -101,6 +119,9 @@ public class XMLNode implements IXMLNode
 	 * @param child
 	 */
     public IXMLNode addChild(IXMLNode child) {
+    	if (child == null) {
+    		return null;
+    	}
 		// Log.d("Connect: " + this.name, child.getName());
 		childs.add(child);
 		// Log.d("add child", "OK");

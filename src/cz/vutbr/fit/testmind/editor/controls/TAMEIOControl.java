@@ -103,11 +103,11 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 	 * 
 	 */
 	private void importFile() {
-		// <Do�asn� kod>
+		// <temporaly code>
 		/*
 		try {
 			Log.d("debug", "control->import Start");
-			ImportFile importFile = new ImportFile(editor, ImportFile.FREE_MIND);
+			ImportFile importFile = new ImportFile(editor, null, ImportFile.FREE_MIND);
 			Log.d("debug", "control->import End");
 			//freeMind.getMindMap();
 		} catch (XmlPullParserException e) {
@@ -118,8 +118,8 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 			e.printStackTrace();
 		}
 		*/
-		// </Do�asn� kod>
-		
+		// </temporaly code>
+
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT); 
         intent.setType(INTENT_MIME_TYPE); 
         intent.addCategory(Intent.CATEGORY_OPENABLE);

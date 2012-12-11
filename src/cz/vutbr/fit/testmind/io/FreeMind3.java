@@ -31,6 +31,7 @@ public class FreeMind3 {
 	
 	static final String E_MAP = "map";
 	static final String E_NODE = "node";
+	static final String E_HTML = "richcontent";
 	static final String A_ID = "ID";
 	static final String A_CREATED = "CREATED";
 	static final String A_MODIFIED = "MODIFIED";
@@ -126,29 +127,48 @@ public class FreeMind3 {
 	 * @throws XmlPullParserException
 	 */
 	private IXMLNode readNode(XmlPullParser parser) throws IOException, XmlPullParserException {
-		////Log.d("readNode", "START");
+		boolean bHTML = false;
+		String sID = "";
+		String sCreated = "";
+		String sModified = "";
+		String sPossition = "";
+		String text = "";
+		//Log.d("readNode", "START");
 		IXMLNode node = null;
 	    parser.require(XmlPullParser.START_TAG, null, E_NODE);
 	    String tag = parser.getName();
 	    ////Log.d("TAG", tag);
 	    if (tag.equals(E_NODE)) {
-	    	String text = parser.getAttributeValue(null, A_TEXT);
-	    	////Log.d("TAG..", text);
+	    	sID = parser.getAttributeValue(null, A_ID).substring(3);
+	    	sCreated = parser.getAttributeValue(null, A_CREATED);
+	    	sModified = parser.getAttributeValue(null, A_MODIFIED);
+	    	sPossition = parser.getAttributeValue(null, A_POSITION);
+	    	text = parser.getAttributeValue(null, A_TEXT);
+	    	if (text == null) {
+	    		parser.nextTag();
+	    	    tag = parser.getName();
+	    	    if (tag.equals(E_HTML)) {
+		    		text = readHTML(parser);
+		    		bHTML = true;
+		    		//Log.d("HTML", text);
+	    	    }
+	    	}
 	    	node = new XMLNode(
-    			Long.parseLong(parser.getAttributeValue(null, A_ID).substring(3)),
-    			Long.parseLong(parser.getAttributeValue(null, A_CREATED)),
-    			Long.parseLong(parser.getAttributeValue(null, A_MODIFIED)),
-    			parser.getAttributeValue(null, A_POSITION),
-    			text
+    			Long.parseLong(sID),
+    			Long.parseLong(sCreated),
+    			Long.parseLong(sModified),
+    			sPossition,
+    			text,
+    			bHTML
 	    	);
 	    	node.setActive(true);
 			node.setHeight(editor.getDefaultNodeHeight() * 2);
-			node.setWidth(editor.getDefaultNodeWidth(text) * 2);
+			node.setWidth(editor.getDefaultNodeWidth(node.getName()) * 2);
 			
 			//rootNode.addChild(node);
 			
 			////Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
-		    while (parser.nextTag() != XmlPullParser.END_TAG) {
+			while (parser.nextTag() != XmlPullParser.END_TAG) {
 		    	////Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
 		    	////Log.d("DEEP", String.valueOf(parser.getDepth()));
 		    	////Log.d("Next TAG", "nalezen");
@@ -159,6 +179,49 @@ public class FreeMind3 {
 	    return node;
 	}
 
+	/**
+	 * Read HTML of Node
+	 * @param parser
+	 * @return
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
+	private String readHTML(XmlPullParser parser) throws IOException, XmlPullParserException {
+		String html = "";
+		int depth = parser.getDepth();
+		Log.d("2HTML-depth", String.valueOf(parser.getDepth()));
+		Log.d("2HTML", parser.getName());
+		parser.nextToken();
+		
+		while (depth != parser.getDepth()) {
+
+			if(parser.getEventType() == parser.START_TAG) {
+				//Log.d(">HTML-name", parser.getName());
+				html += "<"+parser.getName()+">";
+			} else if (parser.getEventType() == parser.END_TAG) {
+				//Log.d(">HTML-name", parser.getName());
+				html += "</"+parser.getName()+">";
+			} else if (parser.getEventType() == parser.TEXT) {
+				//Log.d(">HTML-text", parser.getText());
+				html += parser.getText();
+			} else {
+				//Log.d("HTML", "Exception");
+			}
+		
+			//Log.d("HTML-line", String.valueOf(parser.getLineNumber()));
+			//Log.d(">HTML-depth", String.valueOf(parser.getDepth()));
+			//Log.d(">HTML-desc", parser.getPositionDescription());
+			parser.nextToken();
+		}
+		
+		//Log.d("HTML", "END WHILE");
+		parser.nextToken();
+		//Log.d("HTML-line", String.valueOf(parser.getLineNumber()));
+		//Log.d(">HTML-depth", String.valueOf(parser.getDepth()));
+		//Log.d(">HTML-desc", parser.getPositionDescription());
+		return html;
+	}
+	
 	/** Calculate dimensions of tree nodes
 	 * 
 	 * @param node
