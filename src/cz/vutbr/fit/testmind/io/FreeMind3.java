@@ -166,7 +166,7 @@ public class FreeMind3 {
     			bHTML
 	    	);
 	    	node.setActive(true);
-			node.setHeight(editor.getDefaultNodeHeight() * 2);
+			node.setHeight(editor.getDefaultNodeHeight());
 			node.setWidth(editor.getDefaultNodeWidth(node.getName()) * 2);
 			
 			//rootNode.addChild(node);
