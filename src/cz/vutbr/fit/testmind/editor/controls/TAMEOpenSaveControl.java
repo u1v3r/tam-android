@@ -20,9 +20,11 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
 public class TAMEOpenSaveControl extends TAMEAbstractControl implements ITAMMenuListener, OnActivityResultListener
 {
 	
-	public static final String TESTMIND_FILE_EXTENSION = "db";
+	public static final String TESTMIND_FILE_EXTENSION = "tm";
 	
 	private static final String TAG = "TAMEditorOpenSaveControl";
+
+	public static final String FREEMIND_FILE_EXTENSION = "mm";
 	
 	public TAMEOpenSaveControl(ITAMEditor editor)
 	{

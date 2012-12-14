@@ -1,6 +1,5 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -8,19 +7,15 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.preference.PreferenceManager.OnActivityResultListener;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.MainActivity;
-import cz.vutbr.fit.testmind.OpenSaveActivity;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.io.ImportFile;
 import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.other.Helper;
-import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
  * 
@@ -32,7 +27,7 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 	/**
 	 * constants of states
 	 */
-	private static final String INTENT_MIME_TYPE = "text/xml";	
+	private static final String INTENT_MIME_TYPE = "*/*";	
 	private static final String TAG = "TAMEIOControl";
 
 	/** Constructor for reference to editor
@@ -121,7 +116,7 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 		// </temporaly code>
 
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT); 
-        intent.setType(INTENT_MIME_TYPE); 
+        intent.setType(INTENT_MIME_TYPE);        
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
@@ -160,8 +155,13 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 						
 			if(extension.equals(TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION)){
 				return importTestMind(encodedPath);
-			}else{    			
+			}else if(extension.equals(TAMEOpenSaveControl.FREEMIND_FILE_EXTENSION)){    			
 				return importFreeMind(encodedPath);	    			
+			}else{
+				Toast.makeText(
+						editor.getContext(),
+						editor.getContext().getText(R.string.unsupported_format),
+						Toast.LENGTH_LONG).show();
 			}
 
 		}
@@ -192,8 +192,9 @@ public class TAMEIOControl extends TAMEAbstractControl implements ITAMMenuListen
 
 	private boolean importFreeMind(String encodedPath) {
 		
-		try {
+		try {			
 			ImportFile importFile = new ImportFile(editor, encodedPath, ImportFile.FREE_MIND);
+			saveMindMap();
 			return true;
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block

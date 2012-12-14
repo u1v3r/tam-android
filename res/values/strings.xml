@@ -70,5 +70,6 @@
     <string name="send_to">Share Map</string>
     <string name="testing_activity_child_nodes">Child nodes</string>
     <string name="cannot_open_file">Can not open file %s.</string>
+    <string name="unsupported_format">Unsupported file format</string>
     
 </resources>

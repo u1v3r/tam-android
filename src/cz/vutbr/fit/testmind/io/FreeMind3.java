@@ -118,6 +118,9 @@ public class FreeMind3 {
 			//Log.d("importXML", "readNode");
 			rootNode = readNode(parser);
         }
+		
+		editor.getProfile().setFileName(rootNode.getContent());
+		
 	    return rootNode;
 	}
 	
