@@ -38,7 +38,8 @@ public class FreeMind3 {
 	static final String A_MODIFIED = "MODIFIED";
 	static final String A_POSITION = "POSSITION";
 	static final String A_TEXT = "TEXT";
-	static final int SPACE = 50;
+	static final int HSPACE = 250;
+	static final int VSPACE = 50;
 	
 	public FreeMind3(ITAMEditor editor) {
 		this.editor = editor;
@@ -62,7 +63,7 @@ public class FreeMind3 {
 	 */
 	public FreeMind3(ITAMEditor editor, boolean bTest) {
 		this.editor = editor;
-		this.source = "/mnt/sdcard/TestMind/test.mm";
+		this.source = "/mnt/sdcard/TestMind/test2.mm";
 	}
 	
 	/** Sequence of part of import
@@ -193,7 +194,7 @@ public class FreeMind3 {
 		    	node.addChild(readNode(parser));
 		    }
 	    }
-	    Log.d("readNode", "END");
+	    //Log.d("readNode", "END");
 	    return node;
 	}
 
@@ -207,8 +208,8 @@ public class FreeMind3 {
 	private String readHTML(XmlPullParser parser) throws IOException, XmlPullParserException {
 		String html = "";
 		int depth = parser.getDepth();
-		Log.d("2HTML-depth", String.valueOf(parser.getDepth()));
-		Log.d("2HTML", parser.getName());
+		//Log.d("2HTML-depth", String.valueOf(parser.getDepth()));
+		//Log.d("2HTML", parser.getName());
 		parser.nextToken();
 		
 		while (depth != parser.getDepth()) {
@@ -251,7 +252,7 @@ public class FreeMind3 {
 		
 		if (childs != null) {
 			for(IXMLNode child : childs) {
-				heightSum += calculateDimensions(child);
+				heightSum += calculateDimensions(child) + VSPACE;
 			}
 
 			if (heightSum > node.getHeight()) {
@@ -308,10 +309,11 @@ public class FreeMind3 {
 		ArrayList<IXMLNode> childs = node.getChilds();
 		
 		if (childs != null) {
-			double y_new = y - (node.getHeight() / 3) * (childs.size() - 1);
+			double y_new = y; 
+			// - (node.getHeight() / 3) * (childs.size() - 1);
 			for(IXMLNode child : childs) {
-				createTAMTree(child, parent, x + (int)Math.floor(node.getWidth()) + SPACE, (int)Math.floor(y_new));
-				y_new += child.getHeight();
+				createTAMTree(child, parent, x + (int)Math.floor(node.getWidth()) + HSPACE, (int)Math.floor(y_new));
+				y_new += child.getHeight() + VSPACE;
 			}
 		}
 	}

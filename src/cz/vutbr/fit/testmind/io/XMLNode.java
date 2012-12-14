@@ -33,7 +33,7 @@ public class XMLNode implements IXMLNode
     static final double MAX_HEIGHT = 100;
     static final int POS_LEFT = 1;
     static final int POS_RIGHT = 2;
-    static final int LENGTH_NAME = 10;
+    static final int LENGTH_NAME = 15;
 
     
     /** Constructor for import of node - special for Free Mind
@@ -74,7 +74,7 @@ public class XMLNode implements IXMLNode
      */
     private String cutName(String text) {
 		if (text.length() > LENGTH_NAME) {
-			return text.substring(0, LENGTH_NAME);
+			return text.substring(0, LENGTH_NAME) + "...";
 		} else {
 			return text;
 		}   	
