@@ -33,6 +33,8 @@ public class FreeMind3 {
 	static final String E_NODE = "node";
 	static final String E_HTML = "richcontent";
 	static final String E_FONT = "font";
+	static final String E_ICON = "icon";
+	static final String E_EDGE = "edge";
 	static final String A_ID = "ID";
 	static final String A_CREATED = "CREATED";
 	static final String A_MODIFIED = "MODIFIED";
@@ -174,13 +176,20 @@ public class FreeMind3 {
 			
 			//rootNode.addChild(node);
 			
-			////Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
+			//Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
 			while (parser.nextTag() != XmlPullParser.END_TAG) {
-				if (parser.getEventType() == parser.START_TAG && parser.getName().equals(E_FONT)) {
+				//Log.d("parser", parser.getPositionDescription());
+				/*if (parser.getEventType() == parser.START_TAG && (
+																	parser.getName().equals(E_FONT) 
+																	|| parser.getName().equals(E_ICON)
+																	|| parser.getName().equals(E_EDGE)
+																 )) {
+				*/
+				if (parser.getEventType() == parser.START_TAG && !parser.getName().equals(E_NODE)) {
 					parser.nextTag();
+					//Log.d("parse", "Vyjimka");
 					//Log.d("FONT-desc", parser.getPositionDescription());
 					parser.nextTag();
-					//Log.d("FONT-desc", parser.getPositionDescription());
 					/*
 	    	    	Log.d("FONT-desc", parser.getPositionDescription());
 	    	    	parser.nextToken();
@@ -190,14 +199,15 @@ public class FreeMind3 {
 	    	    	parser.nextToken();
 	    	    	Log.d("FONT-desc", parser.getPositionDescription());
 	    	    	*/
+	    	    } else {
+	    	    	node.addChild(readNode(parser));
 	    	    }
 		    	//Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
 		    	//Log.d("DEEP", String.valueOf(parser.getDepth()));
 		    	//Log.d("Next TAG", "nalezen");
-		    	node.addChild(readNode(parser));
 		    }
 	    }
-	    //Log.d("readNode", "END");
+	    Log.d("readNode", "END");
 	    return node;
 	}
 
@@ -219,13 +229,16 @@ public class FreeMind3 {
 
 			if(parser.getEventType() == parser.START_TAG) {
 				//Log.d(">HTML-name", parser.getName());
-				html += "<"+parser.getName()+">";
+				html = new StringBuffer().append(html).append("<").append(parser.getName()).append(">").toString();
+				//html += "<"+parser.getName()+">";
 			} else if (parser.getEventType() == parser.END_TAG) {
 				//Log.d(">HTML-name", parser.getName());
-				html += "</"+parser.getName()+">";
+				html = new StringBuffer().append(html).append("</").append(parser.getName()).append(">").toString();
+				//html += "</"+parser.getName()+">";
 			} else if (parser.getEventType() == parser.TEXT) {
 				//Log.d(">HTML-text", parser.getText());
-				html += parser.getText();
+				html = new StringBuffer().append(html).append(parser.getText()).toString();
+				//html += parser.getText();
 			} else {
 				//Log.d("HTML", "Exception");
 			}
