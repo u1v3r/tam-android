@@ -219,25 +219,25 @@ public class FreeMind3 {
 	 * @throws XmlPullParserException
 	 */
 	private String readHTML(XmlPullParser parser) throws IOException, XmlPullParserException {
-		String html = "";
 		int depth = parser.getDepth();
 		//Log.d("2HTML-depth", String.valueOf(parser.getDepth()));
 		//Log.d("2HTML", parser.getName());
 		parser.nextToken();
 		
+		StringBuffer htmlBuffer = new StringBuffer();
 		while (depth != parser.getDepth()) {
 
 			if(parser.getEventType() == parser.START_TAG) {
 				//Log.d(">HTML-name", parser.getName());
-				html = new StringBuffer().append(html).append("<").append(parser.getName()).append(">").toString();
+				htmlBuffer.append("<").append(parser.getName()).append(">");
 				//html += "<"+parser.getName()+">";
 			} else if (parser.getEventType() == parser.END_TAG) {
 				//Log.d(">HTML-name", parser.getName());
-				html = new StringBuffer().append(html).append("</").append(parser.getName()).append(">").toString();
+				htmlBuffer.append("</").append(parser.getName()).append(">");
 				//html += "</"+parser.getName()+">";
 			} else if (parser.getEventType() == parser.TEXT) {
 				//Log.d(">HTML-text", parser.getText());
-				html = new StringBuffer().append(html).append(parser.getText()).toString();
+				htmlBuffer.append(parser.getText());
 				//html += parser.getText();
 			} else {
 				//Log.d("HTML", "Exception");
@@ -254,7 +254,7 @@ public class FreeMind3 {
 		//Log.d("HTML-line", String.valueOf(parser.getLineNumber()));
 		//Log.d(">HTML-depth", String.valueOf(parser.getDepth()));
 		//Log.d(">HTML-desc", parser.getPositionDescription());
-		return html;
+		return htmlBuffer.toString();
 	}
 	
 	/** Calculate dimensions of tree nodes
