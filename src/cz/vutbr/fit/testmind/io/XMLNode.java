@@ -33,7 +33,7 @@ public class XMLNode implements IXMLNode
     static final double MAX_HEIGHT = 100;
     static final int POS_LEFT = 1;
     static final int POS_RIGHT = 2;
-    static final int LENGTH_NAME = 15;
+    static final int LENGTH_NAME = 256;
 
     
     /** Constructor for import of node - special for Free Mind
@@ -49,12 +49,13 @@ public class XMLNode implements IXMLNode
 		this.ID = ID;
 		this.created = created;
 		this.modified = modified;
-		this.content = text;
+		this.content = "";
 		if (text == null) {
 			return;
 		}
 		if (bHTML) {
 			this.name = cutName(Html.fromHtml(text).toString());
+			this.content = text;
 		} else {
 			this.name = cutName(text);
 		}
@@ -68,11 +69,23 @@ public class XMLNode implements IXMLNode
 	}
     
     /**
-     * Cut text to max leght of name
+     * Cut text to max length of name
      * @param text
      * @return
      */
     private String cutName(String text) {
+        int newLinePosition = text.indexOf("\n");
+        int newLineRPosition = text.indexOf("\r");
+        
+        if(newLineRPosition != -1 && newLineRPosition < newLinePosition) {
+            newLinePosition = newLineRPosition;
+        }
+        
+        // substr to new line
+        if(newLinePosition != -1) {
+            text = text.substring(0, newLinePosition);
+        }
+        
 		if (text.length() > LENGTH_NAME) {
 			return text.substring(0, LENGTH_NAME) + "...";
 		} else {

@@ -121,7 +121,7 @@ public class FreeMind3 {
 			rootNode = readNode(parser);
         }
 		
-		editor.getProfile().setFileName(rootNode.getContent());
+		editor.getProfile().setFileName(rootNode.getName());
 		
 	    return rootNode;
 	}
@@ -186,10 +186,9 @@ public class FreeMind3 {
 																 )) {
 				*/
 				if (parser.getEventType() == parser.START_TAG && !parser.getName().equals(E_NODE)) {
-					parser.nextTag();
+					while(parser.nextTag() != XmlPullParser.END_TAG){};
 					//Log.d("parse", "Vyjimka");
 					//Log.d("FONT-desc", parser.getPositionDescription());
-					parser.nextTag();
 					/*
 	    	    	Log.d("FONT-desc", parser.getPositionDescription());
 	    	    	parser.nextToken();
@@ -235,9 +234,12 @@ public class FreeMind3 {
 				//Log.d(">HTML-name", parser.getName());
 				htmlBuffer.append("</").append(parser.getName()).append(">");
 				//html += "</"+parser.getName()+">";
-			} else if (parser.getEventType() == parser.TEXT) {
+			} else if (parser.getEventType() == parser.TEXT || parser.getEventType() == parser.ENTITY_REF) {
 				//Log.d(">HTML-text", parser.getText());
-				htmlBuffer.append(parser.getText());
+			    String text = parser.getText().trim();
+			    if(!text.isEmpty()) {
+			        htmlBuffer.append(parser.getText().trim());
+			    }
 				//html += parser.getText();
 			} else {
 				//Log.d("HTML", "Exception");

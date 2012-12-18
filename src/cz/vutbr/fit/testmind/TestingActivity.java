@@ -52,7 +52,6 @@ public class TestingActivity extends FragmentActivity
         }
     }
 
-    private static final String HTML = "<html><head></head><body>%s</body></html>";
     private static final float PATH_TEXT_SIZE = 20;
     private static final float CHILD_TEXT_SIZE = 16;
     private static final String DATA_STATE = "data";
@@ -309,7 +308,7 @@ public class TestingActivity extends FragmentActivity
         }
         
         // load data
-        bodyView.loadData(String.format(HTML, data.node.getBody()), "text/html; charset=UTF-8", null);
+        bodyView.loadData(data.node.getBody(), "text/html; charset=UTF-8", null);
     }
     
     /**
