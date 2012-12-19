@@ -68,7 +68,7 @@ public class TestingNode implements Serializable
     {
         ArrayList<TestingNode> result = new ArrayList<TestingNode>();
         
-        if(childs.size() > 0 || !body.isEmpty())
+        if(childs.size() > 0 || (!body.isEmpty() && !body.equals(title)))
         {
             result.add(this);
         }
