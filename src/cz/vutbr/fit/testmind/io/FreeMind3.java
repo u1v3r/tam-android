@@ -236,10 +236,7 @@ public class FreeMind3 {
 				//html += "</"+parser.getName()+">";
 			} else if (parser.getEventType() == parser.TEXT || parser.getEventType() == parser.ENTITY_REF) {
 				//Log.d(">HTML-text", parser.getText());
-			    String text = parser.getText().trim();
-			    if(!text.isEmpty()) {
-			        htmlBuffer.append(parser.getText().trim());
-			    }
+			    htmlBuffer.append(parser.getText());
 				//html += parser.getText();
 			} else {
 				//Log.d("HTML", "Exception");

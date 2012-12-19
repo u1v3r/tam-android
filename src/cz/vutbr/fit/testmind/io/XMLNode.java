@@ -33,7 +33,7 @@ public class XMLNode implements IXMLNode
     static final double MAX_HEIGHT = 100;
     static final int POS_LEFT = 1;
     static final int POS_RIGHT = 2;
-    static final int LENGTH_NAME = 256;
+    static final int LENGTH_NAME = 128;
 
     
     /** Constructor for import of node - special for Free Mind
@@ -49,13 +49,12 @@ public class XMLNode implements IXMLNode
 		this.ID = ID;
 		this.created = created;
 		this.modified = modified;
-		this.content = "";
+		this.content = text;
 		if (text == null) {
 			return;
 		}
 		if (bHTML) {
 			this.name = cutName(Html.fromHtml(text).toString());
-			this.content = text;
 		} else {
 			this.name = cutName(text);
 		}
