@@ -20,6 +20,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -51,7 +52,6 @@ public class TestingActivity extends FragmentActivity
         }
     }
 
-    private static final String HTML = "<html><head></head><body>%s</body></html>";
     private static final float PATH_TEXT_SIZE = 20;
     private static final float CHILD_TEXT_SIZE = 16;
     private static final String DATA_STATE = "data";
@@ -308,7 +308,7 @@ public class TestingActivity extends FragmentActivity
         }
         
         // load data
-        bodyView.loadData(String.format(HTML, data.node.getBody()), "text/html; charset=UTF-8", null);
+        bodyView.loadData(data.node.getBody(), "text/html; charset=UTF-8", null);
     }
     
     /**
@@ -332,9 +332,11 @@ public class TestingActivity extends FragmentActivity
         for(TestingNode childNode: data.node.getChilds())
         {
             Button childButton = new Button(this);
-            childButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, CHILD_TEXT_SIZE);
-            childButton.setText(childNode.getTitle());
             
+            childButton.setBackgroundColor(getResources().getColor(R.color.node_background_1));
+            childButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, CHILD_TEXT_SIZE);
+            childButton.setTextColor(getResources().getColor(R.color.white));
+            childButton.setText(childNode.getTitle());
             childsView.addView(childButton);
             buttonsNodes.put(childButton, childNode);
             childButton.setOnClickListener(exploreHandler);

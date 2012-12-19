@@ -78,6 +78,14 @@ public class TAMGItemFactory {
 			graph.getListOfSelectedItems().remove(connection);
 		}
 		
+		if(connection.getParentNode() != null) { 
+			connection.getParentNode().getListOfChildConnections().remove(connection);
+		}
+				
+		if(connection.getChildNode() != null) { 
+			connection.getParentNode().getListOfParentConnections().remove(connection);
+		}
+		
 		connection.dispose();
 	}
 	

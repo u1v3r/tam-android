@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"><group android:id="@+id/menu_group_main">
-    <item android:id="@+id/menu_create_mode" android:showAsAction="always|withText" android:title="@string/create" android:enabled="false">
+    <item android:id="@+id/menu_create_mode" android:showAsAction="always|withText" android:title="@string/create_mode" android:enabled="false">
     </item>
-    <item android:id="@+id/menu_view_mode" android:title="@string/view" android:showAsAction="always|withText"></item>
+    <item android:id="@+id/menu_view_mode" android:title="@string/view_mode" android:showAsAction="always|withText"></item>
 </group>
     <group android:id="@+id/menu_group_test" android:visible="false">
         <item android:id="@+id/menu_show_result" android:title="@string/show" android:showAsAction="always|withText"></item>
         <item android:id="@+id/menu_next_question" android:title="@string/next" android:showAsAction="always|withText"></item>
     </group><item android:id="@+id/menu_open" android:showAsAction="never|withText" android:title="@string/menu_open"></item>
     <item android:id="@+id/menu_save" android:title="@string/menu_save" android:showAsAction="never|withText" android:icon="@drawable/ic_action_save"></item>
-    <item android:id="@+id/menu_settings" android:title="@string/menu_settings" android:orderInCategory="100" android:showAsAction="never" />
+   <!-- <item android:id="@+id/menu_settings" android:title="@string/menu_settings" android:orderInCategory="100" android:showAsAction="never" /> -->
     <item android:id="@+id/menu_import" android:title="@string/menu_import" android:showAsAction="never|withText"></item>
-    <item android:id="@+id/menu_export" android:title="@string/menu_export" android:showAsAction="never|withText"></item>
+    <item android:id="@+id/menu_share" android:title="@string/share" android:showAsAction="never|withText"></item>
     <item android:id="@+id/menu_edit_structure" android:title="@string/menu_edit_structure"></item><item android:id="@+id/menu_test_structure" android:showAsAction="never|withText" android:title="@string/menu_test_structure"></item>
     
     <item android:id="@+id/menu_test_content" android:title="@string/menu_test_content"></item>

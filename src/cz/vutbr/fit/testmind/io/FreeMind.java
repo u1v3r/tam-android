@@ -15,6 +15,8 @@ import android.util.Xml;
 
 /**
  * main mind map class
+ * 
+ * deprecated
  */
 public class FreeMind
 {
@@ -67,7 +69,7 @@ public class FreeMind
     		
     		
 
-    		Log.d("root", child.getName());
+    		//Log.d("root", child.getName());
     	}
     }
     
@@ -81,7 +83,7 @@ public class FreeMind
     		*/
     		
 
-    		Log.d("node", child.getName());
+    		//Log.d("node", child.getName());
     	}
     }
     
@@ -131,7 +133,8 @@ public class FreeMind
     			Long.parseLong(parser.getAttributeValue(null, "CREATED")),
     			Long.parseLong(parser.getAttributeValue(null, "MODIFIED")),
     			parser.getAttributeValue(null, "POSITION"),
-    			parser.getAttributeValue(null, "TEXT")
+    			parser.getAttributeValue(null, "TEXT"),
+    			false
 	    	);
 	    }
 	    while (parser.nextTag() != XmlPullParser.END_TAG) {

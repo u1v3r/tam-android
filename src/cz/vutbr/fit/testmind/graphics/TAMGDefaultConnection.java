@@ -9,11 +9,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.Log;
 
 public class TAMGDefaultConnection implements ITAMGConnection {
 	
 	private static final int type = CONNECTION_TYPE_DEFAULT;
 	private static final int HIGHLIGHT_COLOR = R.color.node_highlight_background;
+	private static final String TAG = "TAMGDefaultConnection";
+	
 	private int colorBackground;
 	private int colorBackgroundHighlight;
 	private int colorText;
@@ -80,7 +83,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 
 	
 	public void draw(Canvas canvas, Paint paint) {
-
+			
 		paint.setAntiAlias(true);
 		if(isHighlighted) {
 			paint.setColor(colorBackgroundHighlight);
@@ -90,6 +93,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 		
 		paint.setStrokeWidth(6);
 		int a = 0;
+		
 		Point from = parent.getPosition();
 		for(Point to : listOfMiddlePoints) {
 			
@@ -254,6 +258,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 	
 	public void setEnabled(boolean enable) {
 		
+		
 		if(isEnabled != enable) {
 			
 			if(enable && parent.isEnabled() && child.isEnabled()) {
@@ -292,7 +297,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 	}
 	
 	public void moveSelectedPoint(int dx, int dy) {
-		System.out.println(selectedPoint);
+		//System.out.println(selectedPoint);
 		moveOnePoint(selectedPoint, dx, dy);
 	}
 
@@ -326,7 +331,7 @@ public class TAMGDefaultConnection implements ITAMGConnection {
 			float height = Math.abs(from.y-to.y);
 			
 			if(width/height < 0.2f) {
-				System.out.println("same Y");
+				//System.out.println("same Y");
 				newY = (int) selectedPoint.y;
 				float t = getLineParameter(selectedPoint.y, from.y, to.y);
 				newX = (int) (from.x+t*(to.x-from.x));

@@ -1,5 +1,9 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
+import java.io.File;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.GestureDetector.OnGestureListener;
@@ -23,13 +27,16 @@ public abstract class TAMEAbstractControl {
 	 */
 	public static final class REQUEST_CODES
 	{
-	    public static final int EDIT_NODE = 0;
-	    public static final int OPEN = 1;
-	    public static final int SAVE = 2;
+	    public static final int EDIT_NODE = 100;
+	    public static final int OPEN = 101;
+	    public static final int SAVE = 102;
+	    public static final int NEW_MAP = 103;
 	}
 	
-	public static final int PICK_FILE_RESULT_CODE = 0;
-	public static final int EDIT_NODE_RESULT_CODE = 1;
+	public static final int PICK_FILE_RESULT_CODE = 200;
+	public static final int EDIT_NODE_RESULT_CODE = 201;
+	public static final int IMPORT_FILE = 202;
+	public static final int EXPORT_FILE = 203;
 	
 	//public boolean isDialogOpen = false;
 	private boolean enabled;
@@ -53,6 +60,33 @@ public abstract class TAMEAbstractControl {
 
 	public boolean isEnabled() {
 		return enabled;
+	}
+	
+	/**
+	 * Ulozi mapu pod menom root uzlu
+	 */
+	protected void saveMindMap() {
+		
+		/*new Thread(new Runnable() {
+			
+			public void run() {*/
+				if(editor.getListOfENodes().size() == 0) return;
+				
+				/*
+				 * TODO: treba vyriesit ukladanie aj pri rovnakych menach (pridat datum ulozenie alebo nieco podobne)			
+				 */
+				editor.getProfile().setFileName(editor.getListOfENodes().get(0).getProfile().getTitle());
+					
+				Serializer serializer = new Serializer(
+						String.format("%s/%s.%s", 
+								TAMProfile.TESTMIND_DIRECTORY.getPath(), editor.getProfile().getFileName(),
+								TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
+				
+				serializer.serialize(MainActivity.getProfile());
+			/*}
+		}).start();	
+			*/
+		return;
 	}
 	
 	/*public void setOnGestureListner(OnGestureListener listener){

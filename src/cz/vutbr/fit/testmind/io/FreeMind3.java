@@ -31,30 +31,48 @@ public class FreeMind3 {
 	
 	static final String E_MAP = "map";
 	static final String E_NODE = "node";
+	static final String E_HTML = "richcontent";
+	static final String E_FONT = "font";
+	static final String E_ICON = "icon";
+	static final String E_EDGE = "edge";
 	static final String A_ID = "ID";
 	static final String A_CREATED = "CREATED";
 	static final String A_MODIFIED = "MODIFIED";
 	static final String A_POSITION = "POSSITION";
 	static final String A_TEXT = "TEXT";
-	static final int SPACE = 50;
+	static final int HSPACE = 250;
+	static final int VSPACE = 50;
 	
 	public FreeMind3(ITAMEditor editor) {
 		this.editor = editor;
 		this.source = editor.getProfile().getFileName();
 	}
 	
-	// Speci�ln� pro jin� zdroj, ne� je v profilu
+	/** Special for others sources
+	 *  
+	 * @param editor
+	 * @param source
+	 */
 	public FreeMind3(ITAMEditor editor, String source) {
 		this.editor = editor;
 		this.source = source;
 	}
 	
-	// Speci�ln� pro testovac� ��ely
+	/** Special for test
+	 * 
+	 * @param editor
+	 * @param bTest
+	 */
 	public FreeMind3(ITAMEditor editor, boolean bTest) {
 		this.editor = editor;
-		this.source = "/mnt/sdcard/TestMind/test.mm";
+		this.source = "/mnt/sdcard/TestMind/test2.mm";
 	}
 	
+	/** Sequence of part of import
+	 * 
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	public void runImport() throws XmlPullParserException, IOException {
 		this.importXML();
 		this.calculateDimensions(rootNode);
@@ -62,8 +80,13 @@ public class FreeMind3 {
 		this.editor.invalidate();
 	}
 	
-
+	/** Load XML file to tree
+	 * 
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void importXML() throws XmlPullParserException, IOException {
+		//Log.d("FreeMind3", source);
 		File file = new File(source);
 		InputStream in = new FileInputStream(file);
         
@@ -72,14 +95,21 @@ public class FreeMind3 {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            Log.d("importXML", "getRoot");
-            rootNode = getRoot(parser);
+            ////Log.d("importXML", "getRoot");
+            rootNode = createRoot(parser);
         } finally {
             in.close();
         }
 	}
 
-	private IXMLNode getRoot(XmlPullParser parser) throws XmlPullParserException, IOException {
+	/** Create root of tree
+	 * 
+	 * @param parser
+	 * @return
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
+	private IXMLNode createRoot(XmlPullParser parser) throws XmlPullParserException, IOException {
 		IXMLNode rootNode = null;
 		
 	    parser.require(XmlPullParser.START_TAG, null, E_MAP);
@@ -87,53 +117,157 @@ public class FreeMind3 {
 	    parser.nextTag();
 	    String name = parser.getName();
 		if (name.equals(E_NODE)) {
-			Log.d("importXML", "readNode");
+			//Log.d("importXML", "readNode");
 			rootNode = readNode(parser);
         }
+		
+		editor.getProfile().setFileName(rootNode.getName());
+		
 	    return rootNode;
 	}
 	
+	/** Read node of XML
+	 * 
+	 * @param parser
+	 * @return
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	private IXMLNode readNode(XmlPullParser parser) throws IOException, XmlPullParserException {
-		Log.d("readNode", "START");
+		boolean bHTML = false;
+		String sID = "";
+		String sCreated = "";
+		String sModified = "";
+		String sPossition = "";
+		String text = "";
+		//Log.d("readNode", "START");
 		IXMLNode node = null;
 	    parser.require(XmlPullParser.START_TAG, null, E_NODE);
 	    String tag = parser.getName();
-	    Log.d("TAG", tag);
+	    ////Log.d("TAG", tag);
 	    if (tag.equals(E_NODE)) {
-	    	String text = parser.getAttributeValue(null, A_TEXT);
-	    	Log.d("TAG..", text);
+	    	sID = parser.getAttributeValue(null, A_ID).substring(3);
+	    	sCreated = parser.getAttributeValue(null, A_CREATED);
+	    	sModified = parser.getAttributeValue(null, A_MODIFIED);
+	    	sPossition = parser.getAttributeValue(null, A_POSITION);
+	    	text = parser.getAttributeValue(null, A_TEXT);
+	    	if (text == null) {
+	    		parser.nextTag();
+	    	    tag = parser.getName();
+	    	    if (tag.equals(E_HTML)) {
+		    		text = readHTML(parser);
+		    		bHTML = true;
+		    		//Log.d("HTML", text);
+	    	    } else {
+	    	    	// exception
+	    	    }
+	    	}
 	    	node = new XMLNode(
-    			Long.parseLong(parser.getAttributeValue(null, A_ID).substring(3)),
-    			Long.parseLong(parser.getAttributeValue(null, A_CREATED)),
-    			Long.parseLong(parser.getAttributeValue(null, A_MODIFIED)),
-    			parser.getAttributeValue(null, A_POSITION),
-    			text
+    			Long.parseLong(sID),
+    			Long.parseLong(sCreated),
+    			Long.parseLong(sModified),
+    			sPossition,
+    			text,
+    			bHTML
 	    	);
 	    	node.setActive(true);
-			node.setHeight(editor.getDefaultNodeHeight() * 2);
-			node.setWidth(editor.getDefaultNodeWidth(text) * 2);
+			node.setHeight(editor.getDefaultNodeHeight());
+			node.setWidth(editor.getDefaultNodeWidth(node.getName()) * 2);
 			
 			//rootNode.addChild(node);
 			
-			Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
-		    while (parser.nextTag() != XmlPullParser.END_TAG) {
-		    	Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
-		    	Log.d("DEEP", String.valueOf(parser.getDepth()));
-		    	Log.d("Next TAG", "nalezen");
-		    	node.addChild(readNode(parser));
+			//Log.d("OUT_DEEP", String.valueOf(parser.getDepth()));
+			while (parser.nextTag() != XmlPullParser.END_TAG) {
+				//Log.d("parser", parser.getPositionDescription());
+				/*if (parser.getEventType() == parser.START_TAG && (
+																	parser.getName().equals(E_FONT) 
+																	|| parser.getName().equals(E_ICON)
+																	|| parser.getName().equals(E_EDGE)
+																 )) {
+				*/
+				if (parser.getEventType() == parser.START_TAG && !parser.getName().equals(E_NODE)) {
+					while(parser.nextTag() != XmlPullParser.END_TAG){};
+					//Log.d("parse", "Vyjimka");
+					//Log.d("FONT-desc", parser.getPositionDescription());
+					/*
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	parser.nextToken();
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	parser.nextToken();
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	parser.nextToken();
+	    	    	Log.d("FONT-desc", parser.getPositionDescription());
+	    	    	*/
+	    	    } else {
+	    	    	node.addChild(readNode(parser));
+	    	    }
+		    	//Log.d("TEXT", parser.getAttributeValue(null, A_TEXT));
+		    	//Log.d("DEEP", String.valueOf(parser.getDepth()));
+		    	//Log.d("Next TAG", "nalezen");
 		    }
 	    }
 	    Log.d("readNode", "END");
 	    return node;
 	}
+
+	/**
+	 * Read HTML of Node
+	 * @param parser
+	 * @return
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
+	private String readHTML(XmlPullParser parser) throws IOException, XmlPullParserException {
+		int depth = parser.getDepth();
+		//Log.d("2HTML-depth", String.valueOf(parser.getDepth()));
+		//Log.d("2HTML", parser.getName());
+		parser.nextToken();
+		
+		StringBuffer htmlBuffer = new StringBuffer();
+		while (depth != parser.getDepth()) {
+
+			if(parser.getEventType() == parser.START_TAG) {
+				//Log.d(">HTML-name", parser.getName());
+				htmlBuffer.append("<").append(parser.getName()).append(">");
+				//html += "<"+parser.getName()+">";
+			} else if (parser.getEventType() == parser.END_TAG) {
+				//Log.d(">HTML-name", parser.getName());
+				htmlBuffer.append("</").append(parser.getName()).append(">");
+				//html += "</"+parser.getName()+">";
+			} else if (parser.getEventType() == parser.TEXT || parser.getEventType() == parser.ENTITY_REF) {
+				//Log.d(">HTML-text", parser.getText());
+			    htmlBuffer.append(parser.getText());
+				//html += parser.getText();
+			} else {
+				//Log.d("HTML", "Exception");
+			}
+		
+			//Log.d("HTML-line", String.valueOf(parser.getLineNumber()));
+			//Log.d(">HTML-depth", String.valueOf(parser.getDepth()));
+			//Log.d(">HTML-desc", parser.getPositionDescription());
+			parser.nextToken();
+		}
+		
+		//Log.d("HTML", "END WHILE");
+		parser.nextToken();
+		//Log.d("HTML-line", String.valueOf(parser.getLineNumber()));
+		//Log.d(">HTML-depth", String.valueOf(parser.getDepth()));
+		//Log.d(">HTML-desc", parser.getPositionDescription());
+		return htmlBuffer.toString();
+	}
 	
+	/** Calculate dimensions of tree nodes
+	 * 
+	 * @param node
+	 * @return
+	 */
 	private double calculateDimensions(IXMLNode node) {
 		ArrayList<IXMLNode> childs = node.getChilds();
 		double heightSum = 0;
 		
 		if (childs != null) {
 			for(IXMLNode child : childs) {
-				heightSum += calculateDimensions(child);
+				heightSum += calculateDimensions(child) + VSPACE;
 			}
 
 			if (heightSum > node.getHeight()) {
@@ -163,6 +297,13 @@ public class FreeMind3 {
 	}
 */	
 
+	/** Create TAM tree
+	 * 
+	 * @param node
+	 * @param parent
+	 * @param x coord-x
+	 * @param y coord-y
+	 */
 	private void createTAMTree(IXMLNode node, TAMPNode parent, int x, int y) {
 		TAMPConnection connection = null;
 		if (parent == null) {
@@ -183,10 +324,11 @@ public class FreeMind3 {
 		ArrayList<IXMLNode> childs = node.getChilds();
 		
 		if (childs != null) {
-			double y_new = y - (node.getHeight() / 3) * (childs.size() - 1);
+			double y_new = y; 
+			// - (node.getHeight() / 3) * (childs.size() - 1);
 			for(IXMLNode child : childs) {
-				createTAMTree(child, parent, x + (int)Math.floor(node.getWidth()) + SPACE, (int)Math.floor(y_new));
-				y_new += child.getHeight();
+				createTAMTree(child, parent, x + (int)Math.floor(node.getWidth()) + HSPACE, (int)Math.floor(y_new));
+				y_new += child.getHeight() + VSPACE;
 			}
 		}
 	}

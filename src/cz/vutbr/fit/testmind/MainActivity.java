@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -10,15 +11,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ZoomControls;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.TAMEditorTest;
+import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.io.Serializer;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 public class MainActivity extends FragmentActivity {
+	
+	public static final String PREFS_NAME = "TestMindPrefs";
 	
 	/**
 	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam menu
@@ -27,9 +33,9 @@ public class MainActivity extends FragmentActivity {
 	public final static class MenuItems {
 		public static final int open = R.id.menu_open;
 		public static final int save = R.id.menu_save;		
-		public static final int settings = R.id.menu_settings;
+		//public static final int settings = R.id.menu_settings;
 		public static final int importFile = R.id.menu_import;
-		public static final int exportFile = R.id.menu_export;
+		public static final int shareFile = R.id.menu_share;
 		public static final int create_mode = R.id.menu_create_mode;
 		public static final int view_mode = R.id.menu_view_mode;
 		public static final int test_structure = R.id.menu_test_structure;
@@ -54,6 +60,10 @@ public class MainActivity extends FragmentActivity {
 		public static final int zoom_out = R.id.button_zoom_out;
 		public static final int connect = R.id.button_connect;
 	}
+	
+	public static FrameLayout leftToolbar;
+	public static FrameLayout rightToolbar;
+	
 	
 	public static class EventObjects {
 		public static ZoomControls zoomControls;
@@ -82,8 +92,8 @@ public class MainActivity extends FragmentActivity {
 		
 	private static final String TAG = "MainActivity";
 	
-	private static final String LAST_OPENED_FILE = "last";
-	
+	public static final String LAST_OPENED_FILE = "last";
+
 	private ITAMEditor actualEditor;
 	
 	private static TAMProfile profile;
@@ -91,14 +101,23 @@ public class MainActivity extends FragmentActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {    	
     	super.onCreate(savedInstanceState);	
-    	Log.d(TAG, "onCreate");
+    	//Log.d(TAG, "onCreate");
+    	
+    	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    	String lastMindMap = settings.getString(LAST_OPENED_FILE, "");
+    	
+    	// docasny hack, vid dokumentacia TAMERootInitializeControl.initControl
+    	if(!lastMindMap.isEmpty()) TAMERootInitializeControl.initControl = false;
     	
     	//if(profile != null) {
-    		profile = new TAMProfile();
-    	//}		
-    	  	
-    	
+			profile = new TAMProfile();
+		//}	
+		
+		
     	setContentView(R.layout.activity_main);
+    	
+    	leftToolbar = (FrameLayout) findViewById(R.id.activity_main_left_toolbar);
+		rightToolbar = (FrameLayout) findViewById(R.id.activity_main_right_toolbar);
     	
     	EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
     	EventObjects.editor_test = (TAMEditorTest) findViewById(R.id.acitity_test_tam_editor);
@@ -122,7 +141,16 @@ public class MainActivity extends FragmentActivity {
     	
 		// initialize editors //
     	EventObjects.editor_main.initialize(profile);
-    	EventObjects.editor_test.initialize(profile);
+    	EventObjects.editor_test.initialize(profile);   	  	
+    	    	
+    	if(!lastMindMap.isEmpty()){
+    		    		
+    		Serializer serializer = new Serializer(
+            		String.format("%s/%s." + TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
+            
+            serializer.deserialize(profile);
+            
+    	} 	
     }
 	
 	/**
@@ -137,12 +165,12 @@ public class MainActivity extends FragmentActivity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {		
 		super.onRestoreInstanceState(savedInstanceState);
 		
-		Log.d(TAG, "onRestoreInstanceState");
+		//Log.d(TAG, "onRestoreInstanceState");
 		
 		String lastMindMap = savedInstanceState.getString(LAST_OPENED_FILE);
 		
 		Serializer serializer = new Serializer(
-        		String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
+        		String.format("%s/%s." + TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION, TAMProfile.TESTMIND_DIRECTORY.getPath(), lastMindMap));
         
         serializer.deserialize(profile);  
 		
@@ -151,13 +179,13 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	
-    	Log.d(TAG, "onSaveInstanceState");
+    	//Log.d(TAG, "onSaveInstanceState");
     	/* nie je vhodne tu serializovat veci, vola sa prilis casto
     	Serializer serializer = new Serializer(
 				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
 		serializer.serialize(profile);
     	
-		Log.d(TAG, "ukladam: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+		//Log.d(TAG, "ukladam: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
 		*/
 		outState.putString(LAST_OPENED_FILE, profile.getFileName());
 		
@@ -187,10 +215,22 @@ public class MainActivity extends FragmentActivity {
     	
     	/* ak by mapa nebola ulozena, nech sa uzivatelovi nestrati */
     	Serializer serializer = new Serializer(
-				String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+				String.format("%s/%s.%s",
+						TAMProfile.TESTMIND_DIRECTORY.getPath(), 
+						profile.getFileName(),
+						TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
 		serializer.serialize(profile);
     	
-		Log.d(TAG, "onDestroy save: " + String.format("%s/%s.db", TAMProfile.TESTMIND_DIRECTORY.getPath(), profile.getFileName()));
+		/* ulozi nastavenia, tak aby ich bolo mozne obnovit aj po uplnom zruseni aplikacie */
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString(LAST_OPENED_FILE, profile.getFileName());
+		editor.commit();
+		
+		//Log.d(TAG, "onDestroy save: " + String.format(
+		//		"%s/%s.%s", TAMProfile.TESTMIND_DIRECTORY.getPath(), 
+		//		profile.getFileName(),
+		//		TAMEOpenSaveControl.TESTMIND_FILE_EXTENSION));
     }
     
     
@@ -236,5 +276,5 @@ public class MainActivity extends FragmentActivity {
 
 	public static TAMProfile getProfile() {
 		return profile;
-	}
+	}	
 }

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/open_save_acitivty_add" android:title="@string/add" android:icon="@drawable/ic_action_add" android:visible="true" android:showAsAction="always|withText"></item>
-    <item android:id="@+id/open_save_acitivty_share" android:title="@string/share" android:icon="@drawable/ic_action_share" android:visible="true" android:showAsAction="always|withText"></item>
+    <item android:id="@+id/open_save_acitivty_add" android:title="@string/create_new" android:icon="@drawable/ic_action_add" android:visible="true" android:showAsAction="always|withText"></item>
 </menu>

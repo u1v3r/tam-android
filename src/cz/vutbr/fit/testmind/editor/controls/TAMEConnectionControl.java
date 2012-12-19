@@ -97,11 +97,11 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 							// it is important to test null reference - graph or some items can be already disposed //
 							if(greenNodeFrom != null) {
 								greenNodeFrom.setBackgroundStyle(ITAMENode.BLUE);
-								System.out.println("change color");
+								//System.out.println("change color");
 							}
 							if(greenNodeTo != null) {
 								greenNodeTo.setBackgroundStyle(ITAMENode.BLUE);
-								System.out.println("change color");
+								//System.out.println("change color");
 								//((TAMGraph)greenNodeTo.getEditor()).helpInvalidate();
 								//invalidate();
 							}

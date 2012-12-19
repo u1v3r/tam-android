@@ -2,10 +2,13 @@
 
     <string name="app_name">TestMind</string>
     <string name="main_activity_title">TestMind</string>
+    <string name="main_activity_delete_alert_dialog_title">Remove node</string>
+    <string name="main_activity_delete_alert_dialog_content">Are you sure you want to delete node and all of the nodes it contains?</string>
     <string name="edit_activity_title">Title</string>
     <string name="edit_activity_tag_exists">Tag already exists</string>
     <string name="edit_activity_more_words_selected">Please select only one word</string>
-    <string name="create">Create</string>
+    <string name="create_mode">Edit mode</string>
+    <string name="view_mode">View mode</string>
     <string name="add">Add</string>
     <string name="edit">Edit</string>
     <string name="share">Share</string>
@@ -34,16 +37,16 @@
 	<string name="edit_node_content">Content</string>
     <string name="title_activity_test">Testing</string>
     <string name="click">Click on screen</string>    
-    <string name="btn_add">A</string>
-    <string name="btn_del">D</string>
-    <string name="btn_edit">E</string>
-    <string name="btn_one">1</string>
-    <string name="btn_hide">H</string>
-    <string name="btn_view">V</string>
-    <string name="btn_zoom_in">+</string>
-    <string name="btn_zoom_out">-</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_del">Delete</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_one">Hide one</string>    
+    <string name="btn_hide">Hide</string>
+    <string name="btn_view">Vview</string>
+    <string name="btn_zoom_in">zoom in</string>
+    <string name="btn_zoom_out">zoom out</string>
     <string name="btn_connect">Connect</string>
-    <string name="menu_open">Open</string>
+    <string name="menu_open">Manage maps</string>
     <string name="menu_save">Save</string>
     <string name="menu_import">Import</string>
     <string name="menu_export">Export</string>
@@ -62,4 +65,11 @@
     <string name="open_save_error_empty_file">Name of file is empty!</string>
     <string name="open_save_error_any_file">There is not any file for open!</string>
     <string name="context_menu_delete">Delete</string>
+    <string name="select_file_to_import">Select a File to import</string>
+    <string name="create_new">New</string>
+    <string name="send_to">Share Map</string>
+    <string name="testing_activity_child_nodes">Child nodes</string>
+    <string name="cannot_open_file">Can not open file %s.</string>
+    <string name="unsupported_format">Unsupported file format</string>
+    
 </resources>

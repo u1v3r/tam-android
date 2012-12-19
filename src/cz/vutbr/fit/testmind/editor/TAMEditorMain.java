@@ -2,11 +2,14 @@ package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
+import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
@@ -34,13 +37,13 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	private int mode;
 	private boolean hasRoot = false;
 	private boolean hasVisibleMenu = false;
-			
+	
 	public TAMEditorMain(Context context) {
 		this(context, null);
 	}
 	
 	public TAMEditorMain(Context context, AttributeSet attrs) {		
-		super(context,attrs);
+		super(context,attrs);		
 		// do not type anything there - use initializeControls method instead //
 	}
 	
@@ -88,15 +91,20 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		hasVisibleMenu = true;
 		
 		if(mode == MenuItems.create_mode) {
+			MainActivity.rightToolbar.setVisibility(VISIBLE);
 			EventObjects.btn_add.setVisibility(VISIBLE);
 			EventObjects.btn_delete.setVisibility(VISIBLE);
 			EventObjects.btn_edit.setVisibility(VISIBLE);
 		} else if(mode == MenuItems.view_mode) {
+			/* tlacidla nefunguju, tak sa zatial nebudu zobrazovat
+			MainActivity.rightToolbar.setVisibility(VISIBLE);
 			EventObjects.btn_hide_all.setVisibility(VISIBLE);
 			EventObjects.btn_hide_one.setVisibility(VISIBLE);
 			EventObjects.btn_view.setVisibility(VISIBLE);
+			*/
 		}
 		
+		MainActivity.leftToolbar.setVisibility(GONE);
 		EventObjects.btn_zoom_in.setVisibility(GONE);
 		EventObjects.btn_zoom_out.setVisibility(GONE);
 	}
@@ -107,21 +115,24 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		
 		if(mode == MenuItems.create_mode) {
 			//EventObjects.btn_add.startAnimation(EventObjects.animAlpha);
+			MainActivity.rightToolbar.setVisibility(GONE);
 			EventObjects.btn_add.setVisibility(GONE);
 			EventObjects.btn_delete.setVisibility(GONE);
 			EventObjects.btn_edit.setVisibility(GONE);
 		} else if(mode == MenuItems.view_mode) {
+			MainActivity.rightToolbar.setVisibility(GONE);
 			EventObjects.btn_hide_all.setVisibility(GONE);
 			EventObjects.btn_hide_one.setVisibility(GONE);
 			EventObjects.btn_view.setVisibility(GONE);
 		}
 		
+		MainActivity.leftToolbar.setVisibility(VISIBLE);
 		EventObjects.btn_zoom_in.setVisibility(VISIBLE);
 		EventObjects.btn_zoom_out.setVisibility(VISIBLE);
 	}
 	
 	@Override
-	protected void initializeControls() {
+	protected void initializeControls() {		
 		new TAMEZoomControl(this);
 		new TAMENodeControl(this);
 		new TAMEOpenSaveControl(this);
@@ -133,6 +144,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		mode = MenuItems.create_mode;
 		//actualItem = EventObjects.menu_create;
 	}
+	
+	
 
 	@Override
 	protected void modeChanged(MenuItem item) {

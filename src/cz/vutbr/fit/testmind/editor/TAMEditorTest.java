@@ -49,7 +49,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 		if(item == EventObjects.menu_show) {
 			// TODO
 		} else if(item == EventObjects.menu_next) {
-			System.out.println("next");
+			//System.out.println("next");
 			generateNextQuestion();
 			EventObjects.menu_show.setEnabled(true);
 		}
@@ -97,9 +97,10 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	public void showToolbar() {
 		
 		hasVisibleMenu = true;
-		
+		MainActivity.rightToolbar.setVisibility(VISIBLE);
 		EventObjects.btn_connect.setVisibility(VISIBLE);		
 		
+		MainActivity.leftToolbar.setVisibility(GONE);
 		EventObjects.btn_zoom_in.setVisibility(GONE);
 		EventObjects.btn_zoom_out.setVisibility(GONE);
 	}
@@ -108,8 +109,10 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 		
 		hasVisibleMenu = false;
 		
+		MainActivity.rightToolbar.setVisibility(GONE);
 		EventObjects.btn_connect.setVisibility(GONE);		
 		
+		MainActivity.leftToolbar.setVisibility(VISIBLE);
 		EventObjects.btn_zoom_in.setVisibility(VISIBLE);
 		EventObjects.btn_zoom_out.setVisibility(VISIBLE);
 	}

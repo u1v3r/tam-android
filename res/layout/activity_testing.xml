@@ -9,30 +9,85 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:scrollbars="vertical" >
+
+        <LinearLayout
+            style="@style/DialogTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/node_background_1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_title" >
     
         <cz.vutbr.fit.testmind.layout.FlowLayout
             android:id="@+id/testing_flowLayout_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/testing_background_path"/>
+            android:layout_gravity="fill" >
+
+        </cz.vutbr.fit.testmind.layout.FlowLayout>
+       </LinearLayout>
        
         <TextView
             android:id="@+id/testing_textView_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/acitity_testing_divider_margin"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+        
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/acitity_testing_divider_margin"
+            android:layout_marginRight="@dimen/acitity_testing_divider_margin"
+            android:background="@color/node_background_stroke_1" />
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="@dimen/acitity_testing_divider_margin"
+            android:layout_marginRight="@dimen/acitity_testing_divider_margin"
+            android:background="@color/node_background_stroke_1" />
+
+        <TextView
+            android:id="@+id/testing_activity_body_text"
+            style="@style/DialogTextStyle"
+            android:paddingTop="@dimen/acitity_testing_divider_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:layout_margin="5dp"
+            android:text="@string/edit_node_content" />
         
         <WebView
             android:id="@+id/testing_webView_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        
-        <cz.vutbr.fit.testmind.layout.FlowLayout
-                    android:id="@+id/testing_flowLayout_childs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/testing_activity_child_nodes"
+            style="@style/DialogTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/testing_activity_child_nodes" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <cz.vutbr.fit.testmind.layout.FlowLayout
+                android:id="@+id/testing_flowLayout_childs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp" >
+            </cz.vutbr.fit.testmind.layout.FlowLayout>
+
+        </LinearLayout>
         
     </LinearLayout>
 </ScrollView>

@@ -62,4 +62,10 @@ public class TAMPConnection extends TAMPItem implements Serializable {
 		parent = null;
 		child = null;
 	}
+
+	@Override
+	public String toString() {
+		return "TAMPConnection [id=" + id + ", parent=" + parent + ", child="
+				+ child + "]";
+	}
 }

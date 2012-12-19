@@ -45,7 +45,7 @@ public class TAMGMenuButton extends TAMGAbstractButton {
 		
 		// actualize rectangle //
 		this.setBounds(x-WIDTH, y-HEIGHT, x+WIDTH, y+HEIGHT);
-		System.out.println(getBounds());
+		//System.out.println(getBounds());
 	}
 
 }

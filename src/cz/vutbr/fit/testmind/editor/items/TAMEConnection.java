@@ -1,5 +1,6 @@
 package cz.vutbr.fit.testmind.editor.items;
 
+import android.util.Log;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
@@ -47,6 +48,7 @@ public class TAMEConnection implements ITAMEConnection {
 	}
 
 	public void dispose() {
+		
 		editor.getListOfEConnections().remove(this);
 		editor.getGItemFactory().deleteConnection(gui);
 		gui = null;

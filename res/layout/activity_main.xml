@@ -20,9 +20,11 @@
         android:overScrollMode="always" />
 
     <FrameLayout
+        android:id="@+id/activity_main_left_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
+        android:visibility="gone"
         android:background="@drawable/toolbar_border_right" >
 
         <LinearLayout
@@ -53,10 +55,11 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/main_activity_action_toolbar"
+        android:id="@+id/activity_main_right_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
+        android:visibility="gone"
         android:background="@drawable/toolbar_border_left" >
 
         <LinearLayout

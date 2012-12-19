@@ -211,6 +211,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	if(item.getItemId() == R.id.edit_node_acitivty_ok){
     		saveValues();
     	}else if(item.getItemId() == R.id.edit_node_acitivty_cancel){
+    		setResult(RESULT_CANCELED);
     		finish();
     	}
     	    	
@@ -240,10 +241,10 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 			localTag.setStart(indexOfStart);
 			localTag.setEnd(indexOfStart + localTag.getTag().length());
 			listOfTags.add(localTag);
-			Log.d(TAG,localTag.toString());
+			//Log.d(TAG,localTag.toString());
 		}
     	
-    	Log.d(TAG, bodyText);
+    	////Log.d(TAG, bodyText);
     	
     	
     	Intent intent = new Intent();    	
@@ -251,7 +252,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
     	intent.putExtra(TAMENodeControl.NODE_BODY, bodyText);
     	intent.putExtra(TAMENodeControl.NODE_COLOR,color);
     	    	
-    	Log.d(TAG, "vsetky:" + listOfTags.toString());
+    	////Log.d(TAG, "vsetky:" + listOfTags.toString());
     	
     	intent.putExtra(TAMENodeControl.NODE_TAGS, (Serializable)(listOfTags));
     	setResult(TAMENodeControl.EDIT_NODE_RESULT_CODE, intent);
@@ -332,7 +333,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 	
 	public void onTagBtnClick(View w){
 		
-		Log.d(TAG, "obsahuje:" + listOfTags.toString());
+		////Log.d(TAG, "obsahuje:" + listOfTags.toString());
 		
 		int start = richTextEditor.getSelectionStart();
 		//int startTag = start;
@@ -419,7 +420,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 			//richTextEditor.getEditableText().setSpan(new ForegroundColorSpan(Color.BLACK), start, end, 0);
 			//replaceTextInRichTextEditor(TAG_MARKER + tagString, tagString);
 			
-			Log.d(TAG, "mazem tag: " + tag.toString());
+			////Log.d(TAG, "mazem tag: " + tag.toString());
 		}else{// inak ho pridaj ako tag
 					
 			// kvoli pridanemu tag marker treba posunut poziciu			
@@ -428,7 +429,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 			//tag.setEnd(end);
 			listOfLocalTags.add(tag);
 			
-			Log.d(TAG, "pridavam tag:" + tag.toString());
+			//Log.d(TAG, "pridavam tag:" + tag.toString());
 			
 			// pripoji znak tagu pred vybrane slovo a slovo zvyrazni
 			//replaceTextInRichTextEditor(tagString, TAG_MARKER + tagString);
@@ -528,7 +529,7 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		}
 		
 		
-		//Log.d(TAG,"bold " + isSelectionBold + ",italic " 
+		////Log.d(TAG,"bold " + isSelectionBold + ",italic " 
 			//	+ isSelectionItalic + ", under " + isSelectionUnderline);
 		
 	}
@@ -541,14 +542,14 @@ public class EditNodeActivity extends FragmentActivity implements AnimationListe
 		
 		/*
 		if(isBoldBtnActive){
-			Log.d(TAG, "start " + start + ",before " + before + ", count " + count + ",chars " + s);
+			//Log.d(TAG, "start " + start + ",before " + before + ", count " + count + ",chars " + s);
 			
 			
 				
 			CharSequence charsBefore = s.subSequence(0,s.length()-1);			
 			CharSequence lastChar = s.subSequence(s.length()-1, s.length());
 			
-			Log.d(TAG, charsBefore + " " + lastChar);
+			//Log.d(TAG, charsBefore + " " + lastChar);
 			
 			
 			SpannableString lastCharSpan = new SpannableString(lastChar);
