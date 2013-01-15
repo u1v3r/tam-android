@@ -520,7 +520,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		//Log.d(TAG,"scale " + zoom.sx + " " + zoom.sy + " " + zoom.px + " " + zoom.py);
 		
 		//canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
-		canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
+		if(zoom != null) canvas.scale(zoom.sx, zoom.sy, zoom.px, zoom.py);
 		canvas.translate(translationPoint.x, translationPoint.y);
 		
 		paint.setAntiAlias(true);

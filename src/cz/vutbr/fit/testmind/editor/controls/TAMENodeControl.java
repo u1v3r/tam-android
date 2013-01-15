@@ -18,6 +18,7 @@ import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView.FindListener;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.EditNodeActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
@@ -27,6 +28,7 @@ import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
+import cz.vutbr.fit.testmind.fragments.NodeViewFragment;
 import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
@@ -58,6 +60,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	
 	public interface ITAMNodeControlListener {
 		public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY);
+	}
+	
+	public interface OnNodeSelectedListener{
+		public void onNodeSelected(String htmlBody);
 	}
 	
 	private boolean creatingByGesture = false;
@@ -280,6 +286,19 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
 		if(selection){
 			selectedNode = (TAMENode)item.getHelpObject();
+					
+			updateBodyFragment();
+		}
+	}
+
+	private void updateBodyFragment() {
+		
+		// je vytvoreny fragment
+		if(activity.findViewById(R.id.fragment_node_view_container) != null){
+			OnNodeSelectedListener fragment = (OnNodeSelectedListener) 
+					activity.getSupportFragmentManager().findFragmentById(R.id.node_view_fragment);
+			
+			fragment.onNodeSelected(selectedNode.getProfile().getBody());
 		}
 	}
 
@@ -302,7 +321,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		
 		
 	}
-
+		
 	private void showDeleteAlertDialogAndDelete() {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);

@@ -25,4 +25,6 @@
     <color name="testing_background_activity">#FFFFFF</color>
     <color name="testing_background_path">#33B5E5</color>
     <color name="testing_foreground_path">#FFFFFF</color>
+    
+    <color name="fragment_border">#787878</color>
 </resources>

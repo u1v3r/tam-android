@@ -4,20 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <cz.vutbr.fit.testmind.editor.TAMEditorTest
-        android:id="@+id/acitity_test_tam_editor"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/drawing_surface"
-        android:overScrollMode="always"
-        android:visibility="gone" />
+        android:layout_height="match_parent" >
 
-    <cz.vutbr.fit.testmind.editor.TAMEditorMain
-        android:id="@+id/acitity_main_tam_editor"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/drawing_surface"
-        android:overScrollMode="always" />
+        <cz.vutbr.fit.testmind.editor.TAMEditorTest
+            android:id="@+id/acitity_test_tam_editor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/drawing_surface"
+            android:overScrollMode="always"
+            android:visibility="gone" 
+            android:layout_weight="1"/>
+
+        <cz.vutbr.fit.testmind.editor.TAMEditorMain
+            android:id="@+id/acitity_main_tam_editor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/drawing_surface"
+            android:overScrollMode="always" 
+            android:layout_weight="1"/>
+        
+        <fragment
+            android:id="@+id/node_view_fragment"
+            android:name="cz.vutbr.fit.testmind.fragments.NodeViewFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/activity_main_left_toolbar"
