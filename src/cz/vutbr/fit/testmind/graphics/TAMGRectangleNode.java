@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.shapes.RectShape;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.util.Log;
 
 /**
@@ -22,9 +23,16 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	public static final int OFFSET_Y = 60;
 	protected static final int NODE_WIDTH = 28;
 	protected static final int NODE_HEIGHT = 48;
-		
+	
+	private static final float[] ROUND_CORNERS = new float[] {
+		30, 30, 
+		30, 30, 
+		30, 30, 
+		30, 30 
+	};
+	
 	public TAMGRectangleNode(TAMGraph graph, int x, int y, String text) {
-		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
+		super(graph, x, y, OFFSET_X, OFFSET_Y, text,new RoundRectShape(ROUND_CORNERS ,null, null), type);
 	}
 	
 	public boolean hit(float x, float y) {
