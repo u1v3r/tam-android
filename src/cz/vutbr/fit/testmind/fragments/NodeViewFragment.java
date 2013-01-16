@@ -1,15 +1,17 @@
 package cz.vutbr.fit.testmind.fragments;
 
-import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.OnNodeSelectedListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import cz.vutbr.fit.testmind.R;
+import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.OnNodeSelectedListener;
 
 public class NodeViewFragment extends Fragment implements OnNodeSelectedListener {
+	
+	private static final String TAG = "NodeViewFragment";
 	
 	private WebView webView;
 

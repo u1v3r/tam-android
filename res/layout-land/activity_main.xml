@@ -1,38 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:sliding="http://schemas.android.com/apk/res/cz.vutbr.fit.testmind"
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
+    <com.slidingmenu.lib.SlidingMenu        
+        android:id="@+id/slidingmenulayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <cz.vutbr.fit.testmind.editor.TAMEditorTest
-            android:id="@+id/acitity_test_tam_editor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/drawing_surface"
-            android:overScrollMode="always"
-            android:visibility="gone" 
-            android:layout_weight="1"/>
-
-        <cz.vutbr.fit.testmind.editor.TAMEditorMain
-            android:id="@+id/acitity_main_tam_editor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/drawing_surface"
-            android:overScrollMode="always" 
-            android:layout_weight="1"/>
-        
-        <fragment
-            android:id="@+id/node_view_fragment"
-            android:name="cz.vutbr.fit.testmind.fragments.NodeViewFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3" />
-
-    </LinearLayout>
+        android:layout_height="match_parent"        
+        sliding:mode="right"
+        sliding:touchModeAbove="margin"
+        sliding:touchModeBehind="fullscreen"
+        sliding:behindScrollScale="0.0"
+        sliding:behindWidth="240dp"
+        sliding:shadowDrawable="@drawable/shadow_left"     
+        sliding:viewAbove="@layout/activity_main_surface"
+        sliding:viewBehind="@layout/activity_main_node_view_fragment" />
 
     <LinearLayout
         android:id="@+id/activity_main_left_toolbar"

@@ -7,8 +7,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.slidingmenu.lib.SlidingMenu.OnOpenedListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -16,15 +21,27 @@ import android.content.Intent;
 import android.os.Vibrator;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnAttachStateChangeListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnGenericMotionListener;
+import android.view.View.OnHoverListener;
+import android.view.View.OnLayoutChangeListener;
+import android.view.View.OnTouchListener;
+import android.webkit.WebView;
 import android.webkit.WebView.FindListener;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import cz.vutbr.fit.testmind.EditNodeActivity;
+import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.TAMEditorMain;
+import cz.vutbr.fit.testmind.editor.TAMEditorTest;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
@@ -75,9 +92,12 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	
 	public TAMENodeControl(ITAMNodeControlListener editor) {
 		super((ITAMEditor) editor);		
+		
+		initSlidingMenu();
+		
 		initializeListeners((ITAMEditor) editor);
 	}
-	
+
 	private void initializeListeners(ITAMEditor editor) {
 		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
@@ -88,7 +108,30 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
 		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
 			selectedNode = this.editor.getListOfENodes().get(0);
-		}
+		}		
+	}
+	
+	private void initSlidingMenu() {
+		
+		final SlidingMenu slidingMenu = (SlidingMenu)activity.findViewById(R.id.slidingmenulayout);		
+		
+		// pri zobrazeni behind vrstvy sa neda zatvorit pomocou slide gesta
+		slidingMenu.setOnOpenedListener(new OnOpenedListener() {
+			
+			public void onOpened() {
+				slidingMenu.setSlidingEnabled(false);				
+			}
+		});		
+			
+		// po kliknuti na titulok sa behind vrstva skryje
+		slidingMenu.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {				
+				slidingMenu.setSlidingEnabled(true);
+				slidingMenu.toggle();
+				
+			}
+		});
 	}
 
 	/**

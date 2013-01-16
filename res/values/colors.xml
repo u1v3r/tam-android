@@ -26,5 +26,6 @@
     <color name="testing_background_path">#33B5E5</color>
     <color name="testing_foreground_path">#FFFFFF</color>
     
-    <color name="fragment_border">#787878</color>
+    <color name="shadow_dark">#C1C1C1</color>
+    <color name="shadow_light">#FFFFFF</color>
 </resources>
