@@ -240,6 +240,11 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			
 			selectedNode.setBackgroundStyle(nodeColor);			
 			
+			// refresh - dojde k obnovenie content panelu s novyma hodnotami
+			selectedNode.getGui().setSelected(false);
+			selectedNode.getGui().setSelected(true);
+			
+			
 			editor.invalidate();
 			
 			// pre istotu vzdy false
