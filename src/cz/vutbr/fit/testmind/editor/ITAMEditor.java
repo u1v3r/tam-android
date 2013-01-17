@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PointF;
 import android.preference.PreferenceManager.OnActivityResultListener;
@@ -115,5 +114,6 @@ public interface ITAMEditor {
 	
 	public int getDefaultNodeHeight();
 	
-	public int getDefaultNodeWidth(String text);	
+	public int getDefaultNodeWidth(String text);
+	
 }

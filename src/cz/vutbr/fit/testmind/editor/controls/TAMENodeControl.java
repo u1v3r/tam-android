@@ -91,7 +91,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	private HashSet<Integer> removedConnections = new HashSet<Integer>();
 	
 	public TAMENodeControl(ITAMNodeControlListener editor) {
-		super((ITAMEditor) editor);
+		super((ITAMEditor) editor);		
+		
+		initSlidingMenu();
+		
 		initializeListeners((ITAMEditor) editor);
 	}
 
@@ -106,6 +109,29 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
 			selectedNode = this.editor.getListOfENodes().get(0);
 		}		
+	}
+	
+	private void initSlidingMenu() {
+		
+		final SlidingMenu slidingMenu = (SlidingMenu)activity.findViewById(R.id.slidingmenulayout);		
+		
+		// pri zobrazeni behind vrstvy sa neda zatvorit pomocou slide gesta
+		slidingMenu.setOnOpenedListener(new OnOpenedListener() {
+			
+			public void onOpened() {
+				slidingMenu.setSlidingEnabled(false);				
+			}
+		});		
+			
+		// po kliknuti na titulok sa behind vrstva skryje
+		slidingMenu.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {				
+				slidingMenu.setSlidingEnabled(true);
+				slidingMenu.toggle();
+				
+			}
+		});
 	}
 
 	/**

@@ -15,7 +15,6 @@ import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
@@ -225,4 +224,5 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 		}
 		
 	}
+
 }

@@ -5,17 +5,15 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ZoomControls;
-
-import com.slidingmenu.lib.SlidingMenu;
-import com.slidingmenu.lib.SlidingMenu.OnOpenedListener;
-
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.TAMEditorTest;
@@ -30,7 +28,7 @@ public class MainActivity extends FragmentActivity {
 	public static final String PREFS_NAME = "TestMindPrefs";
 	
 	/**
-	 * Zabezpecuje jednotny pristup k polozkam menu
+	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam menu
 	 * 
 	 */
 	public final static class MenuItems {
@@ -49,7 +47,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	/**
-	 * Zabezpecuje jednotny pristup k polozkam toolbaru
+	 * Zabezpecuje jednoduchy pristup k jednotlivym polozkam toolbaru
 	 * 
 	 */
 	public final static class ButtonItems {
@@ -66,7 +64,7 @@ public class MainActivity extends FragmentActivity {
 	
 	public static LinearLayout leftToolbar;
 	public static LinearLayout rightToolbar;
-	public static SlidingMenu slidingMenu;	
+	
 	
 	public static class EventObjects {
 		public static ZoomControls zoomControls;
@@ -122,8 +120,29 @@ public class MainActivity extends FragmentActivity {
     	leftToolbar = (LinearLayout) findViewById(R.id.activity_main_left_toolbar);
 		rightToolbar = (LinearLayout) findViewById(R.id.activity_main_right_toolbar);
     	
-    	initEventObjects();   	    	
-    	initSlidingMenu();
+    	EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
+    	EventObjects.editor_test = (TAMEditorTest) findViewById(R.id.acitity_test_tam_editor);
+    	
+    	actualEditor = EventObjects.editor_main;
+    	
+    	EventObjects.btn_add = findViewById(R.id.button_add);
+		EventObjects.btn_delete = findViewById(R.id.button_delete);
+		EventObjects.btn_edit = findViewById(R.id.button_edit);
+		EventObjects.btn_hide_one = findViewById(R.id.button_hide_one);
+		EventObjects.btn_hide_all = findViewById(R.id.button_hide_all);
+		EventObjects.btn_view = findViewById(R.id.button_view);
+		EventObjects.btn_zoom_in = findViewById(R.id.button_zoom_in);
+		EventObjects.btn_zoom_out = findViewById(R.id.button_zoom_out);
+		EventObjects.btn_connect = findViewById(R.id.button_connect);
+		
+		//EventObjects.menu_create = (MenuItem) findViewById(R.id.menu_create_mode);
+		//EventObjects.menu_view = (MenuItem) findViewById(R.id.menu_view_mode);
+		
+		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+    	
+		// initialize editors //
+    	EventObjects.editor_main.initialize(profile);
+    	EventObjects.editor_test.initialize(profile);   	  	
     	    	
     	if(!lastMindMap.isEmpty()){
     		    		
@@ -134,24 +153,13 @@ public class MainActivity extends FragmentActivity {
             
     	} 	
     }
-
-
+	
 	/**
 	 * Po otoceni zariadenia nevymaze obsah
 	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		
-		// ak je zobrazene menu tak skry
-		if(slidingMenu.isMenuShowing()){
-			// skry bez animacie a povol zobrazenie pomocou slide gesta
-			toggleSlidingMenu(true, false);
-		}
-		
-		// treba nastavit, inak sa neinterpretuje spravne velkost pri otoceni
-		slidingMenu.setBehindWidthRes(R.dimen.slidingmenu_behindwidth);
-		
 	}
 
 	@Override
@@ -270,63 +278,4 @@ public class MainActivity extends FragmentActivity {
 	public static TAMProfile getProfile() {
 		return profile;
 	}	
-	
-	private void initEventObjects() {
-		
-		EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
-    	EventObjects.editor_test = (TAMEditorTest) findViewById(R.id.acitity_test_tam_editor);
-    	
-    	actualEditor = EventObjects.editor_main;
-    	
-    	EventObjects.btn_add = findViewById(R.id.button_add);
-		EventObjects.btn_delete = findViewById(R.id.button_delete);
-		EventObjects.btn_edit = findViewById(R.id.button_edit);
-		EventObjects.btn_hide_one = findViewById(R.id.button_hide_one);
-		EventObjects.btn_hide_all = findViewById(R.id.button_hide_all);
-		EventObjects.btn_view = findViewById(R.id.button_view);
-		EventObjects.btn_zoom_in = findViewById(R.id.button_zoom_in);
-		EventObjects.btn_zoom_out = findViewById(R.id.button_zoom_out);
-		EventObjects.btn_connect = findViewById(R.id.button_connect);
-		
-		//EventObjects.menu_create = (MenuItem) findViewById(R.id.menu_create_mode);
-		//EventObjects.menu_view = (MenuItem) findViewById(R.id.menu_view_mode);
-		
-		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
-    	
-		// initialize editors //
-    	EventObjects.editor_main.initialize(profile);
-    	EventObjects.editor_test.initialize(profile);
-	}
-	
-	private void initSlidingMenu() {		
-		
-		slidingMenu = (SlidingMenu)findViewById(R.id.slidingmenulayout);
-		
-		// pri zobrazeni behind vrstvy sa neda zatvorit pomocou slide gesta
-		slidingMenu.setOnOpenedListener(new OnOpenedListener() {
-			
-			public void onOpened() {
-				slidingMenu.setSlidingEnabled(false);				
-			}
-		});		
-			
-		// po kliknuti na titulok sa behind vrstva skryje
-		slidingMenu.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {				
-				toggleSlidingMenu(true,true);				
-			}			
-		});
-	}
-	
-	/**
-	 * Zobrazi/skryje sliding menu
-	 *  
-	 * @param enableSliding Urcuje ci sa ma povolit skryvanie pomocou slide gesta
-	 * @param anim Urcuje ci sa ma na skrytie pouzit animacia
-	 */
-	private void toggleSlidingMenu(boolean enableSliding, boolean anim) {
-		slidingMenu.setSlidingEnabled(enableSliding);
-		slidingMenu.toggle(anim);
-	}
 }
