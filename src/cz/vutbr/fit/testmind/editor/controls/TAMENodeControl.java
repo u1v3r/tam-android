@@ -49,10 +49,12 @@ import cz.vutbr.fit.testmind.fragments.NodeViewFragment;
 import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMGraphDrawingFinishedListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
+import cz.vutbr.fit.testmind.graphics.TAMGraph2.ITAMDrawListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
@@ -63,7 +65,7 @@ import cz.vutbr.fit.testmind.profile.Tag;
  */
 public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
                                                                      ITAMTouchListener, OnActivityResultListener,
-                                                                     ITAMItemListener {
+                                                                     ITAMItemListener, ITAMGraphDrawingFinishedListener {
 	
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
@@ -93,6 +95,13 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public TAMENodeControl(ITAMNodeControlListener editor) {
 		super((ITAMEditor) editor);
 		initializeListeners((ITAMEditor) editor);
+
+		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
+		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
+			selectedNode = this.editor.getListOfENodes().get(0);			
+		}	
+		
+		this.editor.getListOfGraphDrawingFinishedListener().add(this);
 	}
 
 	private void initializeListeners(ITAMEditor editor) {
@@ -100,12 +109,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfItemControls().add(this);		
-		editor.getListOfButtonControls().add(this);
-		
-		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
-		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
-			selectedNode = this.editor.getListOfENodes().get(0);
-		}		
+		editor.getListOfButtonControls().add(this);		
 	}
 
 	/**
@@ -428,5 +432,12 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public void onTouchEvent(MotionEvent e, float dx, float dy) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void onDrawingFinished() {
+		
+		if(this.editor.getListOfENodes().size() > 0){
+			this.editor.getListOfENodes().get(0).getGui().setSelected(true);
+		}
 	}
 }
