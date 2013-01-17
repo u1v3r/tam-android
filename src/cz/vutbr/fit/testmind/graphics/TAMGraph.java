@@ -3,18 +3,11 @@ package cz.vutbr.fit.testmind.graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.fit.testmind.MainActivity;
-import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
@@ -23,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 
 public class TAMGraph extends SurfaceView implements OnGestureListener, OnDoubleTapListener, OnGlobalLayoutListener {
 	
@@ -609,7 +603,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				//Vypocet zaciatocnej vzdialenosti dotykov
 				distx = e.getX(0) - e.getX(1);
 				disty = e.getY(0) - e.getY(1);
-				distStart = FloatMath.sqrt(distx * distx + disty * disty);
+				
+				distStart = (float) Math.sqrt(distx * distx + disty * disty);
 				break;
 
 			case MotionEvent.ACTION_MOVE:
@@ -630,7 +625,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 					distCurrentPrev = distCurrent;
 
 					// aktualna vzdialenost dotykov
-					distCurrent = FloatMath.sqrt(distx * distx + disty * disty);
+					distCurrent = (float) Math.sqrt(distx * distx + disty * disty);
 					//Log.d(TAG, "cur:" + distCurrent + ",prev:"+distCurrentPrev);																
 
 					float pivotX = (e.getX(0) + e.getX(1))/2f; //pivot X je v strede dotyku

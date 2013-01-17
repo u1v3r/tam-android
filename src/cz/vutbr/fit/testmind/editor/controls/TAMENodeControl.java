@@ -302,8 +302,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 
 	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
 		if(selection){
-			selectedNode = (TAMENode)item.getHelpObject();
-					
+			selectedNode = (TAMENode)item.getHelpObject();					
 			updateBodyFragment();
 		}
 	}
