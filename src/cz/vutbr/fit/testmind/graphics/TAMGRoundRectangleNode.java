@@ -13,7 +13,8 @@ import android.util.Log;
  * @author jurij
  *
  */
-public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
+public class TAMGRoundRectangleNode extends TAMGAbstractNode implements ITAMGNode {
+	
 	
 	private static final String TAG = "TAMRectangleNode";
 	private static final int type = NODE_TYPE_RECTANGLE;
@@ -24,6 +25,13 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 	protected static final int NODE_WIDTH = 28;
 	protected static final int NODE_HEIGHT = 48;
 	
+	/**
+	 * Udava velkost okolia uzlu, ktore je pri dotyku povazovane este za uzol
+	 * 
+	 * Zjednodusuje presuvanie pri velkom zmenseni
+	 */
+	private static final int HIT_TOLERANCE = 70;
+	
 	private static final float[] ROUND_CORNERS = new float[] {
 		30, 30, 
 		30, 30, 
@@ -31,8 +39,12 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 		30, 30 
 	};
 	
-	public TAMGRectangleNode(TAMGraph graph, int x, int y, String text) {
+	private TAMGZoom zoom;
+	private static int tolerance;
+	
+	public TAMGRoundRectangleNode(TAMGraph graph, int x, int y, String text) {		
 		super(graph, x, y, OFFSET_X, OFFSET_Y, text,new RoundRectShape(ROUND_CORNERS ,null, null), type);
+		this.zoom = graph.getZoom();
 	}
 	
 	public boolean hit(float x, float y) {
@@ -44,8 +56,15 @@ public class TAMGRectangleNode extends TAMGAbstractNode implements ITAMGNode {
 		float top = rect.top*graph.sy+(graph.py-graph.py*graph.sy);
 		float right = rect.right*graph.sx+(graph.px-graph.px*graph.sx);
 		float bottom = rect.bottom*graph.sy+(graph.py-graph.py*graph.sy);*/
+	
+		tolerance = (int) (HIT_TOLERANCE*(2 - zoom.sx));
+		//Log.d(TAG, "toll: " + tolerance);
 		
-		Rect newRect = new Rect(rect.left, rect.top, rect.right, rect.bottom);
+		Rect newRect = new Rect(
+				rect.left - tolerance, 
+				rect.top - tolerance, 
+				rect.right + tolerance,
+				rect.bottom + tolerance);
 		
 		/*if(x >= left && x <= right && y >= top && y <= bottom) {
 			return true;

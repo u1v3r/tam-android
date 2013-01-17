@@ -407,7 +407,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	public void unselectAllWithout(ITAMGItem actual) {
 		
 		if(actual == null) {
-			unselectAll();
+			//unselectAll();
 		} else {
 			int size = listOfSelectedItems.size();
 			int a = 0;
@@ -549,7 +549,13 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 			TAMGMotionEvent ge;
 			activeTouchEvent = true;
+			
+			float dxTestHit = zoom.px-zoom.px*zoom.sx;
+			float dyTestHit = zoom.py-zoom.py*zoom.sy;
 
+			ax = (((x-dxTestHit)/zoom.sx)-translationPoint.x);
+			ay = (((y-dyTestHit)/zoom.sy)-translationPoint.y);
+						
 			switch(e.getAction() & MotionEvent.ACTION_MASK){
 
 			case MotionEvent.ACTION_DOWN:
@@ -562,7 +568,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				float dx = zoom.px-zoom.px*zoom.sx;
 				float dy = zoom.py-zoom.py*zoom.sy;
 
-				ax = ((x-dx)/zoom.sy)-translationPoint.x;
+				ax = ((x-dx)/zoom.sx)-translationPoint.x;
 				ay = ((y-dy)/zoom.sy)-translationPoint.y;
 
 				/*for(ITAMGItem item : listOfConnections) {
@@ -582,9 +588,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 				unselectAllWithout(result);
  
-				if(result == null) {
-					lastSelectedNode = null;
-				}// else {
+				//if(result == null) {
+					//lastSelectedNode = null;
+				//}// else {
 				onItemHitEvent(e, ge);
 				//}
 
@@ -663,9 +669,8 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 						float ddx = (int) (dx1/zoom.sx);
 						float ddy = (int) (dy1/zoom.sy);
-
-						if(!listOfSelectedItems.isEmpty()) {
-
+												
+						if(!listOfSelectedItems.isEmpty() && (isNodeHit(ax, ay) != null)) {							
 							for(ITAMGItem item : listOfSelectedItems) {
 								ge = new TAMGMotionEvent(item, ddx, ddy);
 								onItemMoveEvent(e, ge);
@@ -1026,11 +1031,11 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	public int getDefaultNodeHeight() {
-		return TAMGRectangleNode.NODE_HEIGHT*2;
+		return TAMGRoundRectangleNode.NODE_HEIGHT*2;
 	}
 	
 	public int getDefaultNodeWidth(String text) {
-		return (int) paint.measureText(text) + TAMGRectangleNode.NODE_WIDTH*2;
+		return (int) paint.measureText(text) + TAMGRoundRectangleNode.NODE_WIDTH*2;
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {

@@ -1,16 +1,16 @@
 package cz.vutbr.fit.testmind.graphics;
 
-import android.graphics.drawable.shapes.RoundRectShape;
+import android.graphics.drawable.shapes.RectShape;
 
-public class TAMGRoundRectangleNode extends TAMGAbstractNode {
+public class TAMGRectangleNode extends TAMGAbstractNode {
 
 	public static final int TEXT_SIZE = 14;
 	private static final int type = NODE_TYPE_RECTANGLE;
 	public static final int OFFSET_X = 20;
 	public static final int OFFSET_Y = 20;
 	
-	public TAMGRoundRectangleNode(TAMGraph graph, int x, int y, String text) {
-		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RoundRectShape(null, null, null), type);
+	public TAMGRectangleNode(TAMGraph graph, int x, int y, String text) {
+		super(graph, x, y, OFFSET_X, OFFSET_Y, text, new RectShape(), type);
 	}
 
 	@Override

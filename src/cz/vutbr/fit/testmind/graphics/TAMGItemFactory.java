@@ -14,7 +14,7 @@ public class TAMGItemFactory {
 		
 		if(type == ITAMGNode.NODE_TYPE_RECTANGLE) {
 			//node = new TAMGRectangleNode(graph, (int)((x-dx)/zoom.sx), (int)((y-dy)/zoom.sy), text);
-			node = new TAMGRectangleNode(graph, x, y, text);
+			node = new TAMGRoundRectangleNode(graph, x, y, text);
 		}
 		
 		graph.listOfNodes.add(node);
