@@ -1,6 +1,7 @@
 package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
@@ -188,6 +189,5 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	@Override
 	public void setVisibility(int visibility) {
 		super.setVisibility(visibility);
-	}
-	
+	}	
 }
