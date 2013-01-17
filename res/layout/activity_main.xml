@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:background="@drawable/toolbar_border_left"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <!-- CREATE -->
 
@@ -66,7 +66,7 @@
             android:contentDescription="@string/btn_add"
             android:onClick="buttonPressed"
             android:src="@drawable/ic_action_add"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/button_edit"
@@ -76,7 +76,7 @@
             android:contentDescription="@string/btn_edit"
             android:onClick="buttonPressed"
             android:src="@drawable/ic_action_edit"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/button_delete"
@@ -86,7 +86,7 @@
             android:contentDescription="@string/btn_del"
             android:onClick="buttonPressed"
             android:src="@drawable/ic_action_delete"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <!-- VIEW -->
 

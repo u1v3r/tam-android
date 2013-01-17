@@ -60,7 +60,7 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 			TAMPNode pNode = MainActivity.getProfile().createRoot(title, "");			
 			ITAMENode eNode = TAMPConnectionFactory.addEReference(pNode, this, x, y);
 			eNode.getGui().setSelected(true);
-			showToolbar();
+			//showToolbar();
 			
 			this.hasRoot = true;
 			
@@ -151,8 +151,8 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	@Override
 	protected void modeChanged(MenuItem item) {
 		int id = item.getItemId();
-		hideToolbar();
-		showToolbar(id);
+		//hideToolbar();
+		//showToolbar(id);
 		//Toast.makeText(editor.getContext(), item.getTitle().toString() + " " + getEditor().getResources().getText(R.string.mode_active), Toast.LENGTH_SHORT).show();
 		if(item == EventObjects.menu_create) {
 			EventObjects.menu.findItem(MenuItems.create_mode).setEnabled(false);
@@ -178,9 +178,9 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 		// toolbar //
 		if(hasVisibleMenu) {
 			if(visibility == View.VISIBLE) {
-				showToolbar();
+				//showToolbar();
 			} else {
-				hideToolbar();
+				//hideToolbar();
 				hasVisibleMenu = true;
 			}
 		}
