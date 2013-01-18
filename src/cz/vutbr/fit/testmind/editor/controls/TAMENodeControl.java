@@ -1,52 +1,35 @@
 package cz.vutbr.fit.testmind.editor.controls;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Set;
-
-import com.slidingmenu.lib.SlidingMenu;
-import com.slidingmenu.lib.SlidingMenu.OnClosedListener;
-import com.slidingmenu.lib.SlidingMenu.OnOpenedListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.os.Vibrator;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnAttachStateChangeListener;
-import android.view.View.OnDragListener;
-import android.view.View.OnGenericMotionListener;
-import android.view.View.OnHoverListener;
-import android.view.View.OnLayoutChangeListener;
-import android.view.View.OnTouchListener;
-import android.webkit.WebView;
-import android.webkit.WebView.FindListener;
-import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem.RadialMenuItemClickListener;
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuWidget;
+
 import cz.vutbr.fit.testmind.EditNodeActivity;
-import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
-import cz.vutbr.fit.testmind.editor.TAMEditorMain;
-import cz.vutbr.fit.testmind.editor.TAMEditorTest;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
-import cz.vutbr.fit.testmind.fragments.NodeViewFragment;
-import cz.vutbr.fit.testmind.graphics.ITAMGConnection;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
@@ -54,7 +37,6 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
-import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.Tag;
 
@@ -68,10 +50,23 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
 	
+	
+	private static final int OUTER_RING_ALPHA = 180;
+	private static final int OUTER_RING_COLOR = 0x0099CC;
+	private static final int INNER_RING_ALPHA = 180;
+	private static final int INNER_RING_COLOR = 0xAA66CC;
+	private static final int OUTLINE_ALPHA = 225;
+	private static final int OUTLINE_COLOR = Color.BLACK;
+	private static final int TEXT_SIZE = 13;
+	private static final int ICON_MAX_SIZE = 30;
+	private static final int ICON_MIN_SIZE = 15;
+	private static final long ANIMATION_SPEED = 0L;
+		
 	public static final String NODE_TITLE = "title";
 	public static final String NODE_BODY = "body";
 	public static final String NODE_COLOR = "color";
 	public static final String NODE_TAGS = "tags";
+		
 	
 	private ITAMENode selectedNode = null;
 	
@@ -89,10 +84,68 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	private float x,y;
 	
 	private HashSet<Integer> removedConnections = new HashSet<Integer>();
+	private RadialMenuWidget radialMenu;
 	
 	public TAMENodeControl(ITAMNodeControlListener editor) {
 		super((ITAMEditor) editor);
 		initializeListeners((ITAMEditor) editor);
+		
+		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
+		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
+			selectedNode = this.editor.getListOfENodes().get(0);
+		}
+		
+		initRadialMenu();
+	}
+
+	private void initRadialMenu() {
+		
+		radialMenu = new RadialMenuWidget(activity);		
+		// pieMenu.setDismissOnOutsideClick(true, menuLayout);
+		radialMenu.setInnerRingRadius(70, 130);
+		radialMenu.setAnimationSpeed(ANIMATION_SPEED);		
+		radialMenu.setIconSize(ICON_MIN_SIZE, ICON_MAX_SIZE);
+		radialMenu.setTextSize(TEXT_SIZE);
+		radialMenu.setOutlineColor(OUTLINE_COLOR, OUTLINE_ALPHA);
+		radialMenu.setInnerRingColor(INNER_RING_COLOR, INNER_RING_ALPHA);
+		radialMenu.setOuterRingColor(OUTER_RING_COLOR, OUTER_RING_ALPHA);			
+		//pieMenu.setHeader("Test Menu", 20);
+		
+		Resources res = activity.getResources();
+		
+		RadialMenuItem addItem = new RadialMenuItem(res.getString(R.string.add), res.getString(R.string.add));
+		addItem.setDisplayIcon(R.drawable.ic_action_add);
+		addItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
+			
+			public void execute() {
+				addChildNode();
+				radialMenu.dismiss();
+			}
+		});
+		
+		RadialMenuItem editItem = new RadialMenuItem(res.getString(R.string.edit), res.getString(R.string.edit));
+		editItem.setDisplayIcon(R.drawable.ic_action_edit);
+		editItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
+			
+			public void execute() {
+				openEditNodeActivity();
+				radialMenu.dismiss();
+			}
+		});
+		
+		RadialMenuItem deleteItem = new RadialMenuItem(res.getString(R.string.delete), res.getString(R.string.delete));
+		deleteItem.setDisplayIcon(R.drawable.ic_action_edit);
+		deleteItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
+			
+			public void execute() {
+				deleteSelectedNodeSubTree();
+				radialMenu.dismiss();
+			}
+		});	
+		
+		radialMenu.addMenuEntry(addItem);
+		radialMenu.addMenuEntry(editItem);
+		radialMenu.addMenuEntry(deleteItem);
 	}
 
 	private void initializeListeners(ITAMEditor editor) {
@@ -100,12 +153,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfItemControls().add(this);		
-		editor.getListOfButtonControls().add(this);
-		
-		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
-		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
-			selectedNode = this.editor.getListOfENodes().get(0);
-		}		
+		editor.getListOfButtonControls().add(this);		
 	}
 
 	/**
@@ -161,6 +209,13 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
 		if(editor.getMode() == MenuItems.create_mode) {
+					
+			int height = radialMenu.getHeight();
+			
+			radialMenu.setCenterLocation((int)e.getX(), (int)e.getY() + 100);
+			radialMenu.show((View)editor);
+			
+			/*
 			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 			if(vibrator.hasVibrator()){
 				vibrator.vibrate(VIBRATE_DURATION);
@@ -179,6 +234,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			
 			editor.unselectAll();
 			eNode.getGui().setSelected(true);
+			*/
 		}
 	}
 
