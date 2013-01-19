@@ -75,7 +75,7 @@ public class TAMEHidingControl extends TAMEAbstractControl implements ITAMRadial
 	}
 
 	protected void toggleBranchVisible() {		
-		setBranchVisible(editor.getLastSelectedNode(), true);
+		setBranchVisible(editor.getLastSelectedNode(), false);
 	}
 
 }
