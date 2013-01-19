@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:background="@drawable/toolbar_border_left"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <!-- CREATE -->
 
