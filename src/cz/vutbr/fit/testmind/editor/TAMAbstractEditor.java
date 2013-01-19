@@ -31,6 +31,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	
+	
 	protected List<ITAMENode> listOfENodes;
 	protected List<ITAMEConnection> listOfEConnections;
 	protected TAMProfile profile;
@@ -55,6 +56,13 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	
 	private static final int OUTER_RADIUS = 120;
 	private static final int INNER_RADIUS = 30;	
+	
+	/**
+	 * Konstanta sluzi na vycentrovanie riadial menu na stred dotyku
+	 * 
+	 * pozn. v buducnosti by bolo dobre keby sa pocitalo automaticky
+	 */
+	private static final int RIADIAL_MENU_Y_OFFSET = 100;
 	
 	private RadialMenuWidget radialMenu;
 	
@@ -203,8 +211,7 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	private void initializeRadialMenu() {
 		
 		Resources res = getResources();
-		
-		
+				
 		radialMenu.setSelectedColor(res.getColor(R.color.selected_color), SELECTED_ALPHA);
 		//radialMenu.setDisabledColor(res.getColor(R.color.disabled_color), DISABLED_ALPHA);
 		radialMenu.setInnerRingRadius(INNER_RADIUS, OUTER_RADIUS);		
@@ -235,8 +242,15 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	}
 	
 	public void showRadialMenu(int posX, int posY, View anchor){
-				
-		radialMenu.setCenterLocation(posX, posY+100);
+		
+		/* pri otvorenom slidingmenu dochadza k nespravnej interpretacii pozicie,
+		 * preto treba posunut dolava
+		*/
+		if(MainActivity.slidingMenu.isMenuShowing()){
+			posX = posX - (int)getContext().getResources().getDimension(R.dimen.slidingmenu_behindwidth);
+		}
+		
+		radialMenu.setCenterLocation(posX, posY+RIADIAL_MENU_Y_OFFSET);
 		radialMenu.show(anchor);
 	}
 	
