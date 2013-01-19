@@ -3,14 +3,20 @@ package cz.vutbr.fit.testmind.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuWidget;
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem.RadialMenuItemClickListener;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 
 import cz.vutbr.fit.testmind.MainActivity;
+import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
@@ -31,6 +37,27 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	protected List<ITAMMenuListener> listOfMenuControls;
 	protected List<ITAMButtonListener> listOfButtonControls;
 	protected List<OnActivityResultListener> listOfOnActivityResultControls;
+	protected List<ITAMRadialMenu> listOfRadialMenuListeners;
+	
+	private static final int OUTER_RING_ALPHA = 255;	
+	private static final int INNER_RING_ALPHA = 255;	
+	private static final int OUTLINE_ALPHA = 255;	
+	private static final int DISABLED_ALPHA = 255;
+	private static final int SELECTED_ALPHA = 255;
+	private static final int TEXT_ALPHA = 255;
+	
+	private static final int TEXT_SIZE = 16;		
+	private static final int ICON_MIN_SIZE = 30;
+	private static final int ICON_MAX_SIZE = 40;
+	private static final int BORDER_SIZE = 10;
+	
+	private static final long ANIMATION_SPEED = 0L;
+	
+	private static final int OUTER_RADIUS = 120;
+	private static final int INNER_RADIUS = 30;	
+	
+	private RadialMenuWidget radialMenu;
+	
 	
 	public TAMAbstractEditor(Context context, AttributeSet attrs){		
 		super(context,attrs,0);
@@ -39,14 +66,18 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		this.listOfEConnections = new ArrayList<ITAMEConnection>();
 		this.listOfMenuControls = new ArrayList<ITAMMenuListener>();
 		this.listOfButtonControls = new ArrayList<ITAMButtonListener>();
-		this.listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();
+		this.listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();		
+		this.listOfRadialMenuListeners = new ArrayList<ITAMRadialMenu>();
+		
+		radialMenu = new RadialMenuWidget(getContext());
 	}
 	
 	public void initialize(TAMProfile profile) {
 		this.profile = profile;
 		super.initialize();
-		
+				
 		initializeControls();
+		initializeRadialMenu();
 		
 		this.profile.getListOfEditors().add(this);
 	}
@@ -117,6 +148,10 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		return listOfOnActivityResultControls;
 	}
 	
+	public List<ITAMRadialMenu> getListOfRadialMenuListeners(){
+		return listOfRadialMenuListeners;
+	}
+	
 	public TAMProfile getProfile() {
 		return profile;
 	}
@@ -164,7 +199,50 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		super.setVisibility(visibility);
 		actualizeMenus(visibility);
 	}
+	
+	private void initializeRadialMenu() {
+		
+		Resources res = getResources();
+		
+		
+		radialMenu.setSelectedColor(res.getColor(R.color.selected_color), SELECTED_ALPHA);
+		//radialMenu.setDisabledColor(res.getColor(R.color.disabled_color), DISABLED_ALPHA);
+		radialMenu.setInnerRingRadius(INNER_RADIUS, OUTER_RADIUS);		
+		radialMenu.setAnimationSpeed(ANIMATION_SPEED);		
+		radialMenu.setIconSize(ICON_MIN_SIZE, ICON_MAX_SIZE);
+		radialMenu.setTextSize(TEXT_SIZE);
+		radialMenu.setTextColor(res.getColor(R.color.text_color), TEXT_ALPHA);
+		radialMenu.setOutlineColor(res.getColor(R.color.outline_color), OUTLINE_ALPHA);
+		radialMenu.setInnerRingColor(res.getColor(R.color.inner_ring_color), INNER_RING_ALPHA);
+		radialMenu.setOuterRingColor(res.getColor(R.color.outer_ring_color), OUTER_RING_ALPHA);	
+		radialMenu.setColoredBorderSize(BORDER_SIZE);
+		
+		//pieMenu.setHeader("Test Menu", 20);	
+		
+		initRadialMenuItems();
+	}
+	
+	private void initRadialMenuItems() {
+		
+		for (ITAMRadialMenu menu : getListOfRadialMenuListeners()) {
+			menu.initRadialMenuItems();
+		}
+		
+	}
 
+	public void addRadialMenuItem(RadialMenuItem item){
+		radialMenu.addMenuEntry(item);
+	}
+	
+	public void showRadialMenu(int posX, int posY, View anchor){
+				
+		radialMenu.setCenterLocation(posX, posY+100);
+		radialMenu.show(anchor);
+	}
+	
+	public void dissmisRadialMenu(){		
+		radialMenu.dismiss();
+	}
+		
 	protected abstract void actualizeMenus(int visibility);
-
 }

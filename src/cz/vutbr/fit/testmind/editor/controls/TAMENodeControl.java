@@ -28,6 +28,7 @@ import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
+import cz.vutbr.fit.testmind.editor.ITAMRadialMenu;
 import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
@@ -46,37 +47,18 @@ import cz.vutbr.fit.testmind.profile.Tag;
  */
 public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
                                                                      ITAMTouchListener, OnActivityResultListener,
-                                                                     ITAMItemListener {
+                                                                     ITAMItemListener,ITAMRadialMenu {
 	
 
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
 	
-	
-	private static final int OUTER_RING_ALPHA = 255;	
-	private static final int INNER_RING_ALPHA = 255;	
-	private static final int OUTLINE_ALPHA = 255;	
-	private static final int DISABLED_ALPHA = 255;
-	private static final int SELECTED_ALPHA = 255;
-	private static final int TEXT_ALPHA = 255;
-	
-	private static final int TEXT_SIZE = 16;		
-	private static final int ICON_MIN_SIZE = 30;
-	private static final int ICON_MAX_SIZE = 40;
-	private static final int BORDER_SIZE = 10;
-	
-	private static final long ANIMATION_SPEED = 0L;
-	
-	private static final int OUTER_RADIUS = 120;
-	private static final int INNER_RADIUS = 30;	
-	
-		
+			
 	public static final String NODE_TITLE = "title";
 	public static final String NODE_BODY = "body";
 	public static final String NODE_COLOR = "color";
 	public static final String NODE_TAGS = "tags";
-	
-	
+		
 	
 	private ITAMENode selectedNode = null;
 	
@@ -94,8 +76,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	private float x,y;
 	
 	private HashSet<Integer> removedConnections = new HashSet<Integer>();
-	private RadialMenuWidget radialMenu;
-	
+		
 	public TAMENodeControl(ITAMNodeControlListener editor) {
 		super((ITAMEditor) editor);
 		initializeListeners((ITAMEditor) editor);
@@ -103,74 +84,17 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
 		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
 			selectedNode = this.editor.getListOfENodes().get(0);
-		}
-		
-		initRadialMenu();
+		}		
 	}
 
-	private void initRadialMenu() {
-		
-		Resources res = activity.getResources();
-		
-		radialMenu = new RadialMenuWidget(activity);
-		
-		radialMenu.setSelectedColor(res.getColor(R.color.selected_color), SELECTED_ALPHA);
-		//radialMenu.setDisabledColor(res.getColor(R.color.disabled_color), DISABLED_ALPHA);
-		radialMenu.setInnerRingRadius(INNER_RADIUS, OUTER_RADIUS);		
-		radialMenu.setAnimationSpeed(ANIMATION_SPEED);		
-		radialMenu.setIconSize(ICON_MIN_SIZE, ICON_MAX_SIZE);
-		radialMenu.setTextSize(TEXT_SIZE);
-		radialMenu.setTextColor(res.getColor(R.color.text_color), TEXT_ALPHA);
-		radialMenu.setOutlineColor(res.getColor(R.color.outline_color), OUTLINE_ALPHA);
-		radialMenu.setInnerRingColor(res.getColor(R.color.inner_ring_color), INNER_RING_ALPHA);
-		radialMenu.setOuterRingColor(res.getColor(R.color.outer_ring_color), OUTER_RING_ALPHA);	
-		radialMenu.setColoredBorderSize(BORDER_SIZE);
-		
-		//pieMenu.setHeader("Test Menu", 20);
-		
-		
-		
-		RadialMenuItem addItem = new RadialMenuItem(res.getString(R.string.add), res.getString(R.string.add));
-		addItem.setDisplayIcon(R.drawable.radial_add);
-		addItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
-			
-			public void execute() {
-				addChildNode();
-				radialMenu.dismiss();
-			}
-		});
-		
-		RadialMenuItem editItem = new RadialMenuItem(res.getString(R.string.edit), res.getString(R.string.edit));
-		editItem.setDisplayIcon(R.drawable.radial_edit);
-		editItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
-			
-			public void execute() {
-				openEditNodeActivity();
-				radialMenu.dismiss();
-			}
-		});
-		
-		RadialMenuItem deleteItem = new RadialMenuItem(res.getString(R.string.delete), res.getString(R.string.delete));
-		deleteItem.setDisplayIcon(R.drawable.radial_delete);
-		deleteItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
-			
-			public void execute() {
-				deleteSelectedNodeSubTree();
-				radialMenu.dismiss();
-			}
-		});	
-		
-		radialMenu.addMenuEntry(addItem);
-		radialMenu.addMenuEntry(editItem);
-		radialMenu.addMenuEntry(deleteItem);
-	}
 
 	private void initializeListeners(ITAMEditor editor) {
 		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfItemControls().add(this);		
-		editor.getListOfButtonControls().add(this);		
+		editor.getListOfButtonControls().add(this);
+		editor.getListOfRadialMenuListeners().add(this);
 	}
 
 	/**
@@ -226,8 +150,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
 		if(editor.getMode() == MenuItems.create_mode) {			
-			showRadialMenu((int)e.getX(),(int)e.getY());
-			
+			editor.showRadialMenu((int)e.getX(),(int)e.getY(),activity.findViewById(R.id.main_view));			
 			/*
 			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 			if(vibrator.hasVibrator()){
@@ -249,12 +172,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			eNode.getGui().setSelected(true);
 			*/
 		}
-	}
-
-	private void showRadialMenu(int posX, int posY) {
-		
-		radialMenu.setCenterLocation(posX, posY+100);
-		radialMenu.show(activity.findViewById(R.id.activity_main_right_toolbar));
 	}
 
 	/**
@@ -503,5 +420,45 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public void onTouchEvent(MotionEvent e, float dx, float dy) {
 		// TODO Auto-generated method stub
 		
+	}
+		
+	
+	public void initRadialMenuItems() {		
+
+		Resources res = activity.getResources();
+
+		RadialMenuItem addItem = new RadialMenuItem(res.getString(R.string.add), res.getString(R.string.add));
+		addItem.setDisplayIcon(R.drawable.radial_add);
+		addItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
+
+			public void execute() {
+				addChildNode();
+				editor.dissmisRadialMenu();
+			}
+		});
+
+		RadialMenuItem editItem = new RadialMenuItem(res.getString(R.string.edit), res.getString(R.string.edit));
+		editItem.setDisplayIcon(R.drawable.radial_edit);
+		editItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
+
+			public void execute() {
+				openEditNodeActivity();
+				editor.dissmisRadialMenu();
+			}
+		});
+
+		RadialMenuItem deleteItem = new RadialMenuItem(res.getString(R.string.delete), res.getString(R.string.delete));
+		deleteItem.setDisplayIcon(R.drawable.radial_delete);
+		deleteItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
+
+			public void execute() {
+				deleteSelectedNodeSubTree();
+				editor.dissmisRadialMenu();
+			}
+		});	
+
+		editor.addRadialMenuItem(addItem);		
+		editor.addRadialMenuItem(editItem);
+		editor.addRadialMenuItem(deleteItem);
 	}
 }

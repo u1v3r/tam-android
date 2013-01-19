@@ -2,6 +2,8 @@ package cz.vutbr.fit.testmind.editor;
 
 import java.util.List;
 
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,6 +12,7 @@ import android.graphics.PointF;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.MenuItem;
 import android.view.View;
+import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
@@ -93,6 +96,8 @@ public interface ITAMEditor {
 	
 	public List<ITAMGraphDrawingFinishedListener> getListOfGraphDrawingFinishedListener();
 	
+	public List<ITAMRadialMenu> getListOfRadialMenuListeners();
+	
 	// Surface View functions //
 
 	public Context getContext();
@@ -116,4 +121,10 @@ public interface ITAMEditor {
 	public int getDefaultNodeHeight();
 	
 	public int getDefaultNodeWidth(String text);	
+	
+	public void addRadialMenuItem(RadialMenuItem item);
+	
+	public void showRadialMenu(int posX, int posY, View anchor);
+	
+	public void dissmisRadialMenu();
 }

@@ -1,16 +1,12 @@
 package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.MainActivity.MenuItems;
-import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
@@ -189,5 +185,5 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, ITAM
 	@Override
 	public void setVisibility(int visibility) {
 		super.setVisibility(visibility);
-	}	
+	}
 }
