@@ -12,7 +12,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import android.content.res.Resources;
 import android.view.MotionEvent;
 
-public class TAMEHidingControl extends TAMEAbstractControl implements ITAMRadialMenu {
+public class TAMEHidingControl extends TAMEAbstractControl implements ITAMRadialMenu, ITAMItemGestureListener {
 	
 	private static final String TAG = "TAMEditorHidingControl";
 		
@@ -23,15 +23,13 @@ public class TAMEHidingControl extends TAMEAbstractControl implements ITAMRadial
 
 	public TAMEHidingControl(ITAMEditor editor) {
 		super(editor);
-		//editor.getListOfItemGestureControls().add(this);
+		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfRadialMenuListeners().add(this);
 	}
 
-	/*
+	
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
-		
-		setBranchVisible(node, false);
-		
+		setBranchVisible(node, false);		
 	}
 
 	public void onItemLongReleaseEvent(MotionEvent e, ITAMGNode node) {
@@ -39,12 +37,11 @@ public class TAMEHidingControl extends TAMEAbstractControl implements ITAMRadial
 	}
 
 	public void onItemDoubleTapEvent(MotionEvent e, ITAMGNode node) {
+		// nepouzivat, pouziva NodeControl na zobrazenie radial menu
 		
-		setBranchVisible(node, true);
 	}
 	
-	*/
-	
+		
 	private void setBranchVisible(ITAMGNode node, boolean oneLevel) {
 		
 		//if(getEditor().getMode() == MenuItems.view_mode) {

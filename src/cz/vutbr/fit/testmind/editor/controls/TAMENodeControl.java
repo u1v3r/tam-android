@@ -21,7 +21,6 @@ import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem.RadialMenuIte
 
 import cz.vutbr.fit.testmind.EditNodeActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.ITAMRadialMenu;
@@ -150,8 +149,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 */
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
-				
-		editor.showRadialMenu((int)e.getX(),(int)e.getY(),activity.findViewById(R.id.main_view));
+		// nepouzivat, pouzva hidingControl na skryie uzlu				
 		
 			/*
 			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -191,9 +189,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 * When user double clicks on node, edit dialog is opened.
 	 */
 	public void onItemDoubleTapEvent(MotionEvent e, ITAMGNode node) {
+			
+		editor.showRadialMenu((int)e.getX(),(int)e.getY(),activity.findViewById(R.id.main_view));
 		
-		
-		openEditNodeActivity((TAMENode)node.getHelpObject());
+		//openEditNodeActivity((TAMENode)node.getHelpObject());
 		
 	}
 	

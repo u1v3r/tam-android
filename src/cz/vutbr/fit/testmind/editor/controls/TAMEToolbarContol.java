@@ -6,6 +6,7 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 
 public class TAMEToolbarContol extends TAMEAbstractControl implements ITAMTouchListener {
+
 	
 	public interface ITAMToolbarControlItem {
 		public void showToolbar();
