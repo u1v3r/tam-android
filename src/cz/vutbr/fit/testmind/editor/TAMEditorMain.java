@@ -2,11 +2,7 @@ package cz.vutbr.fit.testmind.editor;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MenuItem;
-import android.view.View;
 import cz.vutbr.fit.testmind.MainActivity;
-import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.editor.controls.TAMEHidingControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEIOControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl;
@@ -14,8 +10,6 @@ import cz.vutbr.fit.testmind.editor.controls.TAMENodeControl.ITAMNodeControlList
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl.ITAMRootControlListener;
-import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
-import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;

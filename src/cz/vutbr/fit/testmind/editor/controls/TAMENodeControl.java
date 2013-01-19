@@ -24,7 +24,6 @@ import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.ITAMRadialMenu;
-import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
@@ -347,7 +346,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 				deleteTraverse(selectedNode.getProfile());
 				editor.invalidate();
 				dialog.dismiss();
-				((ITAMToolbarControlItem)editor).hideToolbar();
 			}
 		});
 		

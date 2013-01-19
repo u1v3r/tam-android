@@ -2,25 +2,19 @@ package cz.vutbr.fit.testmind.editor;
 
 import java.util.Random;
 
+import android.content.Context;
+import android.util.AttributeSet;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
-import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol;
-import cz.vutbr.fit.testmind.editor.controls.TAMEToolbarContol.ITAMToolbarControlItem;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
-import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.graphics.TAMGraph;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.util.AttributeSet;
-import android.view.MenuItem;
-import android.view.View;
 
-public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAMToolbarControlItem  {
+public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 	
 	private boolean hasVisibleMenu = false;
 	private Random random;
@@ -39,7 +33,6 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 	@Override
 	protected void initializeControls() {
 		new TAMEZoomControl(this);
-		new TAMEToolbarContol(this);
 		new TAMEConnectionControl(this);
 		
 		random = new Random();
