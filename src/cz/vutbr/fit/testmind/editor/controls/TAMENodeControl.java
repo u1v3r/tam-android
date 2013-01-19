@@ -16,6 +16,7 @@ import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
@@ -47,26 +48,35 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
                                                                      ITAMTouchListener, OnActivityResultListener,
                                                                      ITAMItemListener {
 	
+
 	private static final String TAG = "TAMEditorNodes";
 	private static final long VIBRATE_DURATION = 100;
 	
 	
-	private static final int OUTER_RING_ALPHA = 180;
-	private static final int OUTER_RING_COLOR = 0x0099CC;
-	private static final int INNER_RING_ALPHA = 180;
-	private static final int INNER_RING_COLOR = 0xAA66CC;
-	private static final int OUTLINE_ALPHA = 225;
-	private static final int OUTLINE_COLOR = Color.BLACK;
-	private static final int TEXT_SIZE = 13;
-	private static final int ICON_MAX_SIZE = 30;
-	private static final int ICON_MIN_SIZE = 15;
+	private static final int OUTER_RING_ALPHA = 255;	
+	private static final int INNER_RING_ALPHA = 255;	
+	private static final int OUTLINE_ALPHA = 255;	
+	private static final int DISABLED_ALPHA = 255;
+	private static final int SELECTED_ALPHA = 255;
+	private static final int TEXT_ALPHA = 255;
+	
+	private static final int TEXT_SIZE = 16;		
+	private static final int ICON_MIN_SIZE = 30;
+	private static final int ICON_MAX_SIZE = 40;
+	private static final int BORDER_SIZE = 10;
+	
 	private static final long ANIMATION_SPEED = 0L;
+	
+	private static final int OUTER_RADIUS = 120;
+	private static final int INNER_RADIUS = 30;	
+	
 		
 	public static final String NODE_TITLE = "title";
 	public static final String NODE_BODY = "body";
 	public static final String NODE_COLOR = "color";
 	public static final String NODE_TAGS = "tags";
-		
+	
+	
 	
 	private ITAMENode selectedNode = null;
 	
@@ -100,21 +110,28 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 
 	private void initRadialMenu() {
 		
-		radialMenu = new RadialMenuWidget(activity);		
-		// pieMenu.setDismissOnOutsideClick(true, menuLayout);
-		radialMenu.setInnerRingRadius(70, 130);
+		Resources res = activity.getResources();
+		
+		radialMenu = new RadialMenuWidget(activity);
+		
+		radialMenu.setSelectedColor(res.getColor(R.color.selected_color), SELECTED_ALPHA);
+		//radialMenu.setDisabledColor(res.getColor(R.color.disabled_color), DISABLED_ALPHA);
+		radialMenu.setInnerRingRadius(INNER_RADIUS, OUTER_RADIUS);		
 		radialMenu.setAnimationSpeed(ANIMATION_SPEED);		
 		radialMenu.setIconSize(ICON_MIN_SIZE, ICON_MAX_SIZE);
 		radialMenu.setTextSize(TEXT_SIZE);
-		radialMenu.setOutlineColor(OUTLINE_COLOR, OUTLINE_ALPHA);
-		radialMenu.setInnerRingColor(INNER_RING_COLOR, INNER_RING_ALPHA);
-		radialMenu.setOuterRingColor(OUTER_RING_COLOR, OUTER_RING_ALPHA);			
+		radialMenu.setTextColor(res.getColor(R.color.text_color), TEXT_ALPHA);
+		radialMenu.setOutlineColor(res.getColor(R.color.outline_color), OUTLINE_ALPHA);
+		radialMenu.setInnerRingColor(res.getColor(R.color.inner_ring_color), INNER_RING_ALPHA);
+		radialMenu.setOuterRingColor(res.getColor(R.color.outer_ring_color), OUTER_RING_ALPHA);	
+		radialMenu.setColoredBorderSize(BORDER_SIZE);
+		
 		//pieMenu.setHeader("Test Menu", 20);
 		
-		Resources res = activity.getResources();
+		
 		
 		RadialMenuItem addItem = new RadialMenuItem(res.getString(R.string.add), res.getString(R.string.add));
-		addItem.setDisplayIcon(R.drawable.ic_action_add);
+		addItem.setDisplayIcon(R.drawable.radial_add);
 		addItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
 			
 			public void execute() {
@@ -124,7 +141,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		});
 		
 		RadialMenuItem editItem = new RadialMenuItem(res.getString(R.string.edit), res.getString(R.string.edit));
-		editItem.setDisplayIcon(R.drawable.ic_action_edit);
+		editItem.setDisplayIcon(R.drawable.radial_edit);
 		editItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
 			
 			public void execute() {
@@ -134,7 +151,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		});
 		
 		RadialMenuItem deleteItem = new RadialMenuItem(res.getString(R.string.delete), res.getString(R.string.delete));
-		deleteItem.setDisplayIcon(R.drawable.ic_action_edit);
+		deleteItem.setDisplayIcon(R.drawable.radial_delete);
 		deleteItem.setOnMenuItemPressed(new RadialMenuItemClickListener() {
 			
 			public void execute() {
@@ -208,12 +225,8 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 */
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
-		if(editor.getMode() == MenuItems.create_mode) {
-					
-			int height = radialMenu.getHeight();
-			
-			radialMenu.setCenterLocation((int)e.getX(), (int)e.getY() + 100);
-			radialMenu.show((View)editor);
+		if(editor.getMode() == MenuItems.create_mode) {			
+			showRadialMenu((int)e.getX(),(int)e.getY());
 			
 			/*
 			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -236,6 +249,12 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			eNode.getGui().setSelected(true);
 			*/
 		}
+	}
+
+	private void showRadialMenu(int posX, int posY) {
+		
+		radialMenu.setCenterLocation(posX, posY+100);
+		radialMenu.show(activity.findViewById(R.id.activity_main_right_toolbar));
 	}
 
 	/**

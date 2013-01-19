@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -150,8 +151,7 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		// treba nastavit, inak sa neinterpretuje spravne velkost pri otoceni
-		slidingMenu.setBehindWidthRes(R.dimen.slidingmenu_behindwidth);
-		
+		slidingMenu.setBehindWidthRes(R.dimen.slidingmenu_behindwidth);		
 	}
 
 	@Override

@@ -1,11 +1,11 @@
-<FrameLayout
+<FrameLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:sliding="http://schemas.android.com/apk/res/cz.vutbr.fit.testmind"
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+    
     <com.slidingmenu.lib.SlidingMenu        
         android:id="@+id/slidingmenulayout"
         android:layout_width="match_parent"
@@ -131,6 +131,5 @@
             android:onClick="buttonPressed"
             android:src="@drawable/ic_action_add"
             android:visibility="gone" />
-    </LinearLayout>
-
+    </LinearLayout>	   
 </FrameLayout>

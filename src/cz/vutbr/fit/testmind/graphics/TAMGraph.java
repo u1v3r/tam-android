@@ -175,6 +175,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		drawingThread = new DrawingThread(getHolder(), this);
 		//getHolder().addCallback(this);	
 		setWillNotDraw(false);
+				
 		
 		factory.createButton(this, ITAMGButton.BUTTON_TYPE_MENU);
 		factory.createButton(this, ITAMGButton.BUTTON_TYPE_MENU);
