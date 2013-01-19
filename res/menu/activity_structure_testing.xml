@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_show_result"
+        android:showAsAction="always|withText"
+        android:title="@string/show">
+    </item>
+    <item
+        android:id="@+id/menu_next_question"
+        android:showAsAction="always|withText"
+        android:title="@string/next">
+    </item>
+
+</menu>

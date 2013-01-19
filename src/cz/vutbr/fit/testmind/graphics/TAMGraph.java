@@ -135,10 +135,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 
 	public boolean isLongPressed = false;
 
-	
-
-	
-       
+	       
 	public TAMGraph(Context context) {
 		this(context,null);
 	}
@@ -1136,6 +1133,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 
 	public void onGlobalLayout() {
+		
+		if(zoom == null){
+			zoom = new TAMGZoom(this);
+		}
 		
 		// ak sa inicializuje nova mapa, tak vykonaj default zoom, inak nic nezoomuj
 		if(TAMERootInitializeControl.initControl){		

@@ -1,38 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.vutbr.fit.testmind"
-
     android:versionCode="1"
-    android:versionName="1.0">
-   
+    android:versionName="1.0" >
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" 
-        android:allowBackup="true">        
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/main_activity_title" android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize">
+            android:name="cz.vutbr.fit.testmind.MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/main_activity_title"
+            android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />                              
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name="EditNodeActivity" 
-            android:theme="@style/AppThemeEmptyActionBar"/>        
-        <activity 
-            android:name=".TestingActivity" 
-            android:label="@string/title_activity_test"/>
-        <activity 
-            android:name=".OpenSaveActivity"/>
+        <activity
+            android:name="cz.vutbr.fit.testmind.EditNodeActivity"
+            android:theme="@style/AppThemeEmptyActionBar" />
+        <activity
+            android:name="cz.vutbr.fit.testmind.TestingActivity"
+            android:label="@string/title_activity_test" />
+        <activity android:name="cz.vutbr.fit.testmind.OpenSaveActivity" />
+        <activity
+            android:name="cz.vutbr.fit.testmind.StructureTestingActivity"
+            android:label="@string/title_activity_structure_testing" >
+        </activity>
     </application>
 
 </manifest>

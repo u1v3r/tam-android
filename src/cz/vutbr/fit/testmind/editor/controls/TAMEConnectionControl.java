@@ -123,12 +123,6 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 		}
 	}
 	
-	public static void invalidate() {
-		if(EventObjects.editor_test != null) {
-			EventObjects.editor_test.invalidate();
-		}
-	}
-
 	public void onItemDoubleTapEvent(MotionEvent e, ITAMGNode node) {
 		// do nothing //
 	}

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.slidingmenu.lib.SlidingMenu.OnOpenedListener;
 
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
-import cz.vutbr.fit.testmind.editor.TAMEditorTest;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.io.Serializer;
@@ -43,7 +41,6 @@ public class MainActivity extends FragmentActivity {
 		public static final int importFile = R.id.menu_import;
 		public static final int shareFile = R.id.menu_share;
 		public static final int testStructure = R.id.menu_test_structure;
-		public static final int editStructure = R.id.menu_edit_structure;
 		public static final int testContent = R.id.menu_test_content;
 		public static final int showResult = R.id.menu_show_result;
 		public static final int nextQuestion = R.id.menu_next_question;
@@ -73,7 +70,7 @@ public class MainActivity extends FragmentActivity {
 	public static class EventObjects {
 		public static ZoomControls zoomControls;
 		public static TAMEditorMain editor_main;
-		public static TAMEditorTest editor_test;
+		//public static TAMEditorTest editor_test;
 		
 		public static View btn_add;
 		public static View btn_delete;
@@ -85,7 +82,7 @@ public class MainActivity extends FragmentActivity {
 		public static View btn_zoom_out;
 		public static View btn_connect;
 		
-		public static Menu menu;
+		//public static Menu menu;
 		
 		public static MenuItem menu_create;
 		public static MenuItem menu_view;
@@ -190,12 +187,7 @@ public class MainActivity extends FragmentActivity {
         
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	getMenuInflater().inflate(R.menu.activity_main, menu);    
-    	
-    	EventObjects.menu = menu;
-		EventObjects.menu_show = menu.findItem(MenuItems.showResult).setVisible(false);
-		EventObjects.menu_next = menu.findItem(MenuItems.nextQuestion).setVisible(false);
-		
+    	getMenuInflater().inflate(R.menu.activity_main, menu);		
     	return true;
     }
     
@@ -231,31 +223,35 @@ public class MainActivity extends FragmentActivity {
     	
     	int id = item.getItemId();
     	
-    	if(MenuItems.editStructure == id){
-			if(actualEditor != EventObjects.editor_main) {
-				actualEditor.setEditorVisibility(View.GONE);
-				actualEditor = EventObjects.editor_main;
-				actualEditor.setEditorVisibility(View.VISIBLE);
-			}
-		} else if(MenuItems.testStructure == id){
-			if(actualEditor != EventObjects.editor_test) {
-				actualEditor.setEditorVisibility(View.GONE);
-				actualEditor = EventObjects.editor_test;
-				actualEditor.setEditorVisibility(View.VISIBLE);
-			}
-		} else if(MenuItems.testContent == id){
-	        Intent i = new Intent(this, TestingActivity.class);
-	        
-	        TestingParcelable nodeParcelable = new TestingParcelable(MainActivity.getProfile().getRoot());
-	        i.putExtra("cz.vutbr.fit.testmind.testing.TestingParcelable", nodeParcelable);
-	        
-	        this.startActivity(i);
-		} else {
-			actualEditor.onOptionsItemSelected(item);
-			return super.onOptionsItemSelected(item);
+    	switch (id) {
+			case MenuItems.testContent:
+				startContentTestingActivity();
+				break;
+			case MenuItems.testStructure:
+				startStructureTestingActivity();
+				break;
+			default:
+				return actualEditor.onOptionsItemSelected(item);				
 		}
+    	    	    	
     	return true;
     }
+
+
+	private void startStructureTestingActivity() {
+		Intent i = new Intent(this,StructureTestingActivity.class);		
+		this.startActivity(i);		
+	}
+
+
+	private void startContentTestingActivity() {
+		Intent i = new Intent(this, TestingActivity.class);
+		
+		TestingParcelable nodeParcelable = new TestingParcelable(MainActivity.getProfile().getRoot());
+		i.putExtra("cz.vutbr.fit.testmind.testing.TestingParcelable", nodeParcelable);
+		
+		this.startActivity(i);
+	}
     
     public void buttonPressed(View view) {
     	actualEditor.onButtonSelected(view);
@@ -273,8 +269,7 @@ public class MainActivity extends FragmentActivity {
 	private void initEventObjects() {
 		
 		EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
-    	EventObjects.editor_test = (TAMEditorTest) findViewById(R.id.acitity_test_tam_editor);
-    	
+    	    	
     	actualEditor = EventObjects.editor_main;
     	
     	EventObjects.btn_add = findViewById(R.id.button_add);
@@ -292,9 +287,8 @@ public class MainActivity extends FragmentActivity {
 		
 		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
     	
-		// initialize editors //
+		// initialize editor //
     	EventObjects.editor_main.initialize(profile);
-    	EventObjects.editor_test.initialize(profile);
 	}
 	
 	private void initSlidingMenu() {		

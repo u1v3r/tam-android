@@ -84,8 +84,9 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		super.initialize();
 				
 		initializeControls();
-		initializeRadialMenu();
+		initializeRadialMenu();	
 		
+		// zabezpeci ulozenie stavu editorov
 		this.profile.getListOfEditors().add(this);
 	}
 	

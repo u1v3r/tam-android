@@ -4,6 +4,7 @@ import java.util.Random;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
@@ -32,6 +33,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 
 	@Override
 	protected void initializeControls() {
+		
 		new TAMEZoomControl(this);
 		new TAMEConnectionControl(this);
 		
@@ -89,28 +91,6 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 		size = profile.getListOfPNodes().size();
 	}
 
-	public void showToolbar() {
-		
-		hasVisibleMenu = true;
-		MainActivity.rightToolbar.setVisibility(VISIBLE);
-		EventObjects.btn_connect.setVisibility(VISIBLE);		
-		
-		MainActivity.leftToolbar.setVisibility(GONE);
-		EventObjects.btn_zoom_in.setVisibility(GONE);
-		EventObjects.btn_zoom_out.setVisibility(GONE);
-	}
-
-	public void hideToolbar() {
-		
-		hasVisibleMenu = false;
-		
-		MainActivity.rightToolbar.setVisibility(GONE);
-		EventObjects.btn_connect.setVisibility(GONE);		
-		
-		MainActivity.leftToolbar.setVisibility(VISIBLE);
-		EventObjects.btn_zoom_in.setVisibility(VISIBLE);
-		EventObjects.btn_zoom_out.setVisibility(VISIBLE);
-	}
 	
 	public void generateNextQuestion() {
 		
