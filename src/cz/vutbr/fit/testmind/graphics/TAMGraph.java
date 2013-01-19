@@ -551,11 +551,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 			TAMGMotionEvent ge;
 			activeTouchEvent = true;
 			
-			float dxTestHit = zoom.px-zoom.px*zoom.sx;
-			float dyTestHit = zoom.py-zoom.py*zoom.sy;
-
-			ax = (((x-dxTestHit)/zoom.sx)-translationPoint.x);
-			ay = (((y-dyTestHit)/zoom.sy)-translationPoint.y);
+			calcActualPosition(e.getX(), e.getY());
 						
 			switch(e.getAction() & MotionEvent.ACTION_MASK){
 
@@ -566,11 +562,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				touchState = TOUCH;
 				moveActionAllowed  = true;// ak je len dotyk jedneho prstu, tak sa moze presuvat
 
-				float dx = zoom.px-zoom.px*zoom.sx;
-				float dy = zoom.py-zoom.py*zoom.sy;
-
-				ax = ((x-dx)/zoom.sx)-translationPoint.x;
-				ay = ((y-dy)/zoom.sy)-translationPoint.y;
+				calcActualPosition(x, y);
 
 				/*for(ITAMGItem item : listOfConnections) {
 					if(item.hit(ax, ay)) {
@@ -728,6 +720,17 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 			return super.onTouchEvent(e);
 		}	
 	}
+	
+	
+	private void calcActualPosition(float x, float y) {
+		
+		float dx = zoom.px-zoom.px*zoom.sx;
+		float dy = zoom.py-zoom.py*zoom.sy;
+
+		ax = ((x-dx)/zoom.sx)-translationPoint.x;
+		ay = ((y-dy)/zoom.sy)-translationPoint.y;
+		
+	}
 
 	public boolean onDown(MotionEvent e) {
 		//System.out.println("G: onDown");
@@ -744,7 +747,9 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 		
 		isLongPressed = true;
 		
-		if(listOfSelectedItems.isEmpty()) {
+		calcActualPosition(e.getX(), e.getY());
+				
+		if(isItemHit(ax, ay) == null) {
 			
 			// could open some settings //
 			onBlankLongPress(e, ax, ay);
@@ -784,7 +789,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	}
 	
 	public boolean onDoubleTap(MotionEvent e) {
-		if(lastSelectedNode == null) {
+		
+		calcActualPosition(e.getX(), e.getY());
+		
+		if(isItemHit(ax, ay) == null) {
 			for(ITAMBlankAreaGestureListener control : listOfBlankAreaGestureControls) {
 				control.onBlankDoubleTapEvent(e, ax, ay);
 			}
