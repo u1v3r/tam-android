@@ -43,7 +43,7 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 		super(editor);
 		editor.getListOfItemGestureControls().add(this);
 		//editor.getListOfItemControls().add(this);
-		editor.getListOfMoveGestureControls().add(this);
+		editor.getListOfBlankAreaGestureControls().add(this);
 		editor.getListOfPreDrawControls().add(this);
 		editor.getListOfTouchControls().add(this);
 		to = new PointF();
@@ -182,6 +182,11 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 	public void onHitEvent(MotionEvent e, TAMGMotionEvent ge) {
 		to.x = ge.dx;
 		to.y = ge.dy;
+	}
+
+	public void onSurfaceHitEvent(MotionEvent e, TAMGMotionEvent ge) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

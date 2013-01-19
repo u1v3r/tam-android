@@ -12,6 +12,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.preference.PreferenceManager.OnActivityResultListener;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMBlankAreaGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMGraphDrawingFinishedListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
@@ -43,7 +45,8 @@ import cz.vutbr.fit.testmind.profile.Tag;
 public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
                                                                      ITAMTouchListener, OnActivityResultListener,
                                                                      ITAMItemListener,ITAMRadialMenu,
-                                                                     ITAMGraphDrawingFinishedListener {
+                                                                     ITAMGraphDrawingFinishedListener,
+                                                                     ITAMBlankAreaGestureListener{
 	
 
 	private static final String TAG = "TAMEditorNodes";
@@ -93,6 +96,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfItemControls().add(this);
 		editor.getListOfButtonControls().add(this);
 		editor.getListOfRadialMenuListeners().add(this);
+		editor.getListOfBlankAreaGestureControls().add(this);
 
 	}
 
@@ -100,6 +104,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 * Cez dialog vytvori child pre vybrany parrent uzol
 	 */
 	private void addChildNode() {		
+		
 		if(selectedNode == null) {
 			Toast.makeText(editor.getContext(), R.string.parent_node_not_selected, Toast.LENGTH_LONG).show();
 		} else {			
@@ -251,9 +256,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			
 			return true;
 		}
-		
-
-		
+	
 		return false;
 	}
 	
@@ -284,15 +287,21 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			//if(e.getAction() == MotionEvent.ACTION_DOWN) {
 				
 				waitingForClick = false;
-								
-				ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection(
-						"", "", selectedNode, (int) ge.dx, (int) ge.dy);
 				
-				editor.unselectAll();
-				node.getGui().setSelected(true);
-				openEditNodeActivity(node);
+				createNewNode((int)x,(int)y);
 			//}
 		}
+	}
+
+
+	private void createNewNode(int x, int y) {
+		
+		ITAMENode node = ((ITAMNodeControlListener) editor).createNodeWithProfileAndConnection(
+				"", "", selectedNode, x, y);
+		
+		editor.unselectAll();
+		node.getGui().setSelected(true);
+		openEditNodeActivity(node);
 	}
 
 	public void onItemSelectEvent(ITAMGItem item, boolean selection) {
@@ -469,5 +478,27 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			this.editor.getListOfENodes().get(0).getGui().setSelected(true);
 		}
 
+	}
+
+
+	public void onBlankMoveEvent(MotionEvent e, float dx, float dy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onBlankLongPressEvent(MotionEvent e, float dx, float dy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void onBlankDoubleTapEvent(MotionEvent e, float dx, float dy) {
+		
+		if(selectedNode == null) return;
+		
+		
+		createNewNode((int)dx,(int)dy);
+		
 	}
 }

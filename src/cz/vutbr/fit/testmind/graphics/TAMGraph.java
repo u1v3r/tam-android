@@ -119,7 +119,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	
 	public interface ITAMTouchListener {
 		//public void onTouchEvent(MotionEvent e, float dx, float dy);
-		public void onHitEvent(MotionEvent e, TAMGMotionEvent ge);
+		public void onHitEvent(MotionEvent e, TAMGMotionEvent ge);		
 	}
 	
 	/**
@@ -273,7 +273,7 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 	 * 
 	 * @return
 	 */
-	public List<ITAMBlankAreaGestureListener> getListOfMoveGestureControls() {
+	public List<ITAMBlankAreaGestureListener> getListOfBlankAreaGestureControls() {
 		return listOfBlankAreaGestureControls;
 	}
 
@@ -579,9 +579,10 @@ public class TAMGraph extends SurfaceView implements OnGestureListener, OnDouble
 				unselectAllWithout(result);
  
 				//if(result == null) {
-					//lastSelectedNode = null;
-				//}// else {
-				onItemHitEvent(e, ge);
+					
+				//}
+				//else {
+					onItemHitEvent(e, ge);
 				//}
 
 				actualPoint.x = x;

@@ -88,7 +88,7 @@ public interface ITAMEditor {
 	
 	public List<OnActivityResultListener> getListOfOnActivityResultControls();
 	
-	public List<ITAMBlankAreaGestureListener> getListOfMoveGestureControls();
+	public List<ITAMBlankAreaGestureListener> getListOfBlankAreaGestureControls();
 	
 	public List<ITAMGItem> getListOfSelectedItems();
 	
