@@ -34,10 +34,12 @@ import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.editor.items.TAMENode;
 import cz.vutbr.fit.testmind.graphics.ITAMGItem;
 import cz.vutbr.fit.testmind.graphics.ITAMGNode;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMGraphDrawingFinishedListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
+import cz.vutbr.fit.testmind.graphics.TAMGraph2.ITAMDrawListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.Tag;
@@ -47,7 +49,8 @@ import cz.vutbr.fit.testmind.profile.Tag;
  */
 public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
                                                                      ITAMTouchListener, OnActivityResultListener,
-                                                                     ITAMItemListener,ITAMRadialMenu {
+                                                                     ITAMItemListener,ITAMRadialMenu,
+                                                                     ITAMGraphDrawingFinishedListener {
 	
 
 	private static final String TAG = "TAMEditorNodes";
@@ -80,11 +83,13 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	public TAMENodeControl(ITAMNodeControlListener editor) {
 		super((ITAMEditor) editor);
 		initializeListeners((ITAMEditor) editor);
-		
+
 		// ak existuje len root, tak ho zvol,riesi problem s nenastanevym selectedNode pri prvom spusteni
 		if(this.editor.getProfile().getRoot() != null && this.editor.getListOfENodes().size() == 1){
-			selectedNode = this.editor.getListOfENodes().get(0);
-		}		
+			selectedNode = this.editor.getListOfENodes().get(0);			
+		}	
+		
+		this.editor.getListOfGraphDrawingFinishedListener().add(this);
 	}
 
 
@@ -92,9 +97,10 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfItemGestureControls().add(this);
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
-		editor.getListOfItemControls().add(this);		
+		editor.getListOfItemControls().add(this);
 		editor.getListOfButtonControls().add(this);
 		editor.getListOfRadialMenuListeners().add(this);
+
 	}
 
 	/**
@@ -227,6 +233,11 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			}
 			
 			selectedNode.setBackgroundStyle(nodeColor);			
+			
+			// refresh - dojde k obnovenie content panelu s novyma hodnotami
+			selectedNode.getGui().setSelected(false);
+			selectedNode.getGui().setSelected(true);
+			
 			
 			editor.invalidate();
 			
@@ -421,7 +432,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		// TODO Auto-generated method stub
 		
 	}
-		
 	
 	public void initRadialMenuItems() {		
 
@@ -460,5 +470,13 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.addRadialMenuItem(addItem);		
 		editor.addRadialMenuItem(editItem);
 		editor.addRadialMenuItem(deleteItem);
+	}
+
+	public void onDrawingFinished() {
+		
+		if(this.editor.getListOfENodes().size() > 0){
+			this.editor.getListOfENodes().get(0).getGui().setSelected(true);
+		}
+
 	}
 }
