@@ -1,11 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+ 
     <item
         android:id="@+id/menu_open"
         android:icon="@drawable/ic_action_manage_maps"
         android:showAsAction="always"
         android:title="@string/menu_open">
     </item>
+<!--
     <item
         android:id="@+id/menu_add"
         android:icon="@drawable/ic_action_add"
@@ -18,6 +19,7 @@
         android:showAsAction="always"
         android:title="@string/edit">
     </item>
+ -->
     <item
         android:id="@+id/menu_save"
         android:icon="@drawable/ic_action_save"

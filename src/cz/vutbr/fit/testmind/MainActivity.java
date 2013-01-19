@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,8 +35,8 @@ public class MainActivity extends FragmentActivity {
 	 */
 	public final static class MenuItems {		
 		public static final int open = R.id.menu_open;
-		public static final int add = R.id.menu_add;
-		public static final int edit = R.id.menu_edit;		
+		//public static final int add = R.id.menu_add;
+		//public static final int edit = R.id.menu_edit;		
 		public static final int save = R.id.menu_save;		
 		//public static final int settings = R.id.menu_settings;
 		public static final int importFile = R.id.menu_import;
@@ -84,11 +85,9 @@ public class MainActivity extends FragmentActivity {
 		
 		//public static Menu menu;
 		
-		public static MenuItem menu_create;
-		public static MenuItem menu_view;
-		public static MenuItem menu_show;
-		public static MenuItem menu_next;
-		
+		//public static MenuItem menu_create;
+		//public static MenuItem menu_view;
+				
 		public static Animation animAlpha;
 	}
 		
@@ -96,7 +95,7 @@ public class MainActivity extends FragmentActivity {
 	
 	public static final String LAST_OPENED_FILE = "last";
 
-	private ITAMEditor actualEditor;
+	private static ITAMEditor actualEditor;
 	
 	private static TAMProfile profile;
 	
@@ -230,8 +229,8 @@ public class MainActivity extends FragmentActivity {
 			case MenuItems.testStructure:
 				startStructureTestingActivity();
 				break;
-			default:
-				return actualEditor.onOptionsItemSelected(item);				
+			default:				
+				return EventObjects.editor_main.onOptionsItemSelected(item);
 		}
     	    	    	
     	return true;
@@ -253,13 +252,13 @@ public class MainActivity extends FragmentActivity {
 		this.startActivity(i);
 	}
     
-    public void buttonPressed(View view) {
-    	actualEditor.onButtonSelected(view);
+    public void buttonPressed(View view) {    	
+    	getActualEditor().onButtonSelected(view);
     }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		actualEditor.onActivityResult(requestCode, resultCode, data);		
+		getActualEditor().onActivityResult(requestCode, resultCode, data);		
 	}
 
 	public static TAMProfile getProfile() {
@@ -270,7 +269,7 @@ public class MainActivity extends FragmentActivity {
 		
 		EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
     	    	
-    	actualEditor = EventObjects.editor_main;
+    	setActualEditor(EventObjects.editor_main);
     	
     	EventObjects.btn_add = findViewById(R.id.button_add);
 		EventObjects.btn_delete = findViewById(R.id.button_delete);
@@ -321,5 +320,15 @@ public class MainActivity extends FragmentActivity {
 	private void toggleSlidingMenu(boolean enableSliding, boolean anim) {
 		slidingMenu.setSlidingEnabled(enableSliding);
 		slidingMenu.toggle(anim);
+	}
+
+
+	public static ITAMEditor getActualEditor() {
+		return actualEditor;
+	}
+
+
+	public static void setActualEditor(ITAMEditor actualEditor) {
+		MainActivity.actualEditor = actualEditor;
 	}
 }

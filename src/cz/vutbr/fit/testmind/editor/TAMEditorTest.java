@@ -5,6 +5,7 @@ import java.util.Random;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
@@ -16,8 +17,7 @@ import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
-	
-	private boolean hasVisibleMenu = false;
+		
 	private Random random;
 	private int size;
 	public final int OFFSET = 100;
@@ -39,48 +39,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 		
 		random = new Random();
 	}
-/*
-	@Override
-	protected void modeChanged(MenuItem item) {
-		if(item == EventObjects.menu_show) {
-			// TODO
-		} else if(item == EventObjects.menu_next) {
-			//System.out.println("next");
-			generateNextQuestion();
-			EventObjects.menu_show.setEnabled(true);
-		}
-	}
-	
-	public int getMode() {
-		// this editor has no modes //
-		return 0;
-	}
-
-	@Override
-	protected void actualizeMenus(int visibility) {
 		
-		if(visibility == View.VISIBLE) {
-			actualizeVariables();
-			EventObjects.menu_show.setVisible(true);
-			EventObjects.menu_show.setEnabled(false);
-			EventObjects.menu_next.setVisible(true);
-		} else {
-			disposeAllItems();
-			EventObjects.menu_show.setVisible(false);
-			EventObjects.menu_next.setVisible(false);
-		}
-		
-		if(hasVisibleMenu) {
-			if(visibility == View.VISIBLE) {
-				showToolbar();
-			} else {
-				hideToolbar();
-				hasVisibleMenu = true;
-			}
-		}
-	}
-	*/
-	
 	@Override
 	public void setVisibility(int visibility) {
 		super.setVisibility(visibility);
@@ -92,6 +51,12 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 	}
 
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return super.onOptionsItemSelected(item);
+	}
+	
 	public void generateNextQuestion() {
 		
 		generateNextQuestion(findNewBaseNode(), 1);
@@ -99,6 +64,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 	}
 	
 	public void generateNextQuestion(TAMPNode node, int depth) {
+			
 		
 		disposeAllItems();
 		
@@ -108,8 +74,12 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 	}
 
 	private TAMPNode findNewBaseNode() {
+		
+		actualizeVariables();
+		
 		TAMProfile profile = MainActivity.getProfile();
 		TAMPNode node;
+		
 		int index = random.nextInt(size);
 		
 		boolean notFound;
