@@ -44,7 +44,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 		
 		random = new Random();
 	}
-
+/*
 	@Override
 	protected void modeChanged(MenuItem item) {
 		if(item == EventObjects.menu_show) {
@@ -84,6 +84,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor, ITAM
 			}
 		}
 	}
+	*/
 	
 	@Override
 	public void setVisibility(int visibility) {

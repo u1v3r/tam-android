@@ -11,17 +11,13 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.preference.PreferenceManager.OnActivityResultListener;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
 import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem.RadialMenuItemClickListener;
-import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuWidget;
 
 import cz.vutbr.fit.testmind.EditNodeActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
@@ -39,7 +35,6 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
-import cz.vutbr.fit.testmind.graphics.TAMGraph2.ITAMDrawListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
 import cz.vutbr.fit.testmind.profile.Tag;
@@ -155,8 +150,9 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 */
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
 		
-		if(editor.getMode() == MenuItems.create_mode) {			
-			editor.showRadialMenu((int)e.getX(),(int)e.getY(),activity.findViewById(R.id.main_view));			
+				
+		editor.showRadialMenu((int)e.getX(),(int)e.getY(),activity.findViewById(R.id.main_view));
+		
 			/*
 			Vibrator vibrator = (Vibrator)editor.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 			if(vibrator.hasVibrator()){
@@ -177,7 +173,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 			editor.unselectAll();
 			eNode.getGui().setSelected(true);
 			*/
-		}
+		
 	}
 
 	/**
@@ -196,11 +192,9 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	 */
 	public void onItemDoubleTapEvent(MotionEvent e, ITAMGNode node) {
 		
-		int mode = editor.getMode();
 		
-		if(mode == MenuItems.create_mode) {
-			openEditNodeActivity((TAMENode)node.getHelpObject());
-		}
+		openEditNodeActivity((TAMENode)node.getHelpObject());
+		
 	}
 	
 	/**

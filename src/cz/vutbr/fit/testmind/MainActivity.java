@@ -34,25 +34,25 @@ public class MainActivity extends FragmentActivity {
 	 * Zabezpecuje jednotny pristup k polozkam menu
 	 * 
 	 */
-	public final static class MenuItems {
+	public final static class MenuItems {		
 		public static final int open = R.id.menu_open;
+		public static final int add = R.id.menu_add;
+		public static final int edit = R.id.menu_edit;		
 		public static final int save = R.id.menu_save;		
 		//public static final int settings = R.id.menu_settings;
 		public static final int importFile = R.id.menu_import;
 		public static final int shareFile = R.id.menu_share;
-		public static final int create_mode = R.id.menu_create_mode;
-		public static final int view_mode = R.id.menu_view_mode;
-		public static final int test_structure = R.id.menu_test_structure;
-		public static final int edit_structure = R.id.menu_edit_structure;
-		public static final int test_content = R.id.menu_test_content;
-		public static final int show_result = R.id.menu_show_result;
-		public static final int next_question = R.id.menu_next_question;
+		public static final int testStructure = R.id.menu_test_structure;
+		public static final int editStructure = R.id.menu_edit_structure;
+		public static final int testContent = R.id.menu_test_content;
+		public static final int showResult = R.id.menu_show_result;
+		public static final int nextQuestion = R.id.menu_next_question;
 	}
 	
 	/**
 	 * Zabezpecuje jednotny pristup k polozkam toolbaru
 	 * 
-	 */
+	 **/
 	public final static class ButtonItems {
 		public static final int add = R.id.button_add;
 		public static final int delete = R.id.button_delete;
@@ -64,6 +64,7 @@ public class MainActivity extends FragmentActivity {
 		public static final int zoom_out = R.id.button_zoom_out;
 		public static final int connect = R.id.button_connect;
 	}
+	
 	
 	public static LinearLayout leftToolbar;
 	public static LinearLayout rightToolbar;
@@ -192,10 +193,8 @@ public class MainActivity extends FragmentActivity {
     	getMenuInflater().inflate(R.menu.activity_main, menu);    
     	
     	EventObjects.menu = menu;
-    	EventObjects.menu_create = menu.findItem(MenuItems.create_mode).setVisible(true);
-		EventObjects.menu_view = menu.findItem(MenuItems.view_mode).setVisible(true);
-		EventObjects.menu_show = menu.findItem(MenuItems.show_result).setVisible(false);
-		EventObjects.menu_next = menu.findItem(MenuItems.next_question).setVisible(false);
+		EventObjects.menu_show = menu.findItem(MenuItems.showResult).setVisible(false);
+		EventObjects.menu_next = menu.findItem(MenuItems.nextQuestion).setVisible(false);
 		
     	return true;
     }
@@ -232,19 +231,19 @@ public class MainActivity extends FragmentActivity {
     	
     	int id = item.getItemId();
     	
-    	if(MenuItems.edit_structure == id){
+    	if(MenuItems.editStructure == id){
 			if(actualEditor != EventObjects.editor_main) {
 				actualEditor.setEditorVisibility(View.GONE);
 				actualEditor = EventObjects.editor_main;
 				actualEditor.setEditorVisibility(View.VISIBLE);
 			}
-		} else if(MenuItems.test_structure == id){
+		} else if(MenuItems.testStructure == id){
 			if(actualEditor != EventObjects.editor_test) {
 				actualEditor.setEditorVisibility(View.GONE);
 				actualEditor = EventObjects.editor_test;
 				actualEditor.setEditorVisibility(View.VISIBLE);
 			}
-		} else if(MenuItems.test_content == id){
+		} else if(MenuItems.testContent == id){
 	        Intent i = new Intent(this, TestingActivity.class);
 	        
 	        TestingParcelable nodeParcelable = new TestingParcelable(MainActivity.getProfile().getRoot());
