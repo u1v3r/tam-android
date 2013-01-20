@@ -323,7 +323,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 	}
 
 	public void onButtonSelected(View item) {
-		
+		/*
 		if(item == EventObjects.btn_add) {
 			addChildNode();
 		} else if(item == EventObjects.btn_edit) {
@@ -331,6 +331,7 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		} else if(item == EventObjects.btn_delete) {
 			deleteSelectedNodeSubTree();
 		}
+		*/
 	}
 
 	private void deleteSelectedNodeSubTree() {

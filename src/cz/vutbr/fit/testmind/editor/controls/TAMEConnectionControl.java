@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.MotionEvent;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
@@ -25,8 +26,10 @@ import cz.vutbr.fit.testmind.graphics.TAMGraph.TAMGMotionEvent;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 
-public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMItemGestureListener, ITAMPreDrawListener, ITAMBlankAreaGestureListener, ITAMTouchListener {
+public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMItemGestureListener, 
+	ITAMPreDrawListener, ITAMBlankAreaGestureListener, ITAMTouchListener {
 	
+	private static final String TAG = "TAMEConnectionControl";
 	private boolean active = false;
 	private ITAMGNode fromNode;
 	private ITAMGNode toNode;
@@ -48,7 +51,7 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 		editor.getListOfTouchControls().add(this);
 		to = new PointF();
 		timer = new Timer();
-		System.out.println("schedule");
+		Log.d(TAG, "schedule");
 	}
 
 	public void onItemLongSelectEvent(MotionEvent e, ITAMGNode node) {
@@ -68,7 +71,7 @@ public class TAMEConnectionControl extends TAMEAbstractControl implements ITAMIt
 
 	public void onItemLongReleaseEvent(MotionEvent e, ITAMGNode node) {
 		
-		System.out.println("release");
+		Log.d(TAG, "release");
 		
 		if(active) {
 			((TAMGraph) getEditor()).setMoveItemsOrGraphEnabled(true);

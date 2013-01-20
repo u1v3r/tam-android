@@ -22,7 +22,7 @@ public class StructureTestingActivity extends FragmentActivity {
 	private void initEditorTest() {
 		editorTest = (TAMEditorTest) findViewById(R.id.acitity_test_tam_editor);
 		editorTest.initialize(MainActivity.getProfile());
-		MainActivity.setActualEditor(editorTest);
+		//MainActivity.setActualEditor(editorTest);
 	}
 
     @Override
@@ -33,19 +33,6 @@ public class StructureTestingActivity extends FragmentActivity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-    	switch (item.getItemId()) {
-    	case menuShow:
-    		// TODO
-    		break;
-    	case menuNext:
-    		//System.out.println("next");
-    		editorTest.generateNextQuestion();
-    	default:
-    		return editorTest.onOptionsItemSelected(item);
-    	}
-
-
-    	return true;   	
+    	return editorTest.onOptionsItemSelected(item);    	
     }
 }

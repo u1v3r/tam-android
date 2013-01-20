@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.widget.ZoomControls;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.OnOpenedListener;
 
-import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
@@ -50,7 +48,7 @@ public class MainActivity extends FragmentActivity {
 	/**
 	 * Zabezpecuje jednotny pristup k polozkam toolbaru
 	 * 
-	 **/
+	 *
 	public final static class ButtonItems {
 		public static final int add = R.id.button_add;
 		public static final int delete = R.id.button_delete;
@@ -62,17 +60,19 @@ public class MainActivity extends FragmentActivity {
 		public static final int zoom_out = R.id.button_zoom_out;
 		public static final int connect = R.id.button_connect;
 	}
-	
+	*/
 	
 	public static LinearLayout leftToolbar;
 	public static LinearLayout rightToolbar;
 	public static SlidingMenu slidingMenu;	
 	
+	public static ZoomControls zoomControls;
+	public static TAMEditorMain editor_main;
+	
 	public static class EventObjects {
-		public static ZoomControls zoomControls;
-		public static TAMEditorMain editor_main;
-		//public static TAMEditorTest editor_test;
 		
+		//public static TAMEditorTest editor_test;
+		/*
 		public static View btn_add;
 		public static View btn_delete;
 		public static View btn_edit;
@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity {
 		public static View btn_zoom_in;
 		public static View btn_zoom_out;
 		public static View btn_connect;
-		
+		*/
 		//public static Menu menu;
 		
 		//public static MenuItem menu_create;
@@ -95,7 +95,7 @@ public class MainActivity extends FragmentActivity {
 	
 	public static final String LAST_OPENED_FILE = "last";
 
-	private static ITAMEditor actualEditor;
+	//private static ITAMEditor actualEditor;
 	
 	private static TAMProfile profile;
 	
@@ -120,7 +120,7 @@ public class MainActivity extends FragmentActivity {
     	leftToolbar = (LinearLayout) findViewById(R.id.activity_main_left_toolbar);
 		rightToolbar = (LinearLayout) findViewById(R.id.activity_main_right_toolbar);
     	
-    	initEventObjects();   	    	
+    	initEditorMain();   	    	
     	initSlidingMenu();
     	    	
     	if(!lastMindMap.isEmpty()){
@@ -132,6 +132,52 @@ public class MainActivity extends FragmentActivity {
             
     	} 	
     }
+	
+	private void initEditorMain() {
+		
+		editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
+    	    	
+    	//setActualEditor(EventObjects.editor_main);
+    	/*
+    	EventObjects.btn_add = findViewById(R.id.button_add);
+		EventObjects.btn_delete = findViewById(R.id.button_delete);
+		EventObjects.btn_edit = findViewById(R.id.button_edit);
+		EventObjects.btn_hide_one = findViewById(R.id.button_hide_one);
+		EventObjects.btn_hide_all = findViewById(R.id.button_hide_all);
+		EventObjects.btn_view = findViewById(R.id.button_view);
+		EventObjects.btn_zoom_in = findViewById(R.id.button_zoom_in);
+		EventObjects.btn_zoom_out = findViewById(R.id.button_zoom_out);
+		EventObjects.btn_connect = findViewById(R.id.button_connect);
+		*/
+		//EventObjects.menu_create = (MenuItem) findViewById(R.id.menu_create_mode);
+		//EventObjects.menu_view = (MenuItem) findViewById(R.id.menu_view_mode);
+		
+		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
+    	
+		// initialize editor //
+		editor_main.initialize(profile);
+	}
+	
+	private void initSlidingMenu() {		
+		
+		slidingMenu = (SlidingMenu)findViewById(R.id.slidingmenulayout);
+		
+		// pri zobrazeni behind vrstvy sa neda zatvorit pomocou slide gesta
+		slidingMenu.setOnOpenedListener(new OnOpenedListener() {
+			
+			public void onOpened() {
+				slidingMenu.setSlidingEnabled(false);				
+			}
+		});		
+			
+		// po kliknuti na titulok sa behind vrstva skryje
+		slidingMenu.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {				
+				toggleSlidingMenu(true,true);				
+			}			
+		});
+	}
 
 
 	/**
@@ -182,11 +228,29 @@ public class MainActivity extends FragmentActivity {
 		
     	super.onSaveInstanceState(outState);
     }
-    
-        
+            
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	getMenuInflater().inflate(R.menu.activity_main, menu);		
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	int id = item.getItemId();
+    	
+    	switch (id) {
+			case MenuItems.testContent:
+				startContentTestingActivity();
+				break;
+			case MenuItems.testStructure:
+				startStructureTestingActivity();
+				break;
+			default:				
+				return editor_main.onOptionsItemSelected(item);
+		}
+    	    	    	
     	return true;
     }
     
@@ -217,26 +281,6 @@ public class MainActivity extends FragmentActivity {
     }
     
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	
-    	int id = item.getItemId();
-    	
-    	switch (id) {
-			case MenuItems.testContent:
-				startContentTestingActivity();
-				break;
-			case MenuItems.testStructure:
-				startStructureTestingActivity();
-				break;
-			default:				
-				return EventObjects.editor_main.onOptionsItemSelected(item);
-		}
-    	    	    	
-    	return true;
-    }
-
-
 	private void startStructureTestingActivity() {
 		Intent i = new Intent(this,StructureTestingActivity.class);		
 		this.startActivity(i);		
@@ -253,64 +297,18 @@ public class MainActivity extends FragmentActivity {
 	}
     
     public void buttonPressed(View view) {    	
-    	getActualEditor().onButtonSelected(view);
+    	editor_main.onButtonSelected(view);
     }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		getActualEditor().onActivityResult(requestCode, resultCode, data);		
+		editor_main.onActivityResult(requestCode, resultCode, data);		
 	}
 
 	public static TAMProfile getProfile() {
 		return profile;
 	}	
-	
-	private void initEventObjects() {
-		
-		EventObjects.editor_main = (TAMEditorMain) findViewById(R.id.acitity_main_tam_editor);
-    	    	
-    	setActualEditor(EventObjects.editor_main);
-    	
-    	EventObjects.btn_add = findViewById(R.id.button_add);
-		EventObjects.btn_delete = findViewById(R.id.button_delete);
-		EventObjects.btn_edit = findViewById(R.id.button_edit);
-		EventObjects.btn_hide_one = findViewById(R.id.button_hide_one);
-		EventObjects.btn_hide_all = findViewById(R.id.button_hide_all);
-		EventObjects.btn_view = findViewById(R.id.button_view);
-		EventObjects.btn_zoom_in = findViewById(R.id.button_zoom_in);
-		EventObjects.btn_zoom_out = findViewById(R.id.button_zoom_out);
-		EventObjects.btn_connect = findViewById(R.id.button_connect);
-		
-		//EventObjects.menu_create = (MenuItem) findViewById(R.id.menu_create_mode);
-		//EventObjects.menu_view = (MenuItem) findViewById(R.id.menu_view_mode);
-		
-		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
-    	
-		// initialize editor //
-    	EventObjects.editor_main.initialize(profile);
-	}
-	
-	private void initSlidingMenu() {		
-		
-		slidingMenu = (SlidingMenu)findViewById(R.id.slidingmenulayout);
-		
-		// pri zobrazeni behind vrstvy sa neda zatvorit pomocou slide gesta
-		slidingMenu.setOnOpenedListener(new OnOpenedListener() {
-			
-			public void onOpened() {
-				slidingMenu.setSlidingEnabled(false);				
-			}
-		});		
-			
-		// po kliknuti na titulok sa behind vrstva skryje
-		slidingMenu.setOnClickListener(new View.OnClickListener() {
-			
-			public void onClick(View v) {				
-				toggleSlidingMenu(true,true);				
-			}			
-		});
-	}
-	
+
 	/**
 	 * Zobrazi/skryje sliding menu
 	 *  
@@ -322,7 +320,7 @@ public class MainActivity extends FragmentActivity {
 		slidingMenu.toggle(anim);
 	}
 
-
+/*
 	public static ITAMEditor getActualEditor() {
 		return actualEditor;
 	}
@@ -331,4 +329,6 @@ public class MainActivity extends FragmentActivity {
 	public static void setActualEditor(ITAMEditor actualEditor) {
 		MainActivity.actualEditor = actualEditor;
 	}
+	
+*/
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
 import cz.vutbr.fit.testmind.MainActivity.EventObjects;
+import cz.vutbr.fit.testmind.StructureTestingActivity;
 import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
@@ -40,11 +41,6 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 		random = new Random();
 	}
 		
-	@Override
-	public void setVisibility(int visibility) {
-		super.setVisibility(visibility);
-	}
-
 	private void actualizeVariables() {
 		// optimizations //
 		size = profile.getListOfPNodes().size();
@@ -53,8 +49,19 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		return super.onOptionsItemSelected(item);
+    	
+		switch (item.getItemId()) {
+    	case StructureTestingActivity.menuShow:
+    		// TODO
+    		break;
+    	case StructureTestingActivity.menuNext:
+    		//System.out.println("next");
+    		generateNextQuestion();
+    	default:
+    		return super.onOptionsItemSelected(item);
+    	}	
+    	
+    	return true;
 	}
 	
 	public void generateNextQuestion() {

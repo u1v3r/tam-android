@@ -19,6 +19,7 @@ public class TAMEZoomControl extends TAMEAbstractControl implements ITAMButtonLi
 
 	public void onButtonSelected(View item) {
 		
+		/*
 		if(((View) getEditor()).getVisibility() == View.VISIBLE) {
 			if(item == EventObjects.btn_zoom_in) {
 				((TAMGraph)editor).onZoomIn();
@@ -26,6 +27,7 @@ public class TAMEZoomControl extends TAMEAbstractControl implements ITAMButtonLi
 				((TAMGraph)editor).onZoomOut();
 			}
 		}
+		*/
 	}	
 
 }
