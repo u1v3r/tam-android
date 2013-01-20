@@ -18,7 +18,7 @@
         sliding:shadowDrawable="@drawable/shadow_left"     
         sliding:viewAbove="@layout/activity_main_surface"
         sliding:viewBehind="@layout/activity_main_node_view_fragment" />
-
+<!-- 
     <LinearLayout
         android:id="@+id/activity_main_left_toolbar"
         android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
         android:background="@drawable/toolbar_border_left"
         android:visibility="gone" >
 
-        <!-- CREATE -->
+         
 
         <ImageButton
             android:id="@+id/button_add"
@@ -88,7 +88,7 @@
             android:src="@drawable/ic_action_delete"
             android:visibility="visible" />
 
-        <!-- VIEW -->
+        
 
         <ImageButton
             android:id="@+id/button_hide_one"
@@ -120,7 +120,7 @@
             android:src="@drawable/ic_action_delete"
             android:visibility="gone" />
 
-        <!-- TEST -->
+       
 
         <ImageButton
             android:id="@+id/button_connect"
@@ -131,5 +131,6 @@
             android:onClick="buttonPressed"
             android:src="@drawable/ic_action_add"
             android:visibility="gone" />
-    </LinearLayout>	   
+    </LinearLayout>	
+-->  
 </FrameLayout>

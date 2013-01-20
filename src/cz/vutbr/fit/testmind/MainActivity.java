@@ -117,8 +117,8 @@ public class MainActivity extends FragmentActivity {
 		
     	setContentView(R.layout.activity_main);
     	
-    	leftToolbar = (LinearLayout) findViewById(R.id.activity_main_left_toolbar);
-		rightToolbar = (LinearLayout) findViewById(R.id.activity_main_right_toolbar);
+    	//leftToolbar = (LinearLayout) findViewById(R.id.activity_main_left_toolbar);
+		//rightToolbar = (LinearLayout) findViewById(R.id.activity_main_right_toolbar);
     	
     	initEditorMain();   	    	
     	initSlidingMenu();
