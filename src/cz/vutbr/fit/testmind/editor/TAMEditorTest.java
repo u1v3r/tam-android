@@ -4,10 +4,8 @@ import java.util.Random;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MenuItem;
 import cz.vutbr.fit.testmind.MainActivity;
-import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.StructureTestingActivity;
 import cz.vutbr.fit.testmind.editor.controls.TAMEConnectionControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMEZoomControl;

@@ -24,11 +24,8 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
 public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor, 
 	ITAMRootControlListener, ITAMNodeControlListener {
 	
-	private static final String TAG = "TAMEditor";
-	
-	private int mode;
+	private static final String TAG = "TAMEditor";	
 	private boolean hasRoot = false;
-	private boolean hasVisibleMenu = false;
 	
 	public TAMEditorMain(Context context) {
 		this(context, null);		
@@ -42,7 +39,6 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor,
 	@Override
 	public void initialize(TAMProfile profile) {		
 		super.initialize(profile);		
-		
 		this.profile.getListOfEditors().add(this);		
 	}
 	
@@ -67,10 +63,6 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor,
 		
 	}
 
-	public int getMode() {
-		return mode;
-	}
-
 	public ITAMENode createNodeWithProfileAndConnection(String title, String body, ITAMENode parent, int posX, int posY) {
 		TAMPNode newProfileNode = profile.createNode(title, body);		
 		ITAMENode newEditorNode = TAMPConnectionFactory.addEReference(newProfileNode, this, posX, posY);
@@ -92,11 +84,5 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor,
 		
 		//mode = MenuItems.create_mode;
 		//actualItem = EventObjects.menu_create;
-	}
-	
-
-	@Override
-	public void setVisibility(int visibility) {
-		super.setVisibility(visibility);
 	}
 }

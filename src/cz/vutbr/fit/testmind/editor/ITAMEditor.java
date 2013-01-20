@@ -2,18 +2,16 @@ package cz.vutbr.fit.testmind.editor;
 
 import java.util.List;
 
-import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PointF;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.MenuItem;
 import android.view.View;
-import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
+
+import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
+
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -23,9 +21,9 @@ import cz.vutbr.fit.testmind.graphics.TAMGItemFactory;
 import cz.vutbr.fit.testmind.graphics.TAMGZoom;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMBlankAreaGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMGraphDrawingFinishedListener;
-import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPostDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemGestureListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMItemListener;
+import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPostDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMPreDrawListener;
 import cz.vutbr.fit.testmind.graphics.TAMGraph.ITAMTouchListener;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
@@ -35,9 +33,7 @@ import cz.vutbr.fit.testmind.profile.TAMProfile;
 public interface ITAMEditor {
 	
 	public TAMProfile getProfile();
-	
-	public void setEditorVisibility(int visibility);
-		
+			
 	public ITAMENode createNode(TAMPNode profile, int x, int y);
 
 	public ITAMENode createNode(TAMPNode profile, int x, int y, int type);
@@ -55,16 +51,12 @@ public interface ITAMEditor {
 	public List<ITAMEConnection> getListOfEConnections();
 	
 	public boolean onOptionsItemSelected(MenuItem item);
-	
-	public void onButtonSelected(View view);
-	
+		
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
 	
 	public void reset();
 	
 	public List<ITAMMenuListener> getListOfMenuControls();
-	
-	public List<ITAMButtonListener> getListOfButtonControls();
 	
 	// TAMGraph functions //
 	

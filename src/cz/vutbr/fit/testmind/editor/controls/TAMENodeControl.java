@@ -21,7 +21,6 @@ import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
 import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem.RadialMenuItemClickListener;
 
 import cz.vutbr.fit.testmind.EditNodeActivity;
-import cz.vutbr.fit.testmind.MainActivity.EventObjects;
 import cz.vutbr.fit.testmind.R;
 import cz.vutbr.fit.testmind.editor.ITAMEditor;
 import cz.vutbr.fit.testmind.editor.ITAMRadialMenu;
@@ -42,11 +41,10 @@ import cz.vutbr.fit.testmind.profile.Tag;
 /**
  * Stara sa o zakladne operacie s uzlom (pridanie, odstranenie, uprava)
  */
-public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener, ITAMButtonListener,
-                                                                     ITAMTouchListener, OnActivityResultListener,
+public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGestureListener,ITAMTouchListener, 
                                                                      ITAMItemListener,ITAMRadialMenu,
                                                                      ITAMGraphDrawingFinishedListener,
-                                                                     ITAMBlankAreaGestureListener{
+                                                                     ITAMBlankAreaGestureListener,OnActivityResultListener{
 	
 
 	private static final String TAG = "TAMEditorNodes";
@@ -94,7 +92,6 @@ public class TAMENodeControl extends TAMEAbstractControl  implements ITAMItemGes
 		editor.getListOfOnActivityResultControls().add(this);
 		editor.getListOfTouchControls().add(this);
 		editor.getListOfItemControls().add(this);
-		editor.getListOfButtonControls().add(this);
 		editor.getListOfRadialMenuListeners().add(this);
 		editor.getListOfBlankAreaGestureControls().add(this);
 

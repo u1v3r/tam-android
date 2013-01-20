@@ -4,27 +4,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-
-import cz.vutbr.fit.testmind.MainActivity.EventObjects;
-import cz.vutbr.fit.testmind.layout.FlowLayout;
-import cz.vutbr.fit.testmind.profile.TAMPConnection;
-import cz.vutbr.fit.testmind.profile.TAMPNode;
-import cz.vutbr.fit.testmind.testing.TestingNode;
-import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.Toast;
+import cz.vutbr.fit.testmind.layout.FlowLayout;
+import cz.vutbr.fit.testmind.testing.TestingNode;
+import cz.vutbr.fit.testmind.testing.TestingParcelable;
 
 /**
  * activity for testing from mind maps

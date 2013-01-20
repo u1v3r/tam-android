@@ -15,9 +15,7 @@ import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuItem;
 import com.touchmenotapps.widget.radialmenu.menu.v1.RadialMenuWidget;
 
 import cz.vutbr.fit.testmind.MainActivity;
-import cz.vutbr.fit.testmind.MainActivity.MenuItems;
 import cz.vutbr.fit.testmind.R;
-import cz.vutbr.fit.testmind.editor.controls.ITAMButtonListener;
 import cz.vutbr.fit.testmind.editor.controls.ITAMMenuListener;
 import cz.vutbr.fit.testmind.editor.items.ITAMEConnection;
 import cz.vutbr.fit.testmind.editor.items.ITAMENode;
@@ -35,7 +33,6 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	protected List<ITAMEConnection> listOfEConnections;
 	protected TAMProfile profile;
 	protected List<ITAMMenuListener> listOfMenuControls;
-	protected List<ITAMButtonListener> listOfButtonControls;
 	protected List<OnActivityResultListener> listOfOnActivityResultControls;
 	protected List<ITAMRadialMenu> listOfRadialMenuListeners;
 	
@@ -71,7 +68,6 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		this.listOfENodes = new ArrayList<ITAMENode>();
 		this.listOfEConnections = new ArrayList<ITAMEConnection>();
 		this.listOfMenuControls = new ArrayList<ITAMMenuListener>();
-		this.listOfButtonControls = new ArrayList<ITAMButtonListener>();
 		this.listOfOnActivityResultControls = new ArrayList<OnActivityResultListener>();		
 		this.listOfRadialMenuListeners = new ArrayList<ITAMRadialMenu>();
 		
@@ -144,10 +140,6 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		return listOfMenuControls;
 	}
 	
-	public List<ITAMButtonListener> getListOfButtonControls() {
-		return listOfButtonControls;
-	}
-	
 	public List<OnActivityResultListener> getListOfOnActivityResultControls() {
 		return listOfOnActivityResultControls;
 	}
@@ -172,21 +164,10 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 
 	}
 	
-	public void onButtonSelected(View item) {
-		
-		for(ITAMButtonListener control : listOfButtonControls) {
-			control.onButtonSelected(item);
-		}
-	}
-	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		for (OnActivityResultListener control : getListOfOnActivityResultControls()) {
 			control.onActivityResult(requestCode, resultCode, data);
 		}
-	}
-	
-	public void setEditorVisibility(int visibility) {
-		super.setVisibility(visibility);
 	}
 	
 	private void initializeRadialMenu() {
