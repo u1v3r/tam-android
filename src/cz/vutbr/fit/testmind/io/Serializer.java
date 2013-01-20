@@ -3,6 +3,7 @@ package cz.vutbr.fit.testmind.io;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -137,12 +138,15 @@ public class Serializer
         
         // profile
         insertProfile(db, profile);
-        
+                
         // editors
         for (ITAMEditor editor: profile.getListOfEditors())
-        {       
+        {      
             insertEditor(db, editor);
         }
+        
+        // uklada referencie len pre zaregistrovane editory
+        Set<ITAMEditor> editors = new HashSet<ITAMEditor>(profile.getListOfEditors());
         
         // nodes
         for (TAMPNode node: profile.getListOfPNodes())
@@ -150,7 +154,8 @@ public class Serializer
             insertNode(db, node);
             
             Map<ITAMEditor, ITAMEItem> references = node.getEditorReferences();
-            Set<ITAMEditor> editors = references.keySet();
+            //Set<ITAMEditor> editors = references.keySet();
+                       
             for (ITAMEditor editor: editors)
             {
                 insertNodeReference(db, editor, (ITAMENode)references.get(editor));
@@ -163,7 +168,8 @@ public class Serializer
              insertConnection(db, connection);
              
              Map<ITAMEditor, ITAMEItem> references = connection.getEditorReferences();
-             Set<ITAMEditor> editors = references.keySet();
+             //Set<ITAMEditor> editors = references.keySet();
+                           
              for (ITAMEditor editor: editors)
              {
                  insertConnectionReference(db, editor, (ITAMEConnection)references.get(editor));
@@ -428,6 +434,7 @@ public class Serializer
      */
     private HashMap<String, ITAMEditor> loadEditors(SQLiteDatabase db, TAMProfile profile)
     {
+    	    	
         HashMap<String, ITAMEditor> editors = new HashMap<String, ITAMEditor>();
         for (ITAMEditor editor: profile.getListOfEditors())
         {       

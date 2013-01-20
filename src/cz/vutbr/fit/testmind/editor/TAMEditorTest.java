@@ -45,8 +45,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 		// optimizations //
 		size = profile.getListOfPNodes().size();
 	}
-
-	
+		
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
     	
@@ -64,15 +63,14 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
     	return true;
 	}
 	
-	public void generateNextQuestion() {
+	private void generateNextQuestion() {
 		
 		generateNextQuestion(findNewBaseNode(), 1);
 		
 	}
 	
-	public void generateNextQuestion(TAMPNode node, int depth) {
-			
-		
+	private void generateNextQuestion(TAMPNode node, int depth) {
+				
 		disposeAllItems();
 		
 		deployNodes(node);
@@ -130,7 +128,7 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 		for(int i = 0; i < size; i++) {
 			getListOfEConnections().get(0).getProfile().removeEReference(this);
 		}
-		
+				
 		getListOfEConnections().clear();
 	}
 	
@@ -169,10 +167,18 @@ public class TAMEditorTest extends TAMAbstractEditor implements ITAMEditor  {
 		
 		//System.out.println(width + " " + height + " " + offsetX + " " + offsetY);
 		
-		TAMPConnectionFactory.addEReference(node, this, (random.nextInt(width)+halfOffsetX-getWidth()/2), (random.nextInt(height)+halfOffsetY-getHeight()/2));
+		TAMPConnectionFactory.addEReference(
+				node, 
+				this, 
+				(random.nextInt(width)+halfOffsetX-getWidth()/2), 
+				(random.nextInt(height)+halfOffsetY-getHeight()/2));
 		
 		for(TAMPNode child : node.getListOfChildNodes()) {
-			TAMPConnectionFactory.addEReference(child, this, (random.nextInt(width)+halfOffsetX-getWidth()/2), (random.nextInt(height)+halfOffsetY-getHeight()/2));
+			TAMPConnectionFactory.addEReference(
+					child, 
+					this, 
+					(random.nextInt(width)+halfOffsetX-getWidth()/2), 
+					(random.nextInt(height)+halfOffsetY-getHeight()/2));
 		}
 		
 	}

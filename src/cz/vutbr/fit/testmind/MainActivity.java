@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.OnOpenedListener;
 
 import cz.vutbr.fit.testmind.editor.TAMEditorMain;
+import cz.vutbr.fit.testmind.editor.TAMEditorTest;
 import cz.vutbr.fit.testmind.editor.controls.TAMEOpenSaveControl;
 import cz.vutbr.fit.testmind.editor.controls.TAMERootInitializeControl;
 import cz.vutbr.fit.testmind.io.Serializer;
@@ -40,9 +42,7 @@ public class MainActivity extends FragmentActivity {
 		public static final int importFile = R.id.menu_import;
 		public static final int shareFile = R.id.menu_share;
 		public static final int testStructure = R.id.menu_test_structure;
-		public static final int testContent = R.id.menu_test_content;
-		public static final int showResult = R.id.menu_show_result;
-		public static final int nextQuestion = R.id.menu_next_question;
+		public static final int testContent = R.id.menu_test_content;		
 	}
 	
 	/**
@@ -62,8 +62,8 @@ public class MainActivity extends FragmentActivity {
 	}
 	*/
 	
-	public static LinearLayout leftToolbar;
-	public static LinearLayout rightToolbar;
+	//public static LinearLayout leftToolbar;
+	//public static LinearLayout rightToolbar;
 	public static SlidingMenu slidingMenu;	
 	
 	public static ZoomControls zoomControls;
@@ -154,6 +154,7 @@ public class MainActivity extends FragmentActivity {
 		
 		EventObjects.animAlpha = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
     	
+		
 		// initialize editor //
 		editor_main.initialize(profile);
 	}

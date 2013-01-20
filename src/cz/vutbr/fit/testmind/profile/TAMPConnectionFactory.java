@@ -6,6 +6,8 @@ import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 
 public class TAMPConnectionFactory {
 	
+	private static final String TAG = "TAMPConnectionFactory";
+
 	private TAMPConnectionFactory(){}
 	
 	public static final ITAMENode addEReference(TAMPNode node, ITAMEditor editor, int x, int y){
@@ -20,7 +22,7 @@ public class TAMPConnectionFactory {
 	}
 		
 	public static final ITAMENode addEReference(TAMPNode node, ITAMEditor editor, int x, int y, int type) {
-		
+			
 		if(!node.getEditorReferences().containsKey(editor)) {
 			ITAMENode eNode = editor.createNode(node, x, y, type);
 			node.getEditorReferences().put(editor, eNode);
@@ -29,7 +31,7 @@ public class TAMPConnectionFactory {
 			return null;
 		}
 	}	
-	
+		
 	public static final boolean connectsSomething(TAMPNode parent, TAMPNode child, ITAMEditor editor) {
 		
 		return (parent.getEReference(editor) != null && child.getEReference(editor) != null);

@@ -63,8 +63,7 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	 */
 	private static final int RIADIAL_MENU_Y_OFFSET = 100;
 	
-	private RadialMenuWidget radialMenu;
-	
+	private RadialMenuWidget radialMenu;	
 	
 	public TAMAbstractEditor(Context context, AttributeSet attrs){		
 		super(context,attrs,0);
@@ -84,14 +83,11 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 		super.initialize();
 				
 		initializeControls();
-		initializeRadialMenu();	
-		
-		// zabezpeci ulozenie stavu editorov
-		this.profile.getListOfEditors().add(this);
+		initializeRadialMenu();
 	}
 	
 	protected abstract void initializeControls();
-	
+		
 	public boolean containsNode(int id) {
 		for(ITAMENode node : listOfENodes) {
 			if(id == node.getProfile().getId()) {
@@ -165,21 +161,13 @@ public abstract class TAMAbstractEditor extends TAMGraph implements ITAMEditor {
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		boolean selected = false;
-		
-		int id = item.getItemId();
-		
-		switch (id) {
-			case MenuItems.showResult:
-			case MenuItems.nextQuestion:
-			default:
-				for(ITAMMenuListener control : listOfMenuControls) {
-					selected = control.onOptionsItemSelected(item);
-				}
-				break;
+
+		for(ITAMMenuListener control : listOfMenuControls) {
+			selected = control.onOptionsItemSelected(item);
 		}
-		
+
 		return selected;
 
 	}

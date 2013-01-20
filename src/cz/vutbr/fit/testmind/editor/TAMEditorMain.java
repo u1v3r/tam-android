@@ -15,6 +15,7 @@ import cz.vutbr.fit.testmind.editor.items.ITAMENode;
 import cz.vutbr.fit.testmind.profile.TAMPConnection;
 import cz.vutbr.fit.testmind.profile.TAMPConnectionFactory;
 import cz.vutbr.fit.testmind.profile.TAMPNode;
+import cz.vutbr.fit.testmind.profile.TAMProfile;
 
 /**
  * Obsahuje zakladne funkcie na pracu s grafom 
@@ -30,12 +31,19 @@ public class TAMEditorMain extends TAMAbstractEditor implements ITAMEditor,
 	private boolean hasVisibleMenu = false;
 	
 	public TAMEditorMain(Context context) {
-		this(context, null);
+		this(context, null);		
 	}
 	
 	public TAMEditorMain(Context context, AttributeSet attrs) {		
 		super(context,attrs);		
-		// do not type anything there - use initializeControls method instead //
+		// do not type anything there - use initializeControls method instead //			
+	}
+	
+	@Override
+	public void initialize(TAMProfile profile) {		
+		super.initialize(profile);		
+		
+		this.profile.getListOfEditors().add(this);		
 	}
 	
 	public boolean createDefaultRootNode(String title) {
