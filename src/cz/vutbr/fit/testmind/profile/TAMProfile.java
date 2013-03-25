@@ -143,6 +143,7 @@ public class TAMProfile {
 		
 		TAMPConnection connection = new TAMPConnection(parent, child);
 		listOfPConnections.add(connection);
+		System.out.println("connection created");
 		return connection;
 	}
 	
