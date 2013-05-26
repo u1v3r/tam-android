@@ -39,6 +39,7 @@ public class TestingActivity extends FragmentActivity
     public static class TestingActivityData implements Serializable
     {
         private static final long serialVersionUID = 1L;
+        public TestingNode rootNode;
         public TestingNode node;
         public ActivityMode mode;
         public TestingPhase testingPhase;
@@ -64,8 +65,8 @@ public class TestingActivity extends FragmentActivity
     private HashMap<TextView, TestingNode> textViewsNodes = new HashMap<TextView, TestingNode>();
     
     private MenuItem controlAction;
-    private MenuItem menuExplore;
-    private MenuItem menuTest;
+    private MenuItem menuMode;
+    private MenuItem menuOrder;
     private FlowLayout pathView;
     private FlowLayout childsView;
     private WebView bodyView;
@@ -89,8 +90,8 @@ public class TestingActivity extends FragmentActivity
         childsView = (FlowLayout) findViewById(R.id.testing_flowLayout_childs);
         bodyView = (WebView) findViewById(R.id.testing_webView_body);        
         
-        TestingNode root = nodeParcelable.getTestingNode();
-        data.testingNodes = root.getListTestingNodes();
+        data.rootNode = nodeParcelable.getTestingNode();
+        data.testingNodes = data.rootNode.getListTestingNodes();
         
         startTesting();
     }
@@ -100,10 +101,9 @@ public class TestingActivity extends FragmentActivity
     {
         getMenuInflater().inflate(R.menu.activity_testing, menu);
 
-        
         controlAction = menu.findItem(R.id.testingActionControl);
-        menuExplore = menu.findItem(R.id.explore);
-        menuTest = menu.findItem(R.id.test);
+        menuMode = menu.findItem(R.id.menu_item_mode);
+        menuOrder = menu.findItem(R.id.menu_item_order);
 
         setActivityMode(data.mode);
         return true;
@@ -135,13 +135,15 @@ public class TestingActivity extends FragmentActivity
         {
             finish();
         }
-        else if(menuExplore.getItemId() == id && data.mode == ActivityMode.TEST)
+        else if(menuMode.getItemId() == id)
         {
-            setActivityMode(ActivityMode.EXPLORE);
+            ActivityMode nextMode = data.mode == ActivityMode.TEST 
+                    ? ActivityMode.EXPLORE : ActivityMode.TEST;
+            setActivityMode(nextMode);
         }
-        else if(menuTest.getItemId() == id && data.mode == ActivityMode.EXPLORE)
+        else if(menuOrder.getItemId() == id)
         {
-            setActivityMode(ActivityMode.TEST);
+            changeOrder();
         }
         
         return true;
@@ -162,7 +164,8 @@ public class TestingActivity extends FragmentActivity
         super.onRestoreInstanceState(savedInstanceState);
         
         data = (TestingActivityData) savedInstanceState.getSerializable(DATA_STATE);
-        if(menuTest != null)
+        // Android 4.2 call onCreateOptionsMenu after onRestoreInstanceState
+        if(menuMode != null)
         {
             setActivityMode(data.mode);
         }
@@ -204,7 +207,6 @@ public class TestingActivity extends FragmentActivity
      */
     private void startTesting()
     {
-        Collections.shuffle(data.testingNodes);
         data.currentIndex = 0;
         if(data.testingNodes.size() > 0)
         {
@@ -224,6 +226,17 @@ public class TestingActivity extends FragmentActivity
     private void setNode(TestingNode node)
     {
         this.data.node = node;
+        
+        if(data.mode == ActivityMode.TEST)
+        {
+            getActionBar().setTitle(String.format("%s %d/%d", getString(R.string.app_name),
+                    data.currentIndex+1, data.testingNodes.size()));
+        }
+        else
+        {
+            getActionBar().setTitle(R.string.app_name);
+        }
+        
         loadNode();
     }
     
@@ -395,15 +408,15 @@ public class TestingActivity extends FragmentActivity
 
         if(mode == ActivityMode.EXPLORE)
         {
-            menuExplore.setChecked(true);
-            menuTest.setChecked(false);
+            menuMode.setTitle(R.string.testing_menu_test);
+            menuOrder.setVisible(false);
             controlAction.setVisible(false);
             setNode(data.node);
         }
         else if(mode == ActivityMode.TEST)
         {
-            menuExplore.setChecked(false);
-            menuTest.setChecked(true);
+            menuMode.setTitle(R.string.testing_menu_explore);
+            menuOrder.setVisible(true);
             controlAction.setVisible(true);
             setTestingPhase(data.testingPhase);
             setNode(data.testingNodes.get(data.currentIndex));
@@ -412,5 +425,25 @@ public class TestingActivity extends FragmentActivity
                 showAnswer();
             }
         }
+    }
+    
+    /**
+     * change order of testing
+     */
+    private void changeOrder()
+    {
+        if(menuOrder.getTitle().equals(getString(R.string.testing_menu_random)))
+        {
+            Collections.shuffle(data.testingNodes);
+            menuOrder.setTitle(R.string.testing_menu_sequentialy);
+        }
+        else if(menuOrder.getTitle().equals(getString(R.string.testing_menu_sequentialy)))
+        {
+            data.testingNodes = data.rootNode.getListTestingNodes();
+            menuOrder.setTitle(R.string.testing_menu_random);
+        }
+        
+        setTestingPhase(TestingPhase.QUESTION);
+        startTesting();
     }
 }
