@@ -67,6 +67,7 @@ public class TestingActivity extends FragmentActivity
     private MenuItem controlAction;
     private MenuItem menuMode;
     private MenuItem menuOrder;
+    private MenuItem menuFromThis;
     private FlowLayout pathView;
     private FlowLayout childsView;
     private WebView bodyView;
@@ -104,6 +105,7 @@ public class TestingActivity extends FragmentActivity
         controlAction = menu.findItem(R.id.testingActionControl);
         menuMode = menu.findItem(R.id.menu_item_mode);
         menuOrder = menu.findItem(R.id.menu_item_order);
+        menuFromThis = menu.findItem(R.id.menu_item_from_this);
 
         setActivityMode(data.mode);
         return true;
@@ -144,6 +146,11 @@ public class TestingActivity extends FragmentActivity
         else if(menuOrder.getItemId() == id)
         {
             changeOrder();
+        }
+        else if(menuFromThis.getItemId() == id)
+        {
+            setTestingNodeByIndex(data.testingNodes.indexOf(data.node));
+            setActivityMode(ActivityMode.TEST);
         }
         
         return true;
@@ -247,10 +254,19 @@ public class TestingActivity extends FragmentActivity
     {
         if(data.currentIndex+1 < data.testingNodes.size())
         {
-            setTestingPhase(TestingPhase.QUESTION);
-            data.currentIndex++;
-            setNode(data.testingNodes.get(data.currentIndex));
+            setTestingNodeByIndex(data.currentIndex+1);
         }
+    }
+    
+    /**
+     * change testing node by index
+     * @param index
+     */
+    private void setTestingNodeByIndex(int index)
+    {
+        setTestingPhase(TestingPhase.QUESTION);
+        data.currentIndex = index;
+        setNode(data.testingNodes.get(data.currentIndex));        
     }
     
     /**
@@ -410,6 +426,7 @@ public class TestingActivity extends FragmentActivity
         {
             menuMode.setTitle(R.string.testing_menu_test);
             menuOrder.setVisible(false);
+            menuFromThis.setVisible(true);
             controlAction.setVisible(false);
             setNode(data.node);
         }
@@ -417,6 +434,7 @@ public class TestingActivity extends FragmentActivity
         {
             menuMode.setTitle(R.string.testing_menu_explore);
             menuOrder.setVisible(true);
+            menuFromThis.setVisible(false);
             controlAction.setVisible(true);
             setTestingPhase(data.testingPhase);
             setNode(data.testingNodes.get(data.currentIndex));

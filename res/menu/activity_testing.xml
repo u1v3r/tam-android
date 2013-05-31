@@ -5,6 +5,10 @@
         
     <item android:id="@+id/menu_item_order"
           android:title="@string/testing_menu_random"/>
+
+    <item android:id="@+id/menu_item_from_this"
+          android:title="@string/testing_menu_from_this"
+          android:visible="false"/>
     
     <item android:id="@+id/testingActionControl"
           android:title="@string/testing_control_show_answer"

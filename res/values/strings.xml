@@ -59,6 +59,7 @@
     <string name="testing_menu_explore">Explore</string>
     <string name="testing_menu_sequentialy">Sequentialy</string>
     <string name="testing_menu_random">Random</string>
+    <string name="testing_menu_from_this">Test from this</string>
     <string name="testing_control_show_answer">Show answer</string>
     <string name="testing_control_next_question">Next question</string>
     <string name="testing_control_again">Testing again</string>
